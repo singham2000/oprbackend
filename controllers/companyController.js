@@ -5,7 +5,6 @@ const formattedDateTime = require("../middleware/time");
 const { Op } = require('sequelize');
 
 
-
 // Get all company
 const getCompany = async (req, res, next) => {
     const company_id = req.query.company_id;

@@ -13,6 +13,6 @@ router
     .get('/houses', buyHouseController.getBuyHouse)
     .post('/house',setAuditFields, buyHouseController.createBuyHouse)
     .put('/house', buyHouseController.updateBuyHouseById)
-    .delete('/house/:id', buyHouseController.deleteBuyHouseById)
+    .delete('/house', buyHouseController.deleteBuyHouseById)
 
 module.exports = router;

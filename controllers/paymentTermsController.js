@@ -10,10 +10,10 @@ const getPaymentTerms = async (req, res, next) => {
     try {
         if (!payment_terms_id) {
             const result = await payment_terms_quo.findAll({
-                attributes: ['payment_terms_id', 'payment_terms_name'],
                 where: {
                     status: { [Op.ne]: 0 }
-                }
+                },
+                order: [['payment_terms_id', 'DESC']]
             });
             res.status(200).json(result);
         } else {
@@ -52,13 +52,11 @@ const createPaymentTerms = async (req, res, next) => {
     try {
         const {
             payment_terms_name,
-            created_by
+            status
         } = req.body;
         const result = await payment_terms_quo.create({
             payment_terms_name,
-            status: 1,
-            created_by,
-            created_on: formattedDateTime
+            status
         });
         res.status(201).json({ message: "Submit Successfully" });
     } catch (err) {
@@ -71,12 +69,11 @@ const updatePaymentTermsById = async (req, res, next) => {
     try {
         const {
             payment_terms_name,
-            updated_by
+            status
         } = req.body;
         const result = await payment_terms_quo.update({
             payment_terms_name,
-            updated_by,
-            updated_on: formattedDateTime
+            status
         }, {
             where: {
                 payment_terms_id: payment_terms_id

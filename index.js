@@ -12,6 +12,7 @@ const setAuditFields = require('./middleware/setAuditFields.js')
 
 
 
+
 // Routes Import
 const itemRoute = require('./routes/itemRoutes');
 const poRoute = require('./routes/poRoutes');
@@ -92,7 +93,7 @@ app.use('/api/category', categoryRoute);
 app.use('/api/uom', uomRoute);
 app.use('/api/shipMode', shipModeRouter);
 app.use("/api/delivery/timeline", deliveryTimelineRouter);
-// app.use("/api/buying", buyHouseRouter); no more need because its replace with company table
+app.use("/api/buying", buyHouseRouter); 
 app.use("/api/quotation", quotationRouter);
 app.use("/api/quoteitems", quotationItemsRouter);
 app.use("/api/itemcategory", itemCategoryRouter);
