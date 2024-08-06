@@ -4,7 +4,7 @@ require('dotenv').config();
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
     host: process.env.DB_HOST,
     dialect: 'mssql',
-    logging: false
+    // logging: false
 });
 
 
@@ -24,7 +24,7 @@ db.role = require('./role_master.js')(sequelize, DataTypes)
 db.user = require('./user_master.js')(sequelize, DataTypes)
 db.vendor = require('./Xvendor_master_old.js')(sequelize, DataTypes)
 db.UomMaster = require('./uom_master.js')(sequelize, DataTypes);
-db.opr_master = require('./opr_master.js')(sequelize, DataTypes);
+db.OprMaster = require('./opr_master.js')(sequelize, DataTypes);
 db.OprItems = require('./opr_items.js')(sequelize, DataTypes);
 db.ShipMode = require('./ship_mode_master.js')(sequelize, DataTypes)
 db.buy_house_opr = require('./buy_house_opr.js')(sequelize, DataTypes);
@@ -41,7 +41,7 @@ db.ItemSubGroupMaster = require('./item_subCategory_master.js')(sequelize, DataT
 db.Department = require('./department_master.js')(sequelize, DataTypes);
 db.desigMaster = require('./designation_master.js')(sequelize, DataTypes)
 db.Vertical = require('./vertical_master.js')(sequelize, DataTypes)
-db.company_master = require('./company_master.js')(sequelize, DataTypes)
+// db.company_master = require('./company_master.js')(sequelize, DataTypes)
 db.BuyingHouse = require('./buyinghouse_master.js')(sequelize, DataTypes)
 db.DeptDesigMapping = require('./dept_desig_mapping.js')(sequelize, DataTypes)
 db.DeliveryTimeline = require('./delivery_timeline_opr.js')(sequelize, DataTypes)
@@ -120,17 +120,13 @@ Object.values(models).forEach(model => {
     }
 });
 
-
-
-
-sequelize.sync({ alter: true })
+sequelize.sync()
     .then(() => {
         console.log('Database & tables created!');
     })
     .catch(error => {
         console.error('Error synchronizing the database:', error);
     });
-
 
 module.exports = {
     sequelize,

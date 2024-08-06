@@ -1,6 +1,6 @@
 // const { company_master } = ('../models');
 const db = require('../models');
-const { company_master } = db;
+const { CompanyMaster:company_master } = db;
 const formattedDateTime = require("../middleware/time");
 const { Op } = require('sequelize');
 

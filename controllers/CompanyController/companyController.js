@@ -1,8 +1,8 @@
 const { CompanyMaster, AddressMaster, sequelize } = require('../../models');
 const generateSeries = require('../../utilites/genrateSeries')
+const { Op } = require('sequelize');
 
 
-//this will create company data in company table and same time address will also create in data 
 exports.createCompany = async (req, res, next) => {
     const transaction = await sequelize.transaction();
     try {
@@ -54,6 +54,25 @@ exports.getCompanies = async (req, res, next) => {
         res.status(200).json(companies);
     } catch (err) {
         next(err);
+    }
+};
+
+
+
+
+// Get company according to vertical
+exports.getCompanyByVertical = async (req, res, next) => {
+    const vertical_id = req.query.vertical_id;
+    try {
+        const result = await CompanyMaster.findAll({
+            where: {
+                vertical_id: vertical_id,
+                status: { [Op.ne]: 0 }
+            }
+        });
+        res.status(200).json(result);
+    } catch (err) {
+        next(err)
     }
 };
 

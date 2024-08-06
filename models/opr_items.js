@@ -65,19 +65,12 @@ module.exports = (sequelize, DataTypes) => {
 
   // Define associations
   OprItems.associate = (models) => {
-    OprItems.belongsTo(models.company_master, { foreignKey: 'company_id' });
-    OprItems.belongsTo(models.opr_master, { foreignKey: 'opr_id' });
+    OprItems.belongsTo(models.CompanyMaster, { foreignKey: 'company_id' });
+    OprItems.belongsTo(models.OprMaster, { foreignKey: 'opr_id' });
     OprItems.belongsTo(models.ItemsMaster, { foreignKey: 'item_id' });
     OprItems.belongsTo(models.AddressMaster, { foreignKey: 'address_id' });
-    // OprItems.belongsTo(models.opr_master, { foreignKey: 'opr_id)' });
-    // opr_master.belongsTo(models.Vertical, { foreignKey: 'vertical_id' });
-    // opr_master.belongsTo(models.Division, { foreignKey: 'division_id' });
-    // opr_master.belongsTo(models.ShipMode, { foreignKey: 'shipment_mode_id' });
-    // opr_master.belongsTo(models.DeliveryTimeline, { foreignKey: 'delivery_timeline_id' });
-    // opr_master.belongsTo(models.Department, { foreignKey: 'department_id' });
-    // opr_master.belongsTo(models.BuyingHouse, { foreignKey: 'buying_house_id' });
+    // OprItems.belongsTo(models.UomMaster, { foreignKey: 'uom_id' });
   };
-
 
   return OprItems;
 };

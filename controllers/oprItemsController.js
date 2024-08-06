@@ -10,7 +10,6 @@ const opr_items = require('../models/opr_items');
 const getOprItem = async (req, res, next) => {
     const opr_id = req.query.opr_id;
     try {
-
         const whereCondition = {};
         if (opr_id) {
             whereCondition.opr_id = opr_id;
@@ -18,8 +17,8 @@ const getOprItem = async (req, res, next) => {
         let Opr_Items = await OprItems.findAll({
             where: whereCondition,
             include: [
-                { model: db.company_master, attributes: ['company_name'] },
-                { model: db.opr_master, attributes: ['opr_num'] },
+                { model: db.CompanyMaster, attributes: ['company_name'] },
+                { model: db.OprMaster, attributes: ['opr_num'] },
                 { model: db.AddressMaster },
                 {
                     model: db.ItemsMaster,
@@ -144,13 +143,14 @@ const getOprItem = async (req, res, next) => {
 
 
 //this function will send only those data which status is 2
+
 const getOprItemForRfq = async (req, res, next) => {
     try {
         let Opr_Items = await OprItems.findAll({
             where: { status: 2 },
             include: [
                 { model: db.company_master, attributes: ['company_name'] },
-                { model: db.opr_master, attributes: ['opr_num'] },
+                { model: db.OprMaster, attributes: ['opr_num'] },
                 {
                     model: db.ItemsMaster,
                     include: {
@@ -191,14 +191,60 @@ const getOprItemForRfq = async (req, res, next) => {
     }
 };
 
-const getOprItemForRfq2 = async (req, res, next) => {
-
+const getOprItemForRfq3 = async (req, res, next) => {
     try {
         let Opr_Items = await OprItems.findAll({
             where: { status: 2 },
             include: [
                 { model: db.company_master, attributes: ['company_name'] },
-                { model: db.opr_master, attributes: ['opr_num'] },
+                { model: db.OprMaster, attributes: ['opr_num'] },
+                {
+                    model: db.ItemsMaster,
+                    include: {
+                        model: db.UomMaster,
+                        attributes: ['uom_name']
+                    },
+                    attributes: ['item_name', 'item_type', 'item_code', 'quantity_in_stock', 'quantity_on_order', 'nafdac_category',]
+                }
+            ],
+            attributes: { exclude: ['created_by', 'updated_by', 'createdAt', 'updatedAt', 'vertical_id', 'company_id', 'division_id'] }
+        })
+
+
+        // Transform the data
+        const transformedData = Opr_Items.map(item => ({
+            opr_item_id: item.opr_item_id,
+            item_id: item.item_id,
+            opr_id: item.opr_id,
+            opr_num: item.OprMaster.opr_num,
+            qty: item.qty,
+            stock_in_transit: item.stock_in_transit,
+            stock_in_hand: item.stock_in_hand,
+            monthly_consumption: item.monthly_consumption,
+            item_description: item.item_description,
+            status: item.status,
+            item_type: item.ItemsMaster.item_type,
+            item_code: item.ItemsMaster.item_code,
+            item_name: item.ItemsMaster.item_name,
+            quantity_in_stock: item.ItemsMaster.quantity_in_stock,
+            quantity_on_order: item.ItemsMaster.quantity_on_order,
+            nafdac_category: item.ItemsMaster.nafdac_category,
+            sub_group: item.ItemsMaster.sub_group,
+            uom: item.ItemsMaster.UomMaster.uom_name || 'null'
+        }));
+        res.status(200).json(transformedData);
+    } catch (err) {
+        next(err);
+    }
+};
+
+const getOprItemForRfq2 = async (req, res, next) => {
+    try {
+        let Opr_Items = await OprItems.findAll({
+            where: { status: 2 },
+            include: [
+                { model: db.company_master, attributes: ['company_name'] },
+                { model: db.OprMaster, attributes: ['opr_num'] },
                 {
                     model: db.ItemsMaster,
                     include: {

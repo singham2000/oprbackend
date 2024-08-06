@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         },
         status: {
-            type: DataTypes.STRING(50),
+            type: DataTypes.INTEGER,
             allowNull: true
         }
     }, {
@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     BuyingHouse.associate = (models) => {
-        BuyingHouse.hasMany(models.opr_master, { foreignKey: 'buying_house_id' });
+        BuyingHouse.hasMany(models.OprMaster, { foreignKey: 'buying_house_id' });
     };
 
 

@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
         created_on: {
             type: DataTypes.DATE,
             allowNull: false
-        },
+        }, 
         created_by: {
             type: DataTypes.STRING(50),
             allowNull: true
@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         },
         status: {
-            type: DataTypes.STRING(50),
+            type: DataTypes.INTEGER,
             allowNull: true
         },
         company_type: {
@@ -49,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     company_master.associate = (models) => {
-        company_master.hasMany(models.opr_master, { foreignKey: 'company_id' });
+        company_master.hasMany(models.OprMaster, { foreignKey: 'company_id' });
         company_master.hasMany(models.OprItems, { foreignKey: 'company_id' });
     };
 

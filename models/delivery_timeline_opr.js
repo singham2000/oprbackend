@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         },
         status: {
-            type: DataTypes.STRING(50),
+            type: DataTypes.INTEGER,
             allowNull: true
         }
     }, {
@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     DeliveryTimeline.associate = (models) => {
-        DeliveryTimeline.hasMany(models.opr_master, { foreignKey: 'delivery_timeline_id' });
+        DeliveryTimeline.hasMany(models.OprMaster, { foreignKey: 'delivery_timeline_id' });
     };
 
     return DeliveryTimeline;

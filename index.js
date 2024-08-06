@@ -55,6 +55,12 @@ const pfiRoutes = require('./routes/pfiRoutes.js')
 const vendorTypeMasterRoutes = require('./routes/vendorTypeMasterRoutes');
 const addressRoutes = require('./routes/addressRoutes.js');
 
+const buyingHouseRoutes = require('./routes/buyHouseRoutes.js');
+const buyingHouseRoutes2 = require('./routes/buyingHouseRoutes.js');
+
+
+
+
 
 
 const app = express();
@@ -115,6 +121,8 @@ app.use('/api/vendor-types', vendorTypeMasterRoutes);
 //addresss new
 
 app.use('/api/address', addressRoutes);
+app.use('/api/bh', buyingHouseRoutes);
+app.use('/api/bhouse', buyingHouseRoutes2);
 
 
 // Error handling middleware

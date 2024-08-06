@@ -1,17 +1,18 @@
 const db = require('../models');
 const { ItemsMaster: Item } = db;
+const generateSeries = require('../utilites/genrateSeries')
 
 // Controller method to fetch all items
 const getAllItems = async (req, res) => {
     try {
-        // const items = await Item.findAll({
-        //     attributes: ['item_id', 'item_name', 'item_code']
-        // });
-        const items = await Item.findAll();
+        const items = await Item.findAll({
+            include: [
+                { model: db.UomMaster, attributes: ['uom_id', 'uom_name'] },
+            ]
+        });
+
         res.status(200).json(items);
     } catch (err) {
-        // console.error('Error fetching items:', err);
-        // res.status(500).json({ error: 'Error fetching items' });
         next(err);
     }
 };

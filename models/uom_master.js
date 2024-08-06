@@ -18,16 +18,8 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(55),
             allowNull: true
         },
-        created_on: {
-            type: DataTypes.DATE,
-            allowNull: true
-        },
         created_by: {
             type: DataTypes.STRING(55),
-            allowNull: true
-        },
-        updated_on: {
-            type: DataTypes.DATE,
             allowNull: true
         },
         updated_by: {
@@ -36,14 +28,13 @@ module.exports = (sequelize, DataTypes) => {
         }
     }, {
         tableName: 'unit_of_measurement',
-        timestamps: false,
-        createdAt: 'created_on',
-        updatedAt: 'updated_on'
+        timestamps: true,
     });
-
+ 
 
     UomMaster.associate = (models) => {
         UomMaster.hasMany(models.ItemsMaster, { foreignKey: 'uom_id' });
+        
     };
 
     return UomMaster;

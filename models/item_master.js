@@ -140,7 +140,5 @@ module.exports = (sequelize, DataTypes) => {
         ItemsMaster.belongsTo(models.UomMaster, { foreignKey: 'uom_id' });
         ItemsMaster.hasMany(models.OprItems, { foreignKey: 'item_id' });
     };
-
-
     return ItemsMaster;
 };

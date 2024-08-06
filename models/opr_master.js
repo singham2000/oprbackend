@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const opr_master = sequelize.define("OprMaster", {
+    const OprMaster = sequelize.define("OprMaster", {
         opr_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -58,7 +58,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         },
         remarks: {
-            type: DataTypes.STRING(500),
+            type: DataTypes.STRING(255),
             allowNull: true
         },
         suppliers: {
@@ -66,7 +66,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         },
         status: {
-            type: DataTypes.STRING(50),
+            type: DataTypes.INTEGER,
             allowNull: true
         },
 
@@ -85,19 +85,17 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     // Define associations
-    opr_master.associate = (models) => {
-        opr_master.belongsTo(models.company_master, { foreignKey: 'company_id' });
-        opr_master.belongsTo(models.Vertical, { foreignKey: 'vertical_id' });
-        opr_master.belongsTo(models.Division, { foreignKey: 'division_id' });
-        opr_master.belongsTo(models.ShipMode, { foreignKey: 'shipment_mode_id' });
-        opr_master.belongsTo(models.DeliveryTimeline, { foreignKey: 'delivery_timeline_id' });
-        opr_master.belongsTo(models.Department, { foreignKey: 'department_id' });
-        opr_master.belongsTo(models.BuyingHouse, { foreignKey: 'buying_house_id' });
-
-
-        opr_master.hasMany(models.OprItems, { foreignKey: 'opr_id' });
+    OprMaster.associate = (models) => {
+        OprMaster.belongsTo(models.CompanyMaster, { foreignKey: 'company_id' });
+        OprMaster.belongsTo(models.Vertical, { foreignKey: 'vertical_id' });
+        OprMaster.belongsTo(models.Division, { foreignKey: 'division_id' });
+        OprMaster.belongsTo(models.ShipMode, { foreignKey: 'shipment_mode_id' });
+        OprMaster.belongsTo(models.DeliveryTimeline, { foreignKey: 'delivery_timeline_id' });
+        OprMaster.belongsTo(models.Department, { foreignKey: 'department_id' });
+        OprMaster.belongsTo(models.BuyingHouse, { foreignKey: 'buying_house_id' });
+        OprMaster.hasMany(models.OprItems, { foreignKey: 'opr_id' });
     };
 
 
-    return opr_master;
+    return OprMaster;
 };

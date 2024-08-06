@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         },
         remarks: {
-            type: DataTypes.STRING(250),
+            type: DataTypes.STRING(255),
             allowNull: true
         },
         receipt_image: {

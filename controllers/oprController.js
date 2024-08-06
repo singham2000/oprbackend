@@ -1,6 +1,6 @@
 // const { opr_master } = ('../models');
 const db = require('../models');
-const { opr_master, company_master, OprItems, Vertical } = db;
+const { OprMaster: opr_master, company_master, OprItems, Vertical } = db;
 const formattedDateTime = require("../middleware/time");
 const { Op } = require('sequelize');
 
@@ -79,11 +79,13 @@ const generateSeries = require("./seriesGenerate");
 
 
 const getOpr = async (req, res, next) => {
-    try {
+    const { opr_id } = req.query;
 
+    try {
         let opr_detials = await opr_master.findAll({
+            where: opr_id ? { opr_id: opr_id } : {},
             include: [
-                { model: db.company_master, attributes: ['company_name'] },
+                { model: db.CompanyMaster, attributes: ['company_name'] },
                 { model: db.Vertical, attributes: ['vertical_name'] },
                 { model: db.Division, attributes: ['division_name'] },
                 { model: db.ShipMode, attributes: ['shipment_mode_name'] },
@@ -91,7 +93,8 @@ const getOpr = async (req, res, next) => {
                 { model: db.Department, attributes: ['dept_name'] },
                 { model: db.BuyingHouse, attributes: ['buying_house_name'] }
             ],
-            attributes: { exclude: ['created_by', 'updated_by', 'createdAt', 'updatedAt', 'vertical_id', 'company_id', 'division_id'] }
+            attributes: { exclude: ['department_id', 'delivery_timeline_id', 'buying_house_id', 'created_by', 'updated_by', 'createdAt', 'updatedAt', 'vertical_id', 'company_id', 'division_id'] }
+
         })
 
         // Function to transform nested fields into top-level fields
