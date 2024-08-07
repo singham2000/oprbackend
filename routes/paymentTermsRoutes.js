@@ -9,5 +9,13 @@ router
     .post('/', PaymentTermsController.createPaymentTerms)
     .put('/', PaymentTermsController.updatePaymentTermsById)
     .delete('/', PaymentTermsController.deletePaymentTermsById)
+router
+    .get('/list', PaymentTermsController.getPaymentTerms)
+    .get('/dropdown', PaymentTermsController.getPaymentTerms)
+    .post('/create', PaymentTermsController.createPaymentTerms)
+    .put('/update', PaymentTermsController.updatePaymentTermsById)
+    .delete('/update', PaymentTermsController.deletePaymentTermsById)
+
+
 
 module.exports = router;

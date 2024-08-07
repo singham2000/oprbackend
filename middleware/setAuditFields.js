@@ -17,7 +17,6 @@ const setAuditFields = async (req, res, next) => {
         token = hardcodetoken;
         console.warn('No authorization header provided. Using hardcoded token.');
     }
-    console.log(token)
 
     jwt.verify(token, jwtSecretKey, (err, decoded) => {
 
@@ -26,7 +25,6 @@ const setAuditFields = async (req, res, next) => {
             return res.status(401).json({ message: 'Token verification failed' });
         }
         const userinfo = decoded;
-        console.log(userinfo);
         if (req.method === 'POST') {
             req.body.created_by = userinfo.first_name || 'NA';
             req.body.updated_by = '';

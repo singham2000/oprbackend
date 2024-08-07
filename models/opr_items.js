@@ -69,7 +69,6 @@ module.exports = (sequelize, DataTypes) => {
     OprItems.belongsTo(models.OprMaster, { foreignKey: 'opr_id' });
     OprItems.belongsTo(models.ItemsMaster, { foreignKey: 'item_id' });
     OprItems.belongsTo(models.AddressMaster, { foreignKey: 'address_id' });
-    // OprItems.belongsTo(models.UomMaster, { foreignKey: 'uom_id' });
   };
 
   return OprItems;

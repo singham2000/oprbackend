@@ -1,8 +1,12 @@
 const { BuyingHouse } = require('../models'); // Import the BuyingHouse model
+const generateSeries = require('../utilites/genrateSeries')
+const { Op, where } = require('sequelize')
 
 // Create a new BuyingHouse
 exports.createBuyingHouse = async (req, res) => {
     try {
+        let { buying_house_name, status } = req.body
+        req.body.buying_house_code = await generateSeries('BH')
         const buyingHouse = await BuyingHouse.create(req.body);
         res.status(201).json(buyingHouse);
     } catch (error) {
@@ -13,14 +17,21 @@ exports.createBuyingHouse = async (req, res) => {
 // Get all BuyingHouses
 exports.getAllBuyingHouses = async (req, res) => {
     try {
-        const buyingHouses = await BuyingHouse.findAll();
+        const buyingHouses = await BuyingHouse.findAll({
+            order: [
+                ['updatedAt', 'DESC']
+            ],
+            where: {
+                status: { [Op.ne]: 0 }
+            }
+        });
         res.status(200).json(buyingHouses);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-// Get all BuyingHouses
+// Get all BuyingHouses for drop down
 exports.getBhdropDown = async (req, res) => {
     try {
         const buyingHouses = await BuyingHouse.findAll({
@@ -35,7 +46,8 @@ exports.getBhdropDown = async (req, res) => {
 // Get a single BuyingHouse by ID
 exports.getBuyingHouseById = async (req, res) => {
     try {
-        const buyingHouse = await BuyingHouse.findByPk(req.params.id);
+
+        const buyingHouse = await BuyingHouse.findByPk(req.query.buying_house_id);
         if (buyingHouse) {
             res.status(200).json(buyingHouse);
         } else {
@@ -48,12 +60,12 @@ exports.getBuyingHouseById = async (req, res) => {
 
 // Update a BuyingHouse by ID
 exports.updateBuyingHouse = async (req, res, next) => {
-    const itemId = req.query.buying_house_id;  // Changed to match the query parameter in the function
+    const itemId = req.query.buying_house_id;
     const updatedData = req.body;
 
     try {
         const item = await BuyingHouse.findByPk(itemId, {
-            where: { status: { [Op.ne]: 0 } }  // Ensuring the BuyingHouse is not soft deleted
+            where: { status: { [Op.ne]: 0 } }
         });
 
         if (!item) {

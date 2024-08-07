@@ -1,3 +1,11 @@
+/**
+* Description: penalty terms show in rfq
+* Developer: Rakesh
+* Created Date: 17-07-2024
+* Updated By:
+* Last Updated:17-07-2024
+*/
+
 module.exports = (sequelize, DataTypes) => {
     const PaymentTypeMaster = sequelize.define('payment_type_master', {
         payment_type_id: {
@@ -10,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(100),
             allowNull: false
         },
+        status: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
         created_by: {
             type: DataTypes.STRING(50),
             allowNull: true
@@ -17,16 +29,6 @@ module.exports = (sequelize, DataTypes) => {
         updated_by: {
             type: DataTypes.STRING(50),
             allowNull: true
-        },
-        createdAt: {
-            type: DataTypes.DATE,
-            allowNull: true,
-            field: 'createdAt'
-        }, 
-        updatedAt: {
-            type: DataTypes.DATE,
-            allowNull: true,
-            field: 'updatedAt'
         }
     }, {
         tableName: 'payment_type_master',

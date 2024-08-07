@@ -8,18 +8,21 @@ const generateSeries = require("./seriesGenerate");
 const opr_items = require('../models/opr_items');
 
 const getOprItem = async (req, res, next) => {
+    console.log('******first**********************')
+
     const opr_id = req.query.opr_id;
     try {
         const whereCondition = {};
         if (opr_id) {
             whereCondition.opr_id = opr_id;
         }
+
         let Opr_Items = await OprItems.findAll({
             where: whereCondition,
             include: [
                 { model: db.CompanyMaster, attributes: ['company_name'] },
                 { model: db.OprMaster, attributes: ['opr_num'] },
-                { model: db.AddressMaster },
+                { model: db.AddressMaster, attributes: ['city'] },
                 {
                     model: db.ItemsMaster,
                     include: {
@@ -53,7 +56,7 @@ const getOprItem = async (req, res, next) => {
             sub_group: item.ItemsMaster.sub_group,
             uom: item.ItemsMaster.UomMaster.uom_name || 'null'
         }));
-        res.status(200).json(transformedData);
+        res.status(200).json(Opr_Items);
     } catch (err) {
         next(err);
     }
@@ -149,8 +152,9 @@ const getOprItemForRfq = async (req, res, next) => {
         let Opr_Items = await OprItems.findAll({
             where: { status: 2 },
             include: [
-                { model: db.company_master, attributes: ['company_name'] },
+                { model: db.CompanyMaster, attributes: ['company_name'] },
                 { model: db.OprMaster, attributes: ['opr_num'] },
+                { model: db.AddressMaster, attributes: ['city'] },
                 {
                     model: db.ItemsMaster,
                     include: {
@@ -162,30 +166,7 @@ const getOprItemForRfq = async (req, res, next) => {
             ],
             attributes: { exclude: ['created_by', 'updated_by', 'createdAt', 'updatedAt', 'vertical_id', 'company_id', 'division_id'] }
         })
-
-
-        // Transform the data
-        const transformedData = Opr_Items.map(item => ({
-            opr_item_id: item.opr_item_id,
-            item_id: item.item_id,
-            opr_id: item.opr_id,
-            opr_num: item.OprMaster.opr_num,
-            qty: item.qty,
-            stock_in_transit: item.stock_in_transit,
-            stock_in_hand: item.stock_in_hand,
-            monthly_consumption: item.monthly_consumption,
-            item_description: item.item_description,
-            status: item.status,
-            item_type: item.ItemsMaster.item_type,
-            item_code: item.ItemsMaster.item_code,
-            item_name: item.ItemsMaster.item_name,
-            quantity_in_stock: item.ItemsMaster.quantity_in_stock,
-            quantity_on_order: item.ItemsMaster.quantity_on_order,
-            nafdac_category: item.ItemsMaster.nafdac_category,
-            sub_group: item.ItemsMaster.sub_group,
-            uom: item.ItemsMaster.UomMaster.uom_name || 'null'
-        }));
-        res.status(200).json(transformedData);
+        res.status(200).json(Opr_Items);
     } catch (err) {
         next(err);
     }
@@ -317,6 +298,7 @@ const getOprItemForRfq2 = async (req, res, next) => {
 //GET OPR ITEM BY opr id
 
 const getOprItembyOprId = async (req, res, next) => {
+    console.log('******second**********************')
     const opr_id = req.query.opr_id;
     try {
         const result = await OprItems.findAll({

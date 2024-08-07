@@ -1,19 +1,34 @@
+const { Op } = require('sequelize');
 const { ItemSubGroupMaster } = require('../models')
 
 // Create a new item sub group
-exports.createItemSubGroup = async (req, res) => {
+exports.createItemSubGroup = async (req, res, next) => {
     try {
+        const { item_sub_group_name, item_parent_group_id } = req.body
         const itemSubGroup = await ItemSubGroupMaster.create(req.body);
         res.status(201).json(itemSubGroup);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        next(error)
     }
 };
+
+
+// // Create a new item sub group
+// exports.createItemSubGroup = async (req, res) => {
+//     try {
+//         const itemSubGroup = await ItemSubGroupMaster.create(req.body);
+//         res.status(201).json(itemSubGroup);
+//     } catch (error) {
+//         res.status(400).json({ error: error.message });
+//     }
+// };
 
 // Get all item sub groups
 exports.getAllItemSubGroups = async (req, res) => {
     try {
-        const itemSubGroups = await ItemSubGroupMaster.findAll();
+        const itemSubGroups = await ItemSubGroupMaster.findAll({
+            where:{status:{[Op.ne]:0}}
+        });
         res.status(200).json(itemSubGroups);
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -36,9 +51,6 @@ exports.getAllItemGroupsByGropuid = async (req, res) => {
     }
 };
 
-
-
-
 // Get an item sub group by ID
 exports.getItemSubGroupById = async (req, res) => {
     try {
@@ -56,7 +68,7 @@ exports.getItemSubGroupById = async (req, res) => {
 // Update an item sub group by ID
 exports.updateItemSubGroup = async (req, res) => {
     try {
-        const itemSubGroup = await ItemSubGroupMaster.findByPk(req.params.id);
+        const itemSubGroup = await ItemSubGroupMaster.findByPk(req.query.item_sub_group_id);
         if (itemSubGroup) {
             await itemSubGroup.update(req.body);
             res.status(200).json(itemSubGroup);
@@ -68,77 +80,18 @@ exports.updateItemSubGroup = async (req, res) => {
     }
 };
 
-// Delete an item sub group by ID
+// Soft delete an ItemSubGroup by ID
 exports.deleteItemSubGroup = async (req, res) => {
+    const itemSubGroupId = req.query.item_sub_group_id;
     try {
-        const itemSubGroup = await ItemSubGroupMaster.findByPk(req.params.id);
+        // Find the item sub group by primary key
+        const itemSubGroup = await ItemSubGroupMaster.findByPk(itemSubGroupId);
+
         if (itemSubGroup) {
-            await itemSubGroup.destroy();
-            res.status(204).json();
-        } else {
-            res.status(404).json({ message: 'Item sub group not found' });
-        }
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-};
+            // Perform a soft delete by updating the status to 0 (or your chosen deleted indicator)
+            await itemSubGroup.update({ status: 0 });
 
-// Create a new item sub group
-exports.createItemSubGroup = async (req, res) => {
-    try {
-        const itemSubGroup = await ItemSubGroupMaster.create(req.body);
-        res.status(201).json(itemSubGroup);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-};
-
-// Get all item sub groups
-exports.getAllItemSubGroups = async (req, res) => {
-    try {
-        const itemSubGroups = await ItemSubGroupMaster.findAll();
-        res.status(200).json(itemSubGroups);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-};
-
-// Get an item sub group by ID
-exports.getItemSubGroupById = async (req, res) => {
-    try {
-        const itemSubGroup = await ItemSubGroupMaster.findByPk(req.params.id);
-        if (itemSubGroup) {
-            res.status(200).json(itemSubGroup);
-        } else {
-            res.status(404).json({ message: 'Item sub group not found' });
-        }
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-};
-
-// Update an item sub group by ID
-exports.updateItemSubGroup = async (req, res) => {
-    try {
-        const itemSubGroup = await ItemSubGroupMaster.findByPk(req.params.id);
-        if (itemSubGroup) {
-            await itemSubGroup.update(req.body);
-            res.status(200).json(itemSubGroup);
-        } else {
-            res.status(404).json({ message: 'Item sub group not found' });
-        }
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-};
-
-// Delete an item sub group by ID
-exports.deleteItemSubGroup = async (req, res) => {
-    try {
-        const itemSubGroup = await ItemSubGroupMaster.findByPk(req.params.id);
-        if (itemSubGroup) {
-            await itemSubGroup.destroy();
-            res.status(204).json();
+            res.status(200).json({ message: 'Item sub group deleted successfully' });
         } else {
             res.status(404).json({ message: 'Item sub group not found' });
         }
