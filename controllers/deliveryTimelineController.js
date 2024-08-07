@@ -15,16 +15,15 @@ const getDeliveryTimeline = async (req, res, next) => {
                 },
                 order: [['delivery_timeline_id', 'DESC']]
             });
-            res.status(200).json(result);
+           return res.status(200).json(result);
         } else {
             const result = await delivery_timeline_opr.findAll({
                 where: {
                     delivery_timeline_id: delivery_timeline_id,
                     status: { [Op.ne]: 0 }
-                },
-                order: [['delivery_timeline_id', 'DESC']]
+                }
             });
-            res.status(200).json(result);
+            return res.status(200).json(result);
         }
 
     } catch (err) {
@@ -41,7 +40,7 @@ const deleteDeliveryTimelineById = async (req, res, next) => {
                 delivery_timeline_id: delivery_timeline_id
             }
         });
-        res.status(200).json({ message: 'Deleted successfully' });
+        return res.status(200).json({ message: 'Deleted successfully' });
     } catch (err) {
         next(err)
     }
@@ -58,7 +57,7 @@ const createDeliveryTimeline = async (req, res, next) => {
             delivery_timeline_name,
             status
         });
-        res.status(201).json({ message: "Submit Successfully" });
+        return res.status(201).json({ message: "Submit Successfully" });
     } catch (err) {
         next(err)
     }
