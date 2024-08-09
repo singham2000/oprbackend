@@ -6,11 +6,9 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger-output.json');
 const cors = require('cors');
 
+
 //import middleware
 const setAuditFields = require('./middleware/setAuditFields.js')
-
-
-
 
 
 // Routes Import
@@ -44,22 +42,28 @@ const verticalRouter = require('./routes/verticalRoutes');
 const companyRouter = require('./routes/companyRoutes');
 const deliveryTimelineRouter = require('./routes/deliveryTimelineRoutes');
 const deliveryTermsRouter = require('./routes/deliveryTermsRoutes');
-const paymentTermsRouter = require('./routes/paymentTermsRoutes');
 const penaltyTermsRoutes = require('./routes/penaltyTermsRoutes');
 const additionalCostRouter = require('./routes/additionalCostRoutes');
 const leadTimeRouter = require('./routes/leadTimeRoutes');
-const paymentTypeMasterRoutes = require('./routes/paymentTypeMasterRoutes');
-const paymentRequestMasterRoutes = require('./routes/paymentRequestMasterRoutes');
-const paymentRequestTransactionsMasterRoutes = require('./routes/PaymentRequestTransactionsMaster.js');
 const mailRoutes = require('./routes/mailRoutes.js')
 const pfiRoutes = require('./routes/pfiRoutes.js')
 const vendorTypeMasterRoutes = require('./routes/vendorTypeMasterRoutes');
 const addressRoutes = require('./routes/addressRoutes.js');
+const buyingHouseRoutes = require('./routes/buyHouseRoutes.js');
+const buyingHouseRoutes2 = require('./routes/buyingHouseRoutes.js');
 
 
+
+//payments
+const paymentTypeMasterRoutes = require('./routes/paymentTypeMasterRoutes');
+const paymentRequestMasterRoutes = require('./routes/paymentRequestMasterRoutes');
+const paymentRequestTransactionsMasterRoutes = require('./routes/PaymentRequestTransactionsMaster.js');
+const paymentTermsRouter = require('./routes/paymentTermsRoutes');
+const payment = require('./routes/paymentRoutes.js')
 
 const app = express();
 const PORT = process.env.PORT || 4000;
+
 
 // Middleware
 app.use(express.json());
@@ -69,7 +73,6 @@ app.use(cors());
 
 //swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
 // Routes
 app.use('/api/user', userRoute);
 app.use('/api/role', roleRoute);
@@ -102,20 +105,27 @@ app.use("/api/vertical", verticalRouter);
 app.use("/api/company", companyRouter);
 app.use('/api/division', divisionRoute);
 app.use("/api/delivery/terms", deliveryTermsRouter);
-app.use("/api/payment/terms", paymentTermsRouter);
-app.use('/api/penaltyterms', penaltyTermsRoutes);
 app.use("/api/quotation/additionalcost", additionalCostRouter);
 app.use("/api/leadtime", leadTimeRouter);
-app.use('/api/payment-types', paymentTypeMasterRoutes);
-app.use('/api/paymentrequests', paymentRequestMasterRoutes);
-app.use('/api/payment-transactions', paymentRequestTransactionsMasterRoutes);
 app.use('/api/mail', mailRoutes);
 app.use('/api/pfi', pfiRoutes);
 app.use('/api/vendor-types', vendorTypeMasterRoutes);
 
-//addresss new
 
+//payments
+app.use("/api/paymentterms", paymentTermsRouter);
+app.use('/api/penaltyterms', penaltyTermsRoutes);
+app.use('/api/payment-types', paymentTypeMasterRoutes);
+app.use('/api/paymentrequests', paymentRequestMasterRoutes);
+app.use('/api/payment-transactions', paymentRequestTransactionsMasterRoutes);
+app.use('/api/payment', payment);
+
+// app.use('/api/payment',)
+
+//addresss new
 app.use('/api/address', addressRoutes);
+app.use('/api/bh', buyingHouseRoutes);
+app.use('/api/bhouse', buyingHouseRoutes2);
 
 
 // Error handling middleware

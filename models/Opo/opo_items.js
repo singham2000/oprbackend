@@ -1,22 +1,12 @@
-// const { company_master } = require(".");
-
 module.exports = (sequelize, DataTypes) => {
-  const pfi_line_item = sequelize.define("pfi_line_item", {
-    pfi_item_id: {
+  const opo_items = sequelize.define("opo_items", {
+    opo_item_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    po_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
-    pfi_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
-    payment_request_id: {
+    opo_id: {
       type: DataTypes.INTEGER,
       allowNull: true
     },
@@ -24,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: true
     },
-    company_id: {
+    quo_id: {
       type: DataTypes.INTEGER,
       allowNull: true
     },
@@ -32,19 +22,15 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: true
     },
-    item_description: {
-      type: DataTypes.STRING(255),
+    address_id: {
+      type: DataTypes.INTEGER,
       allowNull: true
     },
-    po_qty: {
+    opo_qty: {
       type: DataTypes.DECIMAL(18, 2),
       allowNull: true
     },
     rate: {
-      type: DataTypes.DECIMAL(18, 2),
-      allowNull: true
-    },
-    margin_percent: {
       type: DataTypes.DECIMAL(18, 2),
       allowNull: true
     },
@@ -65,9 +51,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     }
   }, {
-    tableName: 'pfi_line_item',
+    tableName: 'opo_items',
     timestamps: true
   });
 
-  return pfi_line_item;
+  return opo_items;
 };

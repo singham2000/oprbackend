@@ -14,6 +14,7 @@ router
     .post('/v1', setAuditFields, companyController2.createCompany)
     .get('/vertical', companyController.getCompanyByVertical)
     .get('/byvertical', companyController.getCompanyByVertical)
+    .get('/v1/byvertical', companyController2.getCompanyByVertical)
     .get('/buyinghouse', companyController.getBuyingHouse)
     .put('/', companyController.updateCompanyById)
     .delete('/', companyController.deleteCompanyById)

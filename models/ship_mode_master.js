@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     ShipMode.associate = (models) => {
-        ShipMode.hasMany(models.opr_master, { foreignKey: 'shipment_mode_id' });
+        ShipMode.hasMany(models.OprMaster, { foreignKey: 'shipment_mode_id' });
     };
 
     return ShipMode;

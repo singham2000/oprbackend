@@ -1,13 +1,12 @@
-const { quotation_master } = require('./index')
 
 module.exports = (sequelize, DataTypes) => {
-    const po_master = sequelize.define("po_master", {
-        po_id: {
+    const opo_master = sequelize.define("opo_master", {
+        opo_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
-        po_num: {
+        opo_num: {
             type: DataTypes.STRING(100),
             allowNull: true
         },
@@ -24,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         },
         vendor_id: {
-            type: DataTypes.INTEGER, 
+            type: DataTypes.INTEGER,
             allowNull: true
         },
         status: {
@@ -35,16 +34,8 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(255),
             allowNull: true
         },
-        created_on: {
-            type: DataTypes.DATE,
-            allowNull: true
-        },
         created_by: {
             type: DataTypes.STRING(50),
-            allowNull: true
-        },
-        updated_on: {
-            type: DataTypes.DATE,
             allowNull: true
         },
         updated_by: {
@@ -52,16 +43,8 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         }
     }, {
-        tableName: 'po_master',
+        tableName: 'opo_master',
         timestamps: false
     });
-
-    // po_master.associate = quotation_master => {
-    //     po_master.belongsTo(quotation_master, {
-    //         foreignKey: 'quo_id',
-    //         as: 'quotationData'
-    //     });
-    // };
-    
-    return po_master;
+    return opo_master;
 };

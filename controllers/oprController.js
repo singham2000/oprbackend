@@ -1,15 +1,14 @@
 // const { opr_master } = ('../models');
 const db = require('../models');
-const { opr_master, company_master, OprItems, Vertical } = db;
+const { OprMaster: opr_master, company_master, OprItems, Vertical } = db;
 const formattedDateTime = require("../middleware/time");
 const { Op } = require('sequelize');
 
 
 const generateSeries = require("./seriesGenerate");
+const { query } = require('express');
 
 ///******************this is on query we have remove query form this and use associaton*****************************/
-
-
 // const getVerticalNameById = require('../middleware/databyid/verticalName');
 // const getCompnayNameById = require('../middleware/databyid/companyName');
 // const getDivisionNameById = require('../middleware/databyid/divisionName');
@@ -79,11 +78,13 @@ const generateSeries = require("./seriesGenerate");
 
 
 const getOpr = async (req, res, next) => {
-    try {
+    const { opr_id } = req.query;
 
+    try {
         let opr_detials = await opr_master.findAll({
+            where: opr_id ? { opr_id: opr_id } : {},
             include: [
-                { model: db.company_master, attributes: ['company_name'] },
+                { model: db.CompanyMaster, attributes: ['company_name','company_id'] },
                 { model: db.Vertical, attributes: ['vertical_name'] },
                 { model: db.Division, attributes: ['division_name'] },
                 { model: db.ShipMode, attributes: ['shipment_mode_name'] },
@@ -91,7 +92,8 @@ const getOpr = async (req, res, next) => {
                 { model: db.Department, attributes: ['dept_name'] },
                 { model: db.BuyingHouse, attributes: ['buying_house_name'] }
             ],
-            attributes: { exclude: ['created_by', 'updated_by', 'createdAt', 'updatedAt', 'vertical_id', 'company_id', 'division_id'] }
+            attributes: { exclude: ['department_id', 'delivery_timeline_id', 'buying_house_id', 'created_by', 'updated_by', 'createdAt', 'updatedAt', 'vertical_id', 'company_id', 'division_id'] }
+
         })
 
         // Function to transform nested fields into top-level fields
@@ -121,12 +123,19 @@ const getOpr = async (req, res, next) => {
         };
 
         opr_detials = await transformData(opr_detials);
+        let rfqcountquery = `select COUNT(*) as qs from quotations_master
+where rfq_id in (Select rfq_id from opr_items where opr_id=10)`
+        opr_detials.received_quotatoins = await db.sequelize.query(rfqcountquery)
         res.status(200).json(opr_detials)
 
     } catch (err) {
         next(err)
     }
 }
+
+
+
+
 
 
 // Controller method to delete by id

@@ -9,7 +9,7 @@ const setAuditFields = require('../middleware/setAuditFields.js');
 router
     .get('/quotes', quotationController.getQuotation)
     .get('/quotebyrfqid', quotationController.getQuotationbyrfqId)
-    .post('/quote', upload.single('quote_doc'), setAuditFields, quotationController.createQuotation)
+    .post('/quote', upload.any(), setAuditFields, quotationController.createQuotation)
     .put('/quote', quotationController.updateQuotationById)
     .delete('/quote', quotationController.deleteQuotationById)
 

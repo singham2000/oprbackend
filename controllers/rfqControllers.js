@@ -1,6 +1,6 @@
 const { where, Op } = require('sequelize');
 const db = require('../models')
-const { rfq: RfqMaster, RfqItemDetail, OprItems } = db
+const { rfq: RfqMaster, RfqItemDetail, OprItems, sequelize } = db
 const getPenaltyTermsNameById = require('../middleware/databyid/penaltyTermsName');
 const generateSeries = require("./seriesGenerate");
 const { Where } = require('sequelize/lib/utils');
@@ -72,18 +72,20 @@ const getRfqById = async (req, res, next) => {
 
 
 const createRfq = async (req, res, next) => {
+    const transaction = await sequelize.transaction();
     try {
         const { penalty_terms_id, opr_item_ids, vendor_ids, item_list, created_by, updated_by } = req.body;
-        const doc_code = 'RFQ';
-        const rfq_series = await generateSeries(doc_code);
+        const rfq_series = await generateSeries('RFQ');
 
         // Check if all necessary data is provided
         if (!opr_item_ids || !vendor_ids || !item_list) {
             return res.status(400).json({ message: "Missing required fields" });
         }
+
+
         // Create RFQ master record
         const rfqres = await RfqMaster.create({
-            rfq_num: rfq_series || 'series not genratged',
+            rfq_num: rfq_series,
             vendor_list: vendor_ids.join(','),
             penalty_terms_id: penalty_terms_id,
             created_by,

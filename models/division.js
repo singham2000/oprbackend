@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         },
         status: {
-            type: DataTypes.STRING(50),
+            type: DataTypes.INTEGER,
             allowNull: true
         },
         created_by: {
@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
     })
 
     Division.associate = (models) => {
-        Division.hasMany(models.opr_master, { foreignKey: 'division_id' });
+        Division.hasMany(models.OprMaster, { foreignKey: 'division_id' });
     };
 
     return Division;

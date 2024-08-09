@@ -94,6 +94,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(50),
             allowNull: true
         },
+        opo_status: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
         quote_doc: {
             type: DataTypes.TEXT,
             allowNull: true

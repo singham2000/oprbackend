@@ -8,7 +8,9 @@ const jwtSecretKey = process.env.JWT_SECRET;
 //Get all users
 const getAllUser = async (req, res, next) => {
     try {
-        const items = await User.findAll();
+        const items = await User.findAll({
+            attributes: ['user_id', 'first_name']
+        });
         res.status(200).json(items);
     } catch (err) {
         next(err);

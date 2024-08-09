@@ -1,7 +1,7 @@
 // Controller responsible for comparision approving and rejecting quotations *Rakesh*.
 // const { quotation_master } = ('../models');
 const db = require('../models');
-const { quotation_master, po_master, quotation_items, delivery_terms_quo, payment_terms_quo, lead_time_quo } = db;
+const { quotation_master, po_master, quotation_items, QuoDoc, delivery_terms_quo, payment_terms_quo, lead_time_quo } = db;
 const formattedDateTime = require("../middleware/time");
 const { Op, where } = require('sequelize');
 const generateSeries = require("./seriesGenerate");
@@ -152,14 +152,18 @@ const deleteQuotationById = async (req, res, next) => {
 
 // Controller method to Create
 const createQuotation = async (req, res, next) => {
-
+  console.log("***********Create quotation ***********")
+  console.log(req.body)
+  console.log(req.files)
+  const { quotation_details, quotation_docslist, created_by } = req.body
   try {
     const doc_code = 'QUO';
     const quotation_series = await generateSeries(doc_code);
-    const fileBuffer = req.file.buffer;
-    const base64String = await fileBuffer.toString("base64");
-    req.body.quote_doc = base64String,
-      req.body.quote_doc_name = req.file.originalname
+    // console.log(req.file)
+    // const fileBuffer = req.file.buffer;
+    // const base64String = await fileBuffer.toString("base64");
+    // req.body.quote_doc = base64String,
+    //   req.body.quote_doc_name = req.file.originalname
 
     const {
       rfq_id,
@@ -176,13 +180,10 @@ const createQuotation = async (req, res, next) => {
       payment_terms,
       remarks,
       total_cost,
-      created_by,
-      ItemData,
-      quote_doc,
-      quote_doc_name
-    } = req.body;
+      ItemData
+    } = quotation_details;
 
-
+    //generate quotation
     const newQuotationMaster = await quotation_master.create({
       quo_num: quotation_series,
       rfq_id,
@@ -202,29 +203,27 @@ const createQuotation = async (req, res, next) => {
       status: 1,
       created_by,
       created_on: formattedDateTime,
-      quote_doc,
-      quote_doc_name
     });
 
 
+    //transform quotation items
     const lastInsertedId = newQuotationMaster.quo_id;
-
-    console.log(lastInsertedId)
-    // console.log(ItemData);
-    console.log(ItemData);
-    // update opr_item status
-    //insert item in quote_item_table
-
-    console.log(ItemData);
-
     const updatedItemdata = ItemData.map(item => ({ ...item, quo_id: lastInsertedId, status: 1 }))
-    console.log(updatedItemdata);
-
-    console.log("rfq quotation items data ****************")
-    console.log(updatedItemdata)
+    //insert quotation item
     await quotation_items.bulkCreate(updatedItemdata);
-    console.log("Transaction committed successfully");
-    return res.status(200).json({ message: "Form Submitted Successfully" })
+
+    //transform quotation docs
+    await quotation_docslist.forEach((data, i) => {
+      data.quotation_id = lastInsertedId;
+      data.q_doc_filename = req.files[i ].originalname;
+      data.q_doc_file = req.files[i].buffer.toString("base64");
+      i++;
+    });
+
+    // insert quotation documents
+    await QuoDoc.bulkCreate(quotation_docslist);
+    res.status(200).json({ message: "quotation genrated Suceesfully" });
+
   } catch (err) {
     next(err);
   }

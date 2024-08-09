@@ -1,13 +1,26 @@
 const { AddressMaster, CompanyMaster } = require('../../models'); // Adjust import based on actual file structure
-
+const { Op } = require('sequelize')
 // Get an address by company Id
 exports.getAddressByCompanyId = async (req, res, next) => {
     try {
         const { entity_id } = req.query;
         const address = await AddressMaster.findAll({
             where: {
-                entity_id: entity_id
-            }
+                entity_id: entity_id,
+                status: {
+                    [Op.ne]: 0
+                }
+            },
+            attributes: [
+                "address_id",
+                "address_type",
+                "entity_type",
+                "address_line1",
+                "address_line2",
+                "city",
+                "state",
+                "postal_code"
+            ]
         });
         if (!address) {
             return res.status(404).json({ error: 'Address not found' });

@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
 
     //associatoin
     Vertical.associate = (models) => {
-        Vertical.hasMany(models.opr_master, { foreignKey: 'vertical_id' });
+        Vertical.hasMany(models.OprMaster, { foreignKey: 'vertical_id' });
     };
 
     return Vertical;

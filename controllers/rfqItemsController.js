@@ -84,7 +84,18 @@ const { RfqItemDetail } = db;
 const getAllRfqItem = async (req, res, next) => {
     try {
         const items = await RfqItemDetail.findAll({
-            attributes: ['rfq_item_id', 'quantity', 'additional_qty']
+            attributes: ['rfq_item_id', 'quantity', 'additional_qty'],
+            include: [
+                {
+                    model: db.UomMaster,
+                    attributes: ['uom_name']
+                },
+                {
+                    model: db.AddressMaster,
+                    attributes: ['city']
+                }
+            ]
+
         });
         res.status(200).json(items);
     } catch (err) {
@@ -112,7 +123,22 @@ const getRfqItemByRfqid = async (req, res, next) => {
         const item = await RfqItemDetail.findAll({
             where: {
                 rfq_id: rfqid
+            },
+            include: [{
+                model: db.ItemsMaster,
+                include: {
+                    model: db.UomMaster,
+                    attributes: ['uom_name'],
+                    // model: db.AddressMaster, attributes: ['city']
+                },
+                attributes: ['item_name', 'item_type', 'item_code', 'quantity_in_stock', 'quantity_on_order', 'nafdac_category',]
+            },
+            {
+                model: db.AddressMaster,
+                attributes: ['city','country']
             }
+            ]
+
         });
         if (!item) {
             return res.status(404).json({ error: 'Item not found' });
@@ -141,6 +167,6 @@ const deleteRfqItemById = async (req, res, next) => {
 module.exports = {
     getAllRfqItem,
     getRfqItemById,
-    deleteRfqItemById,getRfqItemByRfqid
+    deleteRfqItemById, getRfqItemByRfqid
 };
 

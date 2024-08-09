@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: true
         },
+        address_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
         quantity: {
             type: DataTypes.DECIMAL(10, 2),
             allowNull: false
@@ -37,6 +41,12 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: true, // Disable timestamps if you don't need them
         tableName: 'rfq_items' // Ensure the table name matches your SQL table name exactly
     });
+
+    //association
+    rfqitem.associate = (models) => {
+        rfqitem.belongsTo(models.ItemsMaster, { foreignKey: 'item_id' });
+        rfqitem.belongsTo(models.AddressMaster, { foreignKey: 'address_id' });
+    };
 
     return rfqitem;
 };

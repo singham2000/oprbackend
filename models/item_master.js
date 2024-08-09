@@ -1,4 +1,4 @@
-const opr_items = require("./opr_items");
+const opr_items = require("./Opr/opr_items");
 
 module.exports = (sequelize, DataTypes) => {
     const ItemsMaster = sequelize.define('ItemsMaster', {
@@ -135,12 +135,10 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: true,
     })
 
-
     ItemsMaster.associate = (models) => {
         ItemsMaster.belongsTo(models.UomMaster, { foreignKey: 'uom_id' });
         ItemsMaster.hasMany(models.OprItems, { foreignKey: 'item_id' });
+        ItemsMaster.hasMany(models.rfqitem, { foreignKey: 'item_id' });
     };
-
-
     return ItemsMaster;
 };

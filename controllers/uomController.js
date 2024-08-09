@@ -1,11 +1,17 @@
 const db = require('../models')
 const { UomMaster: Uom } = db
+const { Op } = require('sequelize')
 
 
 // Controller method to fetch all items
 const getAllUom = async (req, res, next) => {
     try {
-        const items = await Uom.findAll();
+        const items = await Uom.findAll({
+            where: { status: { [Op.ne]: 0 } },
+            order: [
+                ['createdAt', 'ASC']
+            ]
+        });
         res.status(200).json(items);
 
     } catch (err) {
@@ -18,9 +24,11 @@ const getAllUom = async (req, res, next) => {
 
 // Controller method to fetch item by id
 const getUomById = async (req, res) => {
-    const itemid = req.params.id;
+    const itemid = req.query.uom_id;
     try {
-        const item = await Uom.findByPk(itemid);
+        const item = await Uom.findByPk(itemid, {
+            where: { status: { [Op.ne]: 0 } }
+        });
 
         if (!item) {
             return res.status(404).json({ error: 'uom not found' });
@@ -36,24 +44,49 @@ const getUomById = async (req, res) => {
 
 
 
-// Controller method to delte item by id
-const deleteUomById = async (req, res) => {
-    const itemid = req.params.id;
+// Controller method to update Uom
+const updateUomById = async (req, res, next) => {
+    const itemId = req.query.uom_id;
+    const updatedData = req.body;
     try {
-        const item = await Uom.findByPk(itemid);
-
+        const item = await Uom.findByPk(itemId, {
+            where: { status: { [Op.ne]: 0 } }
+        });
         if (!item) {
-            return res.status(404).json({ error: 'oum not found' });
+            return res.status(404).json({ error: 'UOM not found' });
         }
-
-        item.destroy()
-        res.status(200).json({ message: 'oum deleted successfully' });
+        await item.update(updatedData);
+        res.status(200).json({ 'msg': 'Uom Update Successfully', data: item });
     } catch (err) {
-        // console.error(`Error fetching oum with id ${itemid}:`, err);
-        // res.status(500).json({ error: 'Error fetching oum' });
+
+        console.error(`Error updating UOM with id ${itemId}:`, err);
         next(err);
     }
 };
+
+
+//delete uom set status =0
+const deleteUomById = async (req, res, next) => {
+    const itemId = req.query.uom_id;
+    try {
+        const item = await Uom.findByPk(itemId, {
+            where: { status: { [Op.ne]: 0 } }
+        });
+
+        if (!item) {
+            return res.status(404).json({ error: 'UOM not found' });
+        }
+
+        // Set status to 0 instead of deleting the record
+        await item.update({ status: 0 });
+
+        res.status(200).json({ msg: 'UOM deleted successfully', data: item });
+    } catch (err) {
+        console.error(`Error deleting UOM with id ${itemId}:`, err);
+        next(err);
+    }
+};
+
 
 
 // Controller method to delte item by id
@@ -73,7 +106,8 @@ module.exports = {
     getAllUom,
     getUomById,
     deleteUomById,
-    createUom
+    createUom,
+    updateUomById
 };
 
 
