@@ -7,8 +7,8 @@ const shipModeController = require('../controllers/shipModeController');
 // API routes
 router
     .get('/modes', shipModeController.getAllShipmentModes)
+    .get('/modes/dropdown', shipModeController.getAllShipmentModeDropdown)
     .post('/mode', shipModeController.createShipmentMode)
-    .get('/mode/:id', shipModeController.getShipmentModeById)
     .delete('/mode/:id', shipModeController.deleteShipmentMode)
 
 module.exports = router;

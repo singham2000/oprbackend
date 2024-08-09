@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const branch = sequelize.define('BranchMasterTable', {
+    const Branch = sequelize.define('BranchMasterTable', {
         branch_id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -27,5 +27,5 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: true
     })
 
-    return branch;
+    return Branch;
 };

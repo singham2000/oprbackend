@@ -1,45 +1,44 @@
 const db = require('../models');
 const { branch: Branch } = db;
-
+const { Op } = require('sequelize');
 
 const getAllBranch = async (req, res, next) => {
+    const branch_id = req.query.branch_id;
     try {
-        const items = await Branch.findAll();
-        res.status(200).json(items);
-    } catch (err) {
-        next(err);
-    }
-};
-
-
-// Controller method to fetch item by id
-const getBranchById = async (req, res, next) => {
-    const itemid = req.params.id;
-    try {
-        const item = await Branch.findByPk(itemid);
-
-        if (!item) {
-            return res.status(404).json({ error: 'Item not found' });
+        if (branch_id) {
+            const result = await Branch.findAll({
+                where: {
+                    branch_id: branch_id,
+                    status: { [Op.ne]: 0 }
+                },
+                order: [['branch_id', 'DESC']]
+            });
+            res.status(200).json(result);
+        } else {
+            const result = await Branch.findAll({
+                where: {
+                    status: { [Op.ne]: 0 }
+                },
+                order: [['branch_id', 'DESC']]
+            });
+            res.status(200).json(result);
         }
-        res.status(200).json(item);
 
     } catch (err) {
         next(err)
     }
 };
 
-// Controller method to delte item by id
-const deleteBranchById = async (req, res) => {
-    const itemid = req.params.id;
+// Controller method to delete item by id
+const deleteBranchById = async (req, res, next) => {
+    const branch_id = req.query.branch_id;
     try {
-        const item = await Branch.findByPk(itemid);
-
-        if (!item) {
-            return res.status(404).json({ error: 'Item not found' });
-        }
-
-        item.destroy()
-        res.status(200).json({ message: 'Item deleted successfully' });
+        const result = await Branch.update({ status: 0 }, {
+            where: {
+                branch_id: branch_id
+            }
+        });
+        res.status(201).json({ message: 'Deleted successfully' });
     } catch (err) {
         next(err)
     }
@@ -49,21 +48,38 @@ const deleteBranchById = async (req, res) => {
 // Controller method to delte item by id
 const createBranch = async (req, res) => {
     try {
-        const { branch_name } = req.body;
-        const newItem = await Branch.create({ branch_name });
+        const { branch_name, status } = req.body;
+        const newItem = await Branch.create({ branch_name, status });
         res.status(201).json(newItem);
     } catch (err) {
-        // console.error('Error creating item:', err);
-        // res.status(500).json({ error: 'Error creating item' });
         next(err);
+    }
+};
+
+const updateBranch = async (req, res, next) => {
+    const branch_id = req.query.branch_id;
+    try {
+        const {
+            branch_name,
+            status
+        } = req.body;
+        const result = await Branch.update({
+            branch_name, status
+        }, {
+            where: {
+                branch_id: branch_id
+            }
+        });
+        res.status(201).json({ message: "Updated Successfully" });
+    } catch (err) {
+        next(err)
     }
 };
 
 module.exports = {
     getAllBranch,
-    getBranchById,
     deleteBranchById,
-    createBranch
+    createBranch, updateBranch
 };
 
 
