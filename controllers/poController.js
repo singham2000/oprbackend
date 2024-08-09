@@ -8,8 +8,6 @@ const { Op } = require("sequelize");
 const generateSeries = require("./seriesGenerate");
 const { getQuotationItemByQuoId } = require('./quotationItemsController')
 
-
-
 const getPO = async (req, res, next) => {
   const po_id = req.query.po_id;
   try {
@@ -17,7 +15,7 @@ const getPO = async (req, res, next) => {
       const query = `SELECT po_master.*
       FROM po_master
       INNER JOIN quotations_master
-      ON po_master.quo_id = quotations_master.quo_id where po_id = ${po_id};`;
+      ON po_master.quo_id = quotations_master.quo_id where po_id = ${po_id}`;
 
       const result = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
       res.status(200).json(result);
@@ -34,7 +32,6 @@ const getPO = async (req, res, next) => {
     console.error('Error calling UDF:', error);
     throw error;
   }
-
 };
 
 // Controller method to delete by id
@@ -59,10 +56,7 @@ const deletePOById = async (req, res, next) => {
 
 // Controller method to Create po with status 1
 const genratePo = async (req, res, next) => {
-  let { quo_id, quo_num, total_cost, rfq_id, vendor_id } = req.body;
-
-
-
+  let { quo_id, quo_num, total_cost, rfq_id, opr_id, vendor_id, item_list } = req.body;
   try {
     const doc_code = 'PO';
     const po_series = await generateSeries(doc_code);
@@ -73,7 +67,9 @@ const genratePo = async (req, res, next) => {
       po_num: po_series,
       vendor_id,
       quo_id,
-      quo_num, total_cost, vendor_id,
+      quo_num,
+      opr_id,
+      total_cost,
       status: 1,
       created_by,
       created_on: formattedDateTime,
@@ -90,21 +86,15 @@ const genratePo = async (req, res, next) => {
     );
 
     // extract item from quo_items by quo_id
-    let quo_items = await getQuotationItemByQuoId(quo_id);
+    // let quo_items = await getQuotationItemByQuoId(quo_id);
     let po_id = po_response.dataValues.po_id;
 
     // insert po_id and rfq_id in in each quo_items
-    await quo_items.forEach(element => {
-      element.dataValues.po_id = po_id, element.dataValues.rfq_id = rfq_id
+
+    await item_list.forEach(element => {
+      element.po_id = po_id, element.rfq_id = rfq_id
     });
-
-
-    const extractedData = quo_items.map(item => item.dataValues);
-    console.log("PO -itesm to be inserted")
-    console.log(extractedData);
-
-    const response = await po_items.bulkCreate(extractedData)
-
+    const response = await po_items.bulkCreate(item_list)
     res.status(201).json({ message: "Submit Successfully" });
 
   } catch (err) {
@@ -158,9 +148,6 @@ const AcceptPO = async (req, res, next) => {
   try {
     const { status, po_id, remarks } = req.body;
     let updated_by = '###'
-
-    console.log(req.body);
-
     const result = await po_master.update(
       {
         acceptance_remarks: remarks,
@@ -180,6 +167,5 @@ const AcceptPO = async (req, res, next) => {
     next(err);
   }
 };
-
 
 module.exports = { po_email_conformation, AcceptPO, getPO, deletePOById, genratePo, updatePOById };

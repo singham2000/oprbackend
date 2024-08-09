@@ -7,9 +7,6 @@
 */
 
 
-
-
-
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('PenaltyTermsMaster', {
         penalty_terms_id: {

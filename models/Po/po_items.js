@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
   const po_items = sequelize.define("po_items", {
     po_item_id: {
       type: DataTypes.INTEGER,
-      allowNull: false, 
+      allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
@@ -24,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     po_item_description: {
       type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    address_id: {
+      type: DataTypes.INTEGER,
       allowNull: true
     },
     po_qty: {

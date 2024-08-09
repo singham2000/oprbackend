@@ -6,9 +6,9 @@ const { generatePo } = require('../controllers/quotationController');
 
 // API routes
 router
-    .get('/', POController.getPO)
-    .post('/create',POController.genratePo)
-    .put('/', POController.updatePOById)
-    .delete('/', POController.deletePOById)
+    .get('/list', POController.getPO)
+    .post('/create', POController.genratePo)
+    .put('/update', POController.updatePOById)
+    .delete('/delete', POController.deletePOById)
     .post('/accept', POController.AcceptPO)
 module.exports = router;

@@ -1,4 +1,4 @@
-const { quotation_master } = require('./index')
+const { quotation_master } = require('../index')
 
 module.exports = (sequelize, DataTypes) => {
     const po_master = sequelize.define("po_master", {

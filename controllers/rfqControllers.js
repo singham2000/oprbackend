@@ -95,6 +95,7 @@ const createRfq = async (req, res, next) => {
         // Update item list with RFQ ID and quantity
         item_list.forEach(element => {
             element.rfq_id = rfq_id;
+            element.status = 1;
         });
 
 

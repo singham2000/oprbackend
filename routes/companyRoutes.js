@@ -17,6 +17,8 @@ router
     .get('/v1/byvertical', companyController2.getCompanyByVertical)
     .get('/buyinghouse', companyController.getBuyingHouse)
     .put('/', companyController.updateCompanyById)
-    .delete('/', companyController.deleteCompanyById)
+    .delete('/', companyController.deleteCompanyById);
+router
+    .get('/list', companyController2.getCompanies)
 
 module.exports = router;

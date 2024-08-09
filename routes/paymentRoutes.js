@@ -32,4 +32,10 @@ router.post('/type_create', PaymentController.createPaymentType);
 // router.get('/transaction_list', PaymentController.getPaymentTransactions);
 // router.post('/transaction_create', PaymentController.createPaymentTransaction);
 
+
+//payment terms
+router.get('/terms/dropdown', PaymentController.getAllPaymentTerms);
+router.get('/terms/dropdown2', PaymentController.getAllPaymentTerms);
+
+
 module.exports = router;

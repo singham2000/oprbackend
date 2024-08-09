@@ -152,19 +152,10 @@ const deleteQuotationById = async (req, res, next) => {
 
 // Controller method to Create
 const createQuotation = async (req, res, next) => {
-  console.log("***********Create quotation ***********")
-  console.log(req.body)
-  console.log(req.files)
   const { quotation_details, quotation_docslist, created_by } = req.body
   try {
     const doc_code = 'QUO';
     const quotation_series = await generateSeries(doc_code);
-    // console.log(req.file)
-    // const fileBuffer = req.file.buffer;
-    // const base64String = await fileBuffer.toString("base64");
-    // req.body.quote_doc = base64String,
-    //   req.body.quote_doc_name = req.file.originalname
-
     const {
       rfq_id,
       vendor_id,
@@ -208,14 +199,14 @@ const createQuotation = async (req, res, next) => {
 
     //transform quotation items
     const lastInsertedId = newQuotationMaster.quo_id;
-    const updatedItemdata = ItemData.map(item => ({ ...item, quo_id: lastInsertedId, status: 1 }))
+    const updatedItemdata = ItemData.map(item => ({ ...item, quo_id: lastInsertedId, status: 1, rfq_id,vendor_id }))
     //insert quotation item
     await quotation_items.bulkCreate(updatedItemdata);
 
     //transform quotation docs
     await quotation_docslist.forEach((data, i) => {
       data.quotation_id = lastInsertedId;
-      data.q_doc_filename = req.files[i ].originalname;
+      data.q_doc_filename = req.files[i].originalname;
       data.q_doc_file = req.files[i].buffer.toString("base64");
       i++;
     });
