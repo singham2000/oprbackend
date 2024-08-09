@@ -26,7 +26,10 @@ db.UomMaster = require('./uom_master.js')(sequelize, DataTypes);
 db.OprMaster = require('./Opr/opr_master.js')(sequelize, DataTypes);
 db.OprItems = require('./Opr/opr_items.js')(sequelize, DataTypes);
 db.ShipMode = require('./ship_mode_master.js')(sequelize, DataTypes)
-db.buy_house_opr = require('./buy_house_opr.js')(sequelize, DataTypes);
+// db.buy_house_opr = require('./buy_house_opr.js')(sequelize, DataTypes);
+db.quotation_master = require('./Quotation/quotation_master.js')(sequelize, DataTypes);
+db.quotation_items = require('./Quotation/quotation_items.js')(sequelize, DataTypes);
+// db.buy_house_opr = require('./buy_house_opr.js')(sequelize, DataTypes);
 db.series_master = require('./series_master.js')(sequelize, DataTypes);
 db.CategoryMaster = require('./item_category_master.js')(sequelize, DataTypes);
 db.SubCategoryMaster = require('./item_subCategory_master.js')(sequelize, DataTypes);
@@ -89,7 +92,7 @@ Object.values(models).forEach(model => {
     }
 });
 
-sequelize.sync({ alter: true })
+sequelize.sync()
     .then(() => {
         console.log('Database & tables created!');
     })
