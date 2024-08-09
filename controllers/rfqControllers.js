@@ -2,7 +2,7 @@ const { where, Op } = require('sequelize');
 const db = require('../models')
 const { rfq: RfqMaster, RfqItemDetail, OprItems, sequelize } = db
 const getPenaltyTermsNameById = require('../middleware/databyid/penaltyTermsName');
-const generateSeries = require("./seriesGenerate");
+const {generateSeries} = require("./seriesGenerate");
 const { Where } = require('sequelize/lib/utils');
 
 

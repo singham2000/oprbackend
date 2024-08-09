@@ -1,6 +1,6 @@
 const db = require('../models')
 const { vendor: Vendor, VendorsMaster, company_master, VendorsBanksDetailsMaster, VendorsAddressDetailsMaster } = db
-const generateSeries = require('../utilites/genrateSeries')
+const {generateSeries} = require('../utilites/genrateSeries')
 
 // Function to fetch all vendors with associated bank and address details *getAllVendorsDetails*
 getAllVendor = async (req, res) => {

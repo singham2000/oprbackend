@@ -1,7 +1,7 @@
 const { Pfi_master, PaymentRequestMaster, po_master, sequelize, Pfi_line_items, item } = require("../models");
 const formattedDateTime = require("../middleware/time");
 const { Op, where } = require("sequelize");
-const generateSeries = require("./seriesGenerate");
+const {generateSeries} = require("./seriesGenerate");
 const { getQuotationItemByQuoId } = require('./quotationItemsController');
 // const { pfi_line_item } = require("../models/pfi_line_item");
 

@@ -6,12 +6,17 @@ const { Op } = require('sequelize');
 
 // Create a new shipment mode
 const createShipmentMode = async (req, res, next) => {
-    const { shipMode_name, created_by, updated_by, status } = req.body;
     try {
-        const newShipmentMode = await ShipmentMode.create({ shipMode_name, created_by, updated_by, status });
-        res.status(201).json(newShipmentMode);
+        const {
+            shipment_mode_name, status
+        } = req.body;
+        const result = await ShipmentMode.create({
+            shipment_mode_name,
+            status
+        });
+        return res.status(201).json({ message: "Submit Successfully" });
     } catch (err) {
-        next(err);
+        next(err)
     }
 };
 
@@ -59,17 +64,25 @@ const getAllShipmentModes = async (req, res, next) => {
 
 // Update a shipment mode
 const updateShipmentMode = async (req, res, next) => {
-    const { id } = req.params;
-    const { shipMode_name, created_by, updated_by, status } = req.body;
+    const shipment_mode_id = req.query.shipment_mode_id;
+
     try {
-        const [updated] = await ShipmentMode.update({ shipMode_name, created_by, updated_by, status }, {
-            where: { mode_id: id }
-        });
-        if (!updated) {
-            return res.status(404).json({ error: 'Shipment mode not found' });
+        // Find the shipment mode by primary key
+        const shipmentMode = await ShipmentMode.findByPk(shipment_mode_id);
+
+        if (!shipmentMode) {
+            // Handle the case where the shipment mode is not found
+            return res.status(404).json({ message: "Shipment mode not found" });
         }
-        const updatedShipmentMode = await ShipmentMode.findByPk(id);
-        res.status(200).json(updatedShipmentMode);
+
+        // Update the shipment mode
+        const { shipment_mode_name, status } = req.body;
+        await shipmentMode.update({
+            shipment_mode_name,
+            status
+        });
+
+        res.status(200).json({ message: "Updated Successfully" });
     } catch (err) {
         next(err);
     }
@@ -77,19 +90,19 @@ const updateShipmentMode = async (req, res, next) => {
 
 // Delete a shipment mode
 const deleteShipmentMode = async (req, res, next) => {
-    const { id } = req.params;
+    const shipment_mode_id = req.query.shipment_mode_id;
     try {
-        const deleted = await ShipmentMode.destroy({
-            where: { mode_id: id }
+        const result = await ShipmentMode.update({ status: 0 }, {
+            where: {
+                shipment_mode_id: shipment_mode_id
+            }
         });
-        if (!deleted) {
-            return res.status(404).json({ error: 'Shipment mode not found' });
-        }
-        res.status(204).json({ message: 'Shipment mode deleted' });
+        return res.status(200).json({ message: 'Deleted successfully' });
     } catch (err) {
-        next(err);
+        next(err)
     }
 };
+
 
 module.exports = {
     createShipmentMode,

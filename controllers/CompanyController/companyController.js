@@ -1,5 +1,5 @@
 const { CompanyMaster, AddressMaster, sequelize } = require('../../models');
-const generateSeries = require('../../utilites/genrateSeries')
+const {generateSeries} = require('../../utilites/genrateSeries')
 const { Op } = require('sequelize');
 
 

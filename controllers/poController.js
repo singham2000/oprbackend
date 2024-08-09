@@ -5,7 +5,7 @@ const { sequelize } = db
 const { po_master, quotation_master, po_items } = db;
 const formattedDateTime = require("../middleware/time");
 const { Op } = require("sequelize");
-const generateSeries = require("./seriesGenerate");
+const {generateSeries} = require("./seriesGenerate");
 const { getQuotationItemByQuoId } = require('./quotationItemsController')
 
 

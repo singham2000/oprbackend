@@ -28,13 +28,13 @@ router.post('/', createPenaltyTerm);
 router.get('/', getAllPenaltyTerms);
 
 // Route to get a penalty term by ID
-router.get('/:id', getPenaltyTermById);
+router.get('/get', getPenaltyTermById);
 
 // Route to update a penalty term by ID
-router.put('/:id', updatePenaltyTerm);
+router.put('/', updatePenaltyTerm);
 
 // Route to delete a penalty term by ID
-router.delete('/:id', deletePenaltyTerm);
+router.delete('/', deletePenaltyTerm);
 
 
 
