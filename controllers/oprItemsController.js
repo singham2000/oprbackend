@@ -5,7 +5,7 @@ const { Op, where } = require('sequelize');
 const { sequelize } = db;
 const { QueryTypes } = require('sequelize');
 const generateSeries = require("./seriesGenerate");
-const opr_items = require('../models/opr_items');
+// const opr_items = require('../models/');
 
 const getOprItem = async (req, res, next) => {
     console.log('******first**********************')
@@ -22,7 +22,7 @@ const getOprItem = async (req, res, next) => {
             include: [
                 { model: db.CompanyMaster, attributes: ['company_name'] },
                 { model: db.OprMaster, attributes: ['opr_num'] },
-                { model: db.AddressMaster, attributes: ['city'] },
+                { model: db.AddressMaster, attributes: ['city', 'address_id'] },
                 {
                     model: db.ItemsMaster,
                     include: {
@@ -61,6 +61,9 @@ const getOprItem = async (req, res, next) => {
         next(err);
     }
 };
+
+
+// opr 
 
 // Opr Controller to fetch all items
 // const getOprItemForRfq = async (req, res, next) => {
@@ -154,7 +157,7 @@ const getOprItemForRfq = async (req, res, next) => {
             include: [
                 { model: db.CompanyMaster, attributes: ['company_name'] },
                 { model: db.OprMaster, attributes: ['opr_num'] },
-                { model: db.AddressMaster, attributes: ['city'] },
+                { model: db.AddressMaster, attributes: ['city', 'address_id'] },
                 {
                     model: db.ItemsMaster,
                     include: {
@@ -497,6 +500,58 @@ const getcompanylistPoNumber = async (req, res, next) => {
 }
 
 
+// this funcation will give company dorp down for create rfq,
+const getOprCompanyDropdown = async (req, res, next) => {
+    try {
+        let oprCompanyList = await OprItems.findAll({
+            distinct: true,
+            wher: { status: { [Op.e]: 2 } },
+            include: [{
+                model: db.CompanyMaster,
+                where: { status: 1 },
+                attributes: ['company_id', 'company_name']
+            }],
+            attributes: []
+        })
+        res.status(200).json(oprCompanyList)
+    } catch (err) {
+        next(err)
+    }
+}
+
+
+const getOprItemsforQuoteCompare = async (req, res, next) => {
+    let { opr_id, company_id } = req.query
+
+    let query = `select 
+opr_items.item_id,
+opr_items.company_id,
+opr_items.qty,
+opr_items.address_id,
+address_master.city,
+quotations_master.vendor_id,
+vendors_master.vendor_name,
+quotation_items.rate
+from opr_items
+inner join quotations_master
+on quotations_master.rfq_id = opr_items.rfq_id
+inner join quotation_items
+on quotation_items.quo_id = quotations_master.quo_id
+inner join address_master
+on address_master.address_id = opr_items.address_id
+inner join vendors_master
+on vendors_master.vendor_id = quotations_master.vendor_id
+where company_id = ${company_id} and opr_id = ${opr_id}
+`
+    let [data, metadata] = await db.sequelize.query(query, {
+        replacements: { opr_id: opr_id || null }, // Safe parameter binding
+        type: db.sequelize.QueryTypes.SELECT
+    });
+
+    res.status(200).json(data);
+
+}
+
 // this middle
 const oprItemsController = {
     getOprItem,
@@ -509,6 +564,8 @@ const oprItemsController = {
     getcompanylistPoNumber,
     getOprItemForRfq,
     createOprItem2,
-    getOprItemForRfq2
+    getOprItemForRfq2,
+    getOprCompanyDropdown,
+    getOprItemsforQuoteCompare
 };
 module.exports = oprItemsController;

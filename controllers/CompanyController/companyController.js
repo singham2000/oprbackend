@@ -58,8 +58,6 @@ exports.getCompanies = async (req, res, next) => {
 };
 
 
-
-
 // Get company according to vertical
 exports.getCompanyByVertical = async (req, res, next) => {
     const vertical_id = req.query.vertical_id;

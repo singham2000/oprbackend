@@ -135,7 +135,7 @@ const getRfqItemByRfqid = async (req, res, next) => {
             },
             {
                 model: db.AddressMaster,
-                attributes: ['city']
+                attributes: ['city','country']
             }
             ]
 

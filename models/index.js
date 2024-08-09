@@ -3,8 +3,7 @@ require('dotenv').config();
 
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
     host: process.env.DB_HOST,
-    dialect: 'mssql',
-    // logging: false
+    dialect: 'mssql'
 });
 
 
@@ -24,12 +23,10 @@ db.role = require('./role_master.js')(sequelize, DataTypes)
 db.user = require('./user_master.js')(sequelize, DataTypes)
 db.vendor = require('./Xvendor_master_old.js')(sequelize, DataTypes)
 db.UomMaster = require('./uom_master.js')(sequelize, DataTypes);
-db.OprMaster = require('./opr_master.js')(sequelize, DataTypes);
-db.OprItems = require('./opr_items.js')(sequelize, DataTypes);
+db.OprMaster = require('./Opr/opr_master.js')(sequelize, DataTypes);
+db.OprItems = require('./Opr/opr_items.js')(sequelize, DataTypes);
 db.ShipMode = require('./ship_mode_master.js')(sequelize, DataTypes)
 db.buy_house_opr = require('./buy_house_opr.js')(sequelize, DataTypes);
-db.quotation_master = require('./quotation_master.js')(sequelize, DataTypes);
-db.quotation_items = require('./quotation_items.js')(sequelize, DataTypes);
 db.series_master = require('./series_master.js')(sequelize, DataTypes);
 db.CategoryMaster = require('./item_category_master.js')(sequelize, DataTypes);
 db.SubCategoryMaster = require('./item_subCategory_master.js')(sequelize, DataTypes);
@@ -61,6 +58,10 @@ db.Pfi_master = require('./pfi_master.js')(sequelize, DataTypes);
 db.Pfi_line_items = require('./pfi_line_item.js')(sequelize, DataTypes);
 db.VendorTypeMaster = require('./Vendor/VendorTypeMaster.js')(sequelize, DataTypes);
 
+//quotaions
+db.quotation_master = require('./Quotation/quotation_master.js')(sequelize, DataTypes);
+db.quotation_items = require('./Quotation/quotation_items.js')(sequelize, DataTypes);
+db.QuoDoc = require('./Quotation/quotation_docs.js')(sequelize, DataTypes);
 
 //payments
 db.PaymentTypeMaster = require('./paymentTypes.js')(sequelize, DataTypes)
@@ -69,52 +70,14 @@ db.PaymentRequestTransactionsMaster = require('./Payments/PaymentRequestTransact
 db.PenaltyTermsMaster = require('./PenaltyTermsMaster.js')(sequelize, DataTypes)
 db.payment_terms_quo = require('./payment_terms_quo.js')(sequelize, DataTypes)
 
-
-
-
+//opo
+db.OpoMaster = require('./Opo/opo_master.js')(sequelize, DataTypes);
+db.OpoItems = require('./Opo/opo_items.js')(sequelize, DataTypes);
 
 //new company
 db.CompanyMaster = require('./Company/company_master.js')(sequelize, DataTypes);
 db.AddressMaster = require('./Address/address_master.js')(sequelize, DataTypes);
 db.AddressTypeMaster = require('./Address/address_type.js')(sequelize, DataTypes);
-
-// db.quotation = require('./quotation_master.js')(sequelize, DataTypes)
-
-// Define associations fo payment type
-// db.PaymentTypeMaster.hasMany(db.PaymentRequestMaster, {
-//     foreignKey: 'payment_type_id',
-//     as: 'paymentRequests'
-// });
-// db.PaymentRequestMaster.belongsTo(db.PaymentTypeMaster, {
-//     foreignKey: 'payment_type_id',
-//     as: 'paymentType'
-// });
-
-
-// db.PaymentRequestMaster.hasMany(db.PaymentRequestTransactionsMaster, {
-//     foreignKey: 'payment_request_id',
-//     as: 'transactions'
-// });
-// db.PaymentRequestTransactionsMaster.belongsTo(db.PaymentRequestMaster, {
-//     foreignKey: 'payment_request_id',
-//     as: 'paymentRequest'
-// });
-
-
-
-
-// const { Sequelize, DataTypes } = require('sequelize');
-// const sequelize = new Sequelize('database', 'username', 'password', {
-//     dialect: 'postgres',
-//     // other options
-// });
-
-// // Load models
-// const User = require('./user')(sequelize, DataTypes);
-// const Order = require('./order')(sequelize, DataTypes);
-// const Product = require('./product')(sequelize, DataTypes);
-
-
 
 // Set up associations
 const models = { ...db };
@@ -138,4 +101,3 @@ module.exports = {
     sequelize,
     ...models
 };
-// module.exports = db;

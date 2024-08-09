@@ -17,6 +17,8 @@ router
     .post('/confirm/:opr_id', oprController.confirmOpr)
 router
     .get('/items', oprItemsController.getOprItem)
+    .get('/quotecompare', oprItemsController.getOprItemsforQuoteCompare)
+    .get('/compdropdown', oprItemsController.getOprCompanyDropdown)
     .get('/itemsforrfq', oprItemsController.getOprItemForRfq)
     .get('/v1/itemsforrfq', oprItemsController.getOprItemForRfq2)
     .get('/itembypo', oprItemsController.getOprListbyPoNumber)

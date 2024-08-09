@@ -1,13 +1,4 @@
-// *****this controller controll all the paymene related things
-
-const {
-    PaymentTypeMaster,
-    PaymentRequestMaster,
-    PaymentRequestTransactionsMaster,
-    PenaltyTermsMaster,
-    payment_terms_quo
-} = req.body;
-
+const { PaymentTypeMaster } = require('../models')
 
 
 
@@ -16,16 +7,17 @@ const {
 exports.createPaymentType = async (req, res, next) => {
     try {
         const paymentType = await PaymentTypeMaster.create(req.body);
-        res.status(201).json(paymentType);
+        res.status(201).json({ message: 'payment terms created Sucessfully', data: paymentType });
     } catch (error) {
         next(error);
     }
 };
 
+
 // Get payment types (all or by ID)
 exports.getPaymentTypes = async (req, res) => {
     try {
-        const { id } = req.params;
+        const id = req.query.payment_type_id;
         const paymentTypes = id
             ? await PaymentTypeMaster.findByPk(id)
             : await PaymentTypeMaster.findAll({
@@ -35,7 +27,6 @@ exports.getPaymentTypes = async (req, res) => {
         if (id && !paymentTypes) {
             return res.status(404).json({ message: 'Payment Type not found' });
         }
-
         res.status(200).json(paymentTypes);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -60,7 +51,7 @@ exports.getPaymentTypesDropDown = async (req, res) => {
 // Get a single payment type by ID
 exports.getPaymentTypeById = async (req, res) => {
     try {
-        const paymentType = await PaymentTypeMaster.findByPk(req.params.id);
+        const paymentType = await PaymentTypeMaster.findByPk(req.query.payment_type_id);
         if (paymentType && !paymentType.deletedAt) {
             res.status(200).json(paymentType);
         } else {
@@ -74,84 +65,28 @@ exports.getPaymentTypeById = async (req, res) => {
 // Update a payment type
 exports.updatePaymentType = async (req, res) => {
     try {
-        const paymentType = await PaymentTypeMaster.findByPk(req.params.id);
-        if (paymentType && !paymentType.deletedAt) {
-            await paymentType.update(req.body);
-            res.status(200).json(paymentType);
-        } else {
-            res.status(404).json({ message: 'Payment Type not found' });
-        }
+        const paymentType = await PaymentTypeMaster.findByPk(req.query.payment_type_id);
+        await paymentType.update(req.body);
+        res.status(200).json({ msg: 'Payment type updated Successfully' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
 // Soft delete a payment type
-exports.deletePaymentType = async (req, res) => {
+exports.deletePaymentType = async (req, res, next) => {
     try {
-        const paymentType = await PaymentTypeMaster.findByPk(req.params.id);
-        if (paymentType && !paymentType.deletedAt) {
-            await paymentType.destroy();
+        const paymentType = await PaymentTypeMaster.findByPk(req.query.payment_type_id);
+        if (paymentType && paymentType.status !== 0) {
+            paymentType.status = 0;
+            await paymentType.save();
             res.status(204).json();
+        } else if (paymentType && paymentType.status === 0) {
+            res.status(404).json({ message: 'Payment Type already deleted' });
         } else {
             res.status(404).json({ message: 'Payment Type not found' });
         }
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        next(error)
     }
 };
-
-
-
-
-
-
-
-
-
-// const PaymentTermsController = {
-//     //payment type
-//     getPaymentTypes :async(req,res,next){
-
-//     },
-
-
-//     getPaymentTerms: (req, res) => {
-//         // Logic for fetching payment terms
-//     },
-//     createPaymentTerms: (req, res) => {
-//         // Logic for creating payment terms
-//     },
-//     updatePaymentTermsById: (req, res) => {
-//         // Logic for updating payment terms by ID
-//     },
-//     deletePaymentTermsById: (req, res) => {
-//         // Logic for deleting payment terms by ID
-//     },
-//     getPenaltyTerms: (req, res) => {
-//         // Logic for fetching penalty terms
-//     },
-//     createPenaltyTerms: (req, res) => {
-//         // Logic for creating penalty terms
-//     },
-//     updatePenaltyTermsById: (req, res) => {
-//         // Logic for updating penalty terms by ID
-//     },
-//     deletePenaltyTermsById: (req, res) => {
-//         // Logic for deleting penalty terms by ID
-//     },
-//     getPaymentRequests: (req, res) => {
-//         // Logic for fetching payment requests
-//     },
-//     createPaymentRequest: (req, res) => {
-//         // Logic for creating a payment request
-//     },
-//     getPaymentTransactions: (req, res) => {
-//         // Logic for fetching payment transactions
-//     },
-//     createPaymentTransaction: (req, res) => {
-//         // Logic for creating a payment transaction
-//     }
-// };
-
-// module.exports = PaymentTermsController;

@@ -52,16 +52,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DECIMAL(18, 2),
       allowNull: true
     },
-    created_on: {
-      type: DataTypes.DATE,
-      allowNull: true
-    },
     created_by: {
       type: DataTypes.STRING(50),
-      allowNull: true
-    },
-    updated_on: {
-      type: DataTypes.DATE,
       allowNull: true
     },
     updated_by: {

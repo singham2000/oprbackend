@@ -6,10 +6,9 @@ const { Op } = require('sequelize');
 
 
 const generateSeries = require("./seriesGenerate");
+const { query } = require('express');
 
 ///******************this is on query we have remove query form this and use associaton*****************************/
-
-
 // const getVerticalNameById = require('../middleware/databyid/verticalName');
 // const getCompnayNameById = require('../middleware/databyid/companyName');
 // const getDivisionNameById = require('../middleware/databyid/divisionName');
@@ -85,7 +84,7 @@ const getOpr = async (req, res, next) => {
         let opr_detials = await opr_master.findAll({
             where: opr_id ? { opr_id: opr_id } : {},
             include: [
-                { model: db.CompanyMaster, attributes: ['company_name'] },
+                { model: db.CompanyMaster, attributes: ['company_name','company_id'] },
                 { model: db.Vertical, attributes: ['vertical_name'] },
                 { model: db.Division, attributes: ['division_name'] },
                 { model: db.ShipMode, attributes: ['shipment_mode_name'] },
@@ -124,12 +123,19 @@ const getOpr = async (req, res, next) => {
         };
 
         opr_detials = await transformData(opr_detials);
+        let rfqcountquery = `select COUNT(*) as qs from quotations_master
+where rfq_id in (Select rfq_id from opr_items where opr_id=10)`
+        opr_detials.received_quotatoins = await db.sequelize.query(rfqcountquery)
         res.status(200).json(opr_detials)
 
     } catch (err) {
         next(err)
     }
 }
+
+
+
+
 
 
 // Controller method to delete by id
