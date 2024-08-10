@@ -11,4 +11,6 @@ router
     .put('/update', POController.updatePOById)
     .delete('/delete', POController.deletePOById)
     .post('/accept', POController.AcceptPO)
+router
+    .get('/itemlist',POController.getPoItemsbypoid)
 module.exports = router;

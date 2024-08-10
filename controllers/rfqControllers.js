@@ -71,6 +71,11 @@ const getRfqById = async (req, res, next) => {
 };
 
 
+// this is create rfq
+// on rfq creation 
+// opr items stuatus will change to 3 and update rfq id 
+
+
 const createRfq = async (req, res, next) => {
     const transaction = await sequelize.transaction();
     try {
@@ -91,6 +96,7 @@ const createRfq = async (req, res, next) => {
             created_by,
             updated_by
         });
+
         const { rfq_id } = rfqres;
         // Update item list with RFQ ID and quantity
         item_list.forEach(element => {
@@ -99,18 +105,10 @@ const createRfq = async (req, res, next) => {
         });
 
 
-
         // Bulk create RFQ item details
         const rfqitemres = await RfqItemDetail.bulkCreate(item_list);
-        // Update OPR items with new status and RFQ ID
-        // const opritemres = await OprItems.upda(
-        //     { status: 3, rfq_id: rfq_id },
-        //     { where: { opr_item_id: opr_item_ids } }
-        // );
-        //update opr items
-        // let opr_item_id_list = opr_item_ids.map(item => item.opr_item_id);
-        // console.log(opr_item_id_list);
 
+        //here  opr_items update status 3 and insert rfq id in opr_line item
         await OprItems.update(
             { status: 3, rfq_id: rfq_id },
 
@@ -122,7 +120,9 @@ const createRfq = async (req, res, next) => {
                 }
             }
         );
+
         res.status(201).json({ message: "RFQ Generated Successfully" });
+
     } catch (err) {
         next(err);
     }

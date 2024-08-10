@@ -52,15 +52,25 @@ const deletePOById = async (req, res, next) => {
   }
 };
 
-
-
 // Controller method to Create po with status 1
 const genratePo = async (req, res, next) => {
   let { quo_id, quo_num, total_cost, rfq_id, opr_id, vendor_id, item_list } = req.body;
+
   try {
     const doc_code = 'PO';
     const po_series = await generateSeries(doc_code);
     const { quo_id, quo_num, total_cost, vendor_id, created_by } = req.body;
+
+    //extrace some data form quo
+    // "currency": "USD",
+    // "delivery_terms": "FOB",
+    // "payment_terms": "Abcd Payment terms",
+    // "lead_time"
+
+    const quodata =  await db.Rfq
+
+
+
 
     //genrate po
     const po_response = await po_master.create({
@@ -85,15 +95,13 @@ const genratePo = async (req, res, next) => {
       }
     );
 
-    // extract item from quo_items by quo_id
-    // let quo_items = await getQuotationItemByQuoId(quo_id);
     let po_id = po_response.dataValues.po_id;
 
-    // insert po_id and rfq_id in in each quo_items
-
+    // insert items in po_items
     await item_list.forEach(element => {
       element.po_id = po_id, element.rfq_id = rfq_id
     });
+
     const response = await po_items.bulkCreate(item_list)
     res.status(201).json({ message: "Submit Successfully" });
 
@@ -102,8 +110,8 @@ const genratePo = async (req, res, next) => {
   }
 };
 
-
 //update po status after send mail to vendor
+//po status will becom 2 when po sent to vendor
 const po_email_conformation = async (req, res, next) => {
   try {
     // console.log(req.body);
@@ -121,6 +129,83 @@ const po_email_conformation = async (req, res, next) => {
 };
 
 
+//po status will becom 3 when Vendor  accept po rejct= 4
+const AcceptPO = async (req, res, next) => {
+  try {
+    const { status, po_id, remarks } = req.body;
+    const result = await po_master.update(
+      {
+        acceptance_remarks: remarks,
+        status: status ? 3 : 4,
+        updated_on: formattedDateTime,
+      },
+      {
+        where: {
+          po_id: po_id,
+        },
+      }
+    );
+
+    res.status(201).json({ message: "Updated Successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+
+// GET PO ITEMS
+// const getPoItemsbypoid = async (req, res, next) => {
+//   try {
+//     const { po_id } = req.query;
+//     const result = await po_items.findAll(
+//       {
+//         where: {
+//           po_id: po_id,
+//         },
+//       }
+//     );
+//     res.status(201).json(result);
+//   } catch (err) {
+//     next(err);
+//   }
+// } // this will convert into getPodetails
+
+const getPoItemsbypoid = async (req, res, next) => {
+  try {
+    const { po_id } = req.query;
+
+    const result = await po_master.findAll(
+      {
+        include: [
+          {
+            model: db.VendorsMaster,
+            // attributes: ['vendor_name', 'phone_number', 'email']
+            attributes: ['vendor_id', 'vendor_series', 'vendor_name', 'phone_number', 'alternate_phone_number', 'email', 'contact_person', 'contact_person_phone', 'contact_person_email', 'tax_id', 'payment_terms_id', 'pan_num', 'tin_num', 'gst_num', 'vat_num', 'reference_by', 'vendor_type_id', 'vendor_status', 'registration_date', 'compliance_status', 'last_audited_docs_name'],
+            include: [{
+              model: db.VendorsAddressDetailsMaster,
+              // attributes: ['item_name', 'item_code', 'uom_id'],
+            }]
+          },
+          {
+            model: db.po_items,
+            attributes: ['po_item_id', 'po_qty', 'rate', 'remarks'],
+            include: [{
+              model: db.ItemsMaster,
+              attributes: ['item_name', 'item_code', 'uom_id'],
+            }]
+          }
+        ],
+        where: {
+          po_id: po_id,
+        },
+        attributes: ['po_id', 'po_num', 'status', 'created_on', 'currency', 'delivery_terms', 'payment_terms', 'lead_time']
+      }
+    );
+    res.status(201).json(result);
+  } catch (err) {
+    next(err);
+  }
+}
 
 const updatePOById = async (req, res, next) => {
   const po_id = req.query.po_id;
@@ -144,28 +229,5 @@ const updatePOById = async (req, res, next) => {
   }
 };
 
-const AcceptPO = async (req, res, next) => {
-  try {
-    const { status, po_id, remarks } = req.body;
-    let updated_by = '###'
-    const result = await po_master.update(
-      {
-        acceptance_remarks: remarks,
-        status: status ? 3 : 4,
-        updated_by: updated_by,
-        updated_on: formattedDateTime,
-      },
-      {
-        where: {
-          po_id: po_id,
-        },
-      }
-    );
 
-    res.status(201).json({ message: "Updated Successfully" });
-  } catch (err) {
-    next(err);
-  }
-};
-
-module.exports = { po_email_conformation, AcceptPO, getPO, deletePOById, genratePo, updatePOById };
+module.exports = { po_email_conformation, AcceptPO, getPO, deletePOById, genratePo, updatePOById, getPoItemsbypoid };

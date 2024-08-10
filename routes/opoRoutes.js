@@ -3,6 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const opoController = require('../controllers/OpoController/opoController.js');
+const opoController = require('../controllers/OpoController/');
 
 const setAuditFields = require('../middleware/setAuditFields.js');
 

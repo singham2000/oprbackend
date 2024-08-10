@@ -12,6 +12,7 @@ const setAuditFields = require('../middleware/setAuditFields.js');
 router
     .get('/vendors', getAllVendor)
     .post('/vendor', upload.any(), createVendor)
+    // .post('/vendor',  createVendor)
     .get('/vendor/:id', getVendorById)
     .delete('/vendor/:id', deleteVendorById)
     .post('/vendorsasitem', getVednorListbyitemids)

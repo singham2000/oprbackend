@@ -2015,53 +2015,8 @@
         }
       }
     },
-    "/api/po/": {
+    "/api/po/list": {
       "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "po_id",
-            "in": "query",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "put": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "po_id",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "delivery_timeline_name": {
-                  "example": "any"
-                },
-                "updated_by": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          }
-        }
-      },
-      "delete": {
         "description": "",
         "parameters": [
           {
@@ -2122,6 +2077,55 @@
         }
       }
     },
+    "/api/po/update": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "po_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "delivery_timeline_name": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/api/po/delete": {
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "po_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/po/accept": {
       "post": {
         "description": "",
@@ -2143,6 +2147,23 @@
                 }
               }
             }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/api/po/itemlist": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "po_id",
+            "in": "query",
+            "type": "string"
           }
         ],
         "responses": {

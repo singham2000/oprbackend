@@ -4,7 +4,6 @@ const { PaymentRequestMaster, PaymentTypeMaster, po_master } = db
 const generateSeries = require("./seriesGenerate");
 
 
-
 // this function will genrate data in payment request table
 exports.createPaymentRequestMaster = async (req, res) => {
     try {
@@ -13,7 +12,7 @@ exports.createPaymentRequestMaster = async (req, res) => {
         req.body.pr_num = pr_series;
         const { pr_num, po_id, po_number, po_amount, advice_amount, advice_date, remarks, payment_type_id } = req.body;
 
-        // Ensure po_id is valid
+        // Ensure po_id is valid and update po_staus
         const po = await po_master.findByPk(po_id);
         if (!po) {
             return res.status(404).json({ message: 'Po id is not valid' });
@@ -24,6 +23,7 @@ exports.createPaymentRequestMaster = async (req, res) => {
         if (!paymentType) {
             return res.status(404).json({ message: 'PaymentTypeMaster not found' });
         }
+
         const response = await PaymentRequestMaster.create({
             po_id,
             pr_num,
@@ -36,6 +36,7 @@ exports.createPaymentRequestMaster = async (req, res) => {
             payment_type_id
         });
 
+        
         //update po status
         await po_master.update(
             { status: 5 },

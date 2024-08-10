@@ -9,6 +9,7 @@ const { sequelize, po_items } = require('../models/index')
 
 
 const getQuotation = async (req, res, next) => {
+  console.log("Quotation Item List")
   const quo_id = req.query.quo_id;
   try {
     if (quo_id) {
@@ -24,25 +25,27 @@ const getQuotation = async (req, res, next) => {
       //                 ON quotations_master.lead_time = lead_time_quo.lead_time_id                      
       //                 where quo_id = ${quo_id}`;
 
-      const query = `SELECT [dbo].[fn_additionalCost]([quo_id]) As additionalCost,reference_no,reference_date,
-                      vendors_master.vendor_name As vendorName,
-                      vendors_master.email As vendor_email,
-                      [dbo].[fn_vendorAddress](quotations_master.vendor_id) As vendor_address,
-                      vendors_master.phone_number As vendor_phone_number,
-                      [dbo].[fn_rfqNum]([rfq_id]) as rfq_num
-                      FROM quotations_master
-                      INNER JOIN payment_terms_master
-                      ON quotations_master.payment_terms = payment_terms_master.payment_terms_id 
-                      INNER JOIN delivery_terms_quo
-                      ON quotations_master.delivery_terms = delivery_terms_quo.delivery_terms_id 
-                      INNER JOIN lead_time_quo
-                      ON quotations_master.lead_time = lead_time_quo.lead_time_id 
-                      INNER JOIN vendors_master
-                      ON vendors_master.vendor_id= quotations_master.vendor_id 
-                      where quo_id = 1
-                      `
+      // const query = `SELECT [dbo].[fn_additionalCost]([quo_id]) As additionalCost,reference_no,reference_date,
+      //                 vendors_master.vendor_name As vendorName,
+      //                 vendors_master.email As vendor_email,
+      //                 [dbo].[fn_vendorAddress](quotations_master.vendor_id) As vendor_address,
+      //                 vendors_master.phone_number As vendor_phone_number,
+      //                 [dbo].[fn_rfqNum]([rfq_id]) as rfq_num
+      //                 FROM quotations_master
+      //                 INNER JOIN payment_terms_master
+      //                 ON quotations_master.payment_terms = payment_terms_master.payment_terms_id 
+      //                 INNER JOIN delivery_terms_quo
+      //                 ON quotations_master.delivery_terms = delivery_terms_quo.delivery_terms_id 
+      //                 INNER JOIN lead_time_quo
+      //                 ON quotations_master.lead_time = lead_time_quo.lead_time_id 
+      //                 INNER JOIN vendors_master
+      //                 ON vendors_master.vendor_id= quotations_master.vendor_id 
+      //                 where quo_id = ${quo_id}
+      //                 `
+      // const result = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
 
-      const result = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
+
+      // console.log(result);
 
       let quer2 =
         `select 
@@ -50,14 +53,14 @@ const getQuotation = async (req, res, next) => {
                 item_description,opr_qty,rate
                 from quotation_items
                 where quo_id = ${quo_id}`
-      console.log(quer2)
 
       let data = await sequelize.query(quer2, { type: sequelize.QueryTypes.SELECT });
 
-      data.forEach(item => item.uom = 'KG')
       console.log(data);
-      result[0].item_list = data
-      res.status(200).json(result);
+      data.forEach(item => item.uom = 'KG')
+      // result[0].item_list = data
+
+      res.status(200).json(data);
 
     }
     else {
@@ -153,7 +156,9 @@ const deleteQuotationById = async (req, res, next) => {
 // Controller method to Create
 const createQuotation = async (req, res, next) => {
   const { quotation_details, quotation_docslist, created_by } = req.body
+
   try {
+
     const doc_code = 'QUO';
     const quotation_series = await generateSeries(doc_code);
     const {
@@ -199,7 +204,7 @@ const createQuotation = async (req, res, next) => {
 
     //transform quotation items
     const lastInsertedId = newQuotationMaster.quo_id;
-    const updatedItemdata = ItemData.map(item => ({ ...item, quo_id: lastInsertedId, status: 1, rfq_id,vendor_id }))
+    const updatedItemdata = ItemData.map(item => ({ ...item, quo_id: lastInsertedId, status: 1, rfq_id, vendor_id }))
     //insert quotation item
     await quotation_items.bulkCreate(updatedItemdata);
 
@@ -216,6 +221,7 @@ const createQuotation = async (req, res, next) => {
     res.status(200).json({ message: "quotation genrated Suceesfully" });
 
   } catch (err) {
+    console.log(err)
     next(err);
   }
 }

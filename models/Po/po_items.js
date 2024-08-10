@@ -59,5 +59,20 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: true
   });
 
+  // po_items.associate = (model) => {
+  //   po_items.hasMany(model.po_master, {
+  //     foreignKey: 'po_id'
+  //   });
+  // };
+
+  po_items.associate = (models) => {
+    po_items.belongsTo(models.po_master, {
+      foreignKey: 'po_id',
+    });
+    po_items.belongsTo(models.ItemsMaster, {
+      foreignKey: 'item_id',
+    });
+  };
+
   return po_items;
-};
+}; 

@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
         q_doc_name: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING(255),
             allowNull: true,
         },
         q_doc_remarks: {

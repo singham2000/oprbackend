@@ -28,6 +28,5 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'payment_term_master2',
         timestamps: true
     });
-
     return PaymentTerms;
 };
