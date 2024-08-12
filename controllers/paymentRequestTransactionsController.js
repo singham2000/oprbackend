@@ -50,9 +50,6 @@ exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {
 
 
         // genrate pfi master
-        
-
-
         // insert po_id request_id in talbe
         result.forEach(item => { item.status = 1, item.po_id = po_id, item.payment_request_id = payment_request_id, item.created_by = req.body.created_by })
         const PFI_response = await Pfi_master.bulkCreate(result);
