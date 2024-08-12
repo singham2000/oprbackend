@@ -8,7 +8,7 @@ async function generateSeries(doc_code) {
     try {
         const series = await series_master.findOne({
             where: {
-                status: { [Op.ne]: 0},
+                status: { [Op.eq]: 1 },
                 doc_code: doc_code
             }
         });

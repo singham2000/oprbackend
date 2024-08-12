@@ -60,6 +60,7 @@ db.EmailAttachments = require('./email_attachments.js')(sequelize, DataTypes);
 db.Pfi_master = require('./pfi_master.js')(sequelize, DataTypes);
 db.Pfi_line_items = require('./pfi_line_item.js')(sequelize, DataTypes);
 db.VendorTypeMaster = require('./Vendor/VendorTypeMaster.js')(sequelize, DataTypes);
+db.status_master = require('./status_master')(sequelize, DataTypes);
 
 //quotaions
 db.quotation_master = require('./Quotation/quotation_master.js')(sequelize, DataTypes);
@@ -92,7 +93,7 @@ Object.values(models).forEach(model => {
     }
 });
 
-sequelize.sync()
+sequelize.sync()  
     .then(() => {
         console.log('Database & tables created!');
     })
