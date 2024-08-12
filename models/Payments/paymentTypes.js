@@ -1,9 +1,9 @@
 /**
 * Description: penalty terms show in rfq
 * Developer: Rakesh
-* Created Date: 17-07-2024
+* Created Date: 12-08-2024
 * Updated By:
-* Last Updated:17-07-2024
+* Last Updated:
 */
 
 module.exports = (sequelize, DataTypes) => {
@@ -35,13 +35,13 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: true
     });
 
-    // PaymentTypeMaster.associate = models => {
-    //     // Define associations here
-    //     PaymentTypeMaster.hasMany(models.PaymentRequestMaster, {
-    //         foreignKey: 'payment_type_id',
-    //         as: 'paymentRequests'
-    //     });
-    // };
-    
+    PaymentTypeMaster.associate = models => {
+        // Define associations here
+        PaymentTypeMaster.hasMany(models.PaymentRequestMaster, {
+            foreignKey: 'payment_type_id',
+            as: 'paymentRequests'
+        });
+    };
+
     return PaymentTypeMaster;
 };

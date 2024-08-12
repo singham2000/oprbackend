@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
         }
 
     }, {
-        tableName: 'company_master',
+        tableName: 'Zcompany_master',
         timestamps: false
     });
 

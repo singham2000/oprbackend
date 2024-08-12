@@ -12,6 +12,18 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(100),
             allowNull: true
         },
+        payment_type_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        payment_type_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        penalty_terms_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
         status: {
             type: DataTypes.INTEGER,
             allowNull: false
@@ -25,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         }
     }, {
-        tableName: 'payment_term_master2',
+        tableName: 'payment_term_master_new',
         timestamps: true
     });
     return PaymentTerms;

@@ -59,17 +59,15 @@ const getQuotation = async (req, res, next) => {
       console.log(data);
       data.forEach(item => item.uom = 'KG')
       // result[0].item_list = data
-
       res.status(200).json(data);
-
     }
     else {
       const query = `SELECT * ,[dbo].[fn_additionalCost]([quo_id]) As additionalCost,
                       [dbo].[fn_vendorName]([vendor_id]) As vendorName,
                       [dbo].[fn_rfqNum]([rfq_id]) as rfq_num
                       FROM quotations_master
-                      INNER JOIN payment_terms_master
-                      ON quotations_master.payment_terms = payment_terms_master.payment_terms_id 
+                      INNER JOIN payment_term_master_new
+                      ON quotations_master.payment_terms = payment_term_master_new.payment_terms_id 
                       INNER JOIN delivery_terms_quo
                       ON quotations_master.delivery_terms = delivery_terms_quo.delivery_terms_id 
                       INNER JOIN lead_time_quo

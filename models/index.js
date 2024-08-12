@@ -33,13 +33,14 @@ db.lead_time_quo = require('./lead_time.js')(sequelize, DataTypes)
 
 
 //COMPANY
+db.CompanyMaster = require('./Company/company_master.js')(sequelize, DataTypes);
+db.AddressMaster = require('./Address/address_master.js')(sequelize, DataTypes);
+db.AddressTypeMaster = require('./Address/address_type.js')(sequelize, DataTypes);
 db.BuyingHouse = require('./buyinghouse_master.js')(sequelize, DataTypes)
 db.DeptDesigMapping = require('./dept_desig_mapping.js')(sequelize, DataTypes)
 db.branch = require('./branch_master.js')(sequelize, DataTypes)
 db.Division = require('./division.js')(sequelize, DataTypes)
 db.Vertical = require('./vertical_master.js')(sequelize, DataTypes)
-// db.company_master = require('./company_master.js')(sequelize, DataTypes)
-
 
 //OPR
 db.OprMaster = require('./Opr/opr_master.js')(sequelize, DataTypes);
@@ -58,14 +59,13 @@ db.CriaMaster = require('./cria_master.js')(sequelize, DataTypes);
 db.Nafdac = require('./nafdacMaster.js')(sequelize, DataTypes);
 db.NafdacCategoryMaster = require('./nafdac_category_master.js')(sequelize, DataTypes);
 
-
-
 //VENDOR
 db.VendorsMaster = require('./Vendor/vendor_master.js')(sequelize, DataTypes)
 db.VendorsBanksDetailsMaster = require('./Vendor/vendor_banksDetails_master.js')(sequelize, DataTypes)
 db.VendorsAddressDetailsMaster = require('./Vendor/vendor_adddress_details_master.js')(sequelize, DataTypes)
 db.VendorTypeMaster = require('./Vendor/VendorTypeMaster.js')(sequelize, DataTypes);
 db.vendor = require('./Xvendor_master_old.js')(sequelize, DataTypes)
+
 
 //EMAIL
 db.EmailMessage = require('./email_message_master.js')(sequelize, DataTypes);
@@ -85,7 +85,6 @@ db.rfqitem = require('./Rfq/rfq_Item_master.js')(sequelize, DataTypes)
 db.po_master = require('./Po/po_master.js')(sequelize, DataTypes)
 db.po_items = require('./Po/po_items.js')(sequelize, DataTypes);
 
-
 //QUOTATION
 db.quotation_master = require('./Quotation/quotation_master.js')(sequelize, DataTypes);
 db.quotation_items = require('./Quotation/quotation_items.js')(sequelize, DataTypes);
@@ -93,27 +92,25 @@ db.QuoDoc = require('./Quotation/quotation_docs.js')(sequelize, DataTypes);
 db.quotation_master = require('./Quotation/quotation_master.js')(sequelize, DataTypes);
 db.quotation_items = require('./Quotation/quotation_items.js')(sequelize, DataTypes);
 
-
 //PAYMENTS
-db.PaymentTypeMaster = require('./paymentTypes.js')(sequelize, DataTypes)
-db.PaymentRequestMaster = require('./Payments/PaymentRequestMaster.js')(sequelize, DataTypes)
+// db.PaymentTypeMaster = require('./paymentTypes.js')(sequelize, DataTypes)
+// db.payment_terms_quo = require('./payment_terms_quo.js')(sequelize, DataTypes)
+
 db.PaymentRequestTransactionsMaster = require('./Payments/PaymentRequestTransactionsMaster .js')(sequelize, DataTypes)
 db.PenaltyTermsMaster = require('./Payments/PenaltyTermsMaster.js')(sequelize, DataTypes)
-db.payment_terms_quo = require('./payment_terms_quo.js')(sequelize, DataTypes)
 db.PaymentTerms = require('./Payments/PaymentTerms.js')(sequelize, DataTypes)
+db.PaymentTypeMaster = require('./Payments/paymentTypes.js')(sequelize, DataTypes)
+db.PaymentRequestMaster = require('./Payments/PaymentRequestMaster.js')(sequelize, DataTypes)
+
+
+
 
 //OPO
 db.OpoMaster = require('./Opo/opo_master.js')(sequelize, DataTypes);
 db.OpoItems = require('./Opo/opo_items.js')(sequelize, DataTypes);
 
-//COMPANY
-db.CompanyMaster = require('./Company/company_master.js')(sequelize, DataTypes);
-db.AddressMaster = require('./Address/address_master.js')(sequelize, DataTypes);
-db.AddressTypeMaster = require('./Address/address_type.js')(sequelize, DataTypes);
-
 // Set up associations
 const models = { ...db };
-
 
 // Call associate methods
 Object.values(models).forEach(model => {
@@ -122,13 +119,14 @@ Object.values(models).forEach(model => {
     }
 });
 
-sequelize.sync()
+sequelize.sync({alte:true})
     .then(() => {
         console.log('Database & tables created!');
     })
     .catch(error => {
         console.error('Error synchronizing the database:', error);
     });
+
 module.exports = {
     sequelize,
     ...models

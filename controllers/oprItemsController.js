@@ -61,87 +61,6 @@ const getOprItem = async (req, res, next) => {
 };
 
 
-// opr 
-
-// Opr Controller to fetch all items
-// const getOprItemForRfq = async (req, res, next) => {
-//     console.log("******************")
-//     const opr_id = req.query.opr_id;
-//     try {
-//         if (!opr_id) {
-//             let query =
-//                 `   select   
-//                     opr_item_id,
-//                     opr_items.item_id as item_id,
-//                     opr_id,
-// 					[dbo].[fn_oprnum](opr_id) as opr_num,
-//                     qty,
-//                     stock_in_transit,
-//                     stock_in_hand,
-//                     monthly_consumption,
-//                     opr_items.item_description,
-//                     opr_items.[status],
-//                     item_master.item_type as item_type,
-//                     item_master.item_code as item_code,
-//                     item_master.item_name as item_name,
-//                     item_master.quantity_in_stock  as quantity_in_stock,
-//                     item_master.quantity_on_order  as quantity_on_order,
-//                     item_master.nafdac_category  as nafdac_category,
-//                     [dbo].[fn_SubGrpName](item_master.sub_group) as sub_group,
-//                     [dbo].[fn_UomName](item_master.uom_id) as uom
-//                     from opr_items
-//                     inner join  item_master on opr_items.item_id = item_master.item_id
-//                     where opr_items.status = 2`
-
-//             // const result = await OprItems.findAll({
-//             //     where: {
-//             //         status: { [Op.eq]: 2 }
-//             //     }
-//             // }); 
-
-//             const [result, length] = await db.sequelize.query(query);
-//             res.status(200).json(result);
-//         } else {
-//             // const result = await OprItems.findAll({
-//             //     where: {
-//             //         opr_id: opr_id,
-//             //         status: { [Op.ne]: 0 }
-//             //     }
-
-//             // });
-
-//             let query =
-//                 `   select   
-//                     opr_item_id,
-//                     opr_id,
-//                     opr_items.item_id as item_id,
-// 					[dbo].[fn_oprnum](opr_id) as opr_num,
-//                     qty,
-//                     stock_in_transit,
-//                     stock_in_hand,
-//                     monthly_consumption,
-//                     opr_items.item_description,
-//                     opr_items.[status],
-//                     item_master.item_type as item_type,
-//                     item_master.item_code as item_code,
-//                     item_master.item_name as item_name,
-//                     item_master.quantity_in_stock  as quantity_in_stock,
-//                     item_master.quantity_on_order  as quantity_on_order,
-//                     item_master.nafdac_category  as nafdac_category,
-//                     [dbo].[fn_SubGrpName](item_master.sub_group) as sub_group,
-//                     [dbo].[fn_UomName](item_master.uom_id) as uom
-//                     from opr_items
-//                     inner join  item_master on opr_items.item_id = item_master.item_id
-//                     where opr_id = ${opr_id} `
-//             const [result, length] = await db.sequelize.query(query);
-//             res.status(200).json(result);
-//         }
-
-//     } catch (err) {
-//         next(err);
-//     }
-
-//     };
 
 
 
@@ -590,3 +509,89 @@ const oprItemsController = {
     getOprItemsforQuoteCompare
 };
 module.exports = oprItemsController;
+
+
+
+
+
+// opr 
+
+// Opr Controller to fetch all items
+// const getOprItemForRfq = async (req, res, next) => {
+//     console.log("******************")
+//     const opr_id = req.query.opr_id;
+//     try {
+//         if (!opr_id) {
+//             let query =
+//                 `   select   
+//                     opr_item_id,
+//                     opr_items.item_id as item_id,
+//                     opr_id,
+// 					[dbo].[fn_oprnum](opr_id) as opr_num,
+//                     qty,
+//                     stock_in_transit,
+//                     stock_in_hand,
+//                     monthly_consumption,
+//                     opr_items.item_description,
+//                     opr_items.[status],
+//                     item_master.item_type as item_type,
+//                     item_master.item_code as item_code,
+//                     item_master.item_name as item_name,
+//                     item_master.quantity_in_stock  as quantity_in_stock,
+//                     item_master.quantity_on_order  as quantity_on_order,
+//                     item_master.nafdac_category  as nafdac_category,
+//                     [dbo].[fn_SubGrpName](item_master.sub_group) as sub_group,
+//                     [dbo].[fn_UomName](item_master.uom_id) as uom
+//                     from opr_items
+//                     inner join  item_master on opr_items.item_id = item_master.item_id
+//                     where opr_items.status = 2`
+
+//             // const result = await OprItems.findAll({
+//             //     where: {
+//             //         status: { [Op.eq]: 2 }
+//             //     }
+//             // }); 
+
+//             const [result, length] = await db.sequelize.query(query);
+//             res.status(200).json(result);
+//         } else {
+//             // const result = await OprItems.findAll({
+//             //     where: {
+//             //         opr_id: opr_id,
+//             //         status: { [Op.ne]: 0 }
+//             //     }
+
+//             // });
+
+//             let query =
+//                 `   select   
+//                     opr_item_id,
+//                     opr_id,
+//                     opr_items.item_id as item_id,
+// 					[dbo].[fn_oprnum](opr_id) as opr_num,
+//                     qty,
+//                     stock_in_transit,
+//                     stock_in_hand,
+//                     monthly_consumption,
+//                     opr_items.item_description,
+//                     opr_items.[status],
+//                     item_master.item_type as item_type,
+//                     item_master.item_code as item_code,
+//                     item_master.item_name as item_name,
+//                     item_master.quantity_in_stock  as quantity_in_stock,
+//                     item_master.quantity_on_order  as quantity_on_order,
+//                     item_master.nafdac_category  as nafdac_category,
+//                     [dbo].[fn_SubGrpName](item_master.sub_group) as sub_group,
+//                     [dbo].[fn_UomName](item_master.uom_id) as uom
+//                     from opr_items
+//                     inner join  item_master on opr_items.item_id = item_master.item_id
+//                     where opr_id = ${opr_id} `
+//             const [result, length] = await db.sequelize.query(query);
+//             res.status(200).json(result);
+//         }
+
+//     } catch (err) {
+//         next(err);
+//     }
+
+//     };

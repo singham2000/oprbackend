@@ -56,7 +56,6 @@ exports.getCompanies = async (req, res, next) => {
     }
 };
 
-
 // Get company according to vertical
 exports.getCompanyByVertical = async (req, res, next) => {
     const vertical_id = req.query.vertical_id;
@@ -73,36 +72,75 @@ exports.getCompanyByVertical = async (req, res, next) => {
     }
 };
 
+//UPDATE COMPANY
+exports.updateCompany = async (req, res, next) => {
+    const transaction = await sequelize.transaction();
+    try {
+        const { company_id } = req.query;
+        const { companyData, addressData } = req.body;
 
-// Update a company by ID
-// exports.updateCompany = async (req, res) => {
-//     try {
-//         const [updated] = await CompanyMaster.update(req.body, {
-//             where: { company_id: req.params.id }
-//         });
-//         if (updated) {
-//             const updatedCompany = await CompanyMaster.findByPk(req.params.id);
-//             res.status(200).json(updatedCompany);
-//         } else {
-//             res.status(404).json({ error: 'Company not found' });
-//         }
-//     } catch (error) {
-//         res.status(500).json({ error: error.message });
-//     }
-// };
+        // Update company information
+        const company = await CompanyMaster.findByPk(company_id, { transaction });
+        if (!company) {
+            return res.status(404).json({ message: 'Company not found' });
+        }
 
-// Delete a company by ID
-// exports.deleteCompany = async (req, res) => {
-//     try {
-//         const deleted = await CompanyMaster.destroy({
-//             where: { company_id: req.params.id }
-//         });
-//         if (deleted) {
-//             res.status(204).send();
-//         } else {
-//             res.status(404).json({ error: 'Company not found' });
-//         }
-//     } catch (error) {
-//         res.status(500).json({ error: error.message });
-//     }
-// };
+        await company.update(companyData, { transaction });
+
+        // Update or add address information
+        if (addressData && addressData.length > 0) {
+            // Update existing addresses
+            await Promise.all(addressData.map(async (data) => {
+                if (data.address_id) {
+                    const address = await AddressMaster.findByPk(data.address_id, { transaction });
+                    if (address) {
+                        await address.update(data, { transaction });
+                    }
+                } else {
+                    // Add new addresses
+                    data.entity_id = company.company_id;
+                    data.entity_type = 'company';
+                    data.created_by = req.body.created_by;
+                    await AddressMaster.create(data, { transaction });
+                }
+            }));
+        }
+
+        await transaction.commit();
+        res.status(200).json({ message: 'Company updated successfully', company });
+    } catch (err) {
+        await transaction.rollback();
+        next(err);
+    }
+};
+
+//DELTE COMPANY
+exports.deleteCompany = async (req, res, next) => {
+    const transaction = await sequelize.transaction();
+    try {
+        const { company_id } = req.query;
+
+        // Find the company to delete
+        const company = await CompanyMaster.findByPk(company_id, { transaction });
+        if (!company) {
+            return res.status(404).json({ message: 'Company not found' });
+        }
+
+        // Soft delete the company
+        company.status = 0; // Assuming 0 represents deleted status
+        await company.save({ transaction });
+
+        // Soft delete related addresses
+        await AddressMaster.update(
+            { status: 0 }, // Assuming 0 represents deleted status
+            { where: { entity_id: company_id, entity_type: 'company' }, transaction }
+        );
+
+        await transaction.commit();
+        res.status(204).json();
+    } catch (err) {
+        await transaction.rollback();
+        next(err);
+    }
+};
+
