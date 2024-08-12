@@ -2,9 +2,11 @@ const { where } = require('sequelize');
 const { PaymentRequestTransactionsMaster, PaymentRequestMaster, po_master, Pfi_master, sequelize } = require('../models'); // Adjust the path to your models file
 
 //this funcation will insert data in transaction table and same time i will also insert data in pfi master without pfi number(series)
+
 exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {
     try {
         const { payment_request_id, po_id } = req.body;
+
         //update request status 
         const paymentRequest = await PaymentRequestMaster.update(
             { status: 3 },
@@ -15,6 +17,7 @@ exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {
         if (!paymentRequest) {
             return res.status(404).json({ message: 'Request id is not valid' });
         }
+
         //update po status
         const poMaterResponse = await po_master.update(
             { status: 6 },
@@ -26,7 +29,6 @@ exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {
             return res.status(404).json({ message: 'Po id is not valid' });
         }
 
-
         // handle image file
         const fileBuffer = req.file.buffer;
         const base64String = await fileBuffer.toString("base64");
@@ -36,7 +38,6 @@ exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {
         // genrate transactions
         const newTransaction = await PaymentRequestTransactionsMaster.create(req.body);
 
-
         //create data for pfi
         let query = `select  distinct  opr_items.company_id ,dbo.fn_companyname(opr_items.company_id)  as comp_name
             from opr_items            
@@ -45,9 +46,12 @@ exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {
             where  po_items.po_id=${po_id}`
         let [result, metadata] = await sequelize.query(query);
 
-        
+        console.log(result);
+
+
+        // genrate pfi master
         // insert po_id request_id in talbe
-        await result.forEach(item => { item.status = 1, item.po_id = po_id, item.payment_request_id = payment_request_id, item.created_by = req.body.created_by })
+        result.forEach(item => { item.status = 1, item.po_id = po_id, item.payment_request_id = payment_request_id, item.created_by = req.body.created_by })
         const PFI_response = await Pfi_master.bulkCreate(result);
         res.status(201).json(newTransaction);
 
@@ -55,6 +59,12 @@ exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {
         next(error);
     }
 };
+
+
+
+
+
+
 
 // Get all PaymentRequestTransactionsMaster records
 exports.getAllPaymentRequestTransactionsMasters = async (req, res) => {

@@ -1,4 +1,3 @@
-const { quotation_master } = require('./index')
 
 module.exports = (sequelize, DataTypes) => {
     const po_master = sequelize.define("po_master", {
@@ -24,15 +23,31 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         },
         vendor_id: {
-            type: DataTypes.INTEGER, 
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        currency: {
+            type: DataTypes.STRING(55),
             allowNull: true
         },
         status: {
             type: DataTypes.INTEGER,
             allowNull: true
         },
+        lead_time: {
+            type: DataTypes.STRING(55),
+            allowNull: true
+        },
+        payment_terms: {
+            type: DataTypes.STRING(255),
+            allowNull: true
+        },
         acceptance_remarks: {
             type: DataTypes.STRING(255),
+            allowNull: true
+        },
+        delivery_terms: {
+            type: DataTypes.STRING(55),
             allowNull: true
         },
         created_on: {
@@ -56,12 +71,23 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: false
     });
 
-    // po_master.associate = quotation_master => {
-    //     po_master.belongsTo(quotation_master, {
-    //         foreignKey: 'quo_id',
-    //         as: 'quotationData'
+    // po_master.associate = (model) => {
+    //     po_master.belongsTo(model.po_items, {
+    //         foreignKey: 'po_id'
     //     });
+    //     po_master.belongsTo(model.VendorsMaster, {
+    //         foreignKey: 'vendor_id',
+    //     })
     // };
-    
+
+    po_master.associate = (models) => {
+        po_master.hasMany(models.po_items, {
+            foreignKey: 'po_id',
+        });
+        po_master.belongsTo(models.VendorsMaster, {
+            foreignKey: 'vendor_id',
+        });
+    };
+
     return po_master;
 };

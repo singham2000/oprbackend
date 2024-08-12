@@ -62,6 +62,8 @@ createVendor = async (req, res, next) => {
         vendorDetails.vendor_series = vendor_series
         vendorDetails.last_audited_docs_name = req.files[0].originalname;
         vendorDetails.last_audited_docs = await req.files[0].buffer.toString("base64");
+
+
         const newVendor = await VendorsMaster.create(vendorDetails);
 
         await addressDetails.forEach(data => {
@@ -80,11 +82,14 @@ createVendor = async (req, res, next) => {
 
         res.status(201).json({
             message: 'Vendor created successfully',
+          
             vendor: newVendor,
+            vendor2: vendorDetails,
             bankDetails: newBankDetails,
             addressDetails: newAddressDetails
         });
 
+        
     } catch (err) {
         console.error('Error creating vendor:', err);
         next(err)

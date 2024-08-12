@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         quo_date: {
             type: DataTypes.DATEONLY,
-            allowNull: true
+            allowNull: true 
         },
         currency: {
             type: DataTypes.STRING(55),

@@ -27,7 +27,6 @@ exports.createCompany = async (req, res, next) => {
     }
 };
 
-
 //get company by id and all company
 exports.getCompanies = async (req, res, next) => {
     const { companyId } = req.query;

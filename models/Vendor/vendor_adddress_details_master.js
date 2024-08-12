@@ -9,18 +9,10 @@ module.exports = (sequelize, DataTypes) => {
         vendor_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            // references: {
-            //     model: 'VendorsMaster',
-            //     key: 'vendor_id'
-            // }
         },
         address_type_id: {
             type: DataTypes.INTEGER,
             allowNull: true,
-            // references: {
-            //     model: 'VendorAddressTypeMaster',
-            //     key: 'v_adrs_type_id'
-            // }
         },
         address_line1: {
             type: DataTypes.STRING(255),
@@ -77,6 +69,11 @@ module.exports = (sequelize, DataTypes) => {
     //     VendorsAddressDetailsMaster.belongsTo(models.VendorsMaster, { foreignKey: 'vendor_id' });
     //     VendorsAddressDetailsMaster.belongsTo(models.VendorAddressTypeMaster, { foreignKey: 'address_type_id' });
     // };
+
+    VendorsAddressDetailsMaster.associate = (models) => {
+        VendorsAddressDetailsMaster.belongsTo(models.VendorsMaster, { foreignKey: 'vendor_id' });
+    };
+
 
     return VendorsAddressDetailsMaster;
 };

@@ -5,7 +5,7 @@
     "description": "Description",
     "version": "1.0.0"
   },
-  "host": "192.168.1.4:4000",
+  "host": "192.168.1.2:4000",
   "basePath": "/",
   "schemes": [
     "http"
@@ -2015,53 +2015,8 @@
         }
       }
     },
-    "/api/po/": {
+    "/api/po/list": {
       "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "po_id",
-            "in": "query",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "put": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "po_id",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "delivery_timeline_name": {
-                  "example": "any"
-                },
-                "updated_by": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          }
-        }
-      },
-      "delete": {
         "description": "",
         "parameters": [
           {
@@ -2099,7 +2054,13 @@
                 "rfq_id": {
                   "example": "any"
                 },
+                "opr_id": {
+                  "example": "any"
+                },
                 "vendor_id": {
+                  "example": "any"
+                },
+                "item_list": {
                   "example": "any"
                 },
                 "created_by": {
@@ -2112,6 +2073,55 @@
         "responses": {
           "201": {
             "description": "Created"
+          }
+        }
+      }
+    },
+    "/api/po/update": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "po_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "delivery_timeline_name": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/api/po/delete": {
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "po_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -2146,9 +2156,33 @@
         }
       }
     },
+    "/api/po/itemlist": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "po_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
     "/api/branch/branches": {
       "get": {
         "description": "",
+        "parameters": [
+          {
+            "name": "branch_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -2179,6 +2213,9 @@
                 },
                 "branch_name": {
                   "example": "any"
+                },
+                "status": {
+                  "example": "any"
                 }
               }
             }
@@ -2195,44 +2232,49 @@
             "description": "Unauthorized"
           }
         }
-      }
-    },
-    "/api/branch/branch/{id}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
       },
       "delete": {
         "description": "",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
+            "name": "branch_id",
+            "in": "query",
             "type": "string"
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "201": {
+            "description": "Created"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "branch_id",
+            "in": "query",
+            "type": "string"
           },
-          "404": {
-            "description": "Not Found"
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "branch_name": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
           }
         }
       }
@@ -2240,6 +2282,13 @@
     "/api/dept/departments": {
       "get": {
         "description": "",
+        "parameters": [
+          {
+            "name": "dept_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -2289,44 +2338,34 @@
             "description": "Unauthorized"
           }
         }
-      }
-    },
-    "/api/dept/department/{id}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
       },
       "put": {
         "description": "",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
+            "name": "dept_id",
+            "in": "query",
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "dept_name": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
+          "201": {
+            "description": "Created"
           }
         }
       },
@@ -2334,18 +2373,14 @@
         "description": "",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
+            "name": "dept_id",
+            "in": "query",
             "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
           }
         }
       }
@@ -2353,6 +2388,13 @@
     "/api/dept/designations": {
       "get": {
         "description": "",
+        "parameters": [
+          {
+            "name": "designation_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -2375,9 +2417,6 @@
                 },
                 "status": {
                   "example": "any"
-                },
-                "created_by": {
-                  "example": "any"
                 }
               }
             }
@@ -2388,35 +2427,13 @@
             "description": "Created"
           }
         }
-      }
-    },
-    "/api/dept/designation/{id}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
       },
       "put": {
         "description": "",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
+            "name": "designation_id",
+            "in": "query",
             "type": "string"
           },
           {
@@ -2429,9 +2446,6 @@
                   "example": "any"
                 },
                 "status": {
-                  "example": "any"
-                },
-                "created_by": {
                   "example": "any"
                 }
               }
@@ -2448,18 +2462,14 @@
         "description": "",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
+            "name": "designation_id",
+            "in": "query",
             "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
           }
         }
       }
@@ -2888,6 +2898,23 @@
     "/api/shipMode/modes": {
       "get": {
         "description": "",
+        "parameters": [
+          {
+            "name": "shipment_mode_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/shipMode/modes/dropdown": {
+      "get": {
+        "description": "",
         "responses": {
           "200": {
             "description": "OK"
@@ -2929,25 +2956,6 @@
       }
     },
     "/api/shipMode/mode/{id}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
       "delete": {
         "description": "",
         "parameters": [
@@ -3006,6 +3014,9 @@
                 },
                 "delivery_timeline_name": {
                   "example": "any"
+                },
+                "status": {
+                  "example": "any"
                 }
               }
             }
@@ -3040,7 +3051,7 @@
                 "delivery_timeline_name": {
                   "example": "any"
                 },
-                "updated_by": {
+                "status": {
                   "example": "any"
                 }
               }
@@ -3065,6 +3076,143 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/buying/buyinghouses": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "buying_house_code": {
+                  "example": "any"
+                },
+                "buying_house_name": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/buying/dropdown": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/buying/buyinghouses/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "buying_house_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "buying_house_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "buying_house_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -3421,6 +3569,18 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "category_code": {
+                  "example": "any"
+                },
+                "category_name": {
+                  "example": "any"
+                },
+                "category_description": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
                 }
               }
             }
@@ -3437,54 +3597,40 @@
             "description": "Unauthorized"
           }
         }
-      }
-    },
-    "/api/itemcategory/itemcategories": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/itemcategory/itemcategory/{id}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
       },
       "put": {
         "description": "",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
+            "name": "item_category_id",
+            "in": "query",
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "category_code": {
+                  "example": "any"
+                },
+                "category_name": {
+                  "example": "any"
+                },
+                "category_description": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
+          "201": {
+            "description": "Created"
           }
         }
       },
@@ -3492,18 +3638,31 @@
         "description": "",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
+            "name": "item_category_id",
+            "in": "query",
             "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/itemcategory/itemcategories": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "item_category_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -3848,6 +4007,26 @@
         }
       }
     },
+    "/api/company/list": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/division/divisions": {
       "get": {
         "description": "",
@@ -4063,6 +4242,9 @@
                 },
                 "delivery_terms_name": {
                   "example": "any"
+                },
+                "status": {
+                  "example": "any"
                 }
               }
             }
@@ -4097,7 +4279,7 @@
                 "delivery_terms_name": {
                   "example": "any"
                 },
-                "updated_by": {
+                "status": {
                   "example": "any"
                 }
               }
@@ -4317,6 +4499,9 @@
                 },
                 "lead_time_name": {
                   "example": "any"
+                },
+                "status": {
+                  "example": "any"
                 }
               }
             }
@@ -4351,7 +4536,7 @@
                 "lead_time_name": {
                   "example": "any"
                 },
-                "updated_by": {
+                "status": {
                   "example": "any"
                 }
               }
@@ -5575,9 +5760,49 @@
     "/api/payment/type_create": {
       "post": {
         "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "payment_type_name": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "201": {
             "description": "Created"
+          }
+        }
+      }
+    },
+    "/api/payment/terms/dropdown": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/payment/terms/dropdown2": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
