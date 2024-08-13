@@ -54,7 +54,8 @@ const vendorTypeMasterRoutes = require('./routes/vendorTypeMasterRoutes');
 const addressRoutes = require('./routes/addressRoutes.js');
 const buyingHouseRoutes = require('./routes/buyHouseRoutes.js');
 const buyingHouseRoutes2 = require('./routes/buyingHouseRoutes.js');
-
+const SeriesRoutes = require('./routes/seriesRoutes,js');
+const StatusRoutes = require('./routes/statusRoutes.js');
 
 
 //payments
@@ -113,6 +114,8 @@ app.use("/api/leadtime", leadTimeRouter);
 app.use('/api/mail', mailRoutes);
 app.use('/api/pfi', pfiRoutes);
 app.use('/api/vendor-types', vendorTypeMasterRoutes);
+app.use('/api/series', SeriesRoutes);
+app.use('/api/status', StatusRoutes);
 
 
 //payments

@@ -1,5 +1,5 @@
 const { BuyingHouse } = require('../models'); // Import the BuyingHouse model
-const generateSeries = require('../utilites/genrateSeries')
+const {generateSeries} = require('../utilites/genrateSeries')
 const { Op, where } = require('sequelize')
 
 // Create a new BuyingHouse

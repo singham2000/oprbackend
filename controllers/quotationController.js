@@ -4,7 +4,7 @@ const db = require('../models');
 const { quotation_master, po_master, quotation_items, QuoDoc, delivery_terms_quo, payment_terms_quo, lead_time_quo } = db;
 const formattedDateTime = require("../middleware/time");
 const { Op, where } = require('sequelize');
-const generateSeries = require("./seriesGenerate");
+const {generateSeries} = require("./seriesGenerate");
 const { sequelize, po_items } = require('../models/index')
 
 

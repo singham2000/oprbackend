@@ -9,6 +9,7 @@ router
     .get('/modes', shipModeController.getAllShipmentModes)
     .get('/modes/dropdown', shipModeController.getAllShipmentModeDropdown)
     .post('/mode', shipModeController.createShipmentMode)
-    .delete('/mode/:id', shipModeController.deleteShipmentMode)
+    .put('/mode', shipModeController.updateShipmentMode)
+    .delete('/mode/', shipModeController.deleteShipmentMode)
 
 module.exports = router;

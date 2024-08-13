@@ -80,6 +80,7 @@ db.rfqitem = require('./Rfq/rfq_Item_master.js')(sequelize, DataTypes)
 db.RfqItemDetail = require('./Rfq/rfq_Item_master.js')(sequelize, DataTypes)
 db.rfq = require('./Rfq/rfq_master.js')(sequelize, DataTypes)
 db.rfqitem = require('./Rfq/rfq_Item_master.js')(sequelize, DataTypes)
+db.status_master = require('./status_master')(sequelize, DataTypes);
 
 //OPO
 db.po_master = require('./Po/po_master.js')(sequelize, DataTypes)
@@ -117,7 +118,7 @@ Object.values(models).forEach(model => {
     }
 });
 
-sequelize.sync({force:true})
+sequelize.sync()  
     .then(() => {
         console.log('Database & tables created!');
     })

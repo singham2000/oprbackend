@@ -5,7 +5,7 @@ const formattedDateTime = require("../middleware/time");
 const { Op } = require('sequelize');
 
 
-const generateSeries = require("./seriesGenerate");
+const {generateSeries} = require("./seriesGenerate");
 const { query } = require('express');
 
 ///******************this is on query we have remove query form this and use associaton*****************************/

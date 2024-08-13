@@ -1,6 +1,6 @@
 const db = require('../../models')
 const { vendor: Vendor, VendorsMaster, sequelize, VendorsBanksDetailsMaster, AddressMaster } = db
-const generateSeries = require('../../utilites/genrateSeries');
+const {generateSeries} = require('../../utilites/genrateSeries');
 
 
 exports.createVendor2 = async (req, res, next) => {

@@ -1,7 +1,7 @@
 const { where } = require('sequelize');
 const db = require('../models'); // Adjust the path to your models file
 const { PaymentRequestMaster, PaymentTypeMaster, po_master } = db
-const generateSeries = require("./seriesGenerate");
+const {generateSeries} = require("./seriesGenerate");
 
 
 // this function will genrate data in payment request table
