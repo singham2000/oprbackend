@@ -5,9 +5,6 @@ const PaymentController = require('../controllers/paymentController')
 const setAuditFields = require('../middleware/setAuditFields')
 
 
-
-
-
 // ========================================================
 // PAYMENT  TYPES
 // ========================================================
@@ -25,7 +22,6 @@ router.put('/type_update', setAuditFields, PaymentController.updatePaymentType);
 
 // Soft delete a payment type
 router.delete('/type_delete', setAuditFields, PaymentController.deletePaymentType);
-
 
 
 

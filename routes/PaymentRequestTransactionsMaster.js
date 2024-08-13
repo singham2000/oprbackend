@@ -3,10 +3,11 @@ const router = express.Router();
 const paymentRequestTransactionsMasterController = require('../controllers/paymentRequestTransactionsController');
 const upload = require('../utilites/handlefile.js');
 const paymentRequestMasterController = require('../controllers/paymentRequestController');
-const { confirmPaymentRequest } = require('../controllers/paymentRequestController.js')
+const { confirmPaymentRequest } = require('../controllers/paymentRequestController.js');
+const {createPaymentRequestTransactionsMaster} = require('../controllers/PaymentController/paymentRequestTransactionsController.js');
 
 
-router.post('/', upload.single('receipt_image'), paymentRequestTransactionsMasterController.createPaymentRequestTransactionsMaster);
+router.post('/', upload.single('receipt_image'), createPaymentRequestTransactionsMaster);
 router.get('/', paymentRequestTransactionsMasterController.getAllPaymentRequestTransactionsMasters);
 router.post('/reject', paymentRequestMasterController.rejectPaymentRequestByTreasury);
 router.get('/transaction', paymentRequestTransactionsMasterController.getPaymentRequestTransactionsMasterRequestId);

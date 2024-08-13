@@ -60,11 +60,11 @@ db.Nafdac = require('./nafdacMaster.js')(sequelize, DataTypes);
 db.NafdacCategoryMaster = require('./nafdac_category_master.js')(sequelize, DataTypes);
 
 //VENDOR
+db.vendor = require('./Vendor/vendor_master.js')(sequelize, DataTypes)
 db.VendorsMaster = require('./Vendor/vendor_master.js')(sequelize, DataTypes)
 db.VendorsBanksDetailsMaster = require('./Vendor/vendor_banksDetails_master.js')(sequelize, DataTypes)
 db.VendorsAddressDetailsMaster = require('./Vendor/vendor_adddress_details_master.js')(sequelize, DataTypes)
 db.VendorTypeMaster = require('./Vendor/VendorTypeMaster.js')(sequelize, DataTypes);
-db.vendor = require('./Xvendor_master_old.js')(sequelize, DataTypes)
 
 
 //EMAIL
@@ -103,8 +103,6 @@ db.PaymentTypeMaster = require('./Payments/paymentTypes.js')(sequelize, DataType
 db.PaymentRequestMaster = require('./Payments/PaymentRequestMaster.js')(sequelize, DataTypes)
 
 
-
-
 //OPO
 db.OpoMaster = require('./Opo/opo_master.js')(sequelize, DataTypes);
 db.OpoItems = require('./Opo/opo_items.js')(sequelize, DataTypes);
@@ -119,7 +117,7 @@ Object.values(models).forEach(model => {
     }
 });
 
-sequelize.sync({alte:true})
+sequelize.sync({force:true})
     .then(() => {
         console.log('Database & tables created!');
     })

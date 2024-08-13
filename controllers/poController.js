@@ -67,18 +67,15 @@ const genratePo = async (req, res, next) => {
     // "payment_terms": "Abcd Payment terms",
     // "lead_time"
 
-    const quodata =  await db.Rfq
-
-
-
+    const quodata = await db.Rfq
 
     //genrate po
     const po_response = await po_master.create({
       po_num: po_series,
       vendor_id,
       quo_id,
-      quo_num,
       opr_id,
+      quo_num,
       total_cost,
       status: 1,
       created_by,
