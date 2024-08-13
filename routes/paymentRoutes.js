@@ -3,6 +3,9 @@ const express = require('express');
 const router = express.Router();
 const PaymentController = require('../controllers/paymentController')
 const setAuditFields = require('../middleware/setAuditFields')
+const upload = require('../utilites/handlefile.js');
+
+
 
 
 // ========================================================
@@ -66,6 +69,18 @@ router.delete('/term_delete', setAuditFields, PaymentController.deletePaymentTer
 
 
 
+// ========================================================
+// PAYMENT Request
+// ========================================================
+// Create a new payment term
+router.post('/pr_create', setAuditFields, PaymentController.createPaymentRequestMaster);
+
+
+// ========================================================
+// PAYMENT transaction
+// ========================================================
+// Create a new payment term
+router.post('/transaction',upload.any(), setAuditFields, PaymentController.createPaymentTransactions);
 
 
 //payment terms

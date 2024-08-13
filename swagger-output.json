@@ -2932,13 +2932,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "shipMode_name": {
-                  "example": "any"
-                },
-                "created_by": {
-                  "example": "any"
-                },
-                "updated_by": {
+                "shipment_mode_name": {
                   "example": "any"
                 },
                 "status": {
@@ -2953,25 +2947,54 @@
             "description": "Created"
           }
         }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "shipment_mode_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "shipment_mode_name": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
       }
     },
-    "/api/shipMode/mode/{id}": {
+    "/api/shipMode/mode/": {
       "delete": {
         "description": "",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
+            "name": "shipment_mode_id",
+            "in": "query",
             "type": "string"
           }
         ],
         "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "404": {
-            "description": "Not Found"
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -4842,6 +4865,26 @@
         }
       }
     },
+    "/api/pfi/pfiitems": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "po_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/vendor-types/": {
       "post": {
         "description": "",
@@ -4943,6 +4986,171 @@
           },
           "500": {
             "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/series/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "series_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "doc_code": {
+                  "example": "any"
+                },
+                "prefix": {
+                  "example": "any"
+                },
+                "range_start": {
+                  "example": "any"
+                },
+                "range_end": {
+                  "example": "any"
+                },
+                "suffix": {
+                  "example": "any"
+                },
+                "int_ext": {
+                  "example": "any"
+                },
+                "validity": {
+                  "example": "any"
+                },
+                "additional": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/api/status/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "status_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "module": {
+                  "example": "any"
+                },
+                "table_name": {
+                  "example": "any"
+                },
+                "field_name": {
+                  "example": "any"
+                },
+                "value": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "status_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "module": {
+                  "example": "any"
+                },
+                "table_name": {
+                  "example": "any"
+                },
+                "field_name": {
+                  "example": "any"
+                },
+                "value": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "status_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -5173,12 +5381,6 @@
                 "penalty_terms_name": {
                   "example": "any"
                 },
-                "created_by": {
-                  "example": "any"
-                },
-                "updated_by": {
-                  "example": "any"
-                },
                 "status": {
                   "example": "any"
                 }
@@ -5199,35 +5401,13 @@
             "description": "OK"
           }
         }
-      }
-    },
-    "/api/penaltyterms/{id}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
       },
       "put": {
         "description": "",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
+            "name": "penalty_terms_id",
+            "in": "query",
             "type": "string"
           },
           {
@@ -5237,12 +5417,6 @@
               "type": "object",
               "properties": {
                 "penalty_terms_name": {
-                  "example": "any"
-                },
-                "created_by": {
-                  "example": "any"
-                },
-                "updated_by": {
                   "example": "any"
                 },
                 "status": {
@@ -5255,9 +5429,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
           }
         }
       },
@@ -5265,18 +5436,31 @@
         "description": "",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
+            "name": "penalty_terms_id",
+            "in": "query",
             "type": "string"
           }
         ],
         "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "404": {
-            "description": "Not Found"
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/penaltyterms/get": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "penalty_terms_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -5294,10 +5478,7 @@
                 "payment_type_name": {
                   "example": "any"
                 },
-                "created_by": {
-                  "example": "any"
-                },
-                "updated_by": {
+                "status": {
                   "example": "any"
                 }
               }
@@ -5307,9 +5488,6 @@
         "responses": {
           "201": {
             "description": "Created"
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         }
       },
@@ -5318,30 +5496,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/payment-types/{id}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -5352,9 +5506,8 @@
         "description": "",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
+            "name": "payment_type_id",
+            "in": "query",
             "type": "string"
           },
           {
@@ -5366,10 +5519,7 @@
                 "payment_type_name": {
                   "example": "any"
                 },
-                "created_by": {
-                  "example": "any"
-                },
-                "updated_by": {
+                "status": {
                   "example": "any"
                 }
               }
@@ -5379,12 +5529,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         }
       },
@@ -5392,21 +5536,31 @@
         "description": "",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
+            "name": "payment_type_id",
+            "in": "query",
             "type": "string"
           }
         ],
         "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/payment-types/get": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "payment_type_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -5624,9 +5778,6 @@
         "responses": {
           "201": {
             "description": "Created"
-          },
-          "404": {
-            "description": "Not Found"
           }
         }
       },
@@ -6334,6 +6485,124 @@
         "responses": {
           "204": {
             "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/payment/pr_create": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "pr_num": {
+                  "example": "any"
+                },
+                "po_id": {
+                  "example": "any"
+                },
+                "po_number": {
+                  "example": "any"
+                },
+                "po_amount": {
+                  "example": "any"
+                },
+                "advice_amount": {
+                  "example": "any"
+                },
+                "advice_date": {
+                  "example": "any"
+                },
+                "remarks": {
+                  "example": "any"
+                },
+                "payment_type_id": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/payment/transaction": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "receipt_image": {
+                  "example": "any"
+                },
+                "receipt_image_name": {
+                  "example": "any"
+                },
+                "payment_request_id": {
+                  "example": "any"
+                },
+                "po_id": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
           },
           "400": {
             "description": "Bad Request"

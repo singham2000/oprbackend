@@ -42,4 +42,4 @@ async function generateSeries(doc_code) {
     }
 }
 
-module.exports = generateSeries;
+module.exports = { generateSeries };

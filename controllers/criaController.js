@@ -1,8 +1,7 @@
-
-
 // controllers/criaController.js
 const { CriaMaster } = require('../models');
-// Functions without route definitions
+
+
 const createCriaEntry = async (req, res, next) => {
     try {
         const {
@@ -43,7 +42,6 @@ const createCriaEntry = async (req, res, next) => {
     }
 };
 
-
 const getAllCriaEntries = async (req, res, next) => {
     try {
         const criaEntries = await CriaMaster.findAll({ attributes: ['cria_id', 'cria_name'] });
@@ -52,7 +50,6 @@ const getAllCriaEntries = async (req, res, next) => {
         next(error)
     }
 };
-
 
 const updateCriaEntry = async (req, res, next) => {
     try {
