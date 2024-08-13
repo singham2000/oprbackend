@@ -4,7 +4,7 @@ const formattedDateTime = require("../middleware/time");
 const { Op, where } = require('sequelize');
 const { sequelize } = db;
 const { QueryTypes } = require('sequelize');
-const generateSeries = require("./seriesGenerate");
+const {generateSeries} = require("./seriesGenerate");
 // const opr_items = require('../models/');
 
 const getOprItem = async (req, res, next) => {

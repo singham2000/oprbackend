@@ -4,7 +4,7 @@ const paymentRequestTransactionsMasterController = require('../controllers/payme
 const upload = require('../utilites/handlefile.js');
 const paymentRequestMasterController = require('../controllers/paymentRequestController');
 const { confirmPaymentRequest } = require('../controllers/paymentRequestController.js');
-const {createPaymentRequestTransactionsMaster} = require('../controllers/PaymentController/paymentRequestTransactionsController.js');
+const { createPaymentRequestTransactionsMaster } = require('../controllers/PaymentController/paymentRequestTransactionsController.js');
 
 
 router.post('/', upload.single('receipt_image'), createPaymentRequestTransactionsMaster);

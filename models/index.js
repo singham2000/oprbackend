@@ -118,7 +118,7 @@ Object.values(models).forEach(model => {
     }
 });
 
-sequelize.sync()  
+sequelize.sync()
     .then(() => {
         console.log('Database & tables created!');
     })

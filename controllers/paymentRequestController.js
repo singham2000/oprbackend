@@ -1,7 +1,8 @@
 const { where } = require('sequelize');
 const db = require('../models'); // Adjust the path to your models file
 const { PaymentRequestMaster, PaymentTypeMaster, po_master } = db
-const {generateSeries} = require("./seriesGenerate");
+const { generateSeries } = require("./seriesGenerate");
+
 
 
 // this function will genrate data in payment request table
@@ -36,7 +37,7 @@ exports.createPaymentRequestMaster = async (req, res) => {
             payment_type_id
         });
 
-        
+
         //update po status
         await po_master.update(
             { status: 5 },

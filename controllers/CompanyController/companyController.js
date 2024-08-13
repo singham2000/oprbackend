@@ -1,5 +1,5 @@
 const { CompanyMaster, AddressMaster, sequelize } = require('../../models');
-const {generateSeries} = require('../../utilites/genrateSeries')
+const { generateSeries } = require('../../utilites/genrateSeries')
 const { Op } = require('sequelize');
 
 
@@ -15,7 +15,8 @@ exports.createCompany = async (req, res, next) => {
         addressData.forEach(data => {
             data.entity_id = company.company_id;
             data.entity_type = 'company';
-            data.created_by = req.body.created_by
+            data.created_by = req.body.created_by;
+            data.status = 1
         });
 
         const address = await AddressMaster.bulkCreate(addressData, { transaction });

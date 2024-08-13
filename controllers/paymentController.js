@@ -1,5 +1,21 @@
-const { PaymentTypeMaster, PaymentTerms, PenaltyTermsMaster } = require('../models')
+const {
+    PaymentTypeMaster,
+    PaymentTerms,
+    PenaltyTermsMaster,
+    PaymentRequestMaster,
+    po_master,
+    PaymentRequestTransactionsMaster,
+    Pfi_master,
+    sequelize,
+    Pfi_line_items
+} = require('../models')
+
 const { Op } = require('sequelize')
+const { where } = require('sequelize');
+const { generateSeries } = require("./seriesGenerate");
+const pfi_master = require('../models/pfi_master');
+const company_master = require('../models/Company/company_master');
+
 
 
 //************************************************Payments Type Controller************************************************/
@@ -101,8 +117,6 @@ exports.getAllPaymentTerms = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-
-
 
 // Create a new payment term
 exports.createPaymentTerm = async (req, res, next) => {
@@ -297,6 +311,336 @@ exports.deletePenaltyTerm = async (req, res, next) => {
     }
 };
 
-
-
 //************************************************PAYMENT REQUEST CONTOLLER************************************************/
+
+// this function will genrate data in payment request table
+exports.createPaymentRequestMaster = async (req, res, next) => {
+    try {
+        const doc_code = 'PR';
+        const pr_series = await generateSeries(doc_code);
+        req.body.pr_num = pr_series;
+        const { pr_num, po_id, po_number, po_amount, advice_amount, advice_date, remarks, payment_type_id } = req.body;
+
+        // Ensure po_id is valid and update po_staus
+        const po = await po_master.findByPk(po_id);
+        if (!po) {
+            return res.status(404).json({ message: 'Po id is not valid' });
+        }
+
+        // Ensure payment_type_id is valid
+        const paymentType = await PaymentTypeMaster.findByPk(payment_type_id);
+        if (!paymentType) {
+            return res.status(404).json({ message: 'PaymentTypeMaster not found' });
+        }
+
+        const response = await PaymentRequestMaster.create({
+            po_id,
+            payment_type_id,
+            pr_num,
+            po_number,
+            po_amount,
+            advice_date,
+            advice_amount,
+            advice_remarks: remarks,
+            status: 1
+        });
+
+
+        //update po status
+        await po_master.update(
+            { status: 5 },
+            { where: { po_id: po_id } }
+        )
+
+        res.status(201).json({ msg: 'Payment Request Genreted Successfully', data: response });
+
+    } catch (error) {
+        console.error('Error creating PaymentRequestMaster:', error);
+        next(error)
+    }
+};
+
+// Get all PaymentRequestMaster records
+exports.getAllPaymentRequestMasters = async (req, res) => {
+    try {
+        const paymentRequests = await PaymentRequestMaster.findAll({
+            include: [{
+                model: PaymentTypeMaster,
+                as: 'paymentType'
+            }]
+        });
+        res.status(200).json(paymentRequests);
+    } catch (error) {
+        console.error('Error fetching PaymentRequestMasters:', error);
+        res.status(500).json({ error: 'An error occurred while fetching PaymentRequestMasters.' });
+    }
+};
+
+// Get a PaymentRequestMaster by ID
+exports.getPaymentRequestMasterById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const paymentRequest = await PaymentRequestMaster.findByPk(id, {
+            include: [{
+                model: PaymentTypeMaster,
+                as: 'paymentType'
+            }]
+        });
+
+        if (!paymentRequest) {
+            return res.status(404).json({ message: 'PaymentRequestMaster not found' });
+        }
+
+        res.status(200).json(paymentRequest);
+    } catch (error) {
+        console.error('Error fetching PaymentRequestMaster:', error);
+        res.status(500).json({ error: 'An error occurred while fetching the PaymentRequestMaster.' });
+    }
+};
+
+// Update a PaymentRequestMaster by ID
+exports.updatePaymentRequestMaster = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { po_id, po_number, po_amount, advice_date, advice_amount, advice_remarks, status, created_by, updated_by, payment_type_id } = req.body;
+
+        const paymentRequest = await PaymentRequestMaster.findByPk(id);
+
+        if (!paymentRequest) {
+            return res.status(404).json({ message: 'PaymentRequestMaster not found' });
+        }
+
+        if (payment_type_id) {
+            // Ensure payment_type_id is valid
+            const paymentType = await PaymentTypeMaster.findByPk(payment_type_id);
+            if (!paymentType) {
+                return res.status(404).json({ message: 'PaymentTypeMaster not found' });
+            }
+        }
+
+        await paymentRequest.update({
+            po_id,
+            po_number,
+            po_amount,
+            advice_date,
+            advice_amount,
+            advice_remarks,
+            status,
+            created_by,
+            updated_by,
+            payment_type_id
+        });
+
+        res.status(200).json(paymentRequest);
+    } catch (error) {
+        console.error('Error updating PaymentRequestMaster:', error);
+        res.status(500).json({ error: 'An error occurred while updating the PaymentRequestMaster.' });
+    }
+};
+
+// Delete a PaymentRequestMaster by ID
+exports.deletePaymentRequestMaster = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const paymentRequest = await PaymentRequestMaster.findByPk(id);
+
+        if (!paymentRequest) {
+            return res.status(404).json({ message: 'PaymentRequestMaster not found' });
+        }
+
+        await paymentRequest.destroy();
+        res.status(204).send(); // No content response
+    } catch (error) {
+        console.error('Error deleting PaymentRequestMaster:', error);
+        res.status(500).json({ error: 'An error occurred while deleting the PaymentRequestMaster.' });
+    }
+};
+
+exports.deletePaymentRequestMaster = async (req, res) => {
+    try {
+        const { payment_request_id } = req.params;
+        const paymentRequest = await PaymentRequestMaster.findByPk(payment_request_id);
+
+        if (!paymentRequest) {
+            return res.status(404).json({ message: 'PaymentRequestMaster not found' });
+        }
+
+        // Perform soft delete by setting status to 0
+        await paymentRequest.update({ status: 0 });
+
+        res.status(204).send(); // No content response
+    } catch (error) {
+        console.error('Error deleting PaymentRequestMaster:', error);
+        res.status(500).json({ error: 'An error occurred while deleting the PaymentRequestMaster.' });
+    }
+};
+
+
+exports.rejectPaymentRequestByTreasury = async (req, res, next) => {
+    try {
+        const { request_id, remarks } = req.body
+
+        //verify request id
+        const paymentRequest = await PaymentRequestMaster.findByPk(request_id);
+        if (!paymentRequest) {
+            return res.status(404).json({ message: 'PaymentRequestMaster not found' });
+        }
+
+        //update PaymentRequest
+        const response = await PaymentRequestMaster.update(
+            { status: 4, remarks: remarks },
+            { where: { payment_request_id: request_id } }
+        )
+
+
+        res.status(200).send();
+
+    } catch (error) {
+        // console.error('Error deleting PaymentRequestMaster:', error);
+        // res.status(500).json({ error: 'An error occurred while deleting the PaymentRequestMaster.' });
+        next(error);
+    }
+}
+
+exports.PaymentRequestListForTreasury = async (req, res, next) => {
+    try {
+        const paymentRequests = await PaymentRequestMaster.findAll({
+            include: [{
+                model: PaymentTypeMaster,
+                as: 'paymentType'
+            }],
+            where: {
+                status: [2, 4, 3]
+            }
+        });
+        res.status(200).json(paymentRequests);
+    } catch (error) {
+        next(error)
+        // console.error('Error fetching PaymentRequestMasters:', error);
+        // res.status(500).json({ error: 'An error occurred while fetching PaymentRequestMasters.' });
+    }
+
+}
+
+
+// exports.confirmPaymentRequest = async (req, res, next) => {
+//     let { payment_request_id } = req.body
+//     console.log(payment_request_id);
+//     try {
+//         const paymentRequests = await PaymentRequestMaster.update(
+//             { status: 3 },
+//             {
+//                 where: {
+//                     payment_request_id: payment_request_id
+//                 }
+//             }
+
+//         );
+//         res.status(200).json(paymentRequests);
+//     } catch (error) {
+//         next(error)
+//     }
+
+// }
+
+
+
+//************************************************PAYMENT TRANSACTION CONTOLLER************************************************/
+//this funcation will insert data in transaction table and same time i will also insert data in pfi master without pfi number(series)
+exports.createPaymentTransactions = async (req, res, next) => {
+    try {
+        const { payment_request_id, po_id } = req.body;
+
+        //update request status 
+        const paymentRequest = await PaymentRequestMaster.update(
+            { status: 3 },
+            { where: { payment_request_id: payment_request_id } }
+        );
+
+        //if id not found in master
+        if (!paymentRequest) {
+            return res.status(404).json({ message: 'Request id is not valid' });
+        }
+
+        //update po status
+        const poMaterResponse = await po_master.update(
+            { status: 6 },
+            { where: { po_id: po_id } }
+        );
+
+        //if id not found in master
+        if (!poMaterResponse) {
+            return res.status(404).json({ message: 'Po id is not valid' });
+        }
+
+        // handle image file
+        const fileBuffer = req.files[0].buffer;
+        const base64String = await fileBuffer.toString('base64');
+        req.body.receipt_image = base64String;
+        req.body.receipt_image_name = req.files[0].originalname;
+
+        // genrate transactions
+        const newTransaction = await PaymentRequestTransactionsMaster.create(req.body);
+
+
+        // generate pfi
+
+
+
+        //query for pfi items
+        let query = `
+                    SELECT * 
+                    FROM po_items
+                    INNER JOIN opr_items
+                    ON opr_items.rfq_id = po_items.rfq_id
+                    AND opr_items.item_id = po_items.item_id
+                    WHERE po_items.po_id = :po_id
+                `;
+        // Execute the query with replacements
+        let itemsforPfi = await sequelize.query(query, {
+            replacements: { po_id: po_id },
+            type: sequelize.QueryTypes.SELECT
+        });
+
+        console.log(itemsforPfi);
+
+        // genrate pfi
+        let pfi_data = {
+            status: 1,
+            po_id: po_id,
+            payment_request_id: payment_request_id,
+            created_by: req.body.created_by,
+            company_id: itemsforPfi[0].company_id
+        }
+        const pfi_response = await Pfi_master.create(pfi_data);
+
+
+        // create pfi items
+        const extractData = (data) => {
+            return data.map(item => ({
+                pfi_id: item.po_item_id,
+                payment_request_id: null,
+                rfq_id: item.rfq_id,
+                company_id: item.company_id,
+                item_id: item.item_id,
+                item_description: item.item_description,
+                po_qty: item.po_qty,
+                rate: item.rate,
+                created_by: item.created_by
+            }));
+        };
+
+        let pfi_lineitems = extractData(itemsforPfi)
+
+        await pfi_lineitems.forEach(item => { item.status = 1, item.pfi_id = pfi_response.pfi_id, item.po_id = po_id, item.payment_request_id = payment_request_id })
+
+        const pfi_line_item = await Pfi_line_items.bulkCreate(pfi_lineitems);
+
+        res.status(201).json(newTransaction);
+
+
+    } catch (error) {
+        next(error);
+    }
+};
+

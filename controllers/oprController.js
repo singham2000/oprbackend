@@ -242,7 +242,7 @@ const updateOprById = async (req, res, next) => {
 const confirmOpr = async (req, res, next) => {
     try {
         const doc_code = 'OPR';
-        const opr_series = await generateSeries(doc_code);
+        const opr_series = await generateSeries(doc_code);` `
         const opr_id = req.params.opr_id;
         //u
         const response = await opr_master.update(

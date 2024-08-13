@@ -5,6 +5,10 @@ const { user: User } = db
 const jwtSecretKey = process.env.JWT_SECRET;
 
 
+
+
+
+
 //Get all users
 const getAllUser = async (req, res, next) => {
     try {

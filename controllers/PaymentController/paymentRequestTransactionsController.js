@@ -64,10 +64,6 @@ exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {
 
 
 
-
-
-
-
 // Get all PaymentRequestTransactionsMaster records
 exports.getAllPaymentRequestTransactionsMasters = async (req, res) => {
     try {

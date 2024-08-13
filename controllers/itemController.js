@@ -1,6 +1,6 @@
 const db = require('../models');
 const { ItemsMaster: Item } = db;
-const {generateSeries} = require('../utilites/genrateSeries')
+const { generateSeries } = require('../utilites/genrateSeries')
 
 // Controller method to fetch all items
 const getAllItems = async (req, res) => {
