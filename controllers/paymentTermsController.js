@@ -95,7 +95,7 @@
 
 
 const db = require('../models');
-const { payment_terms_quo } = db;
+const { PenaltyTermsMaster: payment_terms_quo } = db;
 const { Op } = require('sequelize');
 
 // Controller method to fetch all payment terms or a specific one

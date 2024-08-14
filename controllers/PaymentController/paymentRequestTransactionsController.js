@@ -1,32 +1,34 @@
-const { where } = require('sequelize');
-const { PaymentRequestTransactionsMaster, PaymentRequestMaster, po_master, Pfi_master, sequelize } = require('../models'); // Adjust the path to your models file
+const { PaymentRequestTransactionsMaster, PaymentRequestMaster, po_master, Pfi_master, sequelize } = require('../../models'); // Adjust the path to your models file
 
 //this funcation will insert data in transaction table and same time i will also insert data in pfi master without pfi number(series)
+
 exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {
+
+    console.log(req.body)
     try {
         const { payment_request_id, po_id } = req.body;
 
         //update request status 
-        const paymentRequest = await PaymentRequestMaster.update(
-            { status: 3 },
-            { where: { payment_request_id: payment_request_id } }
-        );
+        // const paymentRequest = await PaymentRequestMaster.update(
+        //     { status: 3 },
+        //     { where: { payment_request_id: payment_request_id } }
+        // );
 
         //if id not found in master
-        if (!paymentRequest) {
-            return res.status(404).json({ message: 'Request id is not valid' });
-        }
+        // if (!paymentRequest) {
+        //     return res.status(404).json({ message: 'Request id is not valid' });
+        // }
 
         //update po status
-        const poMaterResponse = await po_master.update(
-            { status: 6 },
-            { where: { po_id: po_id } }
-        );
+        // const poMaterResponse = await po_master.update(
+        //     { status: 6 },
+        //     { where: { po_id: po_id } }
+        // );
 
-        //if id not found in master
-        if (!poMaterResponse) {
-            return res.status(404).json({ message: 'Po id is not valid' });
-        }
+        // //if id not found in master
+        // if (!poMaterResponse) {
+        //     return res.status(404).json({ message: 'Po id is not valid' });
+        // }
 
         // handle image file
         const fileBuffer = req.file.buffer;
@@ -35,7 +37,8 @@ exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {
         req.body.receipt_image_name = req.file.originalname;
 
         // genrate transactions
-        const newTransaction = await PaymentRequestTransactionsMaster.create(req.body);
+        const P_transaction = await PaymentRequestTransactionsMaster.create(req.body);
+        console.log(P_transaction.transactions_id);
 
         //create data for pfi
         let query = `select  distinct  opr_items.company_id ,dbo.fn_companyname(opr_items.company_id)  as comp_name
@@ -52,12 +55,13 @@ exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {
         // insert po_id request_id in talbe
         result.forEach(item => { item.status = 1, item.po_id = po_id, item.payment_request_id = payment_request_id, item.created_by = req.body.created_by })
         const PFI_response = await Pfi_master.bulkCreate(result);
-        res.status(201).json(newTransaction);
+        res.status(201).json(P_transaction);
 
     } catch (error) {
         next(error);
     }
 };
+
 
 
 // Get all PaymentRequestTransactionsMaster records
@@ -133,6 +137,7 @@ exports.getPaymentRequestTransactionsMasterRequestId = async (req, res) => {
     }
 };
 
+
 // Get a PaymentRequestTransactionsMaster by ID
 exports.getPaymentRequestTransactionsfileRequestId = async (req, res) => {
     try {
@@ -163,6 +168,8 @@ exports.getPaymentRequestTransactionsfileRequestId = async (req, res) => {
         res.status(500).json({ error: 'An error occurred while fetching the PaymentRequestTransactionsMaster.' });
     }
 };
+
+
 
 // Update a PaymentRequestTransactionsMaster by ID
 exports.updatePaymentRequestTransactionsMaster = async (req, res) => {
@@ -201,6 +208,7 @@ exports.updatePaymentRequestTransactionsMaster = async (req, res) => {
         res.status(500).json({ error: 'An error occurred while updating the PaymentRequestTransactionsMaster.' });
     }
 };
+
 
 // Delete a PaymentRequestTransactionsMaster by ID
 exports.deletePaymentRequestTransactionsMaster = async (req, res) => {

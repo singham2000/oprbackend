@@ -63,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         }
     }, {
-        tableName: 'company_master2',
+        tableName: 'company_master',
         timestamps: true
     })
 

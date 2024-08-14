@@ -57,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
             field: 'updatedAt'
         }
     }, {
-        tableName: 'payment_request_master',
+        tableName: 'payment_request_master_new',
         timestamps: true
     });
 

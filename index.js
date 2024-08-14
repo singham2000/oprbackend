@@ -124,6 +124,7 @@ app.use('/api/penaltyterms', penaltyTermsRoutes);
 app.use('/api/payment-types', paymentTypeMasterRoutes);
 app.use('/api/paymentrequests', paymentRequestMasterRoutes);
 app.use('/api/payment-transactions', paymentRequestTransactionsMasterRoutes);
+//this is new
 app.use('/api/payment', payment);
 
 // app.use('/api/payment',)

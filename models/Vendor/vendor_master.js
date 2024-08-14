@@ -111,11 +111,11 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: true
     })
 
-    // vendor.associate = (model) => {
-    //     vendor.hasMany(model.po_master, {
-    //         foreignKey: 'vendor_id'
-    //     });
-    // };
+    vendor.associate = (model) => {
+        vendor.hasMany(model.po_master, {
+            foreignKey: 'vendor_id'
+        });
+    };
 
     vendor.associate = (models) => {
         vendor.hasMany(models.po_master, {
