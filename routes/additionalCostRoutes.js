@@ -11,5 +11,10 @@ router
     .get('/', additionalCostController.getAdditionalCost)
     .post('/', setAuditFields, additionalCostController.createAdditionalCost)
     .put('/', setAuditFields, additionalCostController.updateAdditionalCostById)
-    .delete('/', additionalCostController.deleteAdditionalCostById)
+    .delete('/', setAuditFields, additionalCostController.deleteAdditionalCostById)
+router
+    .get('/', additionalCostController.getAdditionalCost)
+    .post('/', setAuditFields, additionalCostController.createAdditionalCost)
+    .put('/', setAuditFields, additionalCostController.updateAdditionalCostById)
+    .delete('/', setAuditFields, additionalCostController.deleteAdditionalCostById)
 module.exports = router;

@@ -1829,6 +1829,23 @@
         }
       }
     },
+    "/api/rfq/vendors": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "rfqid",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/rfq/rfq/{id}": {
       "get": {
         "description": "",
@@ -1941,6 +1958,23 @@
           },
           "401": {
             "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/rfq/vendor_list": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "rfq_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -2237,20 +2271,10 @@
         "description": "",
         "parameters": [
           {
-            "name": "branch_id",
-            "in": "query",
+            "name": "authorization",
+            "in": "header",
             "type": "string"
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          }
-        }
-      },
-      "put": {
-        "description": "",
-        "parameters": [
+          },
           {
             "name": "branch_id",
             "in": "query",
@@ -2262,6 +2286,53 @@
             "schema": {
               "type": "object",
               "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "branch_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
                 "branch_name": {
                   "example": "any"
                 },
@@ -2275,6 +2346,12 @@
         "responses": {
           "201": {
             "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }
@@ -4570,14 +4647,40 @@
         "description": "",
         "parameters": [
           {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
             "name": "additional_cost_id",
             "in": "query",
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }

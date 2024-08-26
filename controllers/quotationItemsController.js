@@ -16,7 +16,11 @@ const getQuotationItem = async (req, res, next) => {
                 where: {
                     quo_item_id: quo_item_id,
                     status: { [Op.ne]: 0 }
-                }
+                },
+                include: [
+                    { model: db.ItemsMaster, attributes: ['item_name'] }
+                ],
+
             });
 
         } else if (quo_id) {
@@ -24,14 +28,20 @@ const getQuotationItem = async (req, res, next) => {
                 where: {
                     quo_id: quo_id,
                     status: { [Op.ne]: 0 }
-                }
+                },
+                include: [
+                    { model: db.ItemsMaster, attributes: ['item_name'] }
+                ],
             });
 
         } else {
             result = await quotation_items.findAll({
                 where: {
                     status: { [Op.ne]: 0 }
-                }
+                },
+                include: [
+                    { model: db.ItemsMaster, attributes: ['item_name'] }
+                ],
             });
 
         }
@@ -44,6 +54,7 @@ const getQuotationItem = async (req, res, next) => {
             // item.dataValues.vendor_email = 'vendor@gmail.com',
             // item.dataValues.vendor_mob = '+1234'
         ))
+
         return res.status(200).json(result);
 
     } catch (err) {

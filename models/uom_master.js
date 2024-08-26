@@ -30,11 +30,11 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'unit_of_measurement',
         timestamps: true,
     });
- 
+
 
     UomMaster.associate = (models) => {
         UomMaster.hasMany(models.ItemsMaster, { foreignKey: 'uom_id' });
-        
+
     };
 
     return UomMaster;
