@@ -212,15 +212,15 @@ const vendorListbyrfqid = async (req, res, next) => {
         }
       },
       attributes: [
-    'vendor_id',
-    'vendor_series',
-    'vendor_name',
-    'phone_number',
-    'email',
-    'contact_person',
-    'contact_person_phone',
-    'contact_person_email'
-  ]
+        'vendor_id',
+        'vendor_series',
+        'vendor_name',
+        'phone_number',
+        'email',
+        'contact_person',
+        'contact_person_phone',
+        'contact_person_email'
+      ]
     });
 
     res.status(200).json(vendors);
