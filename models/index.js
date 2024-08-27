@@ -172,6 +172,32 @@ db.document = require("./Pfi/Document")(sequelize, DataTypes);
 db.form_m = require("./Pfi/FormM")(sequelize, DataTypes);
 db.letter_of_credit = require("./Pfi/LetterOfCredit")(sequelize, DataTypes);
 db.son_pfi = require("./Pfi/SonPfi")(sequelize, DataTypes);
+db.paar = require("./Pfi/Paar")(sequelize, DataTypes);
+
+//Operations
+db.assessment = require("./Opreations/Assessment.js")(sequelize, DataTypes);
+db.operations_nafdac = require("./Opreations/OperationsNafdac")(
+  sequelize,
+  DataTypes
+);
+db.operations_nafdac_master = require("./Opreations/OperationsNafdacMaster.js")(
+  sequelize,
+  DataTypes
+);
+db.operations_nafdac_lapse = require("./Opreations/OperationsNafdacLapse")(
+  sequelize,
+  DataTypes
+);
+db.operations_son = require("./Opreations/OperationsSon")(sequelize, DataTypes);
+db.operations_son_lapse = require("./Opreations/OperationsSonLapse")(
+  sequelize,
+  DataTypes
+);
+db.approval_matrix__master = require("./Masters/ApprovalMatrixMaster.jsx")(
+  sequelize,
+  DataTypes
+);
+db.approval_matrix = require("./Masters/ApprovalMatrix")(sequelize, DataTypes);
 
 // Set up associations
 const models = { ...db };
