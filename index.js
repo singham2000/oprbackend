@@ -60,6 +60,14 @@ const InsuranceRoutes = require("./routes/Pfi/InsuranceRoutes.js");
 const FormMRoutes = require("./routes/Pfi/formMRoutes");
 const LetterOfCreditTermsRoutes = require("./routes/Pfi/LetterOfCreditRoutes.js");
 const SonPfiRoutes = require("./routes/Pfi/SonPfiRoutes");
+const PaarRoutes = require("./routes/Pfi/PaarRoutes");
+
+//Opreations
+const AssessmentRoutes = require("./routes/Opreations/AssessmentRoutes");
+const OperationsNafdacRoutes = require("./routes/Opreations/NafdacRoutes");
+const OperationsNafdacMasterRoutes = require("./routes/Opreations/NafdacMasterRoutes");
+const OperationsSonRoutes = require("./routes/Opreations/SonRoutes");
+
 
 //payments
 const paymentTypeMasterRoutes = require("./routes/paymentTypeMasterRoutes");
@@ -125,6 +133,14 @@ app.use("/api/insurance", InsuranceRoutes);
 app.use("/api/formm", FormMRoutes);
 app.use("/api/lc", LetterOfCreditTermsRoutes);
 app.use("/api/pfi/son", SonPfiRoutes);
+app.use("/api/pfi/paar", PaarRoutes);
+
+//Operations
+app.use("/api/operation/assessment", AssessmentRoutes);
+app.use("/api/operation/nafdac", OperationsNafdacRoutes);
+app.use("/api/operation/nafdac/master", OperationsNafdacMasterRoutes);
+app.use("/api/operation/son", OperationsSonRoutes);
+
 
 //payments
 app.use("/api/paymentterms", paymentTermsRouter);
