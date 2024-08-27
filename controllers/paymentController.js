@@ -550,6 +550,7 @@ exports.PaymentRequestListForTreasury = async (req, res, next) => {
 exports.createPaymentTransactions = async (req, res, next) => {
     try {
         const { payment_request_id, po_id } = req.body;
+        console.log(req.body)
 
         //update request status 
         const paymentRequest = await PaymentRequestMaster.update(
@@ -594,9 +595,11 @@ exports.createPaymentTransactions = async (req, res, next) => {
                     INNER JOIN opr_items
                     ON opr_items.rfq_id = po_items.rfq_id
                     AND opr_items.item_id = po_items.item_id
-                    WHERE po_items.po_id = :po_id
+                    WHERE po_items.po_id = ${po_id}
                 `;
         // Execute the query with replacements
+        console.log("QUERY")
+        console.log(query)
         let itemsforPfi = await sequelize.query(query, {
             replacements: { po_id: po_id },
             type: sequelize.QueryTypes.SELECT
