@@ -2,6 +2,20 @@ const db = require('../models');
 const { branch: Branch } = db;
 const { Op } = require('sequelize');
 
+
+// Controller method to Create Branch
+const createBranch = async (req, res) => {
+    try {
+        const { branch_name, status } = req.body;
+        const newItem = await Branch.create({ branch_name, status });
+        res.status(201).json(newItem);
+    } catch (err) {
+        next(err);
+    }
+};
+
+
+// Controller method to Get all Branch
 const getAllBranch = async (req, res, next) => {
     const branch_id = req.query.branch_id;
     try {
@@ -29,33 +43,8 @@ const getAllBranch = async (req, res, next) => {
     }
 };
 
-// Controller method to delete item by id
-const deleteBranchById = async (req, res, next) => {
-    const branch_id = req.query.branch_id;
-    try {
-        const result = await Branch.update({ status: 0 }, {
-            where: {
-                branch_id: branch_id
-            }
-        });
-        res.status(201).json({ message: 'Deleted successfully' });
-    } catch (err) {
-        next(err)
-    }
-};
 
-
-// Controller method to delte item by id
-const createBranch = async (req, res) => {
-    try {
-        const { branch_name, status } = req.body;
-        const newItem = await Branch.create({ branch_name, status });
-        res.status(201).json(newItem);
-    } catch (err) {
-        next(err);
-    }
-};
-
+// Controller method to update Branch  by id
 const updateBranch = async (req, res, next) => {
     const branch_id = req.query.branch_id;
     try {
@@ -75,6 +64,24 @@ const updateBranch = async (req, res, next) => {
         next(err)
     }
 };
+
+
+// Controller method to delete item by id
+const deleteBranchById = async (req, res, next) => {
+    const branch_id = req.query.branch_id;
+    try {
+        const result = await Branch.update({ status: 0 }, {
+            where: {
+                branch_id: branch_id
+            }
+        });
+        res.status(201).json({ message: 'Deleted successfully' });
+    } catch (err) {
+        next(err)
+    }
+};
+
+
 
 module.exports = {
     getAllBranch,

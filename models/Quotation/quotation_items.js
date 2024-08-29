@@ -77,5 +77,11 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false
   });
 
+
+  quotation_items.associate = (models) => {
+    quotation_items.belongsTo(models.ItemsMaster, { foreignKey: 'item_id' });
+  };
+
   return quotation_items;
+
 };

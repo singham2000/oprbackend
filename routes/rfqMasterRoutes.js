@@ -14,5 +14,6 @@ router
     .get('/rfq/:id', rfqControllers.getRfqById)
     .delete('/rfq/:id', setAuditFields, rfqControllers.deleteRfqById)
     .post('/rfq', setAuditFields, rfqControllers.createRfq)
+    .get('/vendor_list', rfqControllers.vendorListbyrfqid)
 
 module.exports = router;

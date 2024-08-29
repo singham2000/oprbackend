@@ -183,10 +183,58 @@ const deleteRfqById = async (req, res, next) => {
   }
 };
 
+//get vendor detail by rfq id
+const vendorListbyrfqid = async (req, res, next) => {
+  try {
+    let rfq_id = req.query.rfq_id;
+
+    let rfqMasterRecord = await RfqMaster.findByPk(rfq_id, {
+      attributes: ['vendor_list']
+    });
+
+    if (!rfqMasterRecord) {
+      return res.status(404).json({ message: 'RFQ not found' });
+    }
+
+    // Extract the 'vendor_list' value and convert it to an array of numbers
+    const vendorListString = rfqMasterRecord.dataValues.vendor_list;
+    const vendorIds = vendorListString ? vendorListString.split(',').map(Number) : [];
+
+    if (vendorIds.length === 0) {
+      return res.status(200).json([]); // Return an empty array if no vendors are found
+    }
+
+    // Fetch vendors whose IDs are in the vendorIds array
+    let vendors = await VendorsMaster.findAll({
+      where: {
+        vendor_id: {
+          [Op.in]: vendorIds
+        }
+      },
+      attributes: [
+        'vendor_id',
+        'vendor_series',
+        'vendor_name',
+        'phone_number',
+        'email',
+        'contact_person',
+        'contact_person_phone',
+        'contact_person_email'
+      ]
+    });
+
+    res.status(200).json(vendors);
+
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getAllRfq,
   getRfqById,
   deleteRfqById,
   createRfq,
   getVendorsByRfqId,
+  vendorListbyrfqid
 };
