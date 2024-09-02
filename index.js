@@ -81,6 +81,11 @@ const paymentRequestTransactionsMasterRoutes = require("./routes/PaymentRequestT
 const paymentTermsRouter = require("./routes/paymentTermsRoutes");
 const payment = require("./routes/paymentRoutes.js");
 
+
+//services
+
+const serviceRoutes = require('./routes/oprServices/OPRserviceRoutes.js')
+
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -89,9 +94,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 // app.use(setAuditFields);
-
 //swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+
+
 // Routes
 app.use("/api/user", userRoute);
 app.use("/api/role", roleRoute);
@@ -167,6 +174,10 @@ app.use("/api/payment", payment);
 app.use('/api/address', addressRoutes);
 app.use('/api/bh', buyingHouseRoutes);
 app.use('/api/bhouse', buyingHouseRoutes2);
+
+
+//services 
+app.use('/api/service', serviceRoutes)
 
 
 

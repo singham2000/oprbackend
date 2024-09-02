@@ -18,6 +18,7 @@ const getPO = async (req, res, next) => {
 
       const result = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
       res.status(200).json(result);
+
     }
     else {
       const query = `SELECT po_master.*
@@ -182,18 +183,21 @@ const AcceptPO = async (req, res, next) => {
 // } // this will convert into getPodetails
 
 const getPoItemsbypoid = async (req, res, next) => {
-
   try {
     const { po_id } = req.query;
+
+
     let FoundPoItems = await po_items.findAll({
       where: { po_id: po_id },
       include: [
         {
           model: db.ItemsMaster,
-          include: {
-            model: db.UomMaster,
-            attributes: ['uom_name']
-          },
+          include: [
+            {
+              model: db.UomMaster,
+              attributes: ['uom_name']
+            }
+          ],
           attributes: ['item_name', 'item_type', 'item_code', 'quantity_in_stock', 'quantity_on_order', 'nafdac_category',]
         }
       ],
@@ -203,11 +207,6 @@ const getPoItemsbypoid = async (req, res, next) => {
   } catch (error) {
     next(error)
   }
-
-
-
-
-
 }
 
 
@@ -235,4 +234,35 @@ const updatePOById = async (req, res, next) => {
   }
 };
 
-module.exports = { getPOforGrn, po_email_conformation, AcceptPO, getPO, deletePOById, genratePo, updatePOById, getPoItemsbypoid };
+//get vendor details by po_id
+const getVendorDeailsByPoId = async (req, res, next) => {
+  try {
+    const { po_id } = req.query;
+    let foudnVendor = await po_master.findAll({
+      where: { po_id: po_id },
+      include: [
+        {
+          model: db.VendorsMaster,
+          include: [
+            {
+              model: db.VendorsAddressDetailsMaster,
+            }
+          ],
+
+        }
+      ],
+    });
+    res.status(201).json(foudnVendor)
+
+  } catch (error) {
+    next(error)
+  }
+}
+
+
+
+
+
+
+
+module.exports = { getVendorDeailsByPoId, getPOforGrn, po_email_conformation, AcceptPO, getPO, deletePOById, genratePo, updatePOById, getPoItemsbypoid };

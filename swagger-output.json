@@ -2264,6 +2264,23 @@
         }
       }
     },
+    "/api/po/vendor": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "po_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
     "/api/po/itemlist": {
       "get": {
         "description": "",
@@ -3650,6 +3667,11 @@
         "parameters": [
           {
             "name": "service_quo_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "service_rfq_id",
             "in": "query",
             "type": "string"
           }
@@ -9692,6 +9714,16 @@
           },
           "401": {
             "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/service/pos": {
+      "get": {
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
           }
         }
       }

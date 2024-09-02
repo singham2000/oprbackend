@@ -11,6 +11,7 @@ router
     .put('/update', POController.updatePOById)
     .delete('/delete', POController.deletePOById)
     .post('/accept', POController.AcceptPO)
+    .get('/vendor', POController.getVendorDeailsByPoId)
 router
     .get('/itemlist', POController.getPoItemsbypoid)
 

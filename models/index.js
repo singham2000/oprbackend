@@ -117,9 +117,9 @@ db.rfqitem = require("./Rfq/rfq_Item_master.js")(sequelize, DataTypes);
 db.status_master = require("./status_master")(sequelize, DataTypes);
 
 //service rfq
-db.ServiceRFQ = require("./Services/Service_master.js")(sequelize, DataTypes);
+db.ServiceMaster = require('./Services/services_master.js')(sequelize, DataTypes);
+db.ServiceRFQ = require("./Services/service_rfq_master.js")(sequelize, DataTypes);
 db.ServiceQUO = require("./Services/Service_Quotation.js")(sequelize, DataTypes);
-
 
 //Po
 db.po_master = require("./Po/po_master.js")(sequelize, DataTypes);
@@ -147,6 +147,7 @@ db.quotation_items = require("./Quotation/quotation_items.js")(
 //PAYMENTS
 // db.PaymentTypeMaster = require('./paymentTypes.js')(sequelize, DataTypes)
 // db.payment_terms_quo = require('./payment_terms_quo.js')(sequelize, DataTypes)
+
 
 db.PaymentRequestTransactionsMaster =
     require("./Payments/PaymentRequestTransactionsMaster .js")(

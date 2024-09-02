@@ -1,9 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
-    const ServiceMaster = sequelize.define("ServiceMaster", {
+    const ServiceRfqMaster = sequelize.define("ServiceRfqMaster", {
         service_rfq_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
+
         },
         service_num: {
             type: DataTypes.STRING(100),
@@ -48,8 +49,8 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         }
     }, {
-        tableName: 'ServiceMaster',
+        tableName: 'service_rfq_master',
         timestamps: true,
     });
-    return ServiceMaster;
+    return ServiceRfqMaster;
 };
