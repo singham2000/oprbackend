@@ -12,5 +12,10 @@ router
     .delete('/delete', POController.deletePOById)
     .post('/accept', POController.AcceptPO)
 router
-    .get('/itemlist',POController.getPoItemsbypoid)
+    .get('/itemlist', POController.getPoItemsbypoid)
+
+// list for grn
+router
+    .get('/forgrn', POController.getPOforGrn)
+
 module.exports = router;

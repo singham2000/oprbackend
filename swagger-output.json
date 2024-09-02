@@ -1982,6 +1982,77 @@
         }
       }
     },
+    "/api/rfq/service": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "service_type_id": {
+                  "example": "any"
+                },
+                "po_id": {
+                  "example": "any"
+                },
+                "service_description": {
+                  "example": "any"
+                },
+                "vendor_ids_list": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
     "/api/rfqitem/items": {
       "get": {
         "description": "",
@@ -2206,6 +2277,16 @@
         "responses": {
           "201": {
             "description": "Created"
+          }
+        }
+      }
+    },
+    "/api/po/forgrn": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -3478,6 +3559,104 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/quotation/service": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "vendor_id": {
+                  "example": "any"
+                },
+                "amount": {
+                  "example": "any"
+                },
+                "po_id": {
+                  "example": "any"
+                },
+                "remarks": {
+                  "example": "any"
+                },
+                "service_rfq_id": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "get": {
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/api/quotation/service/bysrfqid": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "service_rfq_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/api/quotation/service/confirm": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "service_quo_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
           }
         }
       }
@@ -5252,6 +5431,2392 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/commercial/invoice/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "commercial_invoice_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "pfiId": {
+                  "example": "any"
+                },
+                "pfiNum": {
+                  "example": "any"
+                },
+                "ciSender": {
+                  "example": "any"
+                },
+                "ciSenderDate": {
+                  "example": "any"
+                },
+                "customer": {
+                  "example": "any"
+                },
+                "invoiceNo": {
+                  "example": "any"
+                },
+                "invoiceDate": {
+                  "example": "any"
+                },
+                "oprNo": {
+                  "example": "any"
+                },
+                "shipmentType": {
+                  "example": "any"
+                },
+                "mode": {
+                  "example": "any"
+                },
+                "exchangeDate": {
+                  "example": "any"
+                },
+                "totalPackage": {
+                  "example": "any"
+                },
+                "portOfDC": {
+                  "example": "any"
+                },
+                "deliveryTerms": {
+                  "example": "any"
+                },
+                "portOfLoading": {
+                  "example": "any"
+                },
+                "countryOfOrigin": {
+                  "example": "any"
+                },
+                "countryOfSupply": {
+                  "example": "any"
+                },
+                "paymentTerms": {
+                  "example": "any"
+                },
+                "finalDestination": {
+                  "example": "any"
+                },
+                "countryOfFinalDestination": {
+                  "example": "any"
+                },
+                "blNo": {
+                  "example": "any"
+                },
+                "blDate": {
+                  "example": "any"
+                },
+                "vesselName": {
+                  "example": "any"
+                },
+                "vesselNo": {
+                  "example": "any"
+                },
+                "shippingLineName": {
+                  "example": "any"
+                },
+                "etaDate": {
+                  "example": "any"
+                },
+                "freeDays": {
+                  "example": "any"
+                },
+                "totalNetWeight": {
+                  "example": "any"
+                },
+                "totalGrossWeight": {
+                  "example": "any"
+                },
+                "uom": {
+                  "example": "any"
+                },
+                "sealNo": {
+                  "example": "any"
+                },
+                "cbm": {
+                  "example": "any"
+                },
+                "invoiceRemark": {
+                  "example": "any"
+                },
+                "inlandCharges": {
+                  "example": "any"
+                },
+                "freightCharges": {
+                  "example": "any"
+                },
+                "inspectionCharges": {
+                  "example": "any"
+                },
+                "fullandFinal": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "commercial_invoice_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "penalty_terms_name": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "commercial_invoice_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/insurance/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "insurance_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "pfiId": {
+                  "example": "any"
+                },
+                "pfiNum": {
+                  "example": "any"
+                },
+                "pfiDate": {
+                  "example": "any"
+                },
+                "pfiValue": {
+                  "example": "any"
+                },
+                "currency": {
+                  "example": "any"
+                },
+                "bank": {
+                  "example": "any"
+                },
+                "applicationDate": {
+                  "example": "any"
+                },
+                "insurancePremiumRate": {
+                  "example": "any"
+                },
+                "insuranceCertNo": {
+                  "example": "any"
+                },
+                "invoiceNo": {
+                  "example": "any"
+                },
+                "formMDate": {
+                  "example": "any"
+                },
+                "insuranceCompany": {
+                  "example": "any"
+                },
+                "insuranceClause": {
+                  "example": "any"
+                },
+                "exchangeRate": {
+                  "example": "any"
+                },
+                "paymentDate": {
+                  "example": "any"
+                },
+                "remarks": {
+                  "example": "any"
+                },
+                "sumInsuredUSD": {
+                  "example": "any"
+                },
+                "premiumAmount": {
+                  "example": "any"
+                },
+                "sumInsuredNaira": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "insurance_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "penalty_terms_name": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "insurance_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/formm/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "form_m_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "pfiNum": {
+                  "example": "any"
+                },
+                "pfiId": {
+                  "example": "any"
+                },
+                "insurenceId": {
+                  "example": "any"
+                },
+                "insurenceNum": {
+                  "example": "any"
+                },
+                "formM_number": {
+                  "example": "any"
+                },
+                "formm_date": {
+                  "example": "any"
+                },
+                "pi_description": {
+                  "example": "any"
+                },
+                "formm_expiry_date": {
+                  "example": "any"
+                },
+                "ba_number": {
+                  "example": "any"
+                },
+                "formm_rec_date": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "form_m_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "penalty_terms_name": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "form_m_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/lc/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "letter_of_credit_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "pfiNum": {
+                  "example": "any"
+                },
+                "pfiId": {
+                  "example": "any"
+                },
+                "form_m_id": {
+                  "example": "any"
+                },
+                "form_m_num": {
+                  "example": "any"
+                },
+                "lc_status": {
+                  "example": "any"
+                },
+                "lc_number": {
+                  "example": "any"
+                },
+                "lc_date": {
+                  "example": "any"
+                },
+                "application_date": {
+                  "example": "any"
+                },
+                "lc_type": {
+                  "example": "any"
+                },
+                "lc_issued_amount": {
+                  "example": "any"
+                },
+                "lc_expiry_date": {
+                  "example": "any"
+                },
+                "latest_shipment_date": {
+                  "example": "any"
+                },
+                "advising_bank": {
+                  "example": "any"
+                },
+                "lc_tolerance": {
+                  "example": "any"
+                },
+                "lc_terms_type": {
+                  "example": "any"
+                },
+                "tenor_days": {
+                  "example": "any"
+                },
+                "off_shore_charges_borne_by": {
+                  "example": "any"
+                },
+                "confirmation_charges_borne_by": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "letter_of_credit_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "penalty_terms_name": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "letter_of_credit_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/pfi/son/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "son_pfi_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "pfi_id": {
+                  "example": "any"
+                },
+                "pfi_num": {
+                  "example": "any"
+                },
+                "pfi_date": {
+                  "example": "any"
+                },
+                "payment_types": {
+                  "example": "any"
+                },
+                "son_permit_app_date": {
+                  "example": "any"
+                },
+                "invoice_rec_date": {
+                  "example": "any"
+                },
+                "pay": {
+                  "example": "any"
+                },
+                "permit_no": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "son_pfi_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "penalty_terms_name": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "son_pfi_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/pfi/paar/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "paar_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "pfi_id": {
+                  "example": "any"
+                },
+                "pfi_num": {
+                  "example": "any"
+                },
+                "form_m_id": {
+                  "example": "any"
+                },
+                "form_m_num": {
+                  "example": "any"
+                },
+                "paar_no": {
+                  "example": "any"
+                },
+                "paar_date": {
+                  "example": "any"
+                },
+                "received_on": {
+                  "example": "any"
+                },
+                "exchange_rate": {
+                  "example": "any"
+                },
+                "fob_invoice_amount": {
+                  "example": "any"
+                },
+                "fob_uplift": {
+                  "example": "any"
+                },
+                "freight_uplift": {
+                  "example": "any"
+                },
+                "insurance_uplift": {
+                  "example": "any"
+                },
+                "cif_value_naira": {
+                  "example": "any"
+                },
+                "remarks": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "paar_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "penalty_terms_name": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "paar_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/operation/assessment/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "assessment_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "pfi_id": {
+                  "example": "any"
+                },
+                "pfi_num": {
+                  "example": "any"
+                },
+                "form_m_id": {
+                  "example": "any"
+                },
+                "form_m_num": {
+                  "example": "any"
+                },
+                "paar_id": {
+                  "example": "any"
+                },
+                "paar_num": {
+                  "example": "any"
+                },
+                "cNumber": {
+                  "example": "any"
+                },
+                "assessmentDate": {
+                  "example": "any"
+                },
+                "assessNo": {
+                  "example": "any"
+                },
+                "agentName": {
+                  "example": "any"
+                },
+                "dutyPaidToBank": {
+                  "example": "any"
+                },
+                "exchangeRate": {
+                  "example": "any"
+                },
+                "cifValue": {
+                  "example": "any"
+                },
+                "dutyAmount": {
+                  "example": "any"
+                },
+                "surchargeAmount": {
+                  "example": "any"
+                },
+                "cissAmount": {
+                  "example": "any"
+                },
+                "etlsAmount": {
+                  "example": "any"
+                },
+                "levyAmount": {
+                  "example": "any"
+                },
+                "vatAmount": {
+                  "example": "any"
+                },
+                "penaltyAmount": {
+                  "example": "any"
+                },
+                "totalDuty": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "assessment_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "penalty_terms_name": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "assessment_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/operation/nafdac/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "operations_nafdac_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "pfi_id": {
+                  "example": "any"
+                },
+                "pfi_num": {
+                  "example": "any"
+                },
+                "form_m_id": {
+                  "example": "any"
+                },
+                "form_m_num": {
+                  "example": "any"
+                },
+                "nafdac_date": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "operations_nafdac_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "penalty_terms_name": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "operations_nafdac_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/operation/nafdac/master/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "operations_nafdac_master_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "operations_nafdac_id": {
+                  "example": "any"
+                },
+                "payment_type": {
+                  "example": "any"
+                },
+                "penalty_type": {
+                  "example": "any"
+                },
+                "bill_date": {
+                  "example": "any"
+                },
+                "amount": {
+                  "example": "any"
+                },
+                "remit_charges": {
+                  "example": "any"
+                },
+                "vat": {
+                  "example": "any"
+                },
+                "penalty_payment_date": {
+                  "example": "any"
+                },
+                "penalty_approved_date": {
+                  "example": "any"
+                },
+                "penalty_approved": {
+                  "example": "any"
+                },
+                "narration": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "operations_nafdac_master_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "penalty_terms_name": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "operations_nafdac_master_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/operation/nafdac/master/lapse": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "operations_nafdac_master_id": {
+                  "example": "any"
+                },
+                "operations_nafdac_id": {
+                  "example": "any"
+                },
+                "lapse_type": {
+                  "example": "any"
+                },
+                "lapse_amount": {
+                  "example": "any"
+                },
+                "lapse_narration": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/operation/son/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "operations_son_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "ci_id": {
+                  "example": "any"
+                },
+                "ci_num": {
+                  "example": "any"
+                },
+                "penalty_payment_date": {
+                  "example": "any"
+                },
+                "penalty_approved_date": {
+                  "example": "any"
+                },
+                "payment_types": {
+                  "example": "any"
+                },
+                "bill_no": {
+                  "example": "any"
+                },
+                "bill_date": {
+                  "example": "any"
+                },
+                "amount": {
+                  "example": "any"
+                },
+                "remit_charges": {
+                  "example": "any"
+                },
+                "vat": {
+                  "example": "any"
+                },
+                "penalty_approved": {
+                  "example": "any"
+                },
+                "narration": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "operations_son_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "penalty_terms_name": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "operations_son_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/operation/son/lapse": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "operations_son_id": {
+                  "example": "any"
+                },
+                "lapse_type": {
+                  "example": "any"
+                },
+                "lapse_amount": {
+                  "example": "any"
+                },
+                "lapse_narration": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/shipping/list": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/shipping/listbyciid": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "ci_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/shipping/create": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "ci_id": {
+                  "example": "any"
+                },
+                "shipping_doc_receipt_date_ho": {
+                  "example": "any"
+                },
+                "received_from_bank_date_ho": {
+                  "example": "any"
+                },
+                "obl_sent_apapa_date": {
+                  "example": "any"
+                },
+                "obl_received_date": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/shipping/addcompliance": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "ci_id": {
+                  "example": "any"
+                },
+                "nafdac": {
+                  "example": "any"
+                },
+                "son": {
+                  "example": "any"
+                },
+                "idec": {
+                  "example": "any"
+                },
+                "cria": {
+                  "example": "any"
+                },
+                "fast_track_clearing": {
+                  "example": "any"
+                },
+                "agency": {
+                  "example": "any"
+                },
+                "agent": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/shipping/addeta": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "ci_id": {
+                  "example": "any"
+                },
+                "eta": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/shipping/updateterminal": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "ci_id": {
+                  "example": "any"
+                },
+                "discharge_terminal": {
+                  "example": "any"
+                },
+                "transfer_terminal": {
+                  "example": "any"
+                },
+                "supplier_name": {
+                  "example": "any"
+                },
+                "ci_date": {
+                  "example": "any"
+                },
+                "bl_no": {
+                  "example": "any"
+                },
+                "bl_date": {
+                  "example": "any"
+                },
+                "pfi_num": {
+                  "example": "any"
+                },
+                "formm_num": {
+                  "example": "any"
+                },
+                "formm_date": {
+                  "example": "any"
+                },
+                "no_of_container": {
+                  "example": "any"
+                },
+                "agency_name": {
+                  "example": "any"
+                },
+                "free_days": {
+                  "example": "any"
+                },
+                "cbm": {
+                  "example": "any"
+                },
+                "eta": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/shipping/terminals": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/shipping/terminal/update": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ci_id": {
+                  "example": "any"
+                },
+                "free_days": {
+                  "example": "any"
+                },
+                "cbm": {
+                  "example": "any"
+                },
+                "tdo_received_date": {
+                  "example": "any"
+                },
+                "tdo_valid_till": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/shipping/expenses": {
+      "post": {
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      },
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "shipping_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/container/containers": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/container/container_by_ship_id": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "shipping_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/container/addcontainer": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "shipping_id": {
+                  "example": "any"
+                },
+                "container_num": {
+                  "example": "any"
+                },
+                "size": {
+                  "example": "any"
+                },
+                "type": {
+                  "example": "any"
+                },
+                "seal_no": {
+                  "example": "any"
+                },
+                "arrival_date": {
+                  "example": "any"
+                },
+                "freedays_ending_date": {
+                  "example": "any"
+                },
+                "discharge_date": {
+                  "example": "any"
+                },
+                "transfer_date": {
+                  "example": "any"
+                },
+                "tdo_validity_date": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/container/addexpenses": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "container_expenses": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/container/updatecontainer": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "shiping_id": {
+                  "example": "any"
+                },
+                "container_num": {
+                  "example": "any"
+                },
+                "size": {
+                  "example": "any"
+                },
+                "type": {
+                  "example": "any"
+                },
+                "seal_no": {
+                  "example": "any"
+                },
+                "arrival_date": {
+                  "example": "any"
+                },
+                "freedays_ending_date": {
+                  "example": "any"
+                },
+                "discharge_date": {
+                  "example": "any"
+                },
+                "transfer_date": {
+                  "example": "any"
+                },
+                "tdo_validity_date": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/vessel/create": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/vessel/list": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/vessel/listby_shhipping_id": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -7054,6 +9619,79 @@
           },
           "500": {
             "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/bhouse/grnentry": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "buying_house_id": {
+                  "example": "any"
+                },
+                "po_id": {
+                  "example": "any"
+                },
+                "vendor_id": {
+                  "example": "any"
+                },
+                "po_item_id_lists": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/bhouse/grn/list": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }

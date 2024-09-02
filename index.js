@@ -48,7 +48,7 @@ const pfiRoutes = require('./routes/pfiRoutes.js')
 const vendorTypeMasterRoutes = require('./routes/vendorTypeMasterRoutes');
 const addressRoutes = require('./routes/addressRoutes.js');
 const buyingHouseRoutes = require('./routes/buyHouseRoutes.js');
-const buyingHouseRoutes2 = require('./routes/buyingHouseRoutes.js');
+const buyingHouseRoutes2 = require('./routes/BuyingHouse/buyingHouseRoutes.js');
 const SeriesRoutes = require('./routes/seriesRoutes,js');
 const StatusRoutes = require('./routes/statusRoutes.js');
 
@@ -67,6 +67,11 @@ const AssessmentRoutes = require("./routes/Opreations/AssessmentRoutes");
 const OperationsNafdacRoutes = require("./routes/Opreations/NafdacRoutes");
 const OperationsNafdacMasterRoutes = require("./routes/Opreations/NafdacMasterRoutes");
 const OperationsSonRoutes = require("./routes/Opreations/SonRoutes");
+
+//shipping
+const ShippingMasterRoutes = require('./routes/Shipping/shippingMasterRoutes.js')
+const ContainerRoutes = require('./routes/Shipping/containerRoutes.js')
+const VesselRoutes = require('./routes/Shipping/vesselRoutes.js')
 
 
 //payments
@@ -141,6 +146,11 @@ app.use("/api/operation/nafdac", OperationsNafdacRoutes);
 app.use("/api/operation/nafdac/master", OperationsNafdacMasterRoutes);
 app.use("/api/operation/son", OperationsSonRoutes);
 
+//shipping
+app.use("/api/shipping", ShippingMasterRoutes);
+app.use("/api/container", ContainerRoutes);
+app.use("/api/vessel", VesselRoutes);
+
 
 //payments
 app.use("/api/paymentterms", paymentTermsRouter);
@@ -157,6 +167,9 @@ app.use("/api/payment", payment);
 app.use('/api/address', addressRoutes);
 app.use('/api/bh', buyingHouseRoutes);
 app.use('/api/bhouse', buyingHouseRoutes2);
+
+
+
 
 // Error handling middleware
 app.use(handleError);
