@@ -48,7 +48,7 @@ const pfiRoutes = require('./routes/pfiRoutes.js')
 const vendorTypeMasterRoutes = require('./routes/vendorTypeMasterRoutes');
 const addressRoutes = require('./routes/addressRoutes.js');
 const buyingHouseRoutes = require('./routes/buyHouseRoutes.js');
-const buyingHouseRoutes2 = require('./routes/buyingHouseRoutes.js');
+const buyingHouseRoutes2 = require('./routes/BuyingHouse/buyingHouseRoutes.js');
 const SeriesRoutes = require('./routes/seriesRoutes,js');
 const StatusRoutes = require('./routes/statusRoutes.js');
 
@@ -68,6 +68,11 @@ const OperationsNafdacRoutes = require("./routes/Opreations/NafdacRoutes");
 const OperationsNafdacMasterRoutes = require("./routes/Opreations/NafdacMasterRoutes");
 const OperationsSonRoutes = require("./routes/Opreations/SonRoutes");
 
+//shipping
+const ShippingMasterRoutes = require('./routes/Shipping/shippingMasterRoutes.js')
+const ContainerRoutes = require('./routes/Shipping/containerRoutes.js')
+const VesselRoutes = require('./routes/Shipping/vesselRoutes.js')
+
 
 //payments
 const paymentTypeMasterRoutes = require("./routes/paymentTypeMasterRoutes");
@@ -75,6 +80,11 @@ const paymentRequestMasterRoutes = require("./routes/paymentRequestMasterRoutes"
 const paymentRequestTransactionsMasterRoutes = require("./routes/PaymentRequestTransactionsMaster.js");
 const paymentTermsRouter = require("./routes/paymentTermsRoutes");
 const payment = require("./routes/paymentRoutes.js");
+
+
+//services
+
+const serviceRoutes = require('./routes/oprServices/OPRserviceRoutes.js')
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -84,9 +94,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 // app.use(setAuditFields);
-
 //swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+
+
 // Routes
 app.use("/api/user", userRoute);
 app.use("/api/role", roleRoute);
@@ -141,6 +153,11 @@ app.use("/api/operation/nafdac", OperationsNafdacRoutes);
 app.use("/api/operation/nafdac/master", OperationsNafdacMasterRoutes);
 app.use("/api/operation/son", OperationsSonRoutes);
 
+//shipping
+app.use("/api/shipping", ShippingMasterRoutes);
+app.use("/api/container", ContainerRoutes);
+app.use("/api/vessel", VesselRoutes);
+
 
 //payments
 app.use("/api/paymentterms", paymentTermsRouter);
@@ -157,6 +174,13 @@ app.use("/api/payment", payment);
 app.use('/api/address', addressRoutes);
 app.use('/api/bh', buyingHouseRoutes);
 app.use('/api/bhouse', buyingHouseRoutes2);
+
+
+//services 
+app.use('/api/service', serviceRoutes)
+
+
+
 
 // Error handling middleware
 app.use(handleError);

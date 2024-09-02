@@ -1,12 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
-  const po_items = sequelize.define("po_items", {
-    po_item_id: {
+  const opo_items = sequelize.define("opo_items", {
+    opo_item_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    po_id: {
+    opo_id: {
       type: DataTypes.INTEGER,
       allowNull: true
     },
@@ -22,19 +22,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: true
     },
-    po_item_description: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
     address_id: {
       type: DataTypes.INTEGER,
       allowNull: true
     },
-    po_qty: {
-      type: DataTypes.DECIMAL(18, 2),
-      allowNull: true
-    },
-    grn_qty: {
+    opo_qty: {
       type: DataTypes.DECIMAL(18, 2),
       allowNull: true
     },
@@ -59,24 +51,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     }
   }, {
-    tableName: 'po_items',
+    tableName: 'opo_items',
     timestamps: true
   });
 
-  // po_items.associate = (model) => {
-  //   po_items.hasMany(model.po_master, {
-  //     foreignKey: 'po_id'
-  //   });
-  // };
-
-  po_items.associate = (models) => {
-    po_items.belongsTo(models.po_master, {
-      foreignKey: 'po_id',
-    });
-    po_items.belongsTo(models.ItemsMaster, {
-      foreignKey: 'item_id',
-    });
-  };
-
-  return po_items;
-}; 
+  return opo_items;
+};

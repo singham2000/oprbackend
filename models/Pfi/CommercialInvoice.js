@@ -8,6 +8,10 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
+      ci_num: {
+        type: DataTypes.STRING(155),
+        allowNull: true,
+      },
       ci_sender: {
         type: DataTypes.STRING(155),
         allowNull: true,

@@ -142,6 +142,6 @@ module.exports = (sequelize, DataTypes) => {
         ItemsMaster.hasMany(models.rfqitem, { foreignKey: 'item_id' });
         ItemsMaster.hasMany(models.quotation_items, { foreignKey: 'item_id' });
     };
+
     return ItemsMaster;
 };
- 

@@ -18,6 +18,7 @@ const getPO = async (req, res, next) => {
 
       const result = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
       res.status(200).json(result);
+
     }
     else {
       const query = `SELECT po_master.*
@@ -30,6 +31,21 @@ const getPO = async (req, res, next) => {
   } catch (error) {
     console.error('Error calling UDF:', error);
     throw error;
+  }
+};
+
+
+//get po for grn
+const getPOforGrn = async (req, res, next) => {
+  try {
+    const query = `  SELECT po_master.*
+      FROM po_master
+      INNER JOIN quotations_master
+      ON po_master.quo_id = quotations_master.quo_id where  po_master.status < 10`;
+    const result = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
+    res.status(200).json(result);
+  } catch (error) {
+    next(error)
   }
 };
 
@@ -112,7 +128,7 @@ const po_email_conformation = async (req, res, next) => {
   try {
     // console.log(req.body);
     const { po_id } = req.body;
-    console.log(`po id :${po_id}`)
+    console.log(`po id:${po_id} `)
 
     const po_response = await po_master.update(
       { status: 2 }, // New values to update
@@ -170,38 +186,31 @@ const getPoItemsbypoid = async (req, res, next) => {
   try {
     const { po_id } = req.query;
 
-    const result = await po_master.findAll(
-      {
-        include: [
-          {
-            model: db.VendorsMaster,
-            // attributes: ['vendor_name', 'phone_number', 'email']
-            attributes: ['vendor_id', 'vendor_series', 'vendor_name', 'phone_number', 'alternate_phone_number', 'email', 'contact_person', 'contact_person_phone', 'contact_person_email', 'tax_id', 'payment_terms_id', 'pan_num', 'tin_num', 'gst_num', 'vat_num', 'reference_by', 'vendor_type_id', 'vendor_status', 'registration_date', 'compliance_status', 'last_audited_docs_name'],
-            include: [{
-              model: db.VendorsAddressDetailsMaster,
-              // attributes: ['item_name', 'item_code', 'uom_id'],
-            }]
-          },
-          {
-            model: db.po_items,
-            attributes: ['po_item_id', 'po_qty', 'rate', 'remarks'],
-            include: [{
-              model: db.ItemsMaster,
-              attributes: ['item_name', 'item_code', 'uom_id'],
-            }]
-          }
-        ],
-        where: {
-          po_id: po_id,
-        },
-        attributes: ['po_id', 'po_num', 'status', 'created_on', 'currency', 'delivery_terms', 'payment_terms', 'lead_time']
-      }
-    );
-    res.status(201).json(result);
-  } catch (err) {
-    next(err);
+
+    let FoundPoItems = await po_items.findAll({
+      where: { po_id: po_id },
+      include: [
+        {
+          model: db.ItemsMaster,
+          include: [
+            {
+              model: db.UomMaster,
+              attributes: ['uom_name']
+            }
+          ],
+          attributes: ['item_name', 'item_type', 'item_code', 'quantity_in_stock', 'quantity_on_order', 'nafdac_category',]
+        }
+      ],
+    });
+    res.status(201).json(FoundPoItems)
+
+  } catch (error) {
+    next(error)
   }
 }
+
+
+
 
 const updatePOById = async (req, res, next) => {
   const po_id = req.query.po_id;
@@ -225,4 +234,35 @@ const updatePOById = async (req, res, next) => {
   }
 };
 
-module.exports = { po_email_conformation, AcceptPO, getPO, deletePOById, genratePo, updatePOById, getPoItemsbypoid };
+//get vendor details by po_id
+const getVendorDeailsByPoId = async (req, res, next) => {
+  try {
+    const { po_id } = req.query;
+    let foudnVendor = await po_master.findAll({
+      where: { po_id: po_id },
+      include: [
+        {
+          model: db.VendorsMaster,
+          include: [
+            {
+              model: db.VendorsAddressDetailsMaster,
+            }
+          ],
+
+        }
+      ],
+    });
+    res.status(201).json(foudnVendor)
+
+  } catch (error) {
+    next(error)
+  }
+}
+
+
+
+
+
+
+
+module.exports = { getVendorDeailsByPoId, getPOforGrn, po_email_conformation, AcceptPO, getPO, deletePOById, genratePo, updatePOById, getPoItemsbypoid };

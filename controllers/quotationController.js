@@ -4,7 +4,7 @@ const db = require('../models');
 const { quotation_master, po_master, quotation_items, QuoDoc, delivery_terms_quo, payment_terms_quo, lead_time_quo } = db;
 const formattedDateTime = require("../middleware/time");
 const { Op, where } = require('sequelize');
-const {generateSeries} = require("./seriesGenerate");
+const { generateSeries } = require("./seriesGenerate");
 const { sequelize, po_items } = require('../models/index')
 
 
@@ -13,53 +13,27 @@ const getQuotation = async (req, res, next) => {
   const quo_id = req.query.quo_id;
   try {
     if (quo_id) {
-      // const query = ` SELECT * ,[dbo].[fn_additionalCost]([quo_id]) As additionalCost,
-      //                 [dbo].[fn_vendorName]([vendor_id]) As vendorName,
-      //                 [dbo].[fn_rfqNum]([rfq_id]) as rfq_num
-      //                 FROM quotations_master
-      //                 INNER JOIN payment_terms_master
-      //                 ON quotations_master.payment_terms = payment_terms_master.payment_terms_id 
-      //                 INNER JOIN delivery_terms_quo
-      //                 ON quotations_master.delivery_terms = delivery_terms_quo.delivery_terms_id 
-      //                 INNER JOIN lead_time_quo
-      //                 ON quotations_master.lead_time = lead_time_quo.lead_time_id                      
-      //                 where quo_id = ${quo_id}`;
+      const query = `SELECT *,[dbo].[fn_additionalCost]([quo_id]) As additionalCost,reference_no,reference_date,
+                      vendors_master.vendor_name As vendorName,
+                      vendors_master.email As vendor_email,
+                      [dbo].[fn_vendorAddress](quotations_master.vendor_id) As vendor_address,
+                      vendors_master.phone_number As vendor_phone_number,
+                      [dbo].[fn_rfqNum]([rfq_id]) as rfq_num
+                      FROM quotations_master
+                      INNER JOIN payment_term_master_new
+                      ON quotations_master.payment_terms = payment_term_master_new.payment_terms_id 
+                      INNER JOIN delivery_terms_quo
+                      ON quotations_master.delivery_terms = delivery_terms_quo.delivery_terms_id 
+                      INNER JOIN lead_time_quo
+                      ON quotations_master.lead_time = lead_time_quo.lead_time_id 
+                      INNER JOIN vendors_master
+                      ON vendors_master.vendor_id= quotations_master.vendor_id 
+                      where quo_id = ${quo_id}
+                      `
+      const result = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
+      result.forEach(item => item.uom = 'KG')
+      res.status(200).json(result);
 
-      // const query = `SELECT [dbo].[fn_additionalCost]([quo_id]) As additionalCost,reference_no,reference_date,
-      //                 vendors_master.vendor_name As vendorName,
-      //                 vendors_master.email As vendor_email,
-      //                 [dbo].[fn_vendorAddress](quotations_master.vendor_id) As vendor_address,
-      //                 vendors_master.phone_number As vendor_phone_number,
-      //                 [dbo].[fn_rfqNum]([rfq_id]) as rfq_num
-      //                 FROM quotations_master
-      //                 INNER JOIN payment_terms_master
-      //                 ON quotations_master.payment_terms = payment_terms_master.payment_terms_id 
-      //                 INNER JOIN delivery_terms_quo
-      //                 ON quotations_master.delivery_terms = delivery_terms_quo.delivery_terms_id 
-      //                 INNER JOIN lead_time_quo
-      //                 ON quotations_master.lead_time = lead_time_quo.lead_time_id 
-      //                 INNER JOIN vendors_master
-      //                 ON vendors_master.vendor_id= quotations_master.vendor_id 
-      //                 where quo_id = ${quo_id}
-      //                 `
-      // const result = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
-
-
-      // console.log(result);
-
-      let quer2 =
-        `select 
-                dbo.fn_itemName(item_id) as item_name,
-                item_description,opr_qty,rate
-                from quotation_items
-                where quo_id = ${quo_id}`
-
-      let data = await sequelize.query(quer2, { type: sequelize.QueryTypes.SELECT });
-
-      console.log(data);
-      data.forEach(item => item.uom = 'KG')
-      // result[0].item_list = data
-      res.status(200).json(data);
     }
     else {
       const query = `SELECT * ,[dbo].[fn_additionalCost]([quo_id]) As additionalCost,

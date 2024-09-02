@@ -124,6 +124,7 @@ module.exports = (sequelize, DataTypes) => {
         vendor.hasMany(models.VendorsAddressDetailsMaster, {
             foreignKey: 'vendor_id',
         });
+
     };
 
     return vendor
