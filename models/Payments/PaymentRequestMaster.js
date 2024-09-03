@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
+        doc_type: {
+            type: DataTypes.STRING(100),
+            allowNull: true
+        },
         po_number: {
             type: DataTypes.STRING(100),
             allowNull: true

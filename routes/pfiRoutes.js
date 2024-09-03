@@ -5,9 +5,6 @@ const pfiController = require('../controllers/pfiController');
 const newpfiController = require('../controllers/PfiController/pfiController.js');
 const { getPfiLineItemByPoid } = require('../controllers/PfiController/pfiItemController.js');
 const setAuditFields = require('../middleware/setAuditFields.js');
-// const {  } = require('../controllers/quotationController');
-
-
 
 
 // API routes
@@ -19,8 +16,8 @@ router
     .get('/create2', setAuditFields, pfiController.genratePfi2)
 router
     .post('/create', setAuditFields, newpfiController.create)
-    .get('/list',  newpfiController.pfilist)
-
+    .get('/list', newpfiController.pfilist)
 router.get('/pfiitems', getPfiLineItemByPoid)
+
 
 module.exports = router; 

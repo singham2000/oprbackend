@@ -80,7 +80,7 @@ router.post('/pr_create', setAuditFields, PaymentController.createPaymentRequest
 // PAYMENT transaction
 // ========================================================
 // Create a new payment term
-router.post('/transaction',upload.any(), setAuditFields, PaymentController.createPaymentTransactions);
+router.post('/transaction', upload.any(), setAuditFields, PaymentController.createPaymentTransactions);
 
 
 //payment terms

@@ -15,10 +15,10 @@
 //             type: DataTypes.INTEGER,
 //             allowNull: true
 //         },
-//         po_id: {
-//             type: DataTypes.INTEGER,
-//             allowNull: true
-//         },
+// po_id: {
+//     type: DataTypes.INTEGER,
+//     allowNull: true
+// },
 //         company_id: {
 //             type: DataTypes.INTEGER,
 //             allowNull: true
@@ -68,6 +68,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         opr_no: {
             type: DataTypes.STRING(50),
+            allowNull: true
+        },
+        po_id: {
+            type: DataTypes.INTEGER,
             allowNull: true
         },
         company_id: {

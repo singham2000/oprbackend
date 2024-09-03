@@ -2,8 +2,9 @@
 const db = require("../models");
 const { sequelize } = db
 const { OpoMaster, OpoItems, quotation_master, po_items } = db;
+
 const { Op, where } = require("sequelize");
-const {generateSeries} = require("./seriesGenerate");
+const { generateSeries } = require("./seriesGenerate");
 const { getQuotationItemByQuoId } = require('./quotationItemsController')
 
 exports.getOpo = async (req, res, next) => {

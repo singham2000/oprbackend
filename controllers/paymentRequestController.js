@@ -1,23 +1,100 @@
 const { where } = require('sequelize');
 const db = require('../models'); // Adjust the path to your models file
-const { PaymentRequestMaster, PaymentTypeMaster, po_master } = db
+const { PaymentRequestMaster, PaymentTypeMaster, po_master, ServiceQUO } = db
 const { generateSeries } = require("./seriesGenerate");
 
 
 
+const updateDocumentStatus = async (doc_type, doc_id, res) => {
+    try {
+        switch (doc_type) {
+            case 'po':
+                const po = await po_master.findByPk(doc_id);
+                if (!po) {
+                    return res.status(404).json({ message: 'Po id is not valid' });
+                }
+                await po_master.update(
+                    { status: 5 },
+                    { where: { po_id: doc_id } }
+                )
+                break;
+            case 'service_po':
+                const service_response = await po_master.findByPk(doc_id);
+                if (!service_response) {
+                    return res.status(404).json({ message: 'Service Quo is not valid' });
+                }
+                await ServiceQUO.update(
+                    { status: 5 },
+                    { where: { service_quo_id: doc_id } }
+                )
+
+                break;
+            default:
+                console.log("doct type is not give")
+        }
+    } catch (err) {
+        console.error('Error updating document status:', err);
+        throw err;
+    }
+};
+
+
+
 // this function will genrate data in payment request table
+// exports.createPaymentRequestMaster = async (req, res) => {
+//     try {
+//         const doc_code = 'PR';
+//         const pr_series = await generateSeries(doc_code);
+//         req.body.pr_num = pr_series;
+//         const { pr_num, po_id, po_number, po_amount, advice_amount, advice_date, remarks, payment_type_id } = req.body;
+
+//         // Ensure po_id is valid and update po_staus
+//         const po = await po_master.findByPk(po_id);
+//         if (!po) {
+//             return res.status(404).json({ message: 'Po id is not valid' });
+//         }
+
+//         // Ensure payment_type_id is valid
+//         const paymentType = await PaymentTypeMaster.findByPk(payment_type_id);
+//         if (!paymentType) {
+//             return res.status(404).json({ message: 'PaymentTypeMaster not found' });
+//         }
+
+//         const response = await PaymentRequestMaster.create({
+//             po_id,
+//             pr_num,
+//             po_number,
+//             po_amount,
+//             advice_date,
+//             advice_amount,
+//             advice_remarks: remarks,
+//             status: 2,
+//             payment_type_id
+//         });
+
+
+//         //update po status
+//         await po_master.update(
+//             { status: 5 },
+//             { where: { po_id: po_id } }
+//         )
+
+//         res.status(201).json(response);
+//     } catch (error) {
+//         console.error('Error creating PaymentRequestMaster:', error);
+//         res.status(500).json({ error: 'An error occurred while creating the PaymentRequestMaster.' });
+//     }
+// };
 exports.createPaymentRequestMaster = async (req, res) => {
     try {
         const doc_code = 'PR';
         const pr_series = await generateSeries(doc_code);
         req.body.pr_num = pr_series;
-        const { pr_num, po_id, po_number, po_amount, advice_amount, advice_date, remarks, payment_type_id } = req.body;
+        // const { pr_num, po_id, po_number, po_amount, advice_amount, advice_date, remarks, payment_type_id } = req.body;
+        const { pr_num, doc_id, doc_type, po_number, po_amount, advice_amount, advice_date, remarks, payment_type_id } = req.body;
 
-        // Ensure po_id is valid and update po_staus
-        const po = await po_master.findByPk(po_id);
-        if (!po) {
-            return res.status(404).json({ message: 'Po id is not valid' });
-        }
+        //update documents
+        updateDocumentStatus(doc_type, doc_id, res);
 
         // Ensure payment_type_id is valid
         const paymentType = await PaymentTypeMaster.findByPk(payment_type_id);
@@ -26,7 +103,8 @@ exports.createPaymentRequestMaster = async (req, res) => {
         }
 
         const response = await PaymentRequestMaster.create({
-            po_id,
+            po_id: doc_id,
+            doc_type,
             pr_num,
             po_number,
             po_amount,
@@ -37,19 +115,26 @@ exports.createPaymentRequestMaster = async (req, res) => {
             payment_type_id
         });
 
-
-        //update po status
-        await po_master.update(
-            { status: 5 },
-            { where: { po_id: po_id } }
-        )
-
         res.status(201).json(response);
     } catch (error) {
         console.error('Error creating PaymentRequestMaster:', error);
         res.status(500).json({ error: 'An error occurred while creating the PaymentRequestMaster.' });
     }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // Get all PaymentRequestMaster records

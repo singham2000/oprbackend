@@ -7,6 +7,9 @@ const { Op } = require("sequelize");
 const { generateSeries } = require("./seriesGenerate");
 const { getQuotationItemByQuoId } = require('./quotationItemsController')
 
+
+
+//get all po
 const getPO = async (req, res, next) => {
   const po_id = req.query.po_id;
   try {
@@ -49,7 +52,8 @@ const getPOforGrn = async (req, res, next) => {
   }
 };
 
-// Controller method to delete by id
+
+// soft delte po by po id make status 0
 const deletePOById = async (req, res, next) => {
   const po_id = req.query.po_id;
   try {
@@ -67,10 +71,13 @@ const deletePOById = async (req, res, next) => {
   }
 };
 
-// Controller method to Create po with status 1
+
+//This method will run when quotation gets confirm of final
+//On this event po generate with status 1 and quota status update
+//and po items also genrated and insert into po_item table 
+
 const genratePo = async (req, res, next) => {
   let { quo_id, quo_num, total_cost, rfq_id, opr_id, vendor_id, item_list } = req.body;
-
   try {
     const doc_code = 'PO';
     const po_series = await generateSeries(doc_code);
@@ -81,8 +88,6 @@ const genratePo = async (req, res, next) => {
     // "delivery_terms": "FOB",
     // "payment_terms": "Abcd Payment terms",
     // "lead_time"
-
-    const quodata = await db.Rfq
 
     //genrate po
     const po_response = await po_master.create({
@@ -107,6 +112,7 @@ const genratePo = async (req, res, next) => {
       }
     );
 
+
     let po_id = po_response.dataValues.po_id;
 
     // insert items in po_items
@@ -122,17 +128,19 @@ const genratePo = async (req, res, next) => {
   }
 };
 
+
+
 //update po status after send mail to vendor
-//po status will becom 2 when po sent to vendor
+//po status will become 2 when po sent to vendor
 const po_email_conformation = async (req, res, next) => {
   try {
-    // console.log(req.body);
-    const { po_id } = req.body;
-    console.log(`po id:${po_id} `)
+    console.log("*******************Chnage po status");
 
+    console.log(req.body);
+    const { po_id } = req.body;
     const po_response = await po_master.update(
-      { status: 2 }, // New values to update
-      { where: { po_id: po_id } } // Condition to match records
+      { status: 2 },
+      { where: { po_id: po_id } }
     );
     next();
   } catch (err) {
@@ -141,7 +149,7 @@ const po_email_conformation = async (req, res, next) => {
 };
 
 
-//po status will becom 3 when Vendor  accept po rejct= 4
+//po status will becom 3 when Vendor  accept po reject= 4
 const AcceptPO = async (req, res, next) => {
   try {
     const { status, po_id, remarks } = req.body;
@@ -182,6 +190,7 @@ const AcceptPO = async (req, res, next) => {
 //   }
 // } // this will convert into getPodetails
 
+
 const getPoItemsbypoid = async (req, res, next) => {
   try {
     const { po_id } = req.query;
@@ -210,8 +219,6 @@ const getPoItemsbypoid = async (req, res, next) => {
 }
 
 
-
-
 const updatePOById = async (req, res, next) => {
   const po_id = req.query.po_id;
   try {
@@ -233,6 +240,7 @@ const updatePOById = async (req, res, next) => {
     next(err);
   }
 };
+
 
 //get vendor details by po_id
 const getVendorDeailsByPoId = async (req, res, next) => {
@@ -258,11 +266,6 @@ const getVendorDeailsByPoId = async (req, res, next) => {
     next(error)
   }
 }
-
-
-
-
-
 
 
 module.exports = { getVendorDeailsByPoId, getPOforGrn, po_email_conformation, AcceptPO, getPO, deletePOById, genratePo, updatePOById, getPoItemsbypoid };

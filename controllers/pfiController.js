@@ -1,7 +1,7 @@
 const { Pfi_master, PaymentRequestMaster, po_master, sequelize, Pfi_line_items, item } = require("../models");
 const formattedDateTime = require("../middleware/time");
 const { Op, where } = require("sequelize");
-const {generateSeries} = require("./seriesGenerate");
+const { generateSeries } = require("./seriesGenerate");
 const { getQuotationItemByQuoId } = require('./quotationItemsController');
 
 // const { pfi_line_item } = require("../models/pfi_line_item");
@@ -66,9 +66,7 @@ const getPfibyPoid = async (req, res, next) => {
 // Controller method to delete by id
 const deletePfiyId = async (req, res, next) => {
     const { po_id, company_id } = req.query;
-
     console.log(po_id, company_id)
-
     try {
         const result = await po_master.update(
             { status: 0 },
@@ -106,7 +104,7 @@ const getPfibyid = async (req, res, next) => {
 
         console.log("*****");
         console.log(pfi_items2);
-        res.status(200).json({pfi_details:result,item_list:pfi_items2})
+        res.status(200).json({ pfi_details: result, item_list: pfi_items2 })
 
     } catch (err) {
         next(err);

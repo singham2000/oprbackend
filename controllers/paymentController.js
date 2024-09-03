@@ -7,7 +7,8 @@ const {
     PaymentRequestTransactionsMaster,
     Pfi_master,
     sequelize,
-    Pfi_line_items
+    Pfi_line_items,
+    ServiceQUO
 } = require('../models')
 
 const { Op } = require('sequelize')
@@ -547,15 +548,191 @@ exports.PaymentRequestListForTreasury = async (req, res, next) => {
 
 //************************************************PAYMENT TRANSACTION CONTOLLER************************************************/
 //this funcation will insert data in transaction table and same time i will also insert data in pfi master without pfi number(series)
+// exports.createPaymentTransactions = async (req, res, next) => {
+//     try {
+//         const { payment_request_id, po_id } = req.body;
+//         console.log(req.body)
+
+//         //update request status 
+//         const paymentRequest = await PaymentRequestMaster.update(
+//             { status: 3 },
+//             { where: { payment_request_id: payment_request_id } }
+//         );
+
+//         //if id not found in master
+//         if (!paymentRequest) {
+//             return res.status(404).json({ message: 'Request id is not valid' });
+//         }
+
+//         //update po status
+//         const poMaterResponse = await po_master.update(
+//             { status: 6 },
+//             { where: { po_id: po_id } }
+//         );
+
+//         //if id not found in master
+//         if (!poMaterResponse) {
+//             return res.status(404).json({ message: 'Po id is not valid' });
+//         }
+
+//         // handle image file
+//         const fileBuffer = req.files[0].buffer;
+//         const base64String = await fileBuffer.toString('base64');
+//         req.body.receipt_image = base64String;
+//         req.body.receipt_image_name = req.files[0].originalname;
+
+//         // genrate transactions
+//         const newTransaction = await PaymentRequestTransactionsMaster.create(req.body);
+
+//         //query for pfi items
+//         let query = `
+//                     SELECT * 
+//                     FROM po_items
+//                     INNER JOIN opr_items
+//                     ON opr_items.rfq_id = po_items.rfq_id
+//                     AND opr_items.item_id = po_items.item_id
+//                     WHERE po_items.po_id = ${po_id}
+//                 `;
+//         // Execute the query with replacements
+//         let itemsforPfi = await sequelize.query(query, {
+//             replacements: { po_id: po_id },
+//             type: sequelize.QueryTypes.SELECT
+//         });
+
+//         console.log(itemsforPfi);
+
+//         // genrate pfi
+//         let pfi_data = {
+//             status: 1,
+//             po_id: po_id,
+//             payment_request_id: payment_request_id,
+//             created_by: req.body.created_by,
+//             company_id: itemsforPfi[0].company_id
+//         }
+//         const pfi_response = await Pfi_master.create(pfi_data);
+//         console.log(pfi_data);
+
+//         // create pfi items
+//         const extractData = (data) => {
+//             return data.map(item => ({
+//                 pfi_id: item.po_item_id,
+//                 payment_request_id: null,
+//                 rfq_id: item.rfq_id,
+//                 company_id: item.company_id,
+//                 item_id: item.item_id,
+//                 item_description: item.item_description,
+//                 po_qty: item.po_qty,
+//                 rate: item.rate,
+//                 created_by: item.created_by
+//             }));
+//         };
+
+//         let pfi_lineitems = extractData(itemsforPfi);
+
+
+//         await pfi_lineitems.forEach(item => { item.status = 1, item.pfi_id = pfi_response.pfi_id, item.po_id = po_id, item.payment_request_id = payment_request_id })
+//         const pfi_line_item = await Pfi_line_items.bulkCreate(pfi_lineitems);
+//         res.status(201).json(newTransaction);
+
+
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+
+
+const updateDocumentStatus = async (doc_type, doc_id, res, payment_request_id, req) => {
+    try {
+        switch (doc_type) {
+            case 'po':
+                //update po status
+                let po_id = doc_id
+                const poMaterResponse = await po_master.update(
+                    { status: 6 },
+                    { where: { po_id: po_id } }
+                );
+
+                //if id not found in master
+                if (!poMaterResponse) {
+                    return res.status(404).json({ message: 'Po id is not valid' });
+                }
+
+                //query for pfi items
+                let query = `
+                            SELECT * 
+                            FROM po_items
+                            INNER JOIN opr_items
+                            ON opr_items.rfq_id = po_items.rfq_id
+                            AND opr_items.item_id = po_items.item_id
+                            WHERE po_items.po_id = ${po_id}
+                        `;
+                // Execute the query with replacements
+                let itemsforPfi = await sequelize.query(query, {
+                    replacements: { po_id: po_id },
+                    type: sequelize.QueryTypes.SELECT
+                });
+
+                // genrate pfi
+                let pfi_data = {
+                    status: 1,
+                    po_id: po_id,
+                    payment_request_id: payment_request_id,
+                    created_by: req.body.created_by,
+                    company_id: itemsforPfi[0].company_id
+                }
+                const pfi_response = await Pfi_master.create(pfi_data);
+
+                // create pfi items
+                const extractData = (data) => {
+                    return data.map(item => ({
+                        pfi_id: item.po_item_id,
+                        payment_request_id: null,
+                        rfq_id: item.rfq_id,
+                        company_id: item.company_id,
+                        item_id: item.item_id,
+                        item_description: item.item_description,
+                        po_qty: item.po_qty,
+                        rate: item.rate,
+                        created_by: item.created_by
+                    }));
+                };
+
+                let pfi_lineitems = extractData(itemsforPfi);
+                await pfi_lineitems.forEach(item => { item.status = 1, item.pfi_id = pfi_response.pfi_id, item.po_id = po_id, item.payment_request_id = payment_request_id })
+                const pfi_line_item = await Pfi_line_items.bulkCreate(pfi_lineitems);
+                break;
+
+            case 'service_po':
+                // const service_response = await po_master.findByPk(doc_id);
+                // if (!service_response) {
+                //     return res.status(404).json({ message: 'Service Quo is not valid' });
+                // }
+                await ServiceQUO.update(
+                    { status: 6 },
+                    { where: { service_quo_id: doc_id } }
+                )
+                break;
+            default:
+                throw new Error('Invalid document type');
+        }
+    } catch (err) {
+        console.error('Error updating document status:', err);
+        throw err;
+    }
+};
+
+
+
 exports.createPaymentTransactions = async (req, res, next) => {
     try {
-        const { payment_request_id, po_id } = req.body;
+        const { payment_request_id, doc_type, doc_id } = req.body;
         console.log(req.body)
 
+        updateDocumentStatus(doc_type, doc_id, res, payment_request_id, req)
         //update request status 
         const paymentRequest = await PaymentRequestMaster.update(
             { status: 3 },
-            { where: { payment_request_id: payment_request_id } }
+            { where: { payment_request_id } }
         );
 
         //if id not found in master
@@ -563,16 +740,7 @@ exports.createPaymentTransactions = async (req, res, next) => {
             return res.status(404).json({ message: 'Request id is not valid' });
         }
 
-        //update po status
-        const poMaterResponse = await po_master.update(
-            { status: 6 },
-            { where: { po_id: po_id } }
-        );
 
-        //if id not found in master
-        if (!poMaterResponse) {
-            return res.status(404).json({ message: 'Po id is not valid' });
-        }
 
         // handle image file
         const fileBuffer = req.files[0].buffer;
@@ -583,61 +751,6 @@ exports.createPaymentTransactions = async (req, res, next) => {
         // genrate transactions
         const newTransaction = await PaymentRequestTransactionsMaster.create(req.body);
 
-
-        // generate pfi
-
-
-
-        //query for pfi items
-        let query = `
-                    SELECT * 
-                    FROM po_items
-                    INNER JOIN opr_items
-                    ON opr_items.rfq_id = po_items.rfq_id
-                    AND opr_items.item_id = po_items.item_id
-                    WHERE po_items.po_id = ${po_id}
-                `;
-        // Execute the query with replacements
-        console.log("QUERY")
-        console.log(query)
-        let itemsforPfi = await sequelize.query(query, {
-            replacements: { po_id: po_id },
-            type: sequelize.QueryTypes.SELECT
-        });
-
-        console.log(itemsforPfi);
-
-        // genrate pfi
-        let pfi_data = {
-            status: 1,
-            po_id: po_id,
-            payment_request_id: payment_request_id,
-            created_by: req.body.created_by,
-            company_id: itemsforPfi[0].company_id
-        }
-        const pfi_response = await Pfi_master.create(pfi_data);
-
-
-        // create pfi items
-        const extractData = (data) => {
-            return data.map(item => ({
-                pfi_id: item.po_item_id,
-                payment_request_id: null,
-                rfq_id: item.rfq_id,
-                company_id: item.company_id,
-                item_id: item.item_id,
-                item_description: item.item_description,
-                po_qty: item.po_qty,
-                rate: item.rate,
-                created_by: item.created_by
-            }));
-        };
-
-        let pfi_lineitems = extractData(itemsforPfi)
-
-        await pfi_lineitems.forEach(item => { item.status = 1, item.pfi_id = pfi_response.pfi_id, item.po_id = po_id, item.payment_request_id = payment_request_id })
-
-        const pfi_line_item = await Pfi_line_items.bulkCreate(pfi_lineitems);
 
         res.status(201).json(newTransaction);
 

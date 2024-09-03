@@ -74,11 +74,7 @@ exports.getConfirmQuoList = async (req, res, next) => {
     try {
 
         let serviceQuotation = await ServiceQUO.findAll({
-            where: {
-                status: {
-                    [Op.gte]: 2
-                }
-            }
+            where: { status: 2 }
         });
         if (serviceQuotation) {
             res.status(201).json(serviceQuotation)

@@ -41,6 +41,10 @@ module.exports = (sequelize, DataTypes) => {
         updated_by: {
             type: DataTypes.STRING(50),
             allowNull: true
+        },
+        po_acceptance_remarks: {
+            type: DataTypes.TEXT,
+            allowNull: true
         }
     }, {
         tableName: 'service_quotation_table',

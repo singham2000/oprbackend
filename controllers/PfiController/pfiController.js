@@ -3,7 +3,6 @@ const formattedDateTime = require("../../middleware/time");
 const { Op, where } = require("sequelize");
 const { generateSeries } = require(".././seriesGenerate");
 const { getQuotationItemByQuoId } = require('.././quotationItemsController');
-
 const { Pfi_master: PfiMaster } = require("../../models");
 
 // Create a new PFI Master record
@@ -16,6 +15,7 @@ exports.create = async (req, res) => {
     }
 };
 
+
 // Retrieve all PFI Master records
 exports.pfilist = async (req, res) => {
     try {
@@ -25,6 +25,7 @@ exports.pfilist = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
 
 // Retrieve a single PFI Master record by ID
 exports.findOne = async (req, res) => {
@@ -39,6 +40,7 @@ exports.findOne = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
 
 // Update a PFI Master record by ID
 exports.update = async (req, res) => {
@@ -57,6 +59,7 @@ exports.update = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
 
 // Delete a PFI Master record by ID
 exports.delete = async (req, res) => {

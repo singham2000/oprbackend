@@ -2003,6 +2003,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "status": {
+                  "example": "any"
+                },
                 "service_type_id": {
                   "example": "any"
                 },
@@ -3601,6 +3604,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "status": {
+                  "example": "any"
+                },
                 "vendor_id": {
                   "example": "any"
                 },
@@ -3614,9 +3620,6 @@
                   "example": "any"
                 },
                 "service_rfq_id": {
-                  "example": "any"
-                },
-                "status": {
                   "example": "any"
                 }
               }
@@ -5027,7 +5030,13 @@
                 "bcc": {
                   "example": "any"
                 },
-                "po_id": {
+                "doc_type": {
+                  "example": "any"
+                },
+                "doc_id": {
+                  "example": "any"
+                },
+                "where": {
                   "example": "any"
                 }
               }
@@ -9721,6 +9730,43 @@
     "/api/service/pos": {
       "get": {
         "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/api/service/pos/vacceptance": {
+      "get": {
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/api/service/pos/accpetvend": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "service_po_id": {
+                  "example": "any"
+                },
+                "remarks": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "201": {
             "description": "Created"

@@ -1,3 +1,4 @@
+
 // module.exports = (sequelize, DataTypes) => {
 //     const ShippingMaster = sequelize.define("ShippingMaster", {
 //         shipping_id: {
