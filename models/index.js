@@ -2,13 +2,13 @@ const { Sequelize, DataTypes } = require("sequelize");
 require("dotenv").config();
 
 const sequelize = new Sequelize(
-    process.env.DB_NAME,
-    process.env.DB_USER,
-    process.env.DB_PASSWORD,
-    {
-        host: process.env.DB_HOST,
-        dialect: "mssql",
-    }
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
+  {
+    host: process.env.DB_HOST,
+    dialect: "mssql",
+  }
 );
 
 //load model
@@ -21,8 +21,8 @@ let db = {};
 db.sequelize = sequelize;
 db.menu = require("./menu_master.js")(sequelize, DataTypes);
 db.purchaseLocation = require("./purchase_location_master.js")(
-    sequelize,
-    DataTypes
+  sequelize,
+  DataTypes
 );
 db.role = require("./role_master.js")(sequelize, DataTypes);
 db.user = require("./user_master.js")(sequelize, DataTypes);
@@ -30,18 +30,18 @@ db.ShipMode = require("./ship_mode_master.js")(sequelize, DataTypes);
 db.series_master = require("./series_master.js")(sequelize, DataTypes);
 db.desigMaster = require("./designation_master.js")(sequelize, DataTypes);
 db.CurrencyConversion = require("./CurrencyConversion.js")(
-    sequelize,
-    DataTypes
+  sequelize,
+  DataTypes
 );
 
 //SHIPMENT
 db.DeliveryTimeline = require("./delivery_timeline_opr.js")(
-    sequelize,
-    DataTypes
+  sequelize,
+  DataTypes
 );
 db.delivery_terms_quo = require("./delivery_terms_quo.js")(
-    sequelize,
-    DataTypes
+  sequelize,
+  DataTypes
 );
 db.additional_cost = require("./addition_cost.js")(sequelize, DataTypes);
 db.lead_time_quo = require("./lead_time.js")(sequelize, DataTypes);
@@ -50,12 +50,15 @@ db.lead_time_quo = require("./lead_time.js")(sequelize, DataTypes);
 db.CompanyMaster = require("./Company/company_master.js")(sequelize, DataTypes);
 db.AddressMaster = require("./Address/address_master.js")(sequelize, DataTypes);
 db.AddressTypeMaster = require("./Address/address_type.js")(
-    sequelize,
-    DataTypes
+  sequelize,
+  DataTypes
 );
 
 //buying house related
-db.BuyingHouse = require("./BuyingHouse/buyinghouse_master.js")(sequelize, DataTypes);
+db.BuyingHouse = require("./BuyingHouse/buyinghouse_master.js")(
+  sequelize,
+  DataTypes
+);
 db.GrnMaster = require("./BuyingHouse/grn_master.js")(sequelize, DataTypes);
 
 db.DeptDesigMapping = require("./dept_desig_mapping.js")(sequelize, DataTypes);
@@ -71,34 +74,34 @@ db.OprItems = require("./Opr/opr_items.js")(sequelize, DataTypes);
 db.ItemVendorMap = require("./ItemVendorMap.js")(sequelize, DataTypes);
 db.CategoryMaster = require("./item_category_master.js")(sequelize, DataTypes);
 db.SubCategoryMaster = require("./item_subCategory_master.js")(
-    sequelize,
-    DataTypes
+  sequelize,
+  DataTypes
 );
 db.ItemsMaster = require("./item_master.js")(sequelize, DataTypes);
 db.UomMaster = require("./uom_master.js")(sequelize, DataTypes);
 db.ItemGroupMaster = require("./item_group_master.js")(sequelize, DataTypes);
 db.ItemSubGroupMaster = require("./item_subCategory_master.js")(
-    sequelize,
-    DataTypes
+  sequelize,
+  DataTypes
 );
 db.Department = require("./department_master.js")(sequelize, DataTypes);
 db.CriaMaster = require("./cria_master.js")(sequelize, DataTypes);
 db.Nafdac = require("./nafdacMaster.js")(sequelize, DataTypes);
 db.NafdacCategoryMaster = require("./nafdac_category_master.js")(
-    sequelize,
-    DataTypes
+  sequelize,
+  DataTypes
 );
 
 //VENDOR
 db.vendor = require("./Vendor/vendor_master.js")(sequelize, DataTypes);
 db.VendorsMaster = require("./Vendor/vendor_master.js")(sequelize, DataTypes);
 db.VendorsBanksDetailsMaster =
-    require("./Vendor/vendor_banksDetails_master.js")(sequelize, DataTypes);
+  require("./Vendor/vendor_banksDetails_master.js")(sequelize, DataTypes);
 db.VendorsAddressDetailsMaster =
-    require("./Vendor/vendor_adddress_details_master.js")(sequelize, DataTypes);
+  require("./Vendor/vendor_adddress_details_master.js")(sequelize, DataTypes);
 db.VendorTypeMaster = require("./Vendor/VendorTypeMaster.js")(
-    sequelize,
-    DataTypes
+  sequelize,
+  DataTypes
 );
 
 //EMAIL
@@ -117,9 +120,18 @@ db.rfqitem = require("./Rfq/rfq_Item_master.js")(sequelize, DataTypes);
 db.status_master = require("./status_master")(sequelize, DataTypes);
 
 //service rfq
-db.ServiceMaster = require('./Services/services_master.js')(sequelize, DataTypes);
-db.ServiceRFQ = require("./Services/service_rfq_master.js")(sequelize, DataTypes);
-db.ServiceQUO = require("./Services/Service_Quotation.js")(sequelize, DataTypes);
+db.ServiceMaster = require("./Services/services_master.js")(
+  sequelize,
+  DataTypes
+);
+db.ServiceRFQ = require("./Services/service_rfq_master.js")(
+  sequelize,
+  DataTypes
+);
+db.ServiceQUO = require("./Services/Service_Quotation.js")(
+  sequelize,
+  DataTypes
+);
 
 //Po
 db.po_master = require("./Po/po_master.js")(sequelize, DataTypes);
@@ -127,45 +139,44 @@ db.po_items = require("./Po/po_items.js")(sequelize, DataTypes);
 
 //QUOTATION
 db.quotation_master = require("./Quotation/quotation_master.js")(
-    sequelize,
-    DataTypes
+  sequelize,
+  DataTypes
 );
 db.quotation_items = require("./Quotation/quotation_items.js")(
-    sequelize,
-    DataTypes
+  sequelize,
+  DataTypes
 );
 db.QuoDoc = require("./Quotation/quotation_docs.js")(sequelize, DataTypes);
 db.quotation_master = require("./Quotation/quotation_master.js")(
-    sequelize,
-    DataTypes
+  sequelize,
+  DataTypes
 );
 db.quotation_items = require("./Quotation/quotation_items.js")(
-    sequelize,
-    DataTypes
+  sequelize,
+  DataTypes
 );
 
 //PAYMENTS
 // db.PaymentTypeMaster = require('./paymentTypes.js')(sequelize, DataTypes)
 // db.payment_terms_quo = require('./payment_terms_quo.js')(sequelize, DataTypes)
 
-
 db.PaymentRequestTransactionsMaster =
-    require("./Payments/PaymentRequestTransactionsMaster .js")(
-        sequelize,
-        DataTypes
-    );
-db.PenaltyTermsMaster = require("./Payments/PenaltyTermsMaster.js")(
+  require("./Payments/PaymentRequestTransactionsMaster .js")(
     sequelize,
     DataTypes
+  );
+db.PenaltyTermsMaster = require("./Payments/PenaltyTermsMaster.js")(
+  sequelize,
+  DataTypes
 );
 db.PaymentTerms = require("./Payments/PaymentTerms.js")(sequelize, DataTypes);
 db.PaymentTypeMaster = require("./Payments/paymentTypes.js")(
-    sequelize,
-    DataTypes
+  sequelize,
+  DataTypes
 );
 db.PaymentRequestMaster = require("./Payments/PaymentRequestMaster.js")(
-    sequelize,
-    DataTypes
+  sequelize,
+  DataTypes
 );
 
 //OPO
@@ -174,8 +185,8 @@ db.OpoItems = require("./Opo/opo_items.js")(sequelize, DataTypes);
 
 //PFI
 db.commercial_invoice = require("./Pfi/CommercialInvoice")(
-    sequelize,
-    DataTypes
+  sequelize,
+  DataTypes
 );
 db.insurance = require("./Pfi/Insurance")(sequelize, DataTypes);
 db.document = require("./Pfi/Document")(sequelize, DataTypes);
@@ -187,27 +198,50 @@ db.paar = require("./Pfi/Paar")(sequelize, DataTypes);
 //Operations
 db.assessment = require("./Opreations/Assessment.js")(sequelize, DataTypes);
 db.operations_nafdac = require("./Opreations/OperationsNafdac")(
-    sequelize,
-    DataTypes
+  sequelize,
+  DataTypes
 );
 db.operations_nafdac_master = require("./Opreations/OperationsNafdacMaster.js")(
-    sequelize,
-    DataTypes
+  sequelize,
+  DataTypes
 );
 db.operations_nafdac_lapse = require("./Opreations/OperationsNafdacLapse")(
-    sequelize,
-    DataTypes
+  sequelize,
+  DataTypes
 );
 db.operations_son = require("./Opreations/OperationsSon")(sequelize, DataTypes);
 db.operations_son_lapse = require("./Opreations/OperationsSonLapse")(
-    sequelize,
-    DataTypes
+  sequelize,
+  DataTypes
 );
+db.transport_operation_lapse =
+  require("./Opreations/TransportOperationLapse.js")(sequelize, DataTypes);
+db.container_allocation = require("./Opreations/ContainerAllocation.js")(
+  sequelize,
+  DataTypes
+);
+db.govt_charges = require("./Opreations/GovtCharges")(sequelize, DataTypes);
+
+//Masters
 db.approval_matrix__master = require("./Masters/ApprovalMatrixMaster.js")(
-    sequelize,
-    DataTypes
+  sequelize,
+  DataTypes
 );
 db.approval_matrix = require("./Masters/ApprovalMatrix")(sequelize, DataTypes);
+db.transport_operation_lapse_master =
+  require("./Masters/TransportOperationLapseMaster.js")(sequelize, DataTypes);
+db.container_type_master = require("./Masters/ContainerTypesMasters")(
+  sequelize,
+  DataTypes
+);
+db.payment_term_container_master =
+  require("./Masters/PaymentTermContainerMaster")(sequelize, DataTypes);
+  db.payment_type_transport_master =
+  require("./Masters/PaymentTypeTransportMaster.js")(sequelize, DataTypes);
+  db.add_expense_charges_master = require("./Masters/AddExpenseCharges")(sequelize, DataTypes);
+  db.payment_type_charges_master =
+    require("./Masters/PaymentTypeCharges.js")(sequelize, DataTypes);
+
 
 //Shipping
 db.ShippingMaster = require('./Shipping/shiping_master.js')(sequelize, DataTypes);
@@ -223,18 +257,19 @@ const models = { ...db };
 
 // Call associate methods
 Object.values(models).forEach((model) => {
-    if (model.associate) {
-        model.associate(models);
-    }
+  if (model.associate) {
+    model.associate(models);
+  }
 });
 
-sequelize.sync({ alter: false })
-    .then(() => {
-        console.log("Database & tables created!");
-    })
-    .catch((error) => {
-        console.error("Error synchronizing the database:", error);
-    });
+sequelize
+  .sync({ alter: false })
+  .then(() => {
+    console.log("Database & tables created!");
+  })
+  .catch((error) => {
+    console.error("Error synchronizing the database:", error);
+  });
 
 module.exports = {
     sequelize,

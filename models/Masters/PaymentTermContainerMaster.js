@@ -1,35 +1,15 @@
 module.exports = (sequelize, DataTypes) => {
-  const document = sequelize.define(
-    "document",
+  const payment_term_container_master = sequelize.define(
+    "payment_term_container_master",
     {
-      document_id: {
+      payment_term_container_master_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
       },
-      linked_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      table_name: {
-        type: DataTypes.STRING(50),
-        allowNull: true,
-      },
-      type: {
-        type: DataTypes.STRING(50),
-        allowNull: true,
-      },
-      doc_name: {
-        type: DataTypes.STRING(155),
-        allowNull: true,
-      },
-      doc_base64: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-      },
-      title: {
-        type: DataTypes.STRING(155),
+      payment_term_container_name: {
+        type: DataTypes.STRING(100),
         allowNull: true,
       },
       created_on: {
@@ -54,9 +34,10 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
-      tableName: "document",
+      tableName: "payment_term_container_master",
       timestamps: false,
     }
   );
-  return document;
+
+  return payment_term_container_master;
 };
