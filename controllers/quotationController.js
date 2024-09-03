@@ -130,7 +130,6 @@ const createQuotation = async (req, res, next) => {
   const { quotation_details, quotation_docslist, created_by } = req.body
 
   try {
-
     const doc_code = 'QUO';
     const quotation_series = await generateSeries(doc_code);
     const {

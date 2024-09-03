@@ -3,9 +3,9 @@ const { GrnMaster, po_items, po_master } = require('../../models'); // Adjust im
 
 //genrate new grn enty and same time update grn_quantity in po item
 exports.genrateGrn = async (req, res, next) => {
+    console.log(req.body)
     try {
         const { buying_house_id, po_id, vendor_id, created_by, po_item_id_lists } = req.body
-        console.log("po item ids list")
         console.log(po_item_id_lists)
         const newGrnEntry = await GrnMaster.create(
             {
@@ -15,9 +15,10 @@ exports.genrateGrn = async (req, res, next) => {
                 created_by
             }
         )
+
         //update po status to 10 
         await po_master.update({
-            status: 10
+            grn_status: 1
         },
             {
                 where: { po_id }

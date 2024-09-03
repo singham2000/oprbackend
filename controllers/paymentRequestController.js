@@ -6,6 +6,7 @@ const { generateSeries } = require("./seriesGenerate");
 
 
 const updateDocumentStatus = async (doc_type, doc_id, res) => {
+    console.log(doc_type, doc_id);
     try {
         switch (doc_type) {
             case 'po':
@@ -19,10 +20,7 @@ const updateDocumentStatus = async (doc_type, doc_id, res) => {
                 )
                 break;
             case 'service_po':
-                const service_response = await po_master.findByPk(doc_id);
-                if (!service_response) {
-                    return res.status(404).json({ message: 'Service Quo is not valid' });
-                }
+
                 await ServiceQUO.update(
                     { status: 5 },
                     { where: { service_quo_id: doc_id } }

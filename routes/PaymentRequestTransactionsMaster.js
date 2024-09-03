@@ -7,13 +7,16 @@ const { confirmPaymentRequest } = require('../controllers/paymentRequestControll
 const { createPaymentRequestTransactionsMaster } = require('../controllers/PaymentController/paymentRequestTransactionsController.js');
 
 
+
 router.post('/', upload.single('receipt_image'), createPaymentRequestTransactionsMaster);
 router.get('/', paymentRequestTransactionsMasterController.getAllPaymentRequestTransactionsMasters);
 router.post('/reject', paymentRequestMasterController.rejectPaymentRequestByTreasury);
 router.get('/transaction', paymentRequestTransactionsMasterController.getPaymentRequestTransactionsMasterRequestId);
 router.get('/transactionfile', paymentRequestTransactionsMasterController.getPaymentRequestTransactionsfileRequestId);
-router.get('/:id', paymentRequestTransactionsMasterController.getPaymentRequestTransactionsMasterById);
-router.put('/:id', paymentRequestTransactionsMasterController.updatePaymentRequestTransactionsMaster);
-router.delete('/:id', paymentRequestTransactionsMasterController.deletePaymentRequestTransactionsMaster);
+router.get('/bydocid', paymentRequestTransactionsMasterController.getPaymentTransactionByCoID)
+// router.get('/:id', paymentRequestTransactionsMasterController.getPaymentRequestTransactionsMasterById);
+// router.put('/:id', paymentRequestTransactionsMasterController.updatePaymentRequestTransactionsMaster);
+// router.delete('/:id', paymentRequestTransactionsMasterController.deletePaymentRequestTransactionsMaster);
+
 module.exports = router;
 

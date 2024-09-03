@@ -3,7 +3,6 @@ const { PaymentRequestTransactionsMaster, PaymentRequestMaster, po_master, Pfi_m
 //this funcation will insert data in transaction table and same time i will also insert data in pfi master without pfi number(series)
 
 exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {
-
     console.log(req.body)
     try {
         const { payment_request_id, po_id } = req.body;
@@ -61,8 +60,6 @@ exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {
         next(error);
     }
 };
-
-
 
 // Get all PaymentRequestTransactionsMaster records
 exports.getAllPaymentRequestTransactionsMasters = async (req, res) => {
@@ -225,5 +222,8 @@ exports.deletePaymentRequestTransactionsMaster = async (req, res) => {
         res.status(500).json({ error: 'An error occurred while deleting the PaymentRequestTransactionsMaster.' });
     }
 };
+
+
+
 
 

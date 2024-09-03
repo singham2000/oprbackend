@@ -34,6 +34,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: true
         },
+        grn_status: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
         lead_time: {
             type: DataTypes.STRING(55),
             allowNull: true
@@ -48,6 +52,14 @@ module.exports = (sequelize, DataTypes) => {
         },
         delivery_terms: {
             type: DataTypes.STRING(55),
+            allowNull: true
+        },
+        final_doc_dispatch_no: {
+            type: DataTypes.STRING(55),
+            allowNull: true
+        },
+        disptach_date: {
+            type: DataTypes.DATE,
             allowNull: true
         },
         created_on: {

@@ -80,12 +80,11 @@ const paymentRequestMasterRoutes = require("./routes/paymentRequestMasterRoutes"
 const paymentRequestTransactionsMasterRoutes = require("./routes/PaymentRequestTransactionsMaster.js");
 const paymentTermsRouter = require("./routes/paymentTermsRoutes");
 const payment = require("./routes/paymentRoutes.js");
-
+//documents
+const documentsRoutes = require('./routes/documentRoutes.js')
 
 //services
-
-const serviceRoutes = require('./routes/oprServices/OPRserviceRoutes.js')
-
+const serviceRoutes = require('./routes/ServiceOpr/OPRserviceRoutes.js')
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -97,6 +96,10 @@ app.use(cors());
 //swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+//document Master
+
+
+app.use('/api/doc', documentsRoutes)
 
 
 // Routes

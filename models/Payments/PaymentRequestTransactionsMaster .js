@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
+        doc_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
         payment_date: {
             type: DataTypes.DATEONLY,
             allowNull: false

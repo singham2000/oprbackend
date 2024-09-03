@@ -3,6 +3,11 @@ const express = require('express');
 const router = express.Router();
 const POController = require('../controllers/poController');
 const { generatePo } = require('../controllers/quotationController');
+const upload = require('../utilites/handlefile.js');
+const setAuditFields = require('../middleware/setAuditFields.js');
+
+
+
 
 // API routes
 router
@@ -11,11 +16,14 @@ router
     .put('/update', POController.updatePOById)
     .delete('/delete', POController.deletePOById)
     .post('/accept', POController.AcceptPO)
+    .post('/completecnfrm', upload.any(), setAuditFields, POController.completePo)
+    .post('/paymentconfirm', POController.confimPoPaymentsbyVendor)
+    .post('/finalpaymentconfirm', POController.confimPoFinalPaymentsbyVendor)
     .get('/vendor', POController.getVendorDeailsByPoId)
 router
     .get('/itemlist', POController.getPoItemsbypoid)
 
-// list for grn
+// list for grny
 router
     .get('/forgrn', POController.getPOforGrn)
 

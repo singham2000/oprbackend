@@ -1,6 +1,6 @@
 // const { po_master } = ('../models');
 const db = require("../models");
-const { sequelize } = db
+const { sequelize, Document } = db
 const { po_master, quotation_master, po_items } = db;
 const formattedDateTime = require("../middleware/time");
 const { Op } = require("sequelize");
@@ -20,8 +20,19 @@ const getPO = async (req, res, next) => {
       ON po_master.quo_id = quotations_master.quo_id where po_id = ${po_id}`;
 
       const result = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
-      res.status(200).json(result);
-
+      const result2 = await po_master.findAll({
+        where: { po_id },
+        include: [
+          {
+            model: db.VendorsMaster,
+            attributes: ['vendor_name']
+          },
+          {
+            model: db.po_items
+          }
+        ]
+      })
+      res.status(200).json(result2);
     }
     else {
       const query = `SELECT po_master.*
@@ -37,21 +48,19 @@ const getPO = async (req, res, next) => {
   }
 };
 
-
 //get po for grn
 const getPOforGrn = async (req, res, next) => {
   try {
     const query = `  SELECT po_master.*
       FROM po_master
       INNER JOIN quotations_master
-      ON po_master.quo_id = quotations_master.quo_id where  po_master.status < 10`;
+      ON po_master.quo_id = quotations_master.quo_id where  po_master.grn_status = 1`;
     const result = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
     res.status(200).json(result);
   } catch (error) {
     next(error)
   }
 };
-
 
 // soft delte po by po id make status 0
 const deletePOById = async (req, res, next) => {
@@ -70,7 +79,6 @@ const deletePOById = async (req, res, next) => {
     next(err);
   }
 };
-
 
 //This method will run when quotation gets confirm of final
 //On this event po generate with status 1 and quota status update
@@ -129,14 +137,10 @@ const genratePo = async (req, res, next) => {
 };
 
 
-
 //update po status after send mail to vendor
 //po status will become 2 when po sent to vendor
 const po_email_conformation = async (req, res, next) => {
   try {
-    console.log("*******************Chnage po status");
-
-    console.log(req.body);
     const { po_id } = req.body;
     const po_response = await po_master.update(
       { status: 2 },
@@ -148,8 +152,15 @@ const po_email_conformation = async (req, res, next) => {
   }
 };
 
-
+/***************************************************************
+ * Vendor Activity on Purchase Orders (PO)
+ * 
+ * This section of the code handles all vendor-related activities
+ * associated with purchase orders, including tracking, updates,
+ * and communication.
+ ***************************************************************/
 //po status will becom 3 when Vendor  accept po reject= 4
+
 const AcceptPO = async (req, res, next) => {
   try {
     const { status, po_id, remarks } = req.body;
@@ -171,6 +182,92 @@ const AcceptPO = async (req, res, next) => {
     next(err);
   }
 };
+
+const confimPoPaymentsbyVendor = async (req, res, next) => {
+  try {
+    const { status, po_id, remarks } = req.body;
+    const result = await po_master.update(
+      {
+        acceptance_remarks: remarks,
+        status: 7,
+        updated_on: formattedDateTime,
+      },
+      {
+        where: {
+          po_id: po_id,
+        },
+      }
+    );
+
+    res.status(201).json({ message: "Updated Successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const confimPoFinalPaymentsbyVendor = async (req, res, next) => {
+  try {
+    const { status, po_id, final_doc_dispatch_no, disptach_date } = req.body;
+    console.log(status, po_id, final_doc_dispatch_no, disptach_date);
+    const result = await po_master.update(
+      {
+        final_doc_dispatch_no,
+        disptach_date,
+        status: 10,
+        updated_on: formattedDateTime,
+      },
+      {
+        where: {
+          po_id: po_id,
+        },
+      }
+    );
+
+    res.status(201).json({ message: "Updated Successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+//po completion
+const completePo = async (req, res, next) => {
+
+  const { po_id, pocompletion_docslist, created_by } = req.body
+  try {
+    //change po_master Status
+    const result = await po_master.update(
+      {
+        status: 8,
+      },
+      {
+        where: {
+          po_id: po_id,
+        },
+      }
+    );
+
+    //transform quotation docs
+    await pocompletion_docslist.forEach((data, i) => {
+      data.entity_id = po_id;
+      data.entity_name = 'PO';
+      data.document_name = req.files[i].name;
+      data.document_description = req.files[i].remark;
+      data.document_file_name = req.files[i].originalname;
+      data.document_string = req.files[i].buffer.toString("base64");
+      data.uploaded_by = created_by;
+      i++;
+    });
+
+    // insert quotation documents
+    await Document.bulkCreate(pocompletion_docslist);
+    res.status(200).json({ message: "Po completion update Suceesfully" });
+
+  } catch (err) {
+    console.log(err)
+    next(err);
+  }
+}
+
 
 
 // GET PO ITEMS
@@ -268,4 +365,9 @@ const getVendorDeailsByPoId = async (req, res, next) => {
 }
 
 
-module.exports = { getVendorDeailsByPoId, getPOforGrn, po_email_conformation, AcceptPO, getPO, deletePOById, genratePo, updatePOById, getPoItemsbypoid };
+
+
+
+
+
+module.exports = { confimPoFinalPaymentsbyVendor, completePo, confimPoPaymentsbyVendor, getVendorDeailsByPoId, getPOforGrn, po_email_conformation, AcceptPO, getPO, deletePOById, genratePo, updatePOById, getPoItemsbypoid };

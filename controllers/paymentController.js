@@ -643,6 +643,8 @@ exports.PaymentRequestListForTreasury = async (req, res, next) => {
 
 const updateDocumentStatus = async (doc_type, doc_id, res, payment_request_id, req) => {
     try {
+
+        console.log(doc_type, doc_id, res, payment_request_id, req)
         switch (doc_type) {
             case 'po':
                 //update po status
@@ -702,6 +704,18 @@ const updateDocumentStatus = async (doc_type, doc_id, res, payment_request_id, r
                 const pfi_line_item = await Pfi_line_items.bulkCreate(pfi_lineitems);
                 break;
 
+            case 'f_po':
+                //update po status
+                {
+                    let po_id = doc_id
+                    const poMaterResponse = await po_master.update(
+                        { status: 9 },
+                        { where: { po_id: po_id } }
+                    );
+                }
+                break;
+
+
             case 'service_po':
                 // const service_response = await po_master.findByPk(doc_id);
                 // if (!service_response) {
@@ -725,38 +739,27 @@ const updateDocumentStatus = async (doc_type, doc_id, res, payment_request_id, r
 
 exports.createPaymentTransactions = async (req, res, next) => {
     try {
-        const { payment_request_id, doc_type, doc_id } = req.body;
-        console.log(req.body)
 
-        updateDocumentStatus(doc_type, doc_id, res, payment_request_id, req)
+        const { payment_request_id, doc_type, doc_id } = req.body;
+        updateDocumentStatus(doc_type, doc_id, res, payment_request_id, req);
         //update request status 
         const paymentRequest = await PaymentRequestMaster.update(
             { status: 3 },
             { where: { payment_request_id } }
         );
-
         //if id not found in master
         if (!paymentRequest) {
             return res.status(404).json({ message: 'Request id is not valid' });
         }
-
-
-
         // handle image file
         const fileBuffer = req.files[0].buffer;
         const base64String = await fileBuffer.toString('base64');
         req.body.receipt_image = base64String;
         req.body.receipt_image_name = req.files[0].originalname;
-
         // genrate transactions
         const newTransaction = await PaymentRequestTransactionsMaster.create(req.body);
-
-
         res.status(201).json(newTransaction);
-
-
     } catch (error) {
         next(error);
     }
 };
-

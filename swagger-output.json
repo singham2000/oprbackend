@@ -11,6 +11,26 @@
     "http"
   ],
   "paths": {
+    "/api/doc/docbyentityid": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "entity_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/user/users": {
       "get": {
         "description": "",
@@ -2238,6 +2258,80 @@
       }
     },
     "/api/po/accept": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "example": "any"
+                },
+                "po_id": {
+                  "example": "any"
+                },
+                "remarks": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/api/po/completecnfrm": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "po_id": {
+                  "example": "any"
+                },
+                "pocompletion_docslist": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/po/paymentconfirm": {
       "post": {
         "description": "",
         "parameters": [
@@ -8275,7 +8369,10 @@
                 "pr_num": {
                   "example": "any"
                 },
-                "po_id": {
+                "doc_id": {
+                  "example": "any"
+                },
+                "doc_type": {
                   "example": "any"
                 },
                 "po_number": {
@@ -8566,14 +8663,13 @@
         }
       }
     },
-    "/api/payment-transactions/{id}": {
+    "/api/payment-transactions/bydocid": {
       "get": {
         "description": "",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
+            "name": "doc_id",
+            "in": "query",
             "type": "string"
           }
         ],
@@ -8583,86 +8679,6 @@
           },
           "404": {
             "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "put": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "payment_request_id": {
-                  "example": "any"
-                },
-                "payment_date": {
-                  "example": "any"
-                },
-                "payment_amount": {
-                  "example": "any"
-                },
-                "from_bank_detail_id": {
-                  "example": "any"
-                },
-                "to_bank_detail_id": {
-                  "example": "any"
-                },
-                "receipt_file": {
-                  "example": "any"
-                },
-                "created_by": {
-                  "example": "any"
-                },
-                "updated_by": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         }
       }
@@ -9290,7 +9306,10 @@
                 "payment_request_id": {
                   "example": "any"
                 },
-                "po_id": {
+                "doc_type": {
+                  "example": "any"
+                },
+                "doc_id": {
                   "example": "any"
                 }
               }
@@ -9770,6 +9789,43 @@
         "responses": {
           "201": {
             "description": "Created"
+          }
+        }
+      }
+    },
+    "/api/service/master": {
+      "post": {
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/service/dpn": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }

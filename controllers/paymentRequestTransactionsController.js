@@ -45,9 +45,6 @@ exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {
             where  po_items.po_id=${po_id}`
         let [result, metadata] = await sequelize.query(query);
 
-        console.log(result);
-
-
         // genrate pfi master
         // insert po_id request_id in talbe
         result.forEach(item => { item.status = 1, item.po_id = po_id, item.payment_request_id = payment_request_id, item.created_by = req.body.created_by })
@@ -217,5 +214,28 @@ exports.deletePaymentRequestTransactionsMaster = async (req, res) => {
         res.status(500).json({ error: 'An error occurred while deleting the PaymentRequestTransactionsMaster.' });
     }
 };
+
+
+//get payment id by doc_id
+
+exports.getPaymentTransactionByCoID = async (req, res, next) => {
+    try {
+        const { doc_id } = req.query;
+        const transaction = await PaymentRequestTransactionsMaster.findAll({
+            where: { doc_id }
+        });
+
+        if (!transaction) {
+            return res.status(404).json({ message: 'PaymentRequestTransactionsMaster not found' });
+        }
+
+        res.status(200).json(transaction);
+    } catch (error) {
+        console.error('Error fetching PaymentRequestTransactionsMaster:', error);
+        next(error);
+    }
+}
+
+
 
 

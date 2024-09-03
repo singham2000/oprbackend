@@ -215,6 +215,9 @@ db.Container = require('./Shipping/container.js')(sequelize, DataTypes);
 db.VesselDetails = require('./Shipping/vessel_details.js')(sequelize, DataTypes);
 db.ShippingExpenses = require('./Shipping/shipping_expensesModal.js')(sequelize, DataTypes);
 
+//document Master
+db.Document = require('./documents_master.js')(sequelize, DataTypes);
+
 // Set up associations
 const models = { ...db };
 
@@ -236,4 +239,4 @@ sequelize.sync({ alter: false })
 module.exports = {
     sequelize,
     ...models,
-};
+}; 
