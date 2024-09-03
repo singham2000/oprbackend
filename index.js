@@ -10,49 +10,55 @@ const cors = require("cors");
 const setAuditFields = require("./middleware/setAuditFields.js");
 
 // Routes Import
-const itemRoute = require('./routes/itemRoutes');
-const poRoute = require('./routes/poRoutes');
-const rfqMasterRoute = require('./routes/rfqMasterRoutes');
-const rfqItemDetailRoute = require('./routes/rfqItemDetailRoutes');
-const userRoute = require('./routes/userRoutes');
-const roleRoute = require('./routes/roleRoutes');
-const branchRoute = require('./routes/branchRoutes');
-const deptRoute = require('./routes/deptRoutes');
-const purchaseLocRoute = require('./routes/purchlocationRoutes');
-const divisionRoute = require('./routes/divisionRoutes');
-const vendorRoute = require('./routes/vendorRoutes');
-const menuRoute = require('./routes/menuRoutes');
-const categoryRoute = require('./routes/categoryRoutes');
-const uomRoute = require('./routes/uomRoutes');
-const oprRouter = require('./routes/oprRoutes.js');
-const shipModeRouter = require('./routes/shipModeRoutes.js');
-const oprItemsRouter = require('./routes/oprItemsRoutes.js');
-const buyHouseRouter = require('./routes/buyHouseRoutes.js');
-const quotationRouter = require('./routes/quotationRoutes.js');
-const quotationItemsRouter = require('./routes/quotationItemsRoutes');
-const itemCategoryRouter = require('./routes/itemCategoryRoutes.js')
-const criaRouter = require('./routes/criaRoutes.js')
-const nafdacCategoryRouter = require('./routes/nafdacCategoryRotues.js')
-const nafdacRouter = require('./routes/nafdacRoutes.js');
-const itemGroupRouter = require('./routes/itemGroupRotues.js');
-const itemSubGroupRouter = require('./routes/itemSubGroupRotues.js');
-const verticalRouter = require('./routes/verticalRoutes');
-const companyRouter = require('./routes/companyRoutes');
-const deliveryTimelineRouter = require('./routes/deliveryTimelineRoutes');
-const deliveryTermsRouter = require('./routes/deliveryTermsRoutes');
-const penaltyTermsRoutes = require('./routes/penaltyTermsRoutes');
-const additionalCostRouter = require('./routes/additionalCostRoutes');
-const leadTimeRouter = require('./routes/leadTimeRoutes');
-const mailRoutes = require('./routes/mailRoutes.js')
-const pfiRoutes = require('./routes/pfiRoutes.js')
-const vendorTypeMasterRoutes = require('./routes/vendorTypeMasterRoutes');
-const addressRoutes = require('./routes/addressRoutes.js');
-const buyingHouseRoutes = require('./routes/buyHouseRoutes.js');
-const buyingHouseRoutes2 = require('./routes/BuyingHouse/buyingHouseRoutes.js');
-const SeriesRoutes = require('./routes/seriesRoutes,js');
-const StatusRoutes = require('./routes/statusRoutes.js');
+const itemRoute = require("./routes/itemRoutes");
+const poRoute = require("./routes/poRoutes");
+const rfqMasterRoute = require("./routes/rfqMasterRoutes");
+const rfqItemDetailRoute = require("./routes/rfqItemDetailRoutes");
+const userRoute = require("./routes/userRoutes");
+const roleRoute = require("./routes/roleRoutes");
+const branchRoute = require("./routes/branchRoutes");
+const deptRoute = require("./routes/deptRoutes");
+const purchaseLocRoute = require("./routes/purchlocationRoutes");
+const divisionRoute = require("./routes/divisionRoutes");
+const vendorRoute = require("./routes/vendorRoutes");
+const menuRoute = require("./routes/menuRoutes");
+const categoryRoute = require("./routes/categoryRoutes");
+const uomRoute = require("./routes/uomRoutes");
+const oprRouter = require("./routes/oprRoutes.js");
+const shipModeRouter = require("./routes/shipModeRoutes.js");
+const oprItemsRouter = require("./routes/oprItemsRoutes.js");
+const buyHouseRouter = require("./routes/buyHouseRoutes.js");
+const quotationRouter = require("./routes/quotationRoutes.js");
+const quotationItemsRouter = require("./routes/quotationItemsRoutes");
+const itemCategoryRouter = require("./routes/itemCategoryRoutes.js");
+const criaRouter = require("./routes/criaRoutes.js");
+const nafdacCategoryRouter = require("./routes/nafdacCategoryRotues.js");
+const nafdacRouter = require("./routes/nafdacRoutes.js");
+const itemGroupRouter = require("./routes/itemGroupRotues.js");
+const itemSubGroupRouter = require("./routes/itemSubGroupRotues.js");
+const verticalRouter = require("./routes/verticalRoutes");
+const companyRouter = require("./routes/companyRoutes");
+const deliveryTimelineRouter = require("./routes/deliveryTimelineRoutes");
+const deliveryTermsRouter = require("./routes/deliveryTermsRoutes");
+const penaltyTermsRoutes = require("./routes/penaltyTermsRoutes");
+const additionalCostRouter = require("./routes/additionalCostRoutes");
+const leadTimeRouter = require("./routes/leadTimeRoutes");
+const mailRoutes = require("./routes/mailRoutes.js");
+const pfiRoutes = require("./routes/pfiRoutes.js");
+const vendorTypeMasterRoutes = require("./routes/vendorTypeMasterRoutes");
+const addressRoutes = require("./routes/addressRoutes.js");
+const buyingHouseRoutes = require("./routes/buyHouseRoutes.js");
+const buyingHouseRoutes2 = require("./routes/BuyingHouse/buyingHouseRoutes.js");
+const SeriesRoutes = require("./routes/seriesRoutes,js");
+const StatusRoutes = require("./routes/statusRoutes.js");
 
-
+//Masters
+const ContainerTypesMasters = require("./routes/Masters/ContainerTypesMastersRoutes.js");
+const PaymentTermContainer = require("./routes/Masters/PaymentTermContainerMasterRoutes.js");
+const TransportOperationLapse = require("./routes/Masters/TransportOperationLapseMasterRoutes.js");
+const TransportPaymentTypeLapse = require("./routes/Masters/PaymentTypeTransportRoutes.js");
+const AddExpenseChargesRoutes = require("./routes/Masters/AddExpenseChargesRoutes");
+const PaymentTypeChargesRoutes = require("./routes/Masters/PaymentTypeChargesRoutes.js");
 
 //PFI
 const CommercialInvoiceRoutes = require("./routes/Pfi/commercialInvoiceRoutes.js");
@@ -67,12 +73,14 @@ const AssessmentRoutes = require("./routes/Opreations/AssessmentRoutes");
 const OperationsNafdacRoutes = require("./routes/Opreations/NafdacRoutes");
 const OperationsNafdacMasterRoutes = require("./routes/Opreations/NafdacMasterRoutes");
 const OperationsSonRoutes = require("./routes/Opreations/SonRoutes");
+const TransportOperationLapseRoutes = require("./routes/Opreations/TransportOperationLapseRoutes");
+const ContainerAllocationRoutes = require("./routes/Opreations/ContainerAllocationRoutes");
+const GovtChargesRoutes = require("./routes/Opreations/GovtChargesRoutes");
 
 //shipping
-const ShippingMasterRoutes = require('./routes/Shipping/shippingMasterRoutes.js')
-const ContainerRoutes = require('./routes/Shipping/containerRoutes.js')
-const VesselRoutes = require('./routes/Shipping/vesselRoutes.js')
-
+const ShippingMasterRoutes = require("./routes/Shipping/shippingMasterRoutes.js");
+const ContainerRoutes = require("./routes/Shipping/containerRoutes.js");
+const VesselRoutes = require("./routes/Shipping/vesselRoutes.js");
 
 //payments
 const paymentTypeMasterRoutes = require("./routes/paymentTypeMasterRoutes");
@@ -81,10 +89,9 @@ const paymentRequestTransactionsMasterRoutes = require("./routes/PaymentRequestT
 const paymentTermsRouter = require("./routes/paymentTermsRoutes");
 const payment = require("./routes/paymentRoutes.js");
 
-
 //services
 
-const serviceRoutes = require('./routes/oprServices/OPRserviceRoutes.js')
+const serviceRoutes = require("./routes/oprServices/OPRserviceRoutes.js");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -96,8 +103,6 @@ app.use(cors());
 // app.use(setAuditFields);
 //swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
-
 
 // Routes
 app.use("/api/user", userRoute);
@@ -152,12 +157,25 @@ app.use("/api/operation/assessment", AssessmentRoutes);
 app.use("/api/operation/nafdac", OperationsNafdacRoutes);
 app.use("/api/operation/nafdac/master", OperationsNafdacMasterRoutes);
 app.use("/api/operation/son", OperationsSonRoutes);
+app.use(
+  "/api/operation/transport/operation/lapse",
+  TransportOperationLapseRoutes
+);
+app.use("/api/operation/container/allocation", ContainerAllocationRoutes);
+app.use("/api/operation/govt/charges", GovtChargesRoutes);
 
 //shipping
 app.use("/api/shipping", ShippingMasterRoutes);
 app.use("/api/container", ContainerRoutes);
 app.use("/api/vessel", VesselRoutes);
 
+//Masters
+app.use("/api/operation/container/type", ContainerTypesMasters);
+app.use("/api/operation/container/payment/term", PaymentTermContainer);
+app.use("/api/transport/operation/lapse", TransportOperationLapse);
+app.use("/api/transport/payment/type", TransportPaymentTypeLapse);
+app.use("/api/charges/add/expense", AddExpenseChargesRoutes);
+app.use("/api/charges/payment/type", PaymentTypeChargesRoutes);
 
 //payments
 app.use("/api/paymentterms", paymentTermsRouter);
@@ -171,16 +189,12 @@ app.use("/api/payment", payment);
 // app.use('/api/payment',)
 
 //addresss new
-app.use('/api/address', addressRoutes);
-app.use('/api/bh', buyingHouseRoutes);
-app.use('/api/bhouse', buyingHouseRoutes2);
+app.use("/api/address", addressRoutes);
+app.use("/api/bh", buyingHouseRoutes);
+app.use("/api/bhouse", buyingHouseRoutes2);
 
-
-//services 
-app.use('/api/service', serviceRoutes)
-
-
-
+//services
+app.use("/api/service", serviceRoutes);
 
 // Error handling middleware
 app.use(handleError);
