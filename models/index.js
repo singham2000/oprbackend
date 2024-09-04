@@ -221,6 +221,7 @@ db.container_allocation = require("./Opreations/ContainerAllocation.js")(
     DataTypes
 );
 db.govt_charges = require("./Opreations/GovtCharges")(sequelize, DataTypes);
+db.shipping_lapse = require("./Opreations/ShippingLapse")(sequelize, DataTypes);
 
 //Masters
 db.approval_matrix__master = require("./Masters/ApprovalMatrixMaster.js")(
@@ -235,13 +236,21 @@ db.container_type_master = require("./Masters/ContainerTypesMasters")(
     DataTypes
 );
 db.payment_term_container_master =
-    require("./Masters/PaymentTermContainerMaster")(sequelize, DataTypes);
+  require("./Masters/PaymentTermContainerMaster")(sequelize, DataTypes);
 db.payment_type_transport_master =
-    require("./Masters/PaymentTypeTransportMaster.js")(sequelize, DataTypes);
-db.add_expense_charges_master = require("./Masters/AddExpenseCharges")(sequelize, DataTypes);
-db.payment_type_charges_master =
-    require("./Masters/PaymentTypeCharges.js")(sequelize, DataTypes);
-
+  require("./Masters/PaymentTypeTransportMaster.js")(sequelize, DataTypes);
+db.add_expense_charges_master = require("./Masters/AddExpenseCharges")(
+  sequelize,
+  DataTypes
+);
+db.payment_type_charges_master = require("./Masters/PaymentTypeCharges.js")(
+  sequelize,
+  DataTypes
+);
+db.shipping_lapse_master = require("./Masters/ShippingLapse")(
+  sequelize,
+  DataTypes
+);
 
 //Shipping
 db.ShippingMaster = require('./Shipping/shiping_master.js')(sequelize, DataTypes);
