@@ -59,6 +59,7 @@ const TransportOperationLapse = require("./routes/Masters/TransportOperationLaps
 const TransportPaymentTypeLapse = require("./routes/Masters/PaymentTypeTransportRoutes.js");
 const AddExpenseChargesRoutes = require("./routes/Masters/AddExpenseChargesRoutes");
 const PaymentTypeChargesRoutes = require("./routes/Masters/PaymentTypeChargesRoutes.js");
+const ShippingLapsesRoutes = require("./routes/Masters/ShippingLapseRoutes");
 
 //PFI
 const CommercialInvoiceRoutes = require("./routes/Pfi/commercialInvoiceRoutes.js");
@@ -176,6 +177,7 @@ app.use("/api/transport/operation/lapse", TransportOperationLapse);
 app.use("/api/transport/payment/type", TransportPaymentTypeLapse);
 app.use("/api/charges/add/expense", AddExpenseChargesRoutes);
 app.use("/api/charges/payment/type", PaymentTypeChargesRoutes);
+app.use("/api/shipping/lapse", ShippingLapsesRoutes);
 
 //payments
 app.use("/api/paymentterms", paymentTermsRouter);

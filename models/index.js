@@ -241,6 +241,7 @@ db.payment_term_container_master =
   db.add_expense_charges_master = require("./Masters/AddExpenseCharges")(sequelize, DataTypes);
   db.payment_type_charges_master =
     require("./Masters/PaymentTypeCharges.js")(sequelize, DataTypes);
+    db.shipping_lapse_master = require("./Masters/ShippingLapse")(sequelize, DataTypes);
 
 
 //Shipping
