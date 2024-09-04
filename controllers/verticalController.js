@@ -68,7 +68,6 @@ const deleteVerticalById = async (req, res, next) => {
 // Controller method to Create
 const createVertical = async (req, res, next) => {
     try {
-        console.log(req.body);
         const {
             vertical_name,
             created_by

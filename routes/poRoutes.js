@@ -12,7 +12,7 @@ const setAuditFields = require('../middleware/setAuditFields.js');
 // API routes
 router
     .get('/list', POController.getPO)
-    .post('/create', POController.genratePo)
+    .post('/create', setAuditFields, POController.generatePo)
     .put('/update', POController.updatePOById)
     .delete('/delete', POController.deletePOById)
     .post('/accept', POController.AcceptPO)

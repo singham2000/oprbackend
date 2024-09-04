@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true
         },
-        transport_operation_lapse_name: { 
+        transport_operation_lapse_name: {
             type: DataTypes.STRING(100),
             allowNull: true
         },

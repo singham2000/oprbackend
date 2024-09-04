@@ -40,6 +40,7 @@ const getItemById = async (req, res) => {
 const createItem = async (req, res, next) => {
     const doc_code = 'ITM';
     const item_series = await generateSeries(doc_code);
+    
     req.body.item_series = item_series
     try {
         const fileBuffer = req.file.buffer;

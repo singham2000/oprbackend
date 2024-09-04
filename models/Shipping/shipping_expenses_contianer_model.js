@@ -59,9 +59,9 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         }
     }, {
-        tableName: 'contianer_hipping_expenses',
+        tableName: 'contianer_shipping_expenses',
         timestamps: true
     });
 
-    return ShippingExpenses;
+    return ContainerExpenses;
 };

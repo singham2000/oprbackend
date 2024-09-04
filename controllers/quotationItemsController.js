@@ -80,7 +80,6 @@ const deleteQuotationItemById = async (req, res, next) => {
 
 // Controller method to Create
 const createQuotationItem = async (req, res, next) => {
-    console.log(req.body);
     try {
         const {
             quo_id,
@@ -156,7 +155,6 @@ const getQuotationItemByQuoId = async (quo_id) => {
     let res = await quotation_items.findAll({
         where: { quo_id: quo_id }
     })
-    console.log(res);
     return res;
 }
 

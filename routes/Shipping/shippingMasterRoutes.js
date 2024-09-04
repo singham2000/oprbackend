@@ -5,6 +5,7 @@ const shippingController = require('../../controllers/ShippingController/shippin
 const terminalOperationController = require('../../controllers/ShippingController/terminalOperationController.js')
 const shippingExpensesController = require('../../controllers/ShippingController/shippingExpensesController.js')
 const setAuditFields = require('../../middleware/setAuditFields.js');
+const upload = require('../../utilites/handlefile.js');
 
 
 // API routes
@@ -20,8 +21,10 @@ router
     .get('/terminals', terminalOperationController.getTerminalOperationData)
     .put('/terminal/update', terminalOperationController.updateTerminalDatabyCiID)
 
+
+    
 router
-    .post('/expenses', shippingExpensesController.create)
+    .post('/expenses',upload.single('sadFile'), setAuditFields, shippingExpensesController.create)
     .get('/expenses', shippingExpensesController.getShippingById)
 
 

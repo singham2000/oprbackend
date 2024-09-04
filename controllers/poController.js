@@ -84,18 +84,17 @@ const deletePOById = async (req, res, next) => {
 //On this event po generate with status 1 and quota status update
 //and po items also genrated and insert into po_item table 
 
-const genratePo = async (req, res, next) => {
-  let { quo_id, quo_num, total_cost, rfq_id, opr_id, vendor_id, item_list } = req.body;
+const generatePo = async (req, res, next) => {
   try {
+    const { quo_id, quo_num, total_cost, rfq_id, opr_id, vendor_id, item_list, created_by } = req.body;
+    // Validate input
+    if (!quo_id || !quo_num || !total_cost || !rfq_id || !opr_id || !vendor_id || !item_list || !created_by) {
+      return res.status(400).json({ message: "Invalid input data" });
+    }
+
+    //generate series
     const doc_code = 'PO';
     const po_series = await generateSeries(doc_code);
-    const { quo_id, quo_num, total_cost, vendor_id, created_by } = req.body;
-
-    //extrace some data form quo
-    // "currency": "USD",
-    // "delivery_terms": "FOB",
-    // "payment_terms": "Abcd Payment terms",
-    // "lead_time"
 
     //genrate po
     const po_response = await po_master.create({
@@ -110,8 +109,8 @@ const genratePo = async (req, res, next) => {
       created_on: formattedDateTime,
     });
 
-    //update quotation
-    const result2 = await quotation_master.update(
+    //update quotation mar po status 1
+    await quotation_master.update(
       {
         po_status: 1,
       },
@@ -119,7 +118,6 @@ const genratePo = async (req, res, next) => {
         where: { quo_id },
       }
     );
-
 
     let po_id = po_response.dataValues.po_id;
 
@@ -182,7 +180,6 @@ const AcceptPO = async (req, res, next) => {
     next(err);
   }
 };
-
 const confimPoPaymentsbyVendor = async (req, res, next) => {
   try {
     const { status, po_id, remarks } = req.body;
@@ -204,11 +201,9 @@ const confimPoPaymentsbyVendor = async (req, res, next) => {
     next(err);
   }
 };
-
 const confimPoFinalPaymentsbyVendor = async (req, res, next) => {
   try {
     const { status, po_id, final_doc_dispatch_no, disptach_date } = req.body;
-    console.log(status, po_id, final_doc_dispatch_no, disptach_date);
     const result = await po_master.update(
       {
         final_doc_dispatch_no,
@@ -228,8 +223,6 @@ const confimPoFinalPaymentsbyVendor = async (req, res, next) => {
     next(err);
   }
 };
-
-//po completion
 const completePo = async (req, res, next) => {
 
   const { po_id, pocompletion_docslist, created_by } = req.body
@@ -263,12 +256,9 @@ const completePo = async (req, res, next) => {
     res.status(200).json({ message: "Po completion update Suceesfully" });
 
   } catch (err) {
-    console.log(err)
     next(err);
   }
 }
-
-
 
 // GET PO ITEMS
 // const getPoItemsbypoid = async (req, res, next) => {
@@ -314,8 +304,6 @@ const getPoItemsbypoid = async (req, res, next) => {
     next(error)
   }
 }
-
-
 const updatePOById = async (req, res, next) => {
   const po_id = req.query.po_id;
   try {
@@ -337,8 +325,6 @@ const updatePOById = async (req, res, next) => {
     next(err);
   }
 };
-
-
 //get vendor details by po_id
 const getVendorDeailsByPoId = async (req, res, next) => {
   try {
@@ -363,11 +349,4 @@ const getVendorDeailsByPoId = async (req, res, next) => {
     next(error)
   }
 }
-
-
-
-
-
-
-
-module.exports = { confimPoFinalPaymentsbyVendor, completePo, confimPoPaymentsbyVendor, getVendorDeailsByPoId, getPOforGrn, po_email_conformation, AcceptPO, getPO, deletePOById, genratePo, updatePOById, getPoItemsbypoid };
+module.exports = { confimPoFinalPaymentsbyVendor, completePo, confimPoPaymentsbyVendor, getVendorDeailsByPoId, getPOforGrn, po_email_conformation, AcceptPO, getPO, deletePOById, generatePo, updatePOById, getPoItemsbypoid };

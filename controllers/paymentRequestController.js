@@ -6,7 +6,6 @@ const { generateSeries } = require("./seriesGenerate");
 
 
 const updateDocumentStatus = async (doc_type, doc_id, res) => {
-    console.log(doc_type, doc_id);
     try {
         switch (doc_type) {
             case 'po':

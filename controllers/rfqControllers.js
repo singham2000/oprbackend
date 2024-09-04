@@ -28,7 +28,6 @@ const countItem2 = async (rfq_id) => {
     attributes: [[sequelize.fn("COUNT", sequelize.col("item_id")), "coutn"]],
     Where: { rfq_id: rfq_id },
   });
-  console.log(count.dataValues);
 };
 
 const getVendorsByRfqId = async (req, res, next) => {
@@ -98,7 +97,6 @@ const getRfqById = async (req, res, next) => {
       where: { rfq_id: newitem[0].rfq_id },
     });
     newitem[0].dataValues.items = items;
-    console.log(newitem);
     res.status(200).json(newitem);
   } catch (err) {
     next(err);

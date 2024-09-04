@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         model: ItemGroupMaster,
         key: 'item_group_id'
       },
-      allowNull: true // Adjust to `false` if item_parent_group_id is mandatory
+      allowNull: true
     },
     item_sub_group_name: {
       type: DataTypes.STRING(25),

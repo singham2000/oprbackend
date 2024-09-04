@@ -66,7 +66,6 @@ const getPfibyPoid = async (req, res, next) => {
 // Controller method to delete by id
 const deletePfiyId = async (req, res, next) => {
     const { po_id, company_id } = req.query;
-    console.log(po_id, company_id)
     try {
         const result = await po_master.update(
             { status: 0 },
@@ -100,10 +99,6 @@ const getPfibyid = async (req, res, next) => {
                 ]
             }
         })
-
-
-        console.log("*****");
-        console.log(pfi_items2);
         res.status(200).json({ pfi_details: result, item_list: pfi_items2 })
 
     } catch (err) {
@@ -115,8 +110,6 @@ const getPfibyid = async (req, res, next) => {
 
 // Controller method to Create po with status 1
 const genratePfi = async (req, res, next) => {
-    console.log("**************Pfi body**************")
-    console.log(req.body);
     let { payment_request_id, po_id, amount, company_id, remarks, pfi_id, pfi_items } = req.body;
     try {
         const doc_code = 'PFI';
@@ -131,10 +124,6 @@ const genratePfi = async (req, res, next) => {
                 }
             }
         );
-
-        console.log("**************Pfi Response**************")
-        console.log(PFI_response);
-        console.log(pfi_items);
 
         await pfi_items.forEach(item => {
             item.created_by = req.body.created_by;

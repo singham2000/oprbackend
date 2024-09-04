@@ -99,7 +99,6 @@ exports.getPaymentRequestTransactionsMasterById = async (req, res) => {
 exports.getPaymentRequestTransactionsMasterRequestId = async (req, res) => {
     try {
         const { payment_request_id } = req.query;
-        console.log({ "payementid": payment_request_id })
         const transaction = await PaymentRequestTransactionsMaster.findOne(
             {
                 where: { payment_request_id: payment_request_id },
@@ -134,7 +133,6 @@ exports.getPaymentRequestTransactionsMasterRequestId = async (req, res) => {
 exports.getPaymentRequestTransactionsfileRequestId = async (req, res) => {
     try {
         const { payment_request_id } = req.query;
-        console.log({ "payementid": payment_request_id })
         const transaction = await PaymentRequestTransactionsMaster.findOne(
             {
                 where: { payment_request_id: payment_request_id },

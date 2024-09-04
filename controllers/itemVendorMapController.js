@@ -81,7 +81,6 @@ const deleteItemVendorMap = async (req, res, next) => {
 
 const getVednorListbyitemids = async (req, res, next) => {
     let { item_list } = req.body;
-    console.log(item_list);
     try {
         let result = await ItemVendorMap.findAll({
             where: {
@@ -91,8 +90,6 @@ const getVednorListbyitemids = async (req, res, next) => {
         })
 
         const vendorIds = result.map(result => result.vendor_id);
-        console.log(vendorIds);
-
         let vendorlist = await VendorsMaster.findAll({
             where: {
                 vendor_id: vendorIds

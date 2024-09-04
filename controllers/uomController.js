@@ -8,9 +8,6 @@ const getAllUom = async (req, res, next) => {
     try {
         const items = await Uom.findAll({
             where: { status: { [Op.ne]: 0 } },
-            order: [
-                ['createdAt', 'ASC']
-            ]
         });
         res.status(200).json(items);
 

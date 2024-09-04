@@ -4,9 +4,13 @@ const { ShippingExpenses } = require('../../models');
 const shippingExpensesController = {
     // Create a new Shipping Expense
     create: async (req, res, next) => {
-        let terminalExpenseDetailData = req.body
-         try {
-            const newExpense = await ShippingExpenses.create(terminalExpenseDetailData);
+         console.log(req.body);
+        try {
+            const fileBuffer = req.file.buffer;
+            const base64String = await fileBuffer.toString("base64");
+            req.body.document_name = req.file.originalname
+            req.body.document = base64String
+            const newExpense = await ShippingExpenses.create(req.body);
             res.status(201).json({ message: 'Terminal Expenses Created Successfully', data: newExpense });
         } catch (error) {
             next(error)

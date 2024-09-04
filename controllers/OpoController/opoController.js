@@ -88,8 +88,6 @@ exports.po_email_conformation = async (req, res, next) => {
   try {
     // console.log(req.body);
     const { po_id } = req.body;
-    console.log(`po id :${po_id}`)
-
     const po_response = await po_master.update(
       { status: 2 }, // New values to update
       { where: { po_id: po_id } } // Condition to match records

@@ -9,7 +9,6 @@ const { sequelize, po_items } = require('../models/index')
 
 
 const getQuotation = async (req, res, next) => {
-  console.log("Quotation Item List")
   const quo_id = req.query.quo_id;
   try {
     if (quo_id) {

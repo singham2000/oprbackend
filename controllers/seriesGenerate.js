@@ -25,8 +25,6 @@ async function generateSeries(doc_code) {
 
         const generatedSeries = `${prefix}${last}${suffix}`;
 
-        console.log(start, last, end, validity, formattedDateTime);
-
         if (start < last && last < end && (validity === "" || validity === "NULL" || formattedDateTime < validity)) {
             await series_master.update({ current_num: last }, {
                 where: {

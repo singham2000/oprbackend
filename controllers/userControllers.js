@@ -24,7 +24,6 @@ const getAllUser = async (req, res, next) => {
 
 // Controller method to delte item by id
 const createUser = async (req, res, next) => {
-    console.log(req.body);
     try {
         const {
             first_name,
@@ -84,7 +83,6 @@ const createUser = async (req, res, next) => {
 
 // Verifying a user's password
 const loginUser = async (req, res, next) => {
-    console.log(req.body);
     try {
         let { email, password } = req.body;
         const user = await User.findOne({ where: { email }, attributes: ['first_name', 'email', 'role', 'password_hash'] });
