@@ -124,11 +124,59 @@ const deleteFormMTerm = async (req, res, next) => {
   }
 };
 
+const chekFormAvlforpfiid = async (pfi_id) => {
+  try {
+    const count = await form_m.count({
+      where: { pfi_id: pfi_id }
+    });
+
+    // Determine the status based on the count
+    return count > 0 ? 1 : 0;
+  } catch (err) {
+    console.log("Chedck funtion ")
+    console.log(err)
+  }
+}
+
+const formm_docby_by_pfi_id = async (req, res, next) => {
+  try {
+    let { pfi_id } = req.query;
+    const formData = await form_m.findAll({
+      where: { pfi_id },
+      include: [
+        {
+          model: db.document,
+          where: {
+            table_name: 'form_m'
+          }
+        },
+
+      ]
+
+    })
+    res.status(200).json({
+      data: formData
+    })
+
+
+  } catch (err) {
+    next(err)
+  }
+}
+
+
+
+
 FormMController = {
   createFormMTerm,
   getFormMTerms,
   updateFormMTerm,
   deleteFormMTerm,
+  formm_docby_by_pfi_id,
+  chekFormAvlforpfiid
 };
+
+
+
 
 module.exports = FormMController;

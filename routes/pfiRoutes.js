@@ -12,11 +12,15 @@ router
     .get('/get', pfiController.getPfi)
     .get('/pfibypoid', pfiController.getPfibyPoid)
     .get('/pfibyid', pfiController.getPfibyid)
-    // .post('/create', setAuditFields, pfiController.genratePfi)
+    .post('/create', setAuditFields, pfiController.genratePfi)
     .get('/create2', setAuditFields, pfiController.genratePfi2)
 router
     .post('/create', setAuditFields, newpfiController.create)
-    .get('/list', newpfiController.pfilist)
+    // .get('/list', setAuditFields, newpfiController.pfilist)
+    .get('/list', setAuditFields, pfiController.getPfi)
+    // .get('/draflist', newpfiController.draftpfilist)
+    // .get('/cnfmlist', newpfiController.cnfrmpfilist)
+    .post('/approve', newpfiController.approvePfi)
 router.get('/pfiitems', getPfiLineItemByPoid)
 
 

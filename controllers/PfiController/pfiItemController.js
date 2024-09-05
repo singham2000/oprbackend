@@ -1,10 +1,9 @@
-const { Pfi_line_items: pfi_line_item } = require('../../models'); // Adjust the path based on your file structure
+const { Pfi_line_items: pfi_line_item, ItemsMaster } = require('../../models'); // Adjust the path based on your file structure
 
 // Create a new pfi_line_item
 exports.createPfiLineItem = async (req, res, next) => {
     try {
         const { po_id, pfi_id, payment_request_id, rfq_id, company_id, item_id, item_description, po_qty, rate, margin_percent, remarks, status, created_by } = req.body;
-
         const newPfiLineItem = await pfi_line_item.create({
             po_id,
             pfi_id,
@@ -46,7 +45,11 @@ exports.getPfiLineItemByPoid = async (req, res, next) => {
     try {
         const { po_id } = req.query;
         const item = await pfi_line_item.findAll({
-            where: { po_id: po_id }
+            where: { po_id: po_id },
+            include: {
+                model: ItemsMaster,
+                attributes: ["item_name", "item_code"]
+            }
         });
 
         if (!item) {

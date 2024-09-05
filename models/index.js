@@ -109,6 +109,8 @@ db.EmailMessage = require("./email_message_master.js")(sequelize, DataTypes);
 db.EmailAttachments = require("./email_attachments.js")(sequelize, DataTypes);
 
 //PFI
+db.form_m = require("./Pfi/FormM")(sequelize, DataTypes);
+
 db.Pfi_master = require("./pfi_master.js")(sequelize, DataTypes);
 db.Pfi_line_items = require("./pfi_line_item.js")(sequelize, DataTypes);
 
@@ -190,7 +192,6 @@ db.commercial_invoice = require("./Pfi/CommercialInvoice")(
 );
 db.insurance = require("./Pfi/Insurance")(sequelize, DataTypes);
 db.document = require("./Pfi/Document")(sequelize, DataTypes);
-db.form_m = require("./Pfi/FormM")(sequelize, DataTypes);
 db.letter_of_credit = require("./Pfi/LetterOfCredit")(sequelize, DataTypes);
 db.son_pfi = require("./Pfi/SonPfi")(sequelize, DataTypes);
 db.paar = require("./Pfi/Paar")(sequelize, DataTypes);
@@ -236,20 +237,20 @@ db.container_type_master = require("./Masters/ContainerTypesMasters")(
     DataTypes
 );
 db.payment_term_container_master =
-  require("./Masters/PaymentTermContainerMaster")(sequelize, DataTypes);
+    require("./Masters/PaymentTermContainerMaster")(sequelize, DataTypes);
 db.payment_type_transport_master =
-  require("./Masters/PaymentTypeTransportMaster.js")(sequelize, DataTypes);
+    require("./Masters/PaymentTypeTransportMaster.js")(sequelize, DataTypes);
 db.add_expense_charges_master = require("./Masters/AddExpenseCharges")(
-  sequelize,
-  DataTypes
+    sequelize,
+    DataTypes
 );
 db.payment_type_charges_master = require("./Masters/PaymentTypeCharges.js")(
-  sequelize,
-  DataTypes
+    sequelize,
+    DataTypes
 );
 db.shipping_lapse_master = require("./Masters/ShippingLapse")(
-  sequelize,
-  DataTypes
+    sequelize,
+    DataTypes
 );
 
 //Shipping

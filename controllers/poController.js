@@ -29,6 +29,9 @@ const getPO = async (req, res, next) => {
           },
           {
             model: db.po_items
+          },
+          {
+            model: db.form_m
           }
         ]
       })
@@ -54,7 +57,7 @@ const getPOforGrn = async (req, res, next) => {
     const query = `  SELECT po_master.*
       FROM po_master
       INNER JOIN quotations_master
-      ON po_master.quo_id = quotations_master.quo_id where  po_master.grn_status = 1`;
+      ON po_master.quo_id = quotations_master.quo_id where  po_master.[status] > 8 and po_master.grn_status is  null`;
     const result = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
     res.status(200).json(result);
   } catch (error) {

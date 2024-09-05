@@ -14,6 +14,7 @@ router
     LetterOfCreditController.createLetterOfCreditTerm
   )
   .put("/", setAuditFields, LetterOfCreditController.updateLetterOfCreditTerm)
-  .delete("/", LetterOfCreditController.deleteLetterOfCreditTerm);
+  .delete("/", LetterOfCreditController.deleteLetterOfCreditTerm)
+  .get("/bypfiid", LetterOfCreditController.lcByPfiId);
 
 module.exports = router;

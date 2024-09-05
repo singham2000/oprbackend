@@ -1,4 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
+  
   const commercial_invoice = sequelize.define(
     "commercial_invoice",
     {

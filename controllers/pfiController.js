@@ -1,4 +1,4 @@
-const { Pfi_master, PaymentRequestMaster, po_master, sequelize, Pfi_line_items, item } = require("../models");
+const { Pfi_master, PaymentRequestMaster, po_master, sequelize, Pfi_line_items, item, db, insurance, form_m, letter_of_credit, son_pfi } = require("../models");
 const formattedDateTime = require("../middleware/time");
 const { Op, where } = require("sequelize");
 const { generateSeries } = require("./seriesGenerate");
@@ -35,7 +35,14 @@ const { getQuotationItemByQuoId } = require('./quotationItemsController');
 
 const getPfi = async (req, res, next) => {
     try {
-        const result = await Pfi_master.findAll()
+        const result = await Pfi_master.findAll({
+            include: [
+                { model: insurance },
+                { model: form_m },
+                { model: letter_of_credit },
+                { model: son_pfi }
+            ]
+        })
         res.status(200).json(result);
     } catch (error) {
         console.error('Error calling UDF:', error);

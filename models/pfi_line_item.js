@@ -69,5 +69,10 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: true
   });
 
+
+  pfi_line_item.associate = (models) => {
+    pfi_line_item.belongsTo(models.ItemsMaster, { foreignKey: 'item_id' });
+  };
+
   return pfi_line_item;
 };

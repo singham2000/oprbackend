@@ -6,16 +6,8 @@ const setAuditFields = require("../../middleware/setAuditFields.js");
 // API routes
 router
   .get("/", CommercialInvoiceController.getCommercialInvoiceTerms)
-  .post(
-    "/",
-    setAuditFields,
-    CommercialInvoiceController.createCommercialInvoiceTerm
-  )
-  .put(
-    "/",
-    setAuditFields,
-    CommercialInvoiceController.updateCommercialInvoiceTerm
-  )
+  .post("/", setAuditFields, CommercialInvoiceController.createCommercialInvoiceTerm)
+  .put("/", setAuditFields, CommercialInvoiceController.updateCommercialInvoiceTerm)
   .delete("/", CommercialInvoiceController.deleteCommercialInvoiceTerm);
 
 module.exports = router;

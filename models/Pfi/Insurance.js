@@ -110,5 +110,18 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
+
+
+  insurance.associate = (models) => {
+    insurance.hasMany(models.document, {
+      foreignKey: 'linked_id',
+    });
+
+    insurance.belongsTo(models.Pfi_master, {
+      foreignKey: 'pfi_id',  // Ensure this matches the foreign key in pfi_master
+    });
+  }; 
+
+
   return insurance;
 };

@@ -49,7 +49,8 @@
 //chage on : 27 Aug 2024
 // ------------------------------------------
 
-require('dotenv').config();
+
+// controllers/Pfi/FormMController.js
 
 module.exports = (sequelize, DataTypes) => {
     const pfi_master = sequelize.define("pfi_master", {
@@ -205,12 +206,71 @@ module.exports = (sequelize, DataTypes) => {
         document_name: {
             type: DataTypes.STRING(255),
             allowNull: true
+        },
+        status: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        //reuired cetifiacte
+        nafdac_status: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        nafdac_certificate_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        son_status: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        son_certificate_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        lc_status: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        lc_certificate_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        insurance_status: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        insurance_certificate_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        form_m_status: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        form_m_certificate_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true
         }
     }, {
         tableName: 'pfi_master',
         timestamps: true,
-        logging: process.env.NODE_ENV === 'development' ? console.log : false
     });
 
+    pfi_master.associate = (models) => {
+        // Define the one-to-many relationship with insurance
+        pfi_master.hasMany(models.insurance, {
+            foreignKey: 'pfi_id',  // Ensure this matches the foreign key in insuranc
+        });
+        pfi_master.hasMany(models.form_m, {
+            foreignKey: 'pfi_id',  // Ensure this matches the foreign key in insuranc
+        });
+        pfi_master.hasMany(models.letter_of_credit, {
+            foreignKey: 'pfi_id',  // Ensure this matches the foreign key in insuranc
+        });
+        pfi_master.hasMany(models.son_pfi, {
+            foreignKey: 'pfi_id',  // Ensure this matches the foreign key in insuranc
+        });
+    };
     return pfi_master;
 };

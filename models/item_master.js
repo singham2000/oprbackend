@@ -141,6 +141,7 @@ module.exports = (sequelize, DataTypes) => {
         ItemsMaster.hasMany(models.po_items, { foreignKey: 'item_id' });
         ItemsMaster.hasMany(models.rfqitem, { foreignKey: 'item_id' });
         ItemsMaster.hasMany(models.quotation_items, { foreignKey: 'item_id' });
+        ItemsMaster.hasMany(models.Pfi_line_items, { foreignKey: 'item_id' });
     };
 
     return ItemsMaster;

@@ -140,11 +140,38 @@ const deleteLetterOfCreditTerm = async (req, res, next) => {
   }
 };
 
+
+
+const lcByPfiId = async (req, res, next) => {
+  try {
+    let { pfi_id } = req.query;
+    const data = await letter_of_credit.findAll({
+      where: { pfi_id },
+      include: [
+        {
+          model: db.document,
+          where: {
+            table_name: 'letter_of_credit'
+          }
+        },
+
+      ]
+
+    })
+    res.status(200).json({
+      data: data
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
 LetterOfCreditController = {
   createLetterOfCreditTerm,
   getLetterOfCreditTerms,
   updateLetterOfCreditTerm,
   deleteLetterOfCreditTerm,
+  lcByPfiId
 };
 
 module.exports = LetterOfCreditController;

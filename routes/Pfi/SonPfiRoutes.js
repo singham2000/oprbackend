@@ -7,13 +7,9 @@ const { uploadMulti } = require("../../middleware/fileHandler.js");
 // API routes
 router
   .get("/", SonPfiController.getSonPfiTerms)
-  .post(
-    "/",
-    setAuditFields,
-    uploadMulti.any(),
-    SonPfiController.createSonPfiTerm
-  )
+  .post("/", setAuditFields, uploadMulti.any(), SonPfiController.createSonPfiTerm)
   .put("/", setAuditFields, SonPfiController.updateSonPfiTerm)
-  .delete("/", SonPfiController.deleteSonPfiTerm);
+  .delete("/", SonPfiController.deleteSonPfiTerm)
+  .get("/bypfiid", SonPfiController.sonByPfiId);
 
 module.exports = router;

@@ -142,11 +142,39 @@ const deleteInsuranceTerm = async (req, res, next) => {
   }
 };
 
+
+const InsuranceByPfi_id = async (req, res, next) => {
+  try {
+    let { pfi_id } = req.query;
+    const formData = await insurance.findAll({
+      where: { pfi_id },
+      include: [
+        {
+          model: db.document,
+          where: {
+            table_name: 'insurance'
+          }
+        },
+
+      ]
+
+    })
+    res.status(200).json({
+      data: formData
+    })
+
+
+  } catch (err) {
+    next(err)
+  }
+}
+
 InsuranceController = {
   createInsuranceTerm,
   getInsuranceTerms,
   updateInsuranceTerm,
   deleteInsuranceTerm,
+  InsuranceByPfi_id
 };
 
 module.exports = InsuranceController;

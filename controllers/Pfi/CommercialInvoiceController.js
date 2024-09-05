@@ -1,14 +1,17 @@
 const db = require("../../models");
 const { commercial_invoice } = db;
 const { Op } = require("sequelize");
+const { generateSeries } = require("../seriesGenerate");
+
 
 // Create a new penalty term
 const createCommercialInvoiceTerm = async (req, res, next) => {
   try {
-    console.log(req.body);
+    const ci_series = await generateSeries('INVOICE');
+
     const {
-        pfiId,
-        pfiNum,
+      pfiId,
+      pfiNum,
       ciSender,
       ciSenderDate,
       customer,
@@ -46,8 +49,9 @@ const createCommercialInvoiceTerm = async (req, res, next) => {
       fullandFinal,
     } = req.body;
     const result = await commercial_invoice.create({
-        pfi_id: pfiId,
-        pfi_num: pfiNum,
+      pfi_id: pfiId,
+      pfi_num: pfiNum,
+      ci_num: ci_series,
       ci_sender: ciSender,
       ci_sender_date: ciSenderDate,
       customer: customer,
@@ -116,6 +120,7 @@ const getCommercialInvoiceTerms = async (req, res, next) => {
   }
 };
 
+
 // Update a penalty term by ID
 const updateCommercialInvoiceTerm = async (req, res, next) => {
   const commercial_invoice_id = req.query.commercial_invoice_id;
@@ -156,6 +161,7 @@ const deleteCommercialInvoiceTerm = async (req, res, next) => {
     next(err);
   }
 };
+
 
 CommercialInvoiceController = {
   createCommercialInvoiceTerm,

@@ -58,5 +58,21 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
+
+  document.associate = (models) => {
+    document.belongsTo(models.form_m, {
+      foreignKey: 'linked_id',
+    });
+    document.belongsTo(models.insurance, {
+      foreignKey: 'linked_id',
+    });
+    document.belongsTo(models.letter_of_credit, {
+      foreignKey: 'linked_id',
+    });
+    document.belongsTo(models.son_pfi, {
+      foreignKey: 'linked_id',
+    });
+  };
+
   return document;
 };

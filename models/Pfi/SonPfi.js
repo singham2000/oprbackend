@@ -66,5 +66,17 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
+
+
+  son_pfi.associate = (models) => {
+    son_pfi.hasMany(models.document, {
+      foreignKey: 'linked_id',
+    });
+
+    son_pfi.belongsTo(models.Pfi_master, {
+      foreignKey: 'pfi_id',  // Ensure this matches the foreign key in pfi_master
+    });
+  };
+
   return son_pfi;
 };

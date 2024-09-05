@@ -5,20 +5,16 @@ const { Op } = require("sequelize");
 // Create a new son_pfi
 const createSonPfiTerm = async (req, res, next) => {
   try {
-    console.log(req.body);
-    console.log("file: ", req.files);
-
     const {
-      pfi_id,
-      pfi_num,
-      pfi_date,
+      pfiId: pfi_id,
+      pfiNum: pfi_num,
+      pfiDate: pfi_date,
       payment_types,
       son_permit_app_date,
       invoice_rec_date,
       pay,
       permit_no,
     } = req.body;
-
     const result = await son_pfi.create({
       pfi_id: pfi_id,
       pfi_num: pfi_num,
@@ -32,7 +28,6 @@ const createSonPfiTerm = async (req, res, next) => {
     });
 
     const lastInsertedId = result.son_pfi_id;
-
     if (req.files && req.files.length > 0) {
       await Promise.all(
         req.files.map(async (file) => {
@@ -55,6 +50,8 @@ const createSonPfiTerm = async (req, res, next) => {
     next(err);
   }
 };
+
+
 
 // Get Commercial Invoice
 const getSonPfiTerms = async (req, res, next) => {
@@ -120,11 +117,37 @@ const deleteSonPfiTerm = async (req, res, next) => {
   }
 };
 
+
+const sonByPfiId = async (req, res, next) => {
+  try {
+    let { pfi_id } = req.query;
+    const data = await son_pfi.findAll({
+      where: { pfi_id },
+      include: [
+        {
+          model: db.document,
+          where: {
+            table_name: 'son_pfi'
+          }
+        },
+
+      ]
+
+    })
+    res.status(200).json({
+      data: data
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
 SonPfiController = {
   createSonPfiTerm,
   getSonPfiTerms,
   updateSonPfiTerm,
   deleteSonPfiTerm,
+  sonByPfiId
 };
 
 module.exports = SonPfiController;
