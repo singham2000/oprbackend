@@ -97,7 +97,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
-
       created_on: {
         type: DataTypes.DATE,
         allowNull: true,
@@ -118,6 +117,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
+      eir_received_date: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      }
     },
     {
       tableName: "container_allocation",
