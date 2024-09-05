@@ -143,20 +143,73 @@ const getContainerAllocation = async (req, res, next) => {
 
 // Update a penalty term by ID
 const updateContainerAllocation = async (req, res, next) => {
-  const container_allocation_id = req.query.container_allocation_id;
+  console.log("body: ", req.body);
+  console.log("file: ", req.files);
 
   try {
-    // Find the shipment mode by primary key
-    const PenaltyTerms = await container_allocation.findByPk(
+    const {
+      container_allocation_id,
+      tdo_handover_date,
+      transporter,
+      eir_received_date,
+    } = req.body;
+
+    const ContainerAllocation = await container_allocation.findByPk(
       container_allocation_id
     );
 
-    // Update the shipment mode
-    const { penalty_terms_name, status } = req.body;
-    await PenaltyTerms.update({
-      penalty_terms_name,
-      status,
-    });
+    if (!ContainerAllocation) {
+      return res
+        .status(404)
+        .json({ message: "Container Allocation not found" });
+    }
+
+    if (req.files && req.files.length > 0) {
+      const DocumentContainerAllocation = await container_allocation.findAll({
+        where: {
+          table_name: "container_allocation",
+          linked_id: container_allocation_id,
+        },
+      });
+
+      if (!DocumentContainerAllocation) {
+        await Promise.all(
+          req.files.map(async (file) => {
+            const base64 = file.buffer.toString("base64");
+            await document.create({
+              linked_id: container_allocation_id,
+              table_name: "container_allocation",
+              type: "Transport Module Container Allocation EIR Doc",
+              doc_name: `${file.fieldname}-${file.originalname}`,
+              doc_base64: base64,
+              title: "EIR File Document in Container Allocation",
+              status: 1,
+            });
+          })
+        );
+      } else {
+        await Promise.all(
+          req.files.map(async (file) => {
+            const base64 = file.buffer.toString("base64");
+            await DocumentContainerAllocation.update({
+              doc_name: `${file.fieldname}-${file.originalname}`,
+              doc_base64: base64,
+              status: 1
+            });
+          })
+        );
+      }
+    }
+
+    if (tdo_handover_date) {
+      await ContainerAllocation.update({ tdo_given_date: tdo_handover_date });
+    }
+    if (eir_received_date) {
+      await ContainerAllocation.update({ eir_received_date });
+    }
+    if (transporter) {
+      await ContainerAllocation.update({ transporter });
+    }
 
     res.status(200).json({ message: "Updated Successfully" });
   } catch (err) {
