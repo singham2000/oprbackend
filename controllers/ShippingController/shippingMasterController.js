@@ -1,4 +1,12 @@
-const { ShippingMaster, commercial_invoice, form_m, letter_of_credit } = require("../../models"); // Adjust the path as necessary
+const {
+   ShippingMaster, 
+   Pfi_master, 
+   commercial_invoice, 
+   insurance,
+   form_m,
+   letter_of_credit,
+   son_pfi
+  } = require("../../models"); // Adjust the path as necessary
 
 // Create a new shipping info record
 exports.createShippingMaster = async (req, res) => {
@@ -154,9 +162,18 @@ exports.getAllShippingMasters = async (req, res) => {
   try {
     const ShippingMasters = await ShippingMaster.findAll({
       include: [
-        { model: commercial_invoice, as: "ci" },
-        { model: form_m, letter_of_credit, as: "FormM" },
-        { model: letter_of_credit, as: "LC" },
+        { model: commercial_invoice },
+        {
+          model: Pfi_master,
+          include: [
+            { model: insurance },
+            { model: form_m },
+            { model: letter_of_credit },
+            { model: son_pfi }
+          ]
+        }
+        // { model: form_m, letter_of_credit, as: "FormM" },
+        // { model: letter_of_credit, as: "LC" },
       ],
     });
     res.status(200).json(ShippingMasters);

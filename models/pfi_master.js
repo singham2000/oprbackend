@@ -255,7 +255,7 @@ module.exports = (sequelize, DataTypes) => {
     }, {
         tableName: 'pfi_master',
         timestamps: true,
-    });
+    }); 
 
     pfi_master.associate = (models) => {
         // Define the one-to-many relationship with insurance
@@ -269,6 +269,9 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: 'pfi_id',  // Ensure this matches the foreign key in insuranc
         });
         pfi_master.hasMany(models.son_pfi, {
+            foreignKey: 'pfi_id',  // Ensure this matches the foreign key in insuranc
+        });
+        pfi_master.hasMany(models.ShippingMaster, {
             foreignKey: 'pfi_id',  // Ensure this matches the foreign key in insuranc
         });
     };

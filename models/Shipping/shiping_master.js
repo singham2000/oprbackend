@@ -129,7 +129,6 @@
 // };
 
 const { DataTypes } = require("sequelize");
-
 module.exports = (sequelize, DataTypes) => {
   const ShippingMaster = sequelize.define(
     "ShippingMaster",
@@ -270,16 +269,18 @@ module.exports = (sequelize, DataTypes) => {
   ShippingMaster.associate = (models) => {
     ShippingMaster.belongsTo(models.commercial_invoice, {
       foreignKey: "ci_id",
-      as: "ci",
     });
-    ShippingMaster.belongsTo(models.form_m, {
-      foreignKey: "pfi_num",
-      as: "FormM",
+    ShippingMaster.belongsTo(models.Pfi_master, {
+      foreignKey: "pfi_id",
     });
-    ShippingMaster.belongsTo(models.letter_of_credit, {
-        foreignKey: "pfi_id",
-        as: "LC",
-      });
+    // ShippingMaster.belongsTo(models.form_m, {
+    //   foreignKey: "pfi_num",
+    //   as: "FormM",
+    // });
+    // ShippingMaster.belongsTo(models.letter_of_credit, {
+    //     foreignKey: "pfi_id",
+    //     as: "LC",
+    //   });
   };
 
   return ShippingMaster;

@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  
+
   const commercial_invoice = sequelize.define(
     "commercial_invoice",
     {
@@ -187,5 +187,16 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
+
+
+
+
+  commercial_invoice.associate = (models) => {
+    commercial_invoice.belongsTo(models.Pfi_master, {
+      foreignKey: "pfi_id",
+    });
+  }
+
+
   return commercial_invoice;
 };

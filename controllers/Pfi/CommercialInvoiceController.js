@@ -1,5 +1,17 @@
 const db = require("../../models");
-const { commercial_invoice } = db;
+const {
+  commercial_invoice,
+  ShippingMaster,
+  Pfi_master,
+  insurance,
+  form_m,
+  letter_of_credit,
+  son_pfi
+
+} = db;
+
+
+
 const { Op } = require("sequelize");
 const { generateSeries } = require("../seriesGenerate");
 
@@ -104,6 +116,16 @@ const getCommercialInvoiceTerms = async (req, res, next) => {
         where: {
           status: { [Op.ne]: 0 },
         },
+        include: [
+          {
+            model: Pfi_master,
+            include: [
+              { model: insurance },
+              { model: form_m },
+              { model: letter_of_credit },
+              { model: son_pfi }
+            ]
+          }],
         order: [["commercial_invoice_id", "DESC"]],
       });
       return res.status(200).json(result);
@@ -170,4 +192,4 @@ CommercialInvoiceController = {
   deleteCommercialInvoiceTerm,
 };
 
-module.exports = CommercialInvoiceController;
+module.exports = CommercialInvoiceController; 
