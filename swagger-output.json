@@ -366,6 +366,19 @@
         }
       }
     },
+    "/api/vendor/bankdropdn": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/api/vendor/vendor": {
       "post": {
         "description": "",
@@ -5326,9 +5339,6 @@
           },
           "401": {
             "description": "Unauthorized"
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         }
       }
@@ -6449,13 +6459,13 @@
                 "updated_by": {
                   "example": "any"
                 },
-                "pfi_id": {
+                "pfiId": {
                   "example": "any"
                 },
-                "pfi_num": {
+                "pfiNum": {
                   "example": "any"
                 },
-                "pfi_date": {
+                "pfiDate": {
                   "example": "any"
                 },
                 "payment_types": {
@@ -7636,11 +7646,6 @@
             "type": "string"
           },
           {
-            "name": "container_allocation_id",
-            "in": "query",
-            "type": "string"
-          },
-          {
             "name": "body",
             "in": "body",
             "schema": {
@@ -7652,10 +7657,16 @@
                 "updated_by": {
                   "example": "any"
                 },
-                "penalty_terms_name": {
+                "container_allocation_id": {
                   "example": "any"
                 },
-                "status": {
+                "tdo_handover_date": {
+                  "example": "any"
+                },
+                "transporter": {
+                  "example": "any"
+                },
+                "eir_received_date": {
                   "example": "any"
                 }
               }
@@ -7671,6 +7682,9 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
