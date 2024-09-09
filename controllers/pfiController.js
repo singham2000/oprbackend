@@ -1,36 +1,17 @@
-const { Pfi_master, PaymentRequestMaster, po_master, sequelize, Pfi_line_items, item, db, insurance, form_m, letter_of_credit, son_pfi } = require("../models");
+const {
+    Pfi_master,
+    PaymentRequestMaster,
+    po_master,
+    sequelize,
+    Pfi_line_items,
+    item, db, insurance,
+    form_m, letter_of_credit, son_pfi
+} = require("../models");
+
 const formattedDateTime = require("../middleware/time");
 const { Op, where } = require("sequelize");
 const { generateSeries } = require("./seriesGenerate");
 const { getQuotationItemByQuoId } = require('./quotationItemsController');
-
-// const { pfi_line_item } = require("../models/pfi_line_item");
-
-// const getPfi = async (req, res, next) => {
-//     const po_id = req.query.po_id;
-//     try {
-//         if (po_id) {
-//             const query = `SELECT po_master.*
-//       FROM po_master
-//       INNER JOIN quotations_master
-//       ON po_master.quo_id = quotations_master.quo_id where po_id = ${po_id};`;
-//             const result = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
-//             res.status(200).json(result);
-//         }
-//         else {
-//             const query = `SELECT po_master.*
-//       FROM po_master
-//       INNER JOIN quotations_master
-//       ON po_master.quo_id = quotations_master.quo_id;`;
-//             const result = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
-//             res.status(200).json(result);
-//         }
-//     } catch (error) {
-//         console.error('Error calling UDF:', error);
-//         throw error;
-//     }
-
-// };
 
 
 const getPfi = async (req, res, next) => {
@@ -68,8 +49,6 @@ const getPfibyPoid = async (req, res, next) => {
 
 };
 
-
-
 // Controller method to delete by id
 const deletePfiyId = async (req, res, next) => {
     const { po_id, company_id } = req.query;
@@ -87,7 +66,6 @@ const deletePfiyId = async (req, res, next) => {
         next(err);
     }
 };
-
 const getPfibyid = async (req, res, next) => {
     let { pfi_id, company_id } = req.query;
     try {
@@ -112,9 +90,7 @@ const getPfibyid = async (req, res, next) => {
         next(err);
     }
 
-}
-
-
+};
 // Controller method to Create po with status 1
 const genratePfi = async (req, res, next) => {
     let { payment_request_id, po_id, amount, company_id, remarks, pfi_id, pfi_items } = req.body;
@@ -145,21 +121,11 @@ const genratePfi = async (req, res, next) => {
         next(err);
     }
 };
-
-
 // get opr item company list by po no
 const getcompanylistPoNumber = async (req, res, next) => {
     try {
         let { po_id } = req.query
         console.log('po_id', po_id)
-        // let query = `
-        //     select * from opr_items
-        //     where rfq_id in 
-        //     ( select quotations_master.rfq_id as rfq_id from po_master
-        //     inner join quotations_master
-        //     on quotations_master.quo_id = po_master.quo_id  where po_master.po_id=${po_id})`
-        // let [result, metadata] = await db.sequelize.query(query);
-
         let query = `select  distinct  opr_items.company_id ,dbo.fn_companyname(opr_items.company_id)  as comp_name
             from opr_items            
 			inner join po_items
@@ -174,77 +140,10 @@ const getcompanylistPoNumber = async (req, res, next) => {
     } catch (err) {
         next(err)
     }
-}
-
+};
 
 // Controller method to Create po with status 1
 const genratePfi2 = async (req, res, next) => {
 };
-
-//update po status after send mail to vendor
-// const po_email_conformation = async (req, res, next) => {
-//   try {
-//     // console.log(req.body);
-//     const { po_id } = req.body;
-//     console.log(`po id :${po_id}`)
-//     const po_response = await po_master.update(
-//       { status: 2 }, // New values to update
-//       { where: { po_id: po_id } } // Condition to match records
-//     );
-//     next();
-//   } catch (err) {
-//     next(err);
-//   }
-// };
-
-
-
-// const updatePOById = async (req, res, next) => {
-//     const po_id = req.query.po_id;
-//     try {
-//         const { delivery_timeline_name, updated_by } = req.body;
-//         const result = await po_master.update(
-//             {
-//                 delivery_timeline_name,
-//                 updated_by,
-//                 updated_on: formattedDateTime,
-//             },
-//             {
-//                 where: {
-//                     po_id: po_id,
-//                 },
-//             }
-//         );
-//         res.status(201).json({ message: "Updated Successfully" });
-//     } catch (err) {
-//         next(err);
-//     }
-// };
-
-// const AcceptPO = async (req, res, next) => {
-//     try {
-//         const { status, po_id, remarks } = req.body;
-//         let updated_by = '###'
-//         console.log(req.body);
-//         const result = await po_master.update(
-//             {
-//                 acceptance_remarks: remarks,
-//                 status: status ? 3 : 4,
-//                 updated_by: updated_by,
-//                 updated_on: formattedDateTime,
-//             },
-//             {
-//                 where: {
-//                     po_id: po_id,
-//                 },
-//             }
-//         );
-//         res.status(201).json({ message: "Updated Successfully" });
-//     } catch (err) {
-//         next(err);
-//     }
-// };
-
-// module.exports = { genratePfi, po_email_conformation, AcceptPO, getPO, deletePOById, genratePo, updatePOById };
 
 module.exports = { genratePfi, getPfi, genratePfi2, getPfibyPoid, getPfibyid };

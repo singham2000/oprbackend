@@ -185,6 +185,30 @@ const deleteCommercialInvoiceTerm = async (req, res, next) => {
 };
 
 
+
+// Delete a penalty term by ID
+const addRotaionNo = async (req, res, next) => {
+  const { roation_no,commercial_invoice_id } = req.body;
+  try {
+    const result = await commercial_invoice.update(
+      { status: 0 },
+      {
+        where: {
+          commercial_invoice_id: commercial_invoice_id,
+        },
+      }
+    );
+    return res.status(200).json({ message: "Deleted successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+
+
+
+
+
 CommercialInvoiceController = {
   createCommercialInvoiceTerm,
   getCommercialInvoiceTerms,

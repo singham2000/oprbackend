@@ -185,16 +185,17 @@ db.PaymentRequestMaster = require("./Payments/PaymentRequestMaster.js")(
 db.OpoMaster = require("./Opo/opo_master.js")(sequelize, DataTypes);
 db.OpoItems = require("./Opo/opo_items.js")(sequelize, DataTypes);
 
+
 //PFI
 db.commercial_invoice = require("./Pfi/CommercialInvoice")(
     sequelize,
     DataTypes
 );
 db.insurance = require("./Pfi/Insurance")(sequelize, DataTypes);
-db.document = require("./Pfi/Document")(sequelize, DataTypes);
 db.letter_of_credit = require("./Pfi/LetterOfCredit")(sequelize, DataTypes);
 db.son_pfi = require("./Pfi/SonPfi")(sequelize, DataTypes);
 db.paar = require("./Pfi/Paar")(sequelize, DataTypes);
+
 
 //Operations
 db.assessment = require("./Opreations/Assessment.js")(sequelize, DataTypes);
@@ -252,7 +253,6 @@ db.shipping_lapse_master = require("./Masters/ShippingLapse")(
     sequelize,
     DataTypes
 );
-
 //Shipping
 db.ShippingMaster = require('./Shipping/shiping_master.js')(sequelize, DataTypes);
 db.Container = require('./Shipping/container.js')(sequelize, DataTypes);
@@ -260,11 +260,13 @@ db.VesselDetails = require('./Shipping/vessel_details.js')(sequelize, DataTypes)
 db.ShippingExpenses = require('./Shipping/shipping_expensesModal.js')(sequelize, DataTypes);
 
 //document Master
+db.document = require("./Pfi/Document")(sequelize, DataTypes);
+
+//remove after
 db.Document = require('./documents_master.js')(sequelize, DataTypes);
 
 // Set up associations
 const models = { ...db };
-
 // Call associate methods
 Object.values(models).forEach((model) => {
     if (model.associate) {
@@ -273,7 +275,7 @@ Object.values(models).forEach((model) => {
 });
 
 sequelize
-    .sync({ alter: false })
+    .sync({ alter: true })
     .then(() => {
         console.log("Database & tables created!");
     })

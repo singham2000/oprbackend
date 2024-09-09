@@ -12,6 +12,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
+      bank1_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      bank2_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
       pfi_num: {
         type: DataTypes.STRING(50),
         allowNull: true,
@@ -112,6 +120,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
+  
   letter_of_credit.associate = (models) => {
     letter_of_credit.hasMany(models.document, {
       foreignKey: 'linked_id',

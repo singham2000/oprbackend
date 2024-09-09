@@ -11,6 +11,8 @@ const createLetterOfCreditTerm = async (req, res, next) => {
     const {
       pfiNum,
       pfiId,
+      bank1_id,
+      bank2_id,
       form_m_id,
       form_m_num,
       lc_status,
@@ -49,6 +51,8 @@ const createLetterOfCreditTerm = async (req, res, next) => {
       offshore_charges_borne: off_shore_charges_borne_by, // Updated field name
       confirmation_charges_borne: confirmation_charges_borne_by, // Updated field name
       status: 1,
+      bank1_id,
+      bank2_id
     });
 
     const lastInsertedId = result.letter_of_credit_id;

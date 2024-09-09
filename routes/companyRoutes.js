@@ -8,6 +8,7 @@ const setAuditFields = require('../middleware/setAuditFields.js');
 
 // API routes
 router
+
     .get('/', companyController.getCompany)
     .get('/v1', companyController2.getCompanies)
     .post('/', setAuditFields, companyController.createCompany)

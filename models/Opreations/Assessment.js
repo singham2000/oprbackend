@@ -92,6 +92,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: true,
       },
+      rotation_no: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
       created_on: {
         type: DataTypes.DATE,
         allowNull: true,
