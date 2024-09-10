@@ -69,6 +69,9 @@ const LetterOfCreditTermsRoutes = require("./routes/Pfi/LetterOfCreditRoutes.js"
 const SonPfiRoutes = require("./routes/Pfi/SonPfiRoutes");
 const PaarRoutes = require("./routes/Pfi/PaarRoutes");
 
+//Get Data CI against PFI, FormM,
+const CommercialInvoiceAllData = require("./routes/Pfi/AssociationRoutes");
+
 //Opreations
 const AssessmentRoutes = require("./routes/Opreations/AssessmentRoutes");
 const OperationsNafdacRoutes = require("./routes/Opreations/NafdacRoutes");
@@ -78,7 +81,6 @@ const TransportOperationLapseRoutes = require("./routes/Opreations/TransportOper
 const ContainerAllocationRoutes = require("./routes/Opreations/ContainerAllocationRoutes");
 const GovtChargesRoutes = require("./routes/Opreations/GovtChargesRoutes");
 const ShippingLapseRoutes = require("./routes/Opreations/ShippingLapseRoutes");
-
 
 //shipping
 const ShippingMasterRoutes = require("./routes/Shipping/shippingMasterRoutes.js");
@@ -92,10 +94,11 @@ const paymentRequestTransactionsMasterRoutes = require("./routes/PaymentRequestT
 const paymentTermsRouter = require("./routes/paymentTermsRoutes");
 const payment = require("./routes/paymentRoutes.js");
 //documents
-const documentsRoutes = require('./routes/documentRoutes.js')
+const documentsRoutes = require("./routes/documentRoutes.js");
 
 //services
-const serviceRoutes = require('./routes/ServiceOpr/OPRserviceRoutes.js')
+const serviceRoutes = require("./routes/ServiceOpr/OPRserviceRoutes.js");
+const fetchData = require("./controllers/Pfi/AssociationController.js");
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -109,9 +112,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //document Master
 
-
-app.use('/api/doc', documentsRoutes)
-
+app.use("/api/doc", documentsRoutes);
 
 // Routes
 app.use("/api/user", userRoute);
@@ -160,6 +161,11 @@ app.use("/api/formm", FormMRoutes);
 app.use("/api/lc", LetterOfCreditTermsRoutes);
 app.use("/api/pfi/son", SonPfiRoutes);
 app.use("/api/pfi/paar", PaarRoutes);
+
+//Get Data CI against PFI, FormM,
+app.use("/api/ci/all", CommercialInvoiceAllData);
+const createMultipleUDFs = require("./models/UserDefinedFunction/UserDefinedFunctions.js");
+createMultipleUDFs();
 
 //Operations
 app.use("/api/operation/assessment", AssessmentRoutes);
