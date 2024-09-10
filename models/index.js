@@ -135,6 +135,8 @@ db.ServiceQUO = require("./Services/Service_Quotation.js")(
     DataTypes
 );
 
+db.ServiceTypeMaster =  require("./Services/services_type_master.js")(sequelize, DataTypes);
+
 //Po
 db.po_master = require("./Po/po_master.js")(sequelize, DataTypes);
 db.po_items = require("./Po/po_items.js")(sequelize, DataTypes);
@@ -262,8 +264,8 @@ db.ShippingExpenses = require('./Shipping/shipping_expensesModal.js')(sequelize,
 //document Master
 db.document = require("./Pfi/Document")(sequelize, DataTypes);
 
-//remove after
-db.Document = require('./documents_master.js')(sequelize, DataTypes);
+// //remove after
+// db.Document = require('./documents_master.js')(sequelize, DataTypes);
 
 // Set up associations
 const models = { ...db };
@@ -275,7 +277,7 @@ Object.values(models).forEach((model) => {
 });
 
 sequelize
-    .sync({ alter: true })
+    .sync({ alter: false })
     .then(() => {
         console.log("Database & tables created!");
     })

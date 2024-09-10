@@ -1,17 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const {
-    getDocumentByEntityId
-} = require('../controllers/documentsController.js');
+const documentController = require('../controllers/documentController');
+const upload = require('../utilites/handlefile.js');
 const setAuditFields = require('../middleware/setAuditFields.js');
 
 
 
 
-
-
-// API routes for item categories
-router
-    .get('/docbyentityid', getDocumentByEntityId)
+// Routes for document CRUD operations
+router.post('/create',upload.any(),setAuditFields, documentController.createDocument);
+router.get('/', documentController.getAllDocuments);
+router.get('/bydoc_id', documentController.getDocumentById);
+// router.get('/:id', documentController.getDocumentById);
+// router.put('/:id', documentController.updateDocument);
+// router.delete('/:id', documentController.deleteDocument);
 
 module.exports = router;
+ 

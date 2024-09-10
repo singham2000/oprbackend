@@ -5,7 +5,8 @@ const {
     sequelize,
     Pfi_line_items,
     item, db, insurance,
-    form_m, letter_of_credit, son_pfi
+    form_m, letter_of_credit, son_pfi,
+    ShippingMaster
 } = require("../models");
 
 const formattedDateTime = require("../middleware/time");
@@ -15,16 +16,36 @@ const { getQuotationItemByQuoId } = require('./quotationItemsController');
 
 
 const getPfi = async (req, res, next) => {
+    
+    const {pfi_id} = req.query
+    
     try {
-        const result = await Pfi_master.findAll({
-            include: [
-                { model: insurance },
-                { model: form_m },
-                { model: letter_of_credit },
-                { model: son_pfi }
-            ]
-        })
-        res.status(200).json(result);
+        if(pfi_id){
+            const result = await Pfi_master.findAll({
+                where:{pfi_id},
+                include: [
+                    { model: insurance },
+                    { model: form_m },
+                    { model: letter_of_credit },
+                    { model: son_pfi },
+                    { model: ShippingMaster}
+                ]        
+            })
+            res.status(200).json(result);
+        }else{
+            const result = await Pfi_master.findAll({
+                include: [
+                    { model: insurance },
+                    { model: form_m },
+                    { model: letter_of_credit },
+                    { model: son_pfi },
+                    { model: ShippingMaster}
+                ]
+            })
+            res.status(200).json(result);
+
+        }
+
     } catch (error) {
         console.error('Error calling UDF:', error);
         throw error;

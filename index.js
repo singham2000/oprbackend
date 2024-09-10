@@ -97,7 +97,7 @@ const documentsRoutes = require('./routes/documentRoutes.js')
 //services
 const serviceRoutes = require('./routes/ServiceOpr/OPRserviceRoutes.js')
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(express.json());
@@ -110,8 +110,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 //document Master
 
 
-app.use('/api/doc', documentsRoutes)
-
+app.use('/api/document', documentsRoutes)
 
 // Routes
 app.use("/api/user", userRoute);
