@@ -1,16 +1,16 @@
-const { where } = require('sequelize');
 const { PaymentRequestTransactionsMaster, PaymentRequestMaster, po_master, Pfi_master, sequelize } = require('../models'); // Adjust the path to your models file
 
 //this funcation will insert data in transaction table and same time i will also insert data in pfi master without pfi number(series)
 exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {
     try {
-        const { payment_request_id, po_id } = req.body;
+        const { payment_request_id, po_id, doc_type } = req.body;
 
         //update request status 
         const paymentRequest = await PaymentRequestMaster.update(
             { status: 3 },
             { where: { payment_request_id: payment_request_id } }
         );
+
 
         //if id not found in master
         if (!paymentRequest) {

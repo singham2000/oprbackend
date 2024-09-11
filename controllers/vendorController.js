@@ -1,6 +1,6 @@
 const db = require('../models')
 const { vendor: Vendor, VendorsMaster, company_master, VendorsBanksDetailsMaster, VendorsAddressDetailsMaster } = db
-const {generateSeries} = require('../utilites/genrateSeries')
+const { generateSeries } = require('../utilites/genrateSeries')
 
 // Function to fetch all vendors with associated bank and address details *getAllVendorsDetails*
 getAllVendor = async (req, res) => {
@@ -33,6 +33,23 @@ const getVendorById = async (req, res) => {
         next(err);
     }
 };
+
+
+// bankDrop down
+const getAllBankDropDn = async (req, res) => {
+    try {
+        // Find all vendors
+        const banksdropdn = await VendorsBanksDetailsMaster.findAll({
+            attributes: ['v_banks_detail_id', 'bank_name']
+        });
+        res.json(banksdropdn);
+        
+    } catch (err) {
+        console.error('Error fetching vendors details:', err);
+        res.status(500).json({ error: 'Failed to fetch vendors details' });
+    }
+};
+
 
 // Controller method to delte item by id
 const deleteVendorById = async (req, res) => {
@@ -82,14 +99,14 @@ createVendor = async (req, res, next) => {
 
         res.status(201).json({
             message: 'Vendor created successfully',
-          
+
             vendor: newVendor,
             vendor2: vendorDetails,
             bankDetails: newBankDetails,
             addressDetails: newAddressDetails
         });
 
-        
+
     } catch (err) {
         console.error('Error creating vendor:', err);
         next(err)
@@ -99,6 +116,7 @@ createVendor = async (req, res, next) => {
 module.exports = {
     getAllVendor,
     getVendorById,
+    getAllBankDropDn,
     deleteVendorById,
     createVendor
 };

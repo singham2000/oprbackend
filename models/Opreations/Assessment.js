@@ -92,6 +92,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: true,
       },
+      rotation_no: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
       created_on: {
         type: DataTypes.DATE,
         allowNull: true,
@@ -118,5 +122,14 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
+
+
+  assessment.associate = (models) => {
+    assessment.belongsTo(models.Pfi_master, {
+      foreignKey: "pfi_id",
+    });  
+  }
+
+
   return assessment;
 };

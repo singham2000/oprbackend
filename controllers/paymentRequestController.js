@@ -1,6 +1,7 @@
 const { where } = require('sequelize');
 const db = require('../models'); // Adjust the path to your models file
-const { PaymentRequestMaster, PaymentTypeMaster, po_master, ServiceQUO } = db
+const { PaymentRequestMaster, PaymentTypeMaster, po_master, ServiceQUO, assessment } = db
+
 const { generateSeries } = require("./seriesGenerate");
 
 
@@ -23,6 +24,13 @@ const updateDocumentStatus = async (doc_type, doc_id, res) => {
                 await ServiceQUO.update(
                     { status: 5 },
                     { where: { service_quo_id: doc_id } }
+                )
+
+                break;
+            case 'assesment_ci':
+                await ServiceQUO.update(
+                    { status: 2 },
+                    { where: { assessment_id: doc_id } }
                 )
 
                 break;

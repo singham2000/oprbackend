@@ -9,6 +9,7 @@ const createAssessment = async (req, res, next) => {
     console.log("file: ", req.files);
 
     const {
+      rotation_no,
       pfi_id,
       pfi_num,
       form_m_id,
@@ -29,7 +30,7 @@ const createAssessment = async (req, res, next) => {
       levyAmount,
       vatAmount,
       penaltyAmount,
-      totalDuty,      
+      totalDuty,
     } = req.body;
 
     // assessmentDocument,
@@ -37,6 +38,7 @@ const createAssessment = async (req, res, next) => {
 
     const result = await assessment.create({
       pfi_id,
+      rotation_no,
       pfi_num,
       form_m_id,
       form_m_num,
@@ -56,7 +58,7 @@ const createAssessment = async (req, res, next) => {
       levy_amount: levyAmount,          // Mapping req.body field to model field
       vat_amount: vatAmount,            // Mapping req.body field to model field
       penalty_amount: penaltyAmount,    // Mapping req.body field to model field
-      total_duty: totalDuty, 
+      total_duty: totalDuty,
       status: 1,
     });
 

@@ -11,6 +11,7 @@ const createFormMTerm = async (req, res, next) => {
     const {
       pfiNum,
       pfiId,
+      bank1_id,
       insurenceId,
       insurenceNum,
       formM_number,
@@ -33,6 +34,7 @@ const createFormMTerm = async (req, res, next) => {
       ba_num: ba_number,
       form_m_recd_date: formm_rec_date,
       status: 1,
+      bank1_id
     });
 
     const lastInsertedId = result.form_m_id;

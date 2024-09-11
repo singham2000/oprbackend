@@ -274,6 +274,9 @@ module.exports = (sequelize, DataTypes) => {
         pfi_master.hasMany(models.ShippingMaster, {
             foreignKey: 'pfi_id',  // Ensure this matches the foreign key in insuranc
         });
+        pfi_master.hasMany(models.assessment, {
+            foreignKey: 'pfi_id',  // Ensure this matches the foreign key in insuranc
+        });
     };
     return pfi_master;
 };

@@ -153,14 +153,6 @@ const po_email_conformation = async (req, res, next) => {
   }
 };
 
-/***************************************************************
- * Vendor Activity on Purchase Orders (PO)
- * 
- * This section of the code handles all vendor-related activities
- * associated with purchase orders, including tracking, updates,
- * and communication.
- ***************************************************************/
-//po status will becom 3 when Vendor  accept po reject= 4
 
 const AcceptPO = async (req, res, next) => {
   try {
@@ -183,6 +175,7 @@ const AcceptPO = async (req, res, next) => {
     next(err);
   }
 };
+
 const confimPoPaymentsbyVendor = async (req, res, next) => {
   try {
     const { status, po_id, remarks } = req.body;
@@ -204,6 +197,7 @@ const confimPoPaymentsbyVendor = async (req, res, next) => {
     next(err);
   }
 };
+
 const confimPoFinalPaymentsbyVendor = async (req, res, next) => {
   try {
     const { status, po_id, final_doc_dispatch_no, disptach_date } = req.body;
@@ -226,6 +220,7 @@ const confimPoFinalPaymentsbyVendor = async (req, res, next) => {
     next(err);
   }
 };
+
 const completePo = async (req, res, next) => {
 
   const { po_id, pocompletion_docslist, created_by } = req.body
@@ -262,24 +257,6 @@ const completePo = async (req, res, next) => {
     next(err);
   }
 }
-
-// GET PO ITEMS
-// const getPoItemsbypoid = async (req, res, next) => {
-//   try {
-//     const { po_id } = req.query;
-//     const result = await po_items.findAll(
-//       {
-//         where: {
-//           po_id: po_id,
-//         },
-//       }
-//     );
-//     res.status(201).json(result);
-//   } catch (err) {
-//     next(err);
-//   }
-// } // this will convert into getPodetails
-
 
 const getPoItemsbypoid = async (req, res, next) => {
   try {
@@ -328,7 +305,8 @@ const updatePOById = async (req, res, next) => {
     next(err);
   }
 };
-//get vendor details by po_id
+
+
 const getVendorDeailsByPoId = async (req, res, next) => {
   try {
     const { po_id } = req.query;
@@ -352,4 +330,6 @@ const getVendorDeailsByPoId = async (req, res, next) => {
     next(error)
   }
 }
+
+
 module.exports = { confimPoFinalPaymentsbyVendor, completePo, confimPoPaymentsbyVendor, getVendorDeailsByPoId, getPOforGrn, po_email_conformation, AcceptPO, getPO, deletePOById, generatePo, updatePOById, getPoItemsbypoid };
