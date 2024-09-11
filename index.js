@@ -69,16 +69,17 @@ const LetterOfCreditTermsRoutes = require("./routes/Pfi/LetterOfCreditRoutes.js"
 const SonPfiRoutes = require("./routes/Pfi/SonPfiRoutes");
 const PaarRoutes = require("./routes/Pfi/PaarRoutes");
 
+//Get Data CI against PFI, FormM,
+const CommercialInvoiceAllData = require("./routes/Pfi/AssociationRoutes");
 //Opreations
 const AssessmentRoutes = require("./routes/Opreations/AssessmentRoutes");
-const OperationsNafdacRoutes = require("./routes/Opreations/NafdacRoutes");
+// const OperationsNafdacRoutes = require("./routes/Opreations/NafdacRoutes");
 const OperationsNafdacMasterRoutes = require("./routes/Opreations/NafdacMasterRoutes");
 const OperationsSonRoutes = require("./routes/Opreations/SonRoutes");
 const TransportOperationLapseRoutes = require("./routes/Opreations/TransportOperationLapseRoutes");
 const ContainerAllocationRoutes = require("./routes/Opreations/ContainerAllocationRoutes");
 const GovtChargesRoutes = require("./routes/Opreations/GovtChargesRoutes");
 const ShippingLapseRoutes = require("./routes/Opreations/ShippingLapseRoutes");
-
 
 //shipping
 const ShippingMasterRoutes = require("./routes/Shipping/shippingMasterRoutes.js");
@@ -92,10 +93,11 @@ const paymentRequestTransactionsMasterRoutes = require("./routes/PaymentRequestT
 const paymentTermsRouter = require("./routes/paymentTermsRoutes");
 const payment = require("./routes/paymentRoutes.js");
 //documents
-const documentsRoutes = require('./routes/documentsRoutes.js')
+const documentRoutes = require('./routes/documentRoutes.js')
 
 //services
-const serviceRoutes = require('./routes/ServiceOpr/OPRserviceRoutes.js')
+const serviceRoutes = require("./routes/ServiceOpr/OPRserviceRoutes.js");
+const fetchData = require("./controllers/Pfi/AssociationController.js");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -110,7 +112,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 //document Master
 
 
-app.use('/api/document', documentsRoutes)
+app.use('/api/document', documentRoutes)
 
 
 // Routes
@@ -161,10 +163,15 @@ app.use("/api/lc", LetterOfCreditTermsRoutes);
 app.use("/api/pfi/son", SonPfiRoutes);
 app.use("/api/pfi/paar", PaarRoutes);
 
+//Get Data CI against PFI, FormM,
+app.use("/api/ci/all", CommercialInvoiceAllData);
+const createMultipleUDFs = require("./models/UserDefinedFunction/UserDefinedFunctions.js");
+createMultipleUDFs();
+
 //Operations
 app.use("/api/operation/assessment", AssessmentRoutes);
-app.use("/api/operation/nafdac", OperationsNafdacRoutes);
-app.use("/api/operation/nafdac/master", OperationsNafdacMasterRoutes);
+// app.use("/api/operation/nafdac", OperationsNafdacRoutes);
+app.use("/api/operation/nafdac", OperationsNafdacMasterRoutes);
 app.use("/api/operation/son", OperationsSonRoutes);
 app.use(
   "/api/operation/transport/operation/lapse",
@@ -194,11 +201,11 @@ app.use("/api/penaltyterms", penaltyTermsRoutes);
 app.use("/api/payment-types", paymentTypeMasterRoutes);
 app.use("/api/paymentrequests", paymentRequestMasterRoutes);
 app.use("/api/payment-transactions", paymentRequestTransactionsMasterRoutes);
+
 //this is new
 app.use("/api/payment", payment);
 
 // app.use('/api/payment',)
-
 //addresss new
 app.use("/api/address", addressRoutes);
 app.use("/api/bh", buyingHouseRoutes);

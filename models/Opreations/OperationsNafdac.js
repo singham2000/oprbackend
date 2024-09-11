@@ -54,5 +54,13 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
+
+  operations_nafdac.associate = (models) => {
+    operations_nafdac.belongsTo(models.Pfi_master, {
+      foreignKey: "pfi_id",
+    });
+  }
+  
+
   return operations_nafdac;
 };

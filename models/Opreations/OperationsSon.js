@@ -90,6 +90,13 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: false,
       }
     );
+    operations_son.associate = (models) => {
+      operations_son.belongsTo(models.commercial_invoice, {
+        foreignKey: 'ci_id',
+        targetKey: 'commercial_invoice_id'
+      });
+    };
+
     return operations_son;
   };
   

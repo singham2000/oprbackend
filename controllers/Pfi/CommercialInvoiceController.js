@@ -7,11 +7,15 @@ const {
   form_m,
   letter_of_credit,
   son_pfi,
-  assessment
+  assessment,
+  CompanyMaster,
+  operations_nafdac,
+  paar,
+  operations_nafdac_master,
+  govt_charges,
+  operations_son
 
 } = db;
-
-
 
 const { Op } = require("sequelize");
 const { generateSeries } = require("../seriesGenerate");
@@ -61,7 +65,7 @@ const createCommercialInvoiceTerm = async (req, res, next) => {
       inspectionCharges,
       fullandFinal,
     } = req.body;
-    
+
     const result = await commercial_invoice.create({
       pfi_id: pfiId,
       pfi_num: pfiNum,
@@ -129,10 +133,20 @@ const getCommercialInvoiceTerms = async (req, res, next) => {
               { model: letter_of_credit },
               { model: son_pfi },
               { model: assessment },
-              { model: ShippingMaster }
-
+              { model: ShippingMaster },
+              { model: CompanyMaster},
+              { model: operations_nafdac},
+              { model: paar},
+              { model: operations_nafdac_master},
+              { model: govt_charges}
             ]
-          }],
+          }
+          ,{
+            model: operations_son,            
+          }
+        
+        
+        ],
         order: [["commercial_invoice_id", "DESC"]],
       });
       return res.status(200).json(result);

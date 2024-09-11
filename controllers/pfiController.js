@@ -8,7 +8,11 @@ const {
     Pfi_line_items,
     item, db, insurance,
     form_m, letter_of_credit, son_pfi,
-    ShippingMaster
+    CompanyMaster,
+    operations_nafdac,
+    paar,
+    operations_nafdac_master,
+    govt_charges
 } = require("../models");
 
 const formattedDateTime = require("../middleware/time");
@@ -33,7 +37,13 @@ const getPfi = async (req, res, next) => {
                     { model: letter_of_credit },
                     { model: son_pfi },
                     { model: assessment },
-                    { model: ShippingMaster }
+                    { model: ShippingMaster },
+                    { model: CompanyMaster},
+                    {model: operations_nafdac},
+                    {model: paar},
+                    {model: operations_nafdac_master},
+                    {model: govt_charges},
+
                 ]
             });
 
@@ -53,7 +63,12 @@ const getPfi = async (req, res, next) => {
                 { model: letter_of_credit },
                 { model: son_pfi },
                 { model: assessment },
-                { model: ShippingMaster }
+                { model: ShippingMaster },
+                { model: CompanyMaster},
+                { model: operations_nafdac},
+                { model: paar},
+                { model: operations_nafdac_master},
+                { model: govt_charges},
 
             ]
         });

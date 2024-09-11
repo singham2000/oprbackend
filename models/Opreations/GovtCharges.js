@@ -8,6 +8,10 @@ module.exports = (sequelize, DataTypes) => {
           primaryKey: true,
           autoIncrement: true,
         },
+        pfi_id:{
+          type: DataTypes.INTEGER,
+          allowNull: true,
+        },
         payment_types: {
           type: DataTypes.STRING(55),
           allowNull: true,
@@ -87,6 +91,13 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: false,
       }
     );
+
+    govt_charges.associate = (models) => {
+      govt_charges.belongsTo(models.Pfi_master, {
+        foreignKey: "pfi_id",
+      });
+    }
+
     return govt_charges;
   };
   

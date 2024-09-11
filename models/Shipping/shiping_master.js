@@ -19,7 +19,7 @@
 //             type: DataTypes.DATE,
 //             allowNull: true
 //         },
-//         obl_sent_apapa_date: {
+//         obl_sent_port_date: {
 //             type: DataTypes.DATE,
 //             allowNull: true
 //         },
@@ -187,7 +187,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         allowNull: true,
       },
-      obl_sent_apapa_date: {
+      obl_sent_port_date: {
         type: DataTypes.DATE,
         allowNull: true,
       },
@@ -273,14 +273,6 @@ module.exports = (sequelize, DataTypes) => {
     ShippingMaster.belongsTo(models.Pfi_master, {
       foreignKey: "pfi_id",
     });
-    // ShippingMaster.belongsTo(models.form_m, {
-    //   foreignKey: "pfi_num",
-    //   as: "FormM",
-    // });
-    // ShippingMaster.belongsTo(models.letter_of_credit, {
-    //     foreignKey: "pfi_id",
-    //     as: "LC",
-    //   });
   };
 
   return ShippingMaster;

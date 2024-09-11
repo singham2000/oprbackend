@@ -1,14 +1,41 @@
 const db = require("../../models");
 const { operations_nafdac_master, operations_nafdac_lapse, document } = db;
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
+
+
 
 // Create a new operations_nafdac_master
-const createOperationsNafdacMaster = async (req, res, next) => {
+const addappliedDate = async (req, res, next) => {
   try {
+    const {
+      pfi_id,
+      nafdac_applied_date
+    } = req.body;
+
+    const result = await operations_nafdac_master.create({
+      pfi_id,
+      nafdac_applied_date
+    });
+
+    return res.status(201).json({ message: "applied date inserted successfully" });
+
+  } catch (err) {
+    console.error("Error creating operations_nafdac_master term:", err);
+    next(err);
+  }
+};
+
+
+const createOperationsNafdacMaster = async (req, res, next) => {
+  
+  try {
+
+    console.log("add nafdac document in operation nafdac")
     console.log(req.body);
     console.log("file: ", req.files);
 
     const {
+      pfi_id,
       operations_nafdac_id,
       payment_type,
       penalty_type,
@@ -22,7 +49,8 @@ const createOperationsNafdacMaster = async (req, res, next) => {
       narration,
     } = req.body;
 
-    const result = await operations_nafdac_master.create({
+    
+    const result = await operations_nafdac_master.update({
       operations_nafdac_id,
       payment_type,
       penalty_type,
@@ -36,7 +64,14 @@ const createOperationsNafdacMaster = async (req, res, next) => {
       penalty_approved_by: penalty_approved,
       narration,
       status: 1,
-    });
+      
+    },{
+  where:{pfi_id}
+});
+
+
+console.log("Result after data update");
+console.log(result);
 
     const lastInsertedId = result.operations_nafdac_master_id;
 
@@ -62,6 +97,8 @@ const createOperationsNafdacMaster = async (req, res, next) => {
     next(err);
   }
 };
+
+
 
 // Create a new operations_nafdac_master
 const createOperationsNafdacLapse = async (req, res, next) => {
@@ -181,6 +218,7 @@ const deleteOperationsNafdacMaster = async (req, res, next) => {
 };
 
 OperationsNafdacMasterController = {
+  addappliedDate,
   createOperationsNafdacMaster,
   getOperationsNafdacMasters,
   updateOperationsNafdacMaster,

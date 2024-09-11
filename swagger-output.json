@@ -70,42 +70,14 @@
             "name": "doc_id",
             "in": "query",
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "created_by": {
-                  "example": "any"
-                },
-                "updated_by": {
-                  "example": "any"
-                }
-              }
-            }
           }
         ],
         "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }
-    },
-    "/api/document/": {
-      "get": {
-        "description": "",
-        "responses": {
           "200": {
             "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -6617,11 +6589,6 @@
             "type": "string"
           },
           {
-            "name": "son_pfi_id",
-            "in": "query",
-            "type": "string"
-          },
-          {
             "name": "body",
             "in": "body",
             "schema": {
@@ -6633,10 +6600,13 @@
                 "updated_by": {
                   "example": "any"
                 },
-                "penalty_terms_name": {
+                "pfi_id": {
                   "example": "any"
                 },
-                "status": {
+                "soncap_num": {
+                  "example": "any"
+                },
+                "soncap_apply_date": {
                   "example": "any"
                 }
               }
@@ -6845,6 +6815,16 @@
         }
       }
     },
+    "/api/ci/all/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/operation/assessment/": {
       "get": {
         "description": "",
@@ -7031,7 +7011,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "operations_nafdac_id",
+            "name": "operations_nafdac_master_id",
             "in": "query",
             "type": "string"
           }
@@ -7039,57 +7019,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          }
-        }
-      },
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "created_by": {
-                  "example": "any"
-                },
-                "updated_by": {
-                  "example": "any"
-                },
-                "pfi_id": {
-                  "example": "any"
-                },
-                "pfi_num": {
-                  "example": "any"
-                },
-                "form_m_id": {
-                  "example": "any"
-                },
-                "form_m_num": {
-                  "example": "any"
-                },
-                "nafdac_date": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
           }
         }
       },
@@ -7102,7 +7031,7 @@
             "type": "string"
           },
           {
-            "name": "operations_nafdac_id",
+            "name": "operations_nafdac_master_id",
             "in": "query",
             "type": "string"
           },
@@ -7144,7 +7073,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "operations_nafdac_id",
+            "name": "operations_nafdac_master_id",
             "in": "query",
             "type": "string"
           }
@@ -7156,23 +7085,35 @@
         }
       }
     },
-    "/api/operation/nafdac/master/": {
-      "get": {
+    "/api/operation/nafdac/date": {
+      "post": {
         "description": "",
         "parameters": [
           {
-            "name": "operations_nafdac_master_id",
-            "in": "query",
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "pfi_id": {
+                  "example": "any"
+                },
+                "nafdac_date": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "201": {
+            "description": "Created"
           }
         }
-      },
-      "post": {
+      }
+    },
+    "/api/operation/nafdac/documents": {
+      "put": {
         "description": "",
         "parameters": [
           {
@@ -7240,71 +7181,9 @@
             "description": "Unauthorized"
           }
         }
-      },
-      "put": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "operations_nafdac_master_id",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "created_by": {
-                  "example": "any"
-                },
-                "updated_by": {
-                  "example": "any"
-                },
-                "penalty_terms_name": {
-                  "example": "any"
-                },
-                "status": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      },
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "operations_nafdac_master_id",
-            "in": "query",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
       }
     },
-    "/api/operation/nafdac/master/lapse": {
+    "/api/operation/nafdac/lapse": {
       "post": {
         "description": "",
         "parameters": [
@@ -8270,21 +8149,6 @@
                 },
                 "updated_by": {
                   "example": "any"
-                },
-                "ci_id": {
-                  "example": "any"
-                },
-                "shipping_doc_receipt_date_ho": {
-                  "example": "any"
-                },
-                "received_from_bank_date_ho": {
-                  "example": "any"
-                },
-                "obl_sent_apapa_date": {
-                  "example": "any"
-                },
-                "obl_received_date": {
-                  "example": "any"
                 }
               }
             }
@@ -8328,9 +8192,6 @@
                   "example": "any"
                 },
                 "ci_id": {
-                  "example": "any"
-                },
-                "nafdac": {
                   "example": "any"
                 },
                 "son": {

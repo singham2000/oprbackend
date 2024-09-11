@@ -188,15 +188,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-
-
-
   commercial_invoice.associate = (models) => {
     commercial_invoice.belongsTo(models.Pfi_master, {
       foreignKey: "pfi_id",
     });
+    commercial_invoice.hasMany(models.operations_son, {
+      foreignKey: 'ci_id',
+      targetKey: 'commercial_invoice_id'
+    });
   }
-
-
   return commercial_invoice;
 };

@@ -51,8 +51,6 @@ const createSonPfiTerm = async (req, res, next) => {
   }
 };
 
-
-
 // Get Commercial Invoice
 const getSonPfiTerms = async (req, res, next) => {
   const son_pfi_id = req.query.son_pfi_id;
@@ -80,18 +78,23 @@ const getSonPfiTerms = async (req, res, next) => {
 
 // Update a penalty term by ID
 const updateSonPfiTerm = async (req, res, next) => {
-  const son_pfi_id = req.query.son_pfi_id;
-
+  console.log(req.body);
+  
   try {
-    // Find the shipment mode by primary key
-    const PenaltyTerms = await son_pfi.findByPk(son_pfi_id);
-
     // Update the shipment mode
-    const { penalty_terms_name, status } = req.body;
-    await PenaltyTerms.update({
-      penalty_terms_name,
-      status,
-    });
+    const { pfi_id, soncap_num, soncap_apply_date } = req.body;
+
+    await son_pfi.update(
+      {
+        son_date: soncap_apply_date,
+        permit_num: soncap_num,
+      },
+      {
+        where: {
+          pfi_id,
+        },
+      }
+    );
 
     res.status(200).json({ message: "Updated Successfully" });
   } catch (err) {
@@ -117,7 +120,6 @@ const deleteSonPfiTerm = async (req, res, next) => {
   }
 };
 
-
 const sonByPfiId = async (req, res, next) => {
   try {
     let { pfi_id } = req.query;
@@ -127,27 +129,25 @@ const sonByPfiId = async (req, res, next) => {
         {
           model: db.document,
           where: {
-            table_name: 'son_pfi'
-          }
+            table_name: "son_pfi",
+          },
         },
-
-      ]
-
-    })
+      ],
+    });
     res.status(200).json({
-      data: data
-    })
+      data: data,
+    });
   } catch (err) {
-    next(err)
+    next(err);
   }
-}
+};
 
 SonPfiController = {
   createSonPfiTerm,
   getSonPfiTerms,
   updateSonPfiTerm,
   deleteSonPfiTerm,
-  sonByPfiId
+  sonByPfiId,
 };
 
 module.exports = SonPfiController;

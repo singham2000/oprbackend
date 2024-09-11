@@ -110,9 +110,9 @@ db.EmailAttachments = require("./email_attachments.js")(sequelize, DataTypes);
 
 //PFI
 db.form_m = require("./Pfi/FormM")(sequelize, DataTypes);
-
 db.Pfi_master = require("./pfi_master.js")(sequelize, DataTypes);
 db.Pfi_line_items = require("./pfi_line_item.js")(sequelize, DataTypes);
+
 
 //RFQ
 db.rfqitem = require("./Rfq/rfq_Item_master.js")(sequelize, DataTypes);
@@ -200,19 +200,13 @@ db.paar = require("./Pfi/Paar")(sequelize, DataTypes);
 
 
 //Operations
-db.assessment = require("./Opreations/Assessment.js")(sequelize, DataTypes);
 db.operations_nafdac = require("./Opreations/OperationsNafdac")(
     sequelize,
     DataTypes
 );
-db.operations_nafdac_master = require("./Opreations/OperationsNafdacMaster.js")(
-    sequelize,
-    DataTypes
-);
-db.operations_nafdac_lapse = require("./Opreations/OperationsNafdacLapse")(
-    sequelize,
-    DataTypes
-);
+
+db.operations_nafdac_master = require("./Opreations/OperationsNafdacMaster.js")( sequelize,DataTypes);
+db.operations_nafdac_lapse = require("./Opreations/OperationsNafdacLapse")( sequelize, DataTypes);
 db.operations_son = require("./Opreations/OperationsSon")(sequelize, DataTypes);
 db.operations_son_lapse = require("./Opreations/OperationsSonLapse")(
     sequelize,
@@ -226,6 +220,8 @@ db.container_allocation = require("./Opreations/ContainerAllocation.js")(
 );
 db.govt_charges = require("./Opreations/GovtCharges")(sequelize, DataTypes);
 db.shipping_lapse = require("./Opreations/ShippingLapse")(sequelize, DataTypes);
+
+
 
 //Masters
 db.approval_matrix__master = require("./Masters/ApprovalMatrixMaster.js")(
@@ -255,21 +251,25 @@ db.shipping_lapse_master = require("./Masters/ShippingLapse")(
     sequelize,
     DataTypes
 );
+
+
 //Shipping
 db.ShippingMaster = require('./Shipping/shiping_master.js')(sequelize, DataTypes);
 db.Container = require('./Shipping/container.js')(sequelize, DataTypes);
 db.VesselDetails = require('./Shipping/vessel_details.js')(sequelize, DataTypes);
 db.ShippingExpenses = require('./Shipping/shipping_expensesModal.js')(sequelize, DataTypes);
 
+
 //document Master
 db.document = require("./Pfi/Document")(sequelize, DataTypes);
+db.assessment = require("./Opreations/Assessment.js")(sequelize, DataTypes);
 
-// //remove after
-// db.Document = require('./documents_master.js')(sequelize, DataTypes);
+
+
+
 
 // Set up associations
 const models = { ...db };
-// Call associate methods
 Object.values(models).forEach((model) => {
     if (model.associate) {
         model.associate(models);
