@@ -74,5 +74,5 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  return document;
+  return document; 
 };

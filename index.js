@@ -92,7 +92,7 @@ const paymentRequestTransactionsMasterRoutes = require("./routes/PaymentRequestT
 const paymentTermsRouter = require("./routes/paymentTermsRoutes");
 const payment = require("./routes/paymentRoutes.js");
 //documents
-const documentsRoutes = require('./routes/documentRoutes.js')
+const documentsRoutes = require('./routes/documentsRoutes.js')
 
 //services
 const serviceRoutes = require('./routes/ServiceOpr/OPRserviceRoutes.js')
@@ -110,7 +110,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 //document Master
 
 
-app.use('/api/doc', documentsRoutes)
+app.use('/api/document', documentsRoutes)
 
 
 // Routes
@@ -209,6 +209,7 @@ app.use("/api/service", serviceRoutes);
 
 // Error handling middleware
 app.use(handleError);
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

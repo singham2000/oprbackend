@@ -1,4 +1,6 @@
 const {
+    ShippingMaster,
+    assessment,
     Pfi_master,
     PaymentRequestMaster,
     po_master,
@@ -14,22 +16,70 @@ const { generateSeries } = require("./seriesGenerate");
 const { getQuotationItemByQuoId } = require('./quotationItemsController');
 
 
+
 const getPfi = async (req, res, next) => {
     try {
-        const result = await Pfi_master.findAll({
+        // Check if ID is provided in the request parameters
+        const { pfi_id } = req.query;
+
+        // If an ID is provided, fetch a single record by ID
+        if (pfi_id) {
+            const result = await Pfi_master.findOne({
+                where: { pfi_id }, // Assuming 'id' is the primary key
+                include: [
+                    { model: insurance },
+                    { model: form_m },
+                    { model: letter_of_credit },
+                    { model: son_pfi },
+                    { model: assessment },
+                    { model: ShippingMaster }
+                ]
+            });
+
+            // If no record is found, send a 404 response
+            if (!result) {
+                return res.status(404).json({ message: 'Pfi_master not found' });
+            }
+
+            return res.status(200).json(result);
+        }
+
+        // If no ID is provided, fetch all records
+        const results = await Pfi_master.findAll({
             include: [
                 { model: insurance },
                 { model: form_m },
                 { model: letter_of_credit },
-                { model: son_pfi }
+                { model: son_pfi },
+                { model: assessment },
+                { model: ShippingMaster }
+
             ]
-        })
-        res.status(200).json(result);
+        });
+
+        res.status(200).json(results);
     } catch (error) {
         console.error('Error calling UDF:', error);
-        throw error;
+        next(error); // Pass the error to the error-handling middleware
     }
 };
+
+// const getPfi = async (req, res, next) => {
+//     try {
+//         const result = await Pfi_master.findAll({
+//             include: [
+//                 { model: insurance },
+//                 { model: form_m },
+//                 { model: letter_of_credit },
+//                 { model: son_pfi }
+//             ]
+//         })
+//         res.status(200).json(result);
+//     } catch (error) {
+//         console.error('Error calling UDF:', error);
+//         throw error;
+//     }
+// };
 
 
 const getPfibyPoid = async (req, res, next) => {

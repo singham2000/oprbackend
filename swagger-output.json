@@ -11,22 +11,53 @@
     "http"
   ],
   "paths": {
-    "/api/doc/docbyentityid": {
-      "get": {
+    "/api/document/create": {
+      "post": {
         "description": "",
         "parameters": [
           {
-            "name": "entity_id",
-            "in": "query",
+            "name": "authorization",
+            "in": "header",
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/document/": {
+      "get": {
+        "description": "",
         "responses": {
           "200": {
             "description": "OK"
           },
-          "404": {
-            "description": "Not Found"
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -5210,9 +5241,19 @@
     "/api/pfi/get": {
       "get": {
         "description": "",
+        "parameters": [
+          {
+            "name": "pfi_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -5328,6 +5369,11 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "pfi_id",
+            "in": "query",
+            "type": "string"
           }
         ],
         "responses": {
@@ -5339,6 +5385,9 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -6117,6 +6166,9 @@
                 "pfiId": {
                   "example": "any"
                 },
+                "bank1_id": {
+                  "example": "any"
+                },
                 "insurenceId": {
                   "example": "any"
                 },
@@ -6277,6 +6329,12 @@
                   "example": "any"
                 },
                 "pfiId": {
+                  "example": "any"
+                },
+                "bank1_id": {
+                  "example": "any"
+                },
+                "bank2_id": {
                   "example": "any"
                 },
                 "form_m_id": {
@@ -6770,6 +6828,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "rotation_no": {
                   "example": "any"
                 },
                 "pfi_id": {

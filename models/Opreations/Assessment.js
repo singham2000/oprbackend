@@ -122,5 +122,14 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
+
+
+  assessment.associate = (models) => {
+    assessment.belongsTo(models.Pfi_master, {
+      foreignKey: "pfi_id",
+    });  
+  }
+
+
   return assessment;
 };
