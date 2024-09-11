@@ -3,6 +3,8 @@ const { ServiceMaster } = require('../../models'); // Adjust the path as needed
 // Create a new ServiceMaster
 exports.createServiceMaster = async (req, res) => {
     try {
+        const {service_name,service_code,service_type}= req.body;
+        let service_series = 'S-0000-s'
         const serviceMaster = await ServiceMaster.create(req.body);
         res.status(201).json(serviceMaster);
     } catch (error) {

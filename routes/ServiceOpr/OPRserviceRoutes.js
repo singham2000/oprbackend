@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const ServicePO = require("../../controllers/Quo/QuoController.js");
 const ServiceMaster = require("../../controllers/Services/serviceMaster.js");
+const ServiceType = require("../../controllers/Services/serviceTypeController.js");
 const NewServicePO = require("../../controllers/Services/servicePo.js");
 const setAuditFields = require("../../middleware/setAuditFields.js");
 
@@ -15,6 +16,10 @@ router
 router
     .post('/master', ServiceMaster.createServiceMaster)
     .get('/master', ServiceMaster.getAllServiceMasters)
-    .get('/dpn', ServiceMaster.getAllServiceMastersDropDown)
+    .get('/master/drpdn', ServiceMaster.getAllServiceMasters)
+
+router
+    .post('/type/create',ServiceType.createServiceType )
+    .get('/type/drpdown',ServiceType.getAllServiceTypes )
 
 module.exports = router;

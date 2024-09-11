@@ -20,13 +20,8 @@ router
 router
     .get('/terminals', terminalOperationController.getTerminalOperationData)
     .put('/terminal/update', terminalOperationController.updateTerminalDatabyCiID)
-
-
-    
 router
     .post('/expenses',upload.single('sadFile'), setAuditFields, shippingExpensesController.create)
     .get('/expenses', shippingExpensesController.getShippingById)
 
-
 module.exports = router;
-

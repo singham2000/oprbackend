@@ -7,7 +7,8 @@ const {
     sequelize,
     Pfi_line_items,
     item, db, insurance,
-    form_m, letter_of_credit, son_pfi
+    form_m, letter_of_credit, son_pfi,
+    ShippingMaster
 } = require("../models");
 
 const formattedDateTime = require("../middleware/time");
