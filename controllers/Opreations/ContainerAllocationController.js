@@ -1,5 +1,5 @@
 const db = require("../../models");
-const { container_allocation, document } = db;
+const { container_allocation, document, sequelize } = db;
 const { Op } = require("sequelize");
 
 // Create a new container_allocation
@@ -105,6 +105,10 @@ const getContainerAllocationAddBill = async (req, res, next) => {
         "bill_vat",
         "bill_deduction",
         "bill_narration",
+        [
+          sequelize.literal("dbo.fn_transportPaymentType(bill_payment_type)"),
+          "payment_type",
+        ],
       ],
     });
     return res.status(200).json(result);
@@ -123,6 +127,27 @@ const getContainerAllocation = async (req, res, next) => {
           status: { [Op.ne]: 0 },
         },
         order: [["container_allocation_id", "DESC"]],
+        attributes: [
+          "transporter",
+          "container_count",
+          "container_types",
+          "tdo_given_date",
+          "rate",
+          "delivery_location",
+          "payment_terms",
+          "container_allocation_id",
+          "pfi_id",
+          "ci_id",
+          "bill_narration",
+          [
+            sequelize.literal("dbo.fn_containerType(container_types)"),
+            "type_of_container",
+          ],
+          [
+            sequelize.literal("dbo.fn_containerPaymentTerm(payment_terms)"),
+            "payment_term",
+          ],
+        ],
       });
       return res.status(200).json(result);
     } else {
@@ -194,7 +219,7 @@ const updateContainerAllocation = async (req, res, next) => {
             await DocumentContainerAllocation.update({
               doc_name: `${file.fieldname}-${file.originalname}`,
               doc_base64: base64,
-              status: 1
+              status: 1,
             });
           })
         );
