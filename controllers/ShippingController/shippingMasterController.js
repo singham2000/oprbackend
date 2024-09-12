@@ -17,10 +17,8 @@ const {
 exports.addshippingEntry =  async (req,res)=>{
   try{
     const { pfi_id, ...fields } = req.body;
-    console.log("obl fdafd*******")
-    console.log(req.body);
-    //chek is pfi_exist or not
 
+    //chek is pfi_exist or not
       // Check if the pfi_id already exists
       const existingRecord = await ShippingMaster.findOne({
         where: { pfi_id }
@@ -67,6 +65,32 @@ exports.addOBLshippingEntry =  async (req,res)=>{
   }
 }
 
+
+
+// Add Eta in shhipin recorad againg ci_ic
+exports.addETAinShippingMaster = async (req, res) => {
+  {
+    try{
+       const { pfi_id, eta, updated_by } = req.body;  
+        const existingRecord = await ShippingMaster.findOne({
+          where: { pfi_id }
+        });
+  
+        if (existingRecord) {
+          await ShippingMaster.update({eta, updated_by},{
+            where:{pfi_id}
+          });
+        }else{
+          await ShippingMaster.create({pfi_id,eta, updated_by});
+        }
+        res.status(201).json({status:'Sucess',message:"Shipping Entry added Successfully inShipping Master"});
+    }catch(err){
+      console.log("Error in shipping Entry add eta")
+      console.log("Error:", err )
+    }
+  }
+
+};
 
 // Create a new shipping info record
 exports.createShippingMaster = async (req, res) => {
@@ -123,26 +147,7 @@ exports.addcomplianceinShippingMaster = async (req, res) => {
   }
 };
 
-// Add Eta in shhipin recorad againg ci_ic
-exports.addETAinShippingMaster = async (req, res) => {
-  console.log(req.body);
-  try {
-    const { ci_id, eta, updated_by } = req.body;
-    await ShippingMaster.update(
-      {
-        eta,
-        updated_by,
-      },
-      {
-        where: { ci_id },
-      }
-    );
 
-    res.status(200).json({ msg: "ETA added successfully" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
 
 // Update terminal view (discharge and transfer terminal) in the shipping record against ci_id
 exports.updateShippingDetailsByCiId = async (req, res) => {
