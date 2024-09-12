@@ -9,9 +9,9 @@ const setAuditFields = require('../middleware/setAuditFields.js');
 router.post('/create',upload.any(),setAuditFields, documentController.createDocument);
 router.get('/', documentController.getAllDocuments);
 router.get('/bydoc_id', documentController.getDocumentById);
+router.get('/docbyentityid', documentController.getpoDocumentById);
 // router.get('/:id', documentController.getDocumentById);
 // router.put('/:id', documentController.updateDocument);
 // router.delete('/:id', documentController.deleteDocument);
 
 module.exports = router;
- 

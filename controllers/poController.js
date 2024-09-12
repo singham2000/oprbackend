@@ -1,6 +1,6 @@
 // const { po_master } = ('../models');
 const db = require("../models");
-const { sequelize, Document } = db
+const { sequelize, document:Document } = db
 const { po_master, quotation_master, po_items } = db;
 const formattedDateTime = require("../middleware/time");
 const { Op } = require("sequelize");
@@ -112,7 +112,7 @@ const generatePo = async (req, res, next) => {
       created_on: formattedDateTime,
     });
 
-    //update quotation mar po status 1
+    //update quotation po status 1
     await quotation_master.update(
       {
         po_status: 1,
@@ -222,8 +222,8 @@ const confimPoFinalPaymentsbyVendor = async (req, res, next) => {
 };
 
 const completePo = async (req, res, next) => {
-
   const { po_id, pocompletion_docslist, created_by } = req.body
+
   try {
     //change po_master Status
     const result = await po_master.update(
@@ -238,15 +238,12 @@ const completePo = async (req, res, next) => {
     );
 
     //transform quotation docs
-    await pocompletion_docslist.forEach((data, i) => {
-      data.entity_id = po_id;
-      data.entity_name = 'PO';
-      data.document_name = req.files[i].name;
-      data.document_description = req.files[i].remark;
-      data.document_file_name = req.files[i].originalname;
-      data.document_string = req.files[i].buffer.toString("base64");
+    await pocompletion_docslist.map((data, i) => {
+      data.linked_id = po_id;
+      data.table_name = 'PO';
+      data.doc_name = req.files[i].originalname;
+      data.doc_base64 = req.files[i].buffer.toString("base64");
       data.uploaded_by = created_by;
-      i++;
     });
 
     // insert quotation documents

@@ -1,5 +1,5 @@
 const { document } = require('../models'); // Adjust the path according to your file structure
-
+const {Op} = require('sequelize')
 // Create a new document
 exports.createDocument = async (req, res, next) => {
   try {
@@ -61,6 +61,30 @@ exports.getDocumentById = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
+// Get a document by ID
+exports.getpoDocumentById = async (req, res) => {
+  try {
+    let {entity_id}= req.query;
+    const doc = await document.findAll({
+      where: {
+        [Op.and]: [
+          { linked_id: entity_id },
+          { table_name: 'PO' }
+        ]
+      }
+    });
+    if (doc) {
+      res.status(200).json(doc);
+    } else {
+      res.status(404).json({ message: 'Document not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 
 
 

@@ -31,8 +31,11 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: true // Assuming you are not using Sequelize's automatic createdAt and updatedAt fields
     })
 
-    return ItemGroupMaster;
+    ItemGroupMaster.associate = (models) => {
+        ItemGroupMaster.hasMany(models.ItemsMaster, { foreignKey: 'group_name', targetKey:'item_group_id' });
+    };
 
+    return ItemGroupMaster;
 }
 
 

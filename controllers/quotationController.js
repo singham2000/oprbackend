@@ -137,6 +137,7 @@ const createQuotation = async (req, res, next) => {
       reference_no,
       reference_date,
       quo_date,
+      quote_qty:quote_qtd,
       currency,
       delivery_terms,
       country_origin,
