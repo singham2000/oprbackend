@@ -5,10 +5,13 @@ const { Op } = require("sequelize");
 // Create a new govt_charges
 const createGovtCharges = async (req, res, next) => {
   try {
+
+    console.log("Govt charge added log****************")
     console.log(req.body);
     console.log("file: ", req.files);
 
     const {
+      pfi_id,
       payment_types,
       add_expense,
       paid_to_others,
@@ -22,6 +25,7 @@ const createGovtCharges = async (req, res, next) => {
     } = req.body;
 
     const result = await govt_charges.create({
+      pfi_id,
       payment_types,
       add_expense,
       paid_to_others,
@@ -63,10 +67,7 @@ const createGovtCharges = async (req, res, next) => {
 
 const createOtherCharges = async (req, res, next) => {
   try {
-    console.log(req.body);
-
-    const { invoice_num, other_amount, other_narration } = req.body;
-
+    const { pfi_id , other_amount, other_narration } = req.body;
     const result = await govt_charges.update(
       {
         other_amount,
@@ -74,9 +75,7 @@ const createOtherCharges = async (req, res, next) => {
         govt_status: 1,
       },
       {
-        where: {
-          invoice_num: invoice_num,
-        },
+        where: {pfi_id}
       }
     );
 

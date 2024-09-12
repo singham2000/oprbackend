@@ -71,10 +71,9 @@ const PaarRoutes = require("./routes/Pfi/PaarRoutes");
 
 //Get Data CI against PFI, FormM,
 const CommercialInvoiceAllData = require("./routes/Pfi/AssociationRoutes");
-
 //Opreations
 const AssessmentRoutes = require("./routes/Opreations/AssessmentRoutes");
-const OperationsNafdacRoutes = require("./routes/Opreations/NafdacRoutes");
+// const OperationsNafdacRoutes = require("./routes/Opreations/NafdacRoutes");
 const OperationsNafdacMasterRoutes = require("./routes/Opreations/NafdacMasterRoutes");
 const OperationsSonRoutes = require("./routes/Opreations/SonRoutes");
 const TransportOperationLapseRoutes = require("./routes/Opreations/TransportOperationLapseRoutes");
@@ -94,7 +93,7 @@ const paymentRequestTransactionsMasterRoutes = require("./routes/PaymentRequestT
 const paymentTermsRouter = require("./routes/paymentTermsRoutes");
 const payment = require("./routes/paymentRoutes.js");
 //documents
-const documentsRoutes = require("./routes/documentsRoutes.js");
+const documentRoutes = require('./routes/documentRoutes.js')
 
 //services
 const serviceRoutes = require("./routes/ServiceOpr/OPRserviceRoutes.js");
@@ -113,7 +112,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 //document Master
 
 
-app.use('/api/doc', documentsRoutes)
+app.use('/api/document', documentRoutes)
 
 
 // Routes
@@ -171,8 +170,8 @@ createMultipleUDFs();
 
 //Operations
 app.use("/api/operation/assessment", AssessmentRoutes);
-app.use("/api/operation/nafdac", OperationsNafdacRoutes);
-app.use("/api/operation/nafdac/master", OperationsNafdacMasterRoutes);
+// app.use("/api/operation/nafdac", OperationsNafdacRoutes);
+app.use("/api/operation/nafdac", OperationsNafdacMasterRoutes);
 app.use("/api/operation/son", OperationsSonRoutes);
 app.use(
   "/api/operation/transport/operation/lapse",
@@ -202,11 +201,11 @@ app.use("/api/penaltyterms", penaltyTermsRoutes);
 app.use("/api/payment-types", paymentTypeMasterRoutes);
 app.use("/api/paymentrequests", paymentRequestMasterRoutes);
 app.use("/api/payment-transactions", paymentRequestTransactionsMasterRoutes);
+
 //this is new
 app.use("/api/payment", payment);
 
 // app.use('/api/payment',)
-
 //addresss new
 app.use("/api/address", addressRoutes);
 app.use("/api/bh", buyingHouseRoutes);

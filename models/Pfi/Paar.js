@@ -90,5 +90,15 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
+
+  paar.associate = (models) => {
+    paar.belongsTo(models.Pfi_master, {
+      foreignKey: "pfi_id",
+    });
+  }
+  
+
+
+
   return paar;
 };

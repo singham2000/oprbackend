@@ -76,6 +76,7 @@ module.exports = (sequelize, DataTypes) => {
         });
         company.hasMany(models.OprMaster, { foreignKey: 'company_id' });
         company.hasMany(models.OprItems, { foreignKey: 'company_id' });
+        company.hasMany(models.Pfi_master, { foreignKey: 'company_id' });
     };
     return company
 }

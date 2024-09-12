@@ -1,4 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
+
   const operations_nafdac_master = sequelize.define(
     "operations_nafdac_master",
     {
@@ -8,10 +9,16 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      operations_nafdac_id: {
+      pfi_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
+
+      nafdac_applied_date: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
+
       payment_type: {
         type: DataTypes.STRING(150),
         allowNull: true,
@@ -86,5 +93,14 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
+  
+  operations_nafdac_master.associate = (models) => {
+    operations_nafdac_master.belongsTo(models.Pfi_master, {
+      foreignKey: "pfi_id",
+    });
+  }
+
+
   return operations_nafdac_master;
+
 };

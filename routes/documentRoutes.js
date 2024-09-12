@@ -5,8 +5,6 @@ const upload = require('../utilites/handlefile.js');
 const setAuditFields = require('../middleware/setAuditFields.js');
 
 
-
-
 // Routes for document CRUD operations
 router.post('/create',upload.any(),setAuditFields, documentController.createDocument);
 router.get('/', documentController.getAllDocuments);

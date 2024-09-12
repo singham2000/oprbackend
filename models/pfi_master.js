@@ -258,9 +258,8 @@ module.exports = (sequelize, DataTypes) => {
     }); 
 
     pfi_master.associate = (models) => {
-        // Define the one-to-many relationship with insurance
         pfi_master.hasMany(models.insurance, {
-            foreignKey: 'pfi_id',  // Ensure this matches the foreign key in insuranc
+            foreignKey: 'pfi_id',
         });
         pfi_master.hasMany(models.form_m, {
             foreignKey: 'pfi_id',  // Ensure this matches the foreign key in insuranc
@@ -277,6 +276,12 @@ module.exports = (sequelize, DataTypes) => {
         pfi_master.hasMany(models.assessment, {
             foreignKey: 'pfi_id',  // Ensure this matches the foreign key in insuranc
         });
+        pfi_master.belongsTo(models.CompanyMaster, { foreignKey: 'company_id' });
+        pfi_master.hasOne(models.operations_nafdac, { foreignKey: 'pfi_id' });
+        pfi_master.hasOne(models.paar, { foreignKey: 'pfi_id' });
+        pfi_master.hasOne(models.operations_nafdac_master, { foreignKey: 'pfi_id' });
+        pfi_master.hasOne(models.govt_charges, { foreignKey: 'pfi_id' });
     };
+
     return pfi_master;
 };

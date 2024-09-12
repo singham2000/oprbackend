@@ -12,8 +12,10 @@ const upload = require('../../utilites/handlefile.js');
 router
     .get('/list', shippingController.getAllShippingMasters)
     .get('/listbyciid', shippingController.getShippingMasterByCiId)
-    .post('/create', setAuditFields, shippingController.createShippingMaster)
-    .put('/addcompliance', setAuditFields, shippingController.addcomplianceinShippingMaster)
+    .put('/create', setAuditFields, shippingController.addshippingEntry)
+    // .put('/create', setAuditFields, shippingController.createShippingMaster)
+    .put('/addcompliance', setAuditFields, shippingController.addOBLshippingEntry)
+    // .put('/addcompliance', setAuditFields, shippingController.addcomplianceinShippingMaster)
     .put('/addeta', setAuditFields, shippingController.addETAinShippingMaster)
     .put('/updateterminal', setAuditFields, shippingController.updateShippingDetailsByCiId)
 

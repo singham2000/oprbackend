@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 const {
    ShippingMaster, 
    Pfi_master, 
@@ -8,38 +9,84 @@ const {
    son_pfi
   } = require("../../models"); // Adjust the path as necessary
 
+
+
+
+
+//add shipping entry
+exports.addshippingEntry =  async (req,res)=>{
+  try{
+    const { pfi_id, ...fields } = req.body;
+    console.log("obl fdafd*******")
+    console.log(req.body);
+    //chek is pfi_exist or not
+
+      // Check if the pfi_id already exists
+      const existingRecord = await ShippingMaster.findOne({
+        where: { pfi_id }
+      });
+
+      if (existingRecord) {
+        await ShippingMaster.update(req.body,{
+          where:{pfi_id}
+        });
+      }else{
+        await ShippingMaster.create(req.body);
+      }
+      res.status(201).json({status:'Sucess',message:"Shipping Entry added Successfully inShipping Master"});
+  }catch(err){
+    console.log("Erro in shipping Entry")
+    console.log("Error:", err )
+  }
+}
+
+
+exports.addOBLshippingEntry =  async (req,res)=>{
+  try{
+    const { pfi_id, ...fields } = req.body;
+    console.log("obl Entry*******")
+    console.log(req.body);
+    //chek is pfi_exist or not
+
+      // Check if the pfi_id already exists
+      const existingRecord = await ShippingMaster.findOne({
+        where: { pfi_id }
+      });
+
+      if (existingRecord) {
+        await ShippingMaster.update(req.body,{
+          where:{pfi_id}
+        });
+      }else{
+        await ShippingMaster.create(req.body);
+      }
+      res.status(201).json({status:'Sucess',message:"OBL added Successfully in Shipping Master"});
+  }catch(err){
+    console.log("Erro in shipping Entry")
+    console.log("Error:", err )
+  }
+}
+
+
 // Create a new shipping info record
 exports.createShippingMaster = async (req, res) => {
   try {
-    const {
-      ci_id,
-      shipping_doc_receipt_date_ho,
-      received_from_bank_date_ho,
-      obl_sent_apapa_date,
-      obl_received_date,
-      created_by,
-    } = req.body;
-    await ShippingMaster.create({
-      ci_id,
-      shipping_doc_receipt_date_ho,
-      received_from_bank_date_ho,
-      obl_sent_apapa_date,
-      obl_received_date,
-      created_by,
-    });
-
+    console.log("Gnerate Shipping Entry")
+    console.log(req.body);
+    await ShippingMaster.create(req.body);
     res.status(201).json({ msg: "OBL Receipt APAPA Updated Successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
+
+
 // Create a new shipping info record
 exports.addcomplianceinShippingMaster = async (req, res) => {
   try {
     const {
       ci_id,
-      nafdac,
       son,
       idec,
       cria,
@@ -48,6 +95,12 @@ exports.addcomplianceinShippingMaster = async (req, res) => {
       agent,
       updated_by,
     } = req.body;
+
+    console.log("Create Add compplaince-------------")
+    console.log(req.body)
+
+
+
     await ShippingMaster.update(
       {
         nafdac,
@@ -225,14 +278,14 @@ exports.updateShippingMaster = async (req, res) => {
     const {
       shipping_doc_receipt_date_ho,
       received_from_bank_date_ho,
-      obl_sent_apapa_date,
+      obl_sent_port_date,
       obl_received_date,
     } = req.body;
     const [updated] = await ShippingMaster.update(
       {
         shipping_doc_receipt_date_ho,
         received_from_bank_date_ho,
-        obl_sent_apapa_date,
+        obl_sent_port_date,
         obl_received_date,
       },
       {

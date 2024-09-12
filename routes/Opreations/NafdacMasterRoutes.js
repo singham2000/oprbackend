@@ -7,12 +7,16 @@ const { uploadMulti } = require("../../middleware/fileHandler.js");
 // API routes
 router
   .get("/", OperationsNafdacMasterController.getOperationsNafdacMasters)
-  .post(
-    "/",
+
+  .post("/date", OperationsNafdacMasterController.addappliedDate)
+
+  .put(
+    "/documents",
     setAuditFields,
     uploadMulti.any(),
     OperationsNafdacMasterController.createOperationsNafdacMaster
   )
+  
   .post(
     "/lapse",
     setAuditFields,
@@ -24,6 +28,7 @@ router
     setAuditFields,
     OperationsNafdacMasterController.updateOperationsNafdacMaster
   )
+
   .delete("/", OperationsNafdacMasterController.deleteOperationsNafdacMaster);
 
 module.exports = router;
