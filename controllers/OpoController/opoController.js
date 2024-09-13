@@ -38,7 +38,12 @@ exports.deleteOpo = async (req, res, next) => {
 
 // Controller method to Create OPO with status 1
 exports.genrateOpo = async (req, res, next) => {
+
+  console.log("Generate po ");
+  console.log(req.body);
   let { quo_id, quo_num, vendor_id, itemList } = req.body;
+
+
 
   try {
     const doc_code = 'OPO';

@@ -1,6 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const ItemGroupMaster = require('./item_group_master.js')(sequelize, DataTypes)
-  return sequelize.define('item_sub_group_master', {
+  const ItemSubGroupMaster=sequelize.define('item_sub_group_master', {
     item_sub_group_id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -9,10 +8,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     item_parent_group_id: {
       type: DataTypes.INTEGER,
-      references: {
-        model: ItemGroupMaster,
-        key: 'item_group_id'
-      },
       allowNull: true
     },
     item_sub_group_name: {
@@ -37,10 +32,13 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     tableName: 'item_sub_group_master',
-    timestamps: true // Assuming you are not using Sequelize's automatic createdAt and updatedAt fields
+    timestamps: true 
   });
 
-  // Set up association
-  ItemSubGroupMaster.belongsTo(ItemGroupMaster, { foreignKey: 'item_parent_group_id' });
+  ItemSubGroupMaster.associate = (models) => {
+      ItemSubGroupMaster.hasMany(models.ItemsMaster, { foreignKey: 'group_name', targetKey:'item_group_id' });
+  };
+
+return ItemSubGroupMaster;
 }
 

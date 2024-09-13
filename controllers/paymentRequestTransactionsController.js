@@ -1,4 +1,4 @@
-const { PaymentRequestTransactionsMaster, PaymentRequestMaster, po_master, Pfi_master, sequelize } = require('../models'); // Adjust the path to your models file
+    const { PaymentRequestTransactionsMaster, PaymentRequestMaster, po_master, Pfi_master, sequelize } = require('../models'); // Adjust the path to your models file
 
 //this funcation will insert data in transaction table and same time i will also insert data in pfi master without pfi number(series)
 exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {

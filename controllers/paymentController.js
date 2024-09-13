@@ -643,7 +643,6 @@ exports.PaymentRequestListForTreasury = async (req, res, next) => {
 
 const updateDocumentStatus = async (doc_type, doc_id, res, payment_request_id, req) => {
     try {
-
         console.log(doc_type, doc_id, res, payment_request_id, req)
         switch (doc_type) {
             case 'po':
@@ -668,11 +667,14 @@ const updateDocumentStatus = async (doc_type, doc_id, res, payment_request_id, r
                             AND opr_items.item_id = po_items.item_id
                             WHERE po_items.po_id = ${po_id}
                         `;
+    console.log(query);
                 // Execute the query with replacements
                 let itemsforPfi = await sequelize.query(query, {
                     replacements: { po_id: po_id },
                     type: sequelize.QueryTypes.SELECT
                 });
+
+
 
                 // genrate pfi
                 let pfi_data = {
@@ -739,7 +741,6 @@ const updateDocumentStatus = async (doc_type, doc_id, res, payment_request_id, r
 
 exports.createPaymentTransactions = async (req, res, next) => {
     try {
-
         const { payment_request_id, doc_type, doc_id } = req.body;
         updateDocumentStatus(doc_type, doc_id, res, payment_request_id, req);
         //update request status 

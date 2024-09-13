@@ -88,11 +88,17 @@ const createQuotationItem = async (req, res, next) => {
             item_description,
             opr_qty,
             opo_qtd,
-            quote_qtd,
+            quote_qty:quote_qtd,
             rate,
             remarks,
             created_by
         } = req.body;
+
+        console.log("create qote item");
+
+        console.log(req.body);
+
+
         const result = await quotation_items.create({
             quo_id,
             item_type,

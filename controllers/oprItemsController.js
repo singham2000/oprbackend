@@ -471,7 +471,8 @@ const getOprItemsforQuoteCompare = async (req, res, next) => {
             quotation_items.vendor_id as vendor_id,
             vendors_master.vendor_name,
             address_master.city,
-            quotation_items.quo_id
+            quotation_items.quo_id,
+            quotation_items.rfq_id
             from opr_items
             inner join quotation_items
             on quotation_items.rfq_id =opr_items.rfq_id
