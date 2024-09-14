@@ -61,7 +61,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       sum_insured_naira: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING(155),
         allowNull: true,
       },
       premium_amount_naira: {
@@ -110,8 +110,6 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
-
-
   insurance.associate = (models) => {
     insurance.hasMany(models.document, {
       foreignKey: 'linked_id',

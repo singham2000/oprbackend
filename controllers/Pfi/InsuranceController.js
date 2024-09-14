@@ -5,8 +5,9 @@ const { Op } = require("sequelize");
 // Create a new Insurance
 const createInsuranceTerm = async (req, res, next) => {
   try {
-    // console.log(req.body);
-    // console.log("file: ", req.files);
+    console.log("*********************")
+    console.log(req.body);
+    console.log("file: ", req.files);
 
     const {
       pfiId,

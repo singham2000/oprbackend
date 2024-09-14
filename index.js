@@ -80,6 +80,8 @@ const TransportOperationLapseRoutes = require("./routes/Opreations/TransportOper
 const ContainerAllocationRoutes = require("./routes/Opreations/ContainerAllocationRoutes");
 const GovtChargesRoutes = require("./routes/Opreations/GovtChargesRoutes");
 const ShippingLapseRoutes = require("./routes/Opreations/ShippingLapseRoutes");
+const AddServiceContainer = require("./routes/Opreations/AddShippingContainerRoutes.js");
+
 
 //shipping
 const ShippingMasterRoutes = require("./routes/Shipping/shippingMasterRoutes.js");
@@ -180,6 +182,7 @@ app.use(
 app.use("/api/operation/container/allocation", ContainerAllocationRoutes);
 app.use("/api/operation/govt/charges", GovtChargesRoutes);
 app.use("/api/operation/shipping/lapse", ShippingLapseRoutes);
+app.use("/api/service/container", AddServiceContainer);
 
 //shipping
 app.use("/api/shipping", ShippingMasterRoutes);

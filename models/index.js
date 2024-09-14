@@ -220,6 +220,8 @@ db.container_allocation = require("./Opreations/ContainerAllocation.js")(
 );
 db.govt_charges = require("./Opreations/GovtCharges")(sequelize, DataTypes);
 db.shipping_lapse = require("./Opreations/ShippingLapse")(sequelize, DataTypes);
+db.add_shippment_container = require("./Opreations/AddShippingContainer.js")(sequelize, DataTypes);
+db.shippment_container_detail = require("./Opreations/ShippingContainerDetails.js")(sequelize, DataTypes);
 
 
 
