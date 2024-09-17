@@ -1,12 +1,20 @@
 // Controller responsible for comparision approving and rejecting quotations *Rakesh*.
 // const { quotation_master } = ('../models');
-const db = require('../models');
-const { quotation_master, po_master, quotation_items, QuoDoc, delivery_terms_quo, payment_terms_quo, lead_time_quo } = db;
+const db = require("../models");
+const {
+  quotation_master,
+  po_master,
+  quotation_items,
+  QuoDoc,
+  delivery_terms_quo,
+  payment_terms_quo,
+  lead_time_quo,
+  additional_cost
+} = db;
 const formattedDateTime = require("../middleware/time");
-const { Op, where } = require('sequelize');
+const { Op, where } = require("sequelize");
 const { generateSeries } = require("./seriesGenerate");
-const { sequelize, po_items } = require('../models/index')
-
+const { sequelize, po_items } = require("../models/index");
 
 const getQuotation = async (req, res, next) => {
   const quo_id = req.query.quo_id;
@@ -28,13 +36,13 @@ const getQuotation = async (req, res, next) => {
                       INNER JOIN vendors_master
                       ON vendors_master.vendor_id= quotations_master.vendor_id 
                       where quo_id = ${quo_id}
-                      `
-      const result = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
-      result.forEach(item => item.uom = 'KG')
+                      `;
+      const result = await sequelize.query(query, {
+        type: sequelize.QueryTypes.SELECT,
+      });
+      result.forEach((item) => (item.uom = "KG"));
       res.status(200).json(result);
-
-    }
-    else {
+    } else {
       const query = `SELECT * ,[dbo].[fn_additionalCost]([quo_id]) As additionalCost,
                       [dbo].[fn_vendorName]([vendor_id]) As vendorName,
                       [dbo].[fn_rfqNum]([rfq_id]) as rfq_num
@@ -45,19 +53,19 @@ const getQuotation = async (req, res, next) => {
                       ON quotations_master.delivery_terms = delivery_terms_quo.delivery_terms_id 
                       INNER JOIN lead_time_quo
                       ON quotations_master.lead_time = lead_time_quo.lead_time_id`;
-      const result = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
+      const result = await sequelize.query(query, {
+        type: sequelize.QueryTypes.SELECT,
+      });
       res.status(200).json(result);
     }
   } catch (error) {
-    next(error)
+    next(error);
   }
-
 };
 
 // quotation by rfq it with items
 const getQuotationbyrfqId = async (req, res, next) => {
   try {
-
     const rfq_id = req.query.rfq_id;
     if (rfq_id) {
       const query = `SELECT * 
@@ -68,7 +76,9 @@ const getQuotationbyrfqId = async (req, res, next) => {
                       ON quotations_master.delivery_terms = delivery_terms_quo.delivery_terms_id 
                       INNER JOIN lead_time_quo
                       ON quotations_master.lead_time = lead_time_quo.lead_time_id where rfq_id = ${rfq_id};`;
-      const result = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
+      const result = await sequelize.query(query, {
+        type: sequelize.QueryTypes.SELECT,
+      });
 
       // result.forEach(item => item.items = {
       //   await quotation_items.findall({
@@ -78,13 +88,11 @@ const getQuotationbyrfqId = async (req, res, next) => {
 
       for (const item of result) {
         item.items = await quotation_items.findAll({
-          where: { quo_id: item.quo_id }
+          where: { quo_id: item.quo_id },
         });
       }
       res.status(200).json(result);
-    }
-
-    else {
+    } else {
       const query = `SELECT * 
                       FROM quotations_master
                       INNER JOIN payment_terms_master
@@ -94,42 +102,48 @@ const getQuotationbyrfqId = async (req, res, next) => {
                       INNER JOIN lead_time_quo
                       ON quotations_master.lead_time = lead_time_quo.lead_time_id`;
 
-      const result = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
+      const result = await sequelize.query(query, {
+        type: sequelize.QueryTypes.SELECT,
+      });
 
       for (const item of result) {
         item.items = await quotation_items.findAll({
-          where: { quo_id: item.quo_id }
+          where: { quo_id: item.quo_id },
         });
       }
 
       res.status(200).json(result);
     }
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
 // Controller method to delete by id
 const deleteQuotationById = async (req, res, next) => {
   const quo_id = req.query.quo_id;
   try {
-    const result = await quotation_master.update({ status: 0 }, {
-      where: {
-        quo_id: quo_id
+    const result = await quotation_master.update(
+      { status: 0 },
+      {
+        where: {
+          quo_id: quo_id,
+        },
       }
-    });
-    res.status(200).json({ message: 'Deleted successfully' });
+    );
+    res.status(200).json({ message: "Deleted successfully" });
   } catch (err) {
-    next(err)
+    next(err);
   }
 };
 
 // Controller method to Create
 const createQuotation = async (req, res, next) => {
-  const { quotation_details, quotation_docslist, created_by } = req.body
+  console.log(req.body);
+  const { quotation_details, quotation_docslist, created_by } = req.body;
 
   try {
-    const doc_code = 'QUO';
+    const doc_code = "QUO";
     const quotation_series = await generateSeries(doc_code);
     const {
       rfq_id,
@@ -137,7 +151,7 @@ const createQuotation = async (req, res, next) => {
       reference_no,
       reference_date,
       quo_date,
-      quote_qty:quote_qtd,
+      quote_qty: quote_qtd,
       currency,
       delivery_terms,
       country_origin,
@@ -147,7 +161,17 @@ const createQuotation = async (req, res, next) => {
       payment_terms,
       remarks,
       total_cost,
-      ItemData
+      invalid_charges,
+      freight_charges,
+      inspection_charges,
+      thc,
+      container_stuffing,
+      container_seal,
+      bl,
+      vgm,
+      miscellaneous,
+      additional_charges,
+      ItemData,
     } = quotation_details;
 
     //generate quotation
@@ -172,10 +196,32 @@ const createQuotation = async (req, res, next) => {
       created_on: formattedDateTime,
     });
 
-
     //transform quotation items
     const lastInsertedId = newQuotationMaster.quo_id;
-    const updatedItemdata = ItemData.map(item => ({ ...item, quo_id: lastInsertedId, status: 1, rfq_id, vendor_id }))
+
+    const result = await additional_cost.create({
+      quo_id: lastInsertedId,
+      quo_num: quotation_series,
+      inland_charges: invalid_charges,
+      freight_charges,
+      inspection_charges,
+      thc,
+      container_stuffing,
+      container_seal,
+      bl,
+      vgm,
+      miscellaneous,
+      additional_cost: additional_charges,
+      status: 1,
+  });
+
+    const updatedItemdata = ItemData.map((item) => ({
+      ...item,
+      quo_id: lastInsertedId,
+      status: 1,
+      rfq_id,
+      vendor_id,
+    }));
     //insert quotation item
     await quotation_items.bulkCreate(updatedItemdata);
 
@@ -190,13 +236,11 @@ const createQuotation = async (req, res, next) => {
     // insert quotation documents
     await QuoDoc.bulkCreate(quotation_docslist);
     res.status(200).json({ message: "quotation genrated Suceesfully" });
-
   } catch (err) {
-    console.log(err)
+    console.log(err);
     next(err);
   }
-}
-
+};
 
 const updateQuotationById = async (req, res, next) => {
   const quo_id = req.query.quo_id;
@@ -216,36 +260,38 @@ const updateQuotationById = async (req, res, next) => {
       payment_terms,
       remarks,
       total_cost,
-      updated_by
-    } = req.body;
-    const result = await quotation_master.update({
-      rfq_id,
-      vendor_id,
-      reference_no,
-      reference_date,
-      quo_date,
-      currency,
-      delivery_terms,
-      country_origin,
-      country_supply,
-      port_loading,
-      lead_time,
-      payment_terms,
-      remarks,
-      total_cost,
       updated_by,
-      updated_on: formattedDateTime
-    }, {
-      where: {
-        quo_id: quo_id
+    } = req.body;
+    const result = await quotation_master.update(
+      {
+        rfq_id,
+        vendor_id,
+        reference_no,
+        reference_date,
+        quo_date,
+        currency,
+        delivery_terms,
+        country_origin,
+        country_supply,
+        port_loading,
+        lead_time,
+        payment_terms,
+        remarks,
+        total_cost,
+        updated_by,
+        updated_on: formattedDateTime,
+      },
+      {
+        where: {
+          quo_id: quo_id,
+        },
       }
-    });
+    );
     res.status(201).json({ message: "Updated Successfully" });
   } catch (err) {
-    next(err)
+    next(err);
   }
 };
-
 
 //this function will genrate po with status 2 after finalize quotation
 // const generatePo = async (req, res, next) => {
@@ -264,7 +310,6 @@ const updateQuotationById = async (req, res, next) => {
 //       created_by,
 //       created_on: formattedDateTime,
 //     });
-
 
 //     const result2 = await quotation_master.update(
 //       {
@@ -286,23 +331,19 @@ const updateQuotationById = async (req, res, next) => {
 //     //   quo_id,
 //     // })
 
-
-
 //     res.status(201).json({ message: "Submit Successfully" });
 //   } catch (err) {
 //     next(err);
 //   }
 // };
 
-
 quotationController = {
   getQuotation,
   deleteQuotationById,
   createQuotation,
   updateQuotationById,
-  getQuotationbyrfqId
+  getQuotationbyrfqId,
   // generatePo
 };
 
-
-module.exports = quotationController
+module.exports = quotationController;
