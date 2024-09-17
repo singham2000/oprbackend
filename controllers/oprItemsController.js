@@ -60,17 +60,17 @@ const getOprItem = async (req, res, next) => {
     }
 };
 
-
-
-
-
-
 //this function will send only those data which status is 2
-
 const getOprItemForRfq = async (req, res, next) => {
     try {
+        let {opr_id_list}= req.query
         let Opr_Items = await OprItems.findAll({
-            where: { status: 2 },
+            where: {
+                [Op.and]: [
+                    { status: 2 },
+                    { opr_id: { [Op.in]: opr_id_list } }
+                ]
+            },
             include: [
                 { model: db.CompanyMaster, attributes: ['company_name'] },
                 { model: db.OprMaster, attributes: ['opr_num'] },

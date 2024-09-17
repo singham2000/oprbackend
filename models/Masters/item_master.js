@@ -1,4 +1,4 @@
-const opr_items = require("./Opr/opr_items");
+const opr_items = require("../Opr/opr_items");
 
 module.exports = (sequelize, DataTypes) => {
     const ItemsMaster = sequelize.define('ItemsMaster', {

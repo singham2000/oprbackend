@@ -19,15 +19,15 @@ let db = {};
 
 //OTHER
 db.sequelize = sequelize;
-db.menu = require("./menu_master.js")(sequelize, DataTypes);
+db.menu = require("./Masters/menu_master.js")(sequelize, DataTypes);
 db.purchaseLocation = require("./purchase_location_master.js")(
     sequelize,
     DataTypes
 );
-db.role = require("./role_master.js")(sequelize, DataTypes);
+db.role = require("./Masters/role_master.js")(sequelize, DataTypes);
 db.user = require("./user_master.js")(sequelize, DataTypes);
-db.ShipMode = require("./ship_mode_master.js")(sequelize, DataTypes);
-db.series_master = require("./series_master.js")(sequelize, DataTypes);
+db.ShipMode = require("./Masters/ship_mode_master.js")(sequelize, DataTypes);
+db.series_master = require("./Masters/series_master.js")(sequelize, DataTypes);
 db.desigMaster = require("./designation_master.js")(sequelize, DataTypes);
 db.CurrencyConversion = require("./CurrencyConversion.js")(
     sequelize,
@@ -64,7 +64,7 @@ db.GrnMaster = require("./BuyingHouse/grn_master.js")(sequelize, DataTypes);
 db.DeptDesigMapping = require("./dept_desig_mapping.js")(sequelize, DataTypes);
 db.branch = require("./branch_master.js")(sequelize, DataTypes);
 db.Division = require("./division.js")(sequelize, DataTypes);
-db.Vertical = require("./vertical_master.js")(sequelize, DataTypes);
+db.Vertical = require("./Masters/vertical_master.js")(sequelize, DataTypes);
 
 //OPR
 db.OprMaster = require("./Opr/opr_master.js")(sequelize, DataTypes);
@@ -77,8 +77,8 @@ db.SubCategoryMaster = require("./item_subCategory_master.js")(
     sequelize,
     DataTypes
 );
-db.ItemsMaster = require("./item_master.js")(sequelize, DataTypes);
-db.UomMaster = require("./uom_master.js")(sequelize, DataTypes);
+db.ItemsMaster = require("./Masters/item_master.js")(sequelize, DataTypes);
+db.UomMaster = require("./Masters/uom_master.js")(sequelize, DataTypes);
 db.ItemGroupMaster = require("./item_group_master.js")(sequelize, DataTypes);
 db.ItemSubGroupMaster = require("./item_subCategory_master.js")(
     sequelize,

@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true,
         },
         penalty_terms_id: {
-            type: DataTypes.INTEGER,
-            allowNull: true
+            type: DataTypes.STRING,
+            allowNull: true,
         },
         remarks: {
             type: DataTypes.STRING(255),
