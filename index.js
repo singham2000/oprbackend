@@ -1,15 +1,12 @@
-// app.js (or index.js)
+// -------------------------------IMPORT PROJECTS -------------------------------
 const express = require("express");
-const { handleNotFound, handleErrors } = require("./middleware/errorHandlers");
 const handleError = require("./middleware/errorHandler");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger-output.json");
 const cors = require("cors");
 
-//import middleware
-const setAuditFields = require("./middleware/setAuditFields.js");
 
-// Routes Import
+// -------------------------------IMPORT ROUTE -------------------------------
 const itemRoute = require("./routes/itemRoutes");
 const poRoute = require("./routes/poRoutes");
 const rfqMasterRoute = require("./routes/rfqMasterRoutes");
@@ -22,7 +19,6 @@ const purchaseLocRoute = require("./routes/purchlocationRoutes");
 const divisionRoute = require("./routes/divisionRoutes");
 const vendorRoute = require("./routes/vendorRoutes");
 const menuRoute = require("./routes/menuRoutes");
-const categoryRoute = require("./routes/categoryRoutes");
 const uomRoute = require("./routes/uomRoutes");
 const oprRouter = require("./routes/oprRoutes.js");
 const shipModeRouter = require("./routes/shipModeRoutes.js");
@@ -30,12 +26,10 @@ const oprItemsRouter = require("./routes/oprItemsRoutes.js");
 const buyHouseRouter = require("./routes/buyHouseRoutes.js");
 const quotationRouter = require("./routes/quotationRoutes.js");
 const quotationItemsRouter = require("./routes/quotationItemsRoutes");
-const itemCategoryRouter = require("./routes/itemCategoryRoutes.js");
 const criaRouter = require("./routes/criaRoutes.js");
 const nafdacCategoryRouter = require("./routes/nafdacCategoryRotues.js");
 const nafdacRouter = require("./routes/nafdacRoutes.js");
-const itemGroupRouter = require("./routes/itemGroupRotues.js");
-const itemSubGroupRouter = require("./routes/itemSubGroupRotues.js");
+
 const verticalRouter = require("./routes/verticalRoutes");
 const companyRouter = require("./routes/companyRoutes");
 const deliveryTimelineRouter = require("./routes/deliveryTimelineRoutes");
@@ -51,6 +45,17 @@ const buyingHouseRoutes = require("./routes/buyHouseRoutes.js");
 const buyingHouseRoutes2 = require("./routes/BuyingHouse/buyingHouseRoutes.js");
 const SeriesRoutes = require("./routes/seriesRoutes,js");
 const StatusRoutes = require("./routes/statusRoutes.js");
+
+
+
+//category
+const categoryRoute = require("./routes/categoryRoutes");
+const itemCategoryRouter = require("./routes/itemCategoryRoutes.js");
+const itemGroupRouter = require("./routes/itemGroupRotues.js");
+const itemSubGroupRouter = require("./routes/itemSubGroupRotues.js");
+
+
+
 
 //Masters
 const ContainerTypesMasters = require("./routes/Masters/ContainerTypesMastersRoutes.js");
@@ -71,8 +76,10 @@ const PaarRoutes = require("./routes/Pfi/PaarRoutes");
 
 //Get Data CI against PFI, FormM,
 const CommercialInvoiceAllData = require("./routes/Pfi/AssociationRoutes");
+
 //Opreations
 const AssessmentRoutes = require("./routes/Opreations/AssessmentRoutes");
+
 // const OperationsNafdacRoutes = require("./routes/Opreations/NafdacRoutes");
 const OperationsNafdacMasterRoutes = require("./routes/Opreations/NafdacMasterRoutes");
 const OperationsSonRoutes = require("./routes/Opreations/SonRoutes");
@@ -87,6 +94,7 @@ const AddServiceContainer = require("./routes/Opreations/AddShippingContainerRou
 const ShippingMasterRoutes = require("./routes/Shipping/shippingMasterRoutes.js");
 const ContainerRoutes = require("./routes/Shipping/containerRoutes.js");
 const VesselRoutes = require("./routes/Shipping/vesselRoutes.js");
+const packageRoutes = require('./routes/packageRoutes.js');
 
 //payments
 const paymentTypeMasterRoutes = require("./routes/paymentTypeMasterRoutes");
@@ -94,8 +102,10 @@ const paymentRequestMasterRoutes = require("./routes/paymentRequestMasterRoutes"
 const paymentRequestTransactionsMasterRoutes = require("./routes/PaymentRequestTransactionsMaster.js");
 const paymentTermsRouter = require("./routes/paymentTermsRoutes");
 const payment = require("./routes/paymentRoutes.js");
+
 //documents
 const documentRoutes = require('./routes/documentRoutes.js')
+const reqdocRoutes = require('./routes/reqdocmasterRoutes.js')
 
 //services
 const serviceRoutes = require("./routes/ServiceOpr/OPRserviceRoutes.js");
@@ -107,15 +117,17 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-// app.use(setAuditFields);
+
 //swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //document Master
+app.use('/api/document', documentRoutes);
+app.use('/api/reqdoc', reqdocRoutes);
 
 
-app.use('/api/document', documentRoutes)
-
+//category ye new wala jaha sare category jayega
+app.use("/api/category", itemGroupRouter);
 
 // Routes
 app.use("/api/user", userRoute);
@@ -131,12 +143,12 @@ app.use("/api/opr", oprRouter);
 // app.use("/api/opritem", oprItemsRouter);
 app.use("/api/rfq", rfqMasterRoute);
 app.use("/api/rfqitem", rfqItemDetailRoute);
-app.use("/api/po", poRoute); /****/
+app.use("/api/po", poRoute);
 app.use("/api/branch", branchRoute);
 app.use("/api/dept", deptRoute);
 app.use("/api/purchaselocation", purchaseLocRoute);
 app.use("/api/menu", menuRoute);
-app.use("/api/category", categoryRoute);
+// app.use("/api/category", categoryRoute);
 app.use("/api/uom", uomRoute);
 app.use("/api/shipMode", shipModeRouter);
 app.use("/api/delivery/timeline", deliveryTimelineRouter);
@@ -156,6 +168,9 @@ app.use("/api/pfi", pfiRoutes);
 app.use("/api/vendor-types", vendorTypeMasterRoutes);
 app.use("/api/series", SeriesRoutes);
 app.use("/api/status", StatusRoutes);
+app.use("/api/package", packageRoutes)
+
+
 
 //PFI
 app.use("/api/commercial/invoice", CommercialInvoiceRoutes);

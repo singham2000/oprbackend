@@ -66,7 +66,6 @@ const getVendorsByRfqId = async (req, res, next) => {
 const getAllRfq = async (req, res, next) => {
   try {
     const items = await RfqMaster.findAll();
-    // Map over items and fetch count for each rfq_id
     const updatedItems = await Promise.all(
       items.map(async (item) => {
         countItem2();
@@ -81,26 +80,57 @@ const getAllRfq = async (req, res, next) => {
   }
 };
 
-// Controller method to fetch item by id
-const getRfqById = async (req, res, next) => {
-  const itemid = req.params.id;
-  try {
-    const item = await RfqMaster.findAll({
-      where: { rfq_id: itemid },
-    });
-    if (!item) {
-      return res.status(404).json({ error: "Item not found" });
-    }
-    let newitem = await getPenaltyTermsNameById(item);
 
+
+// Controller method to fetch item by rfq_id
+const getRfqById = async (req, res, next) => {
+  // console.log("Gertfdafda*************");
+  // console.log(req.body);
+  // const itemid = req.params.id;
+  // console.log(itemid);
+
+  // try {
+  //   const item = await RfqMaster.findAll({
+  //     where: { rfq_id: itemid },
+  //   });
+  //   if (!item) {
+  //     return res.status(404).json({ error: "Item not found" });
+  //   }
+
+  //   console.log(item);
+  //   // let newitem = await getPenaltyTermsNameById(item);
+
+  //   // let items = await RfqItemDetail.findAll({
+  //   //   where: { rfq_id: newitem[0].rfq_id },
+  //   // });
+
+  //   let items = await RfqItemDetail.findAll({
+  //     where: { rfq_id: itemid },
+  //   });
+
+
+  //   newitem[0].dataValues.items = items;
+  //   res.status(200).json(newitem);
+  // } catch (err) {
+  //   next(err);
+  // }
+
+  try {
+    const rfq_id = req.params.id;
+    console.log("*********rfq_iod*********")
+    console.log(rfq_id)
     let items = await RfqItemDetail.findAll({
-      where: { rfq_id: newitem[0].rfq_id },
-    });
-    newitem[0].dataValues.items = items;
-    res.status(200).json(newitem);
+      where: {
+        rfq_id
+      }
+    })
+    res.status(200).json(items);
+
   } catch (err) {
     next(err);
   }
+
+
 };
 
 // this is create rfq
@@ -108,6 +138,7 @@ const getRfqById = async (req, res, next) => {
 // opr items stuatus will change to 3 and update rfq id
 
 const createRfq = async (req, res, next) => {
+
   const transaction = await sequelize.transaction();
   try {
     const {
@@ -146,6 +177,7 @@ const createRfq = async (req, res, next) => {
 
     //here  opr_items update status 3 and insert rfq id in opr_line item
     await OprItems.update(
+
       { status: 3, rfq_id: rfq_id },
 
       {
@@ -162,6 +194,8 @@ const createRfq = async (req, res, next) => {
     next(err);
   }
 };
+
+
 
 // Controller method to delete RFQ by id
 const deleteRfqById = async (req, res, next) => {

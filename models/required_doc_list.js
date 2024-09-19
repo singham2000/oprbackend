@@ -1,21 +1,25 @@
 module.exports = (sequelize, DataTypes) => {
-    const UomMaster = sequelize.define('UomMaster', {
-        uom_id: {
+    const reqdocmaster = sequelize.define('require_doc_master', {
+        req_doc_id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
             allowNull: false
         },
-        uom_name: {
+        module_name: {
             type: DataTypes.STRING(255),
             allowNull: true
         },
-        uom_code: {
+        req_doc_name: {
+            type: DataTypes.STRING(255),
+            allowNull: true
+        },
+        req_doc_description: {
             type: DataTypes.STRING(255),
             allowNull: true
         },
         status: {
-            type: DataTypes.STRING(55),
+            type: DataTypes.INTEGER,
             allowNull: true
         },
         created_by: {
@@ -27,14 +31,10 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         }
     }, {
-        tableName: 'unit_of_measurement',
-        timestamps: true,
-    });
-
-    UomMaster.associate = (models) => {
-        UomMaster.hasMany(models.ItemsMaster, { foreignKey: 'uom_id' });
-    };
-    
-    return UomMaster;
-
+        tableName: 'require_doc_master',
+        timestamps: true
+    })
+    return reqdocmaster;
 };
+
+

@@ -72,20 +72,19 @@ db.OprItems = require("./Opr/opr_items.js")(sequelize, DataTypes);
 
 //ITEM
 db.ItemVendorMap = require("./ItemVendorMap.js")(sequelize, DataTypes);
-db.CategoryMaster = require("./item_category_master.js")(sequelize, DataTypes);
-db.SubCategoryMaster = require("./item_subCategory_master.js")(
+db.CategoryMaster = require("./Item/item_category_master.js")(sequelize, DataTypes);
+db.SubCategoryMaster = require("./Item/item_sub_group_master.js")(
     sequelize,
     DataTypes
 );
-db.ItemsMaster = require("./Masters/item_master.js")(sequelize, DataTypes);
-db.UomMaster = require("./Masters/uom_master.js")(sequelize, DataTypes);
-db.ItemGroupMaster = require("./item_group_master.js")(sequelize, DataTypes);
-db.ItemSubGroupMaster = require("./item_subCategory_master.js")(
-    sequelize,
-    DataTypes
-);
+db.ItemsMaster = require("./Item/item_master.js")(sequelize, DataTypes);
+
+db.ItemSuperGroupMaster = require("./Item/item_super_group_master.js")(sequelize, DataTypes);
+db.ItemGroupMaster = require("./Item/item_group_master.js")(sequelize, DataTypes);
+db.ItemSubGroupMaster = require("./Item/item_sub_group_master.js")(sequelize, DataTypes);
+
 db.Department = require("./department_master.js")(sequelize, DataTypes);
-db.CriaMaster = require("./cria_master.js")(sequelize, DataTypes);
+db.CriaMaster = require("./cria_master.js")(sequelize, DataTypes); 1
 db.Nafdac = require("./nafdacMaster.js")(sequelize, DataTypes);
 db.NafdacCategoryMaster = require("./nafdac_category_master.js")(
     sequelize,
@@ -135,7 +134,7 @@ db.ServiceQUO = require("./Services/Service_Quotation.js")(
     DataTypes
 );
 
-db.ServiceTypeMaster =  require("./Services/services_type_master.js")(sequelize, DataTypes);
+db.ServiceTypeMaster = require("./Services/services_type_master.js")(sequelize, DataTypes);
 
 //Po
 db.po_master = require("./Po/po_master.js")(sequelize, DataTypes);
@@ -205,8 +204,8 @@ db.operations_nafdac = require("./Opreations/OperationsNafdac")(
     DataTypes
 );
 
-db.operations_nafdac_master = require("./Opreations/OperationsNafdacMaster.js")( sequelize,DataTypes);
-db.operations_nafdac_lapse = require("./Opreations/OperationsNafdacLapse")( sequelize, DataTypes);
+db.operations_nafdac_master = require("./Opreations/OperationsNafdacMaster.js")(sequelize, DataTypes);
+db.operations_nafdac_lapse = require("./Opreations/OperationsNafdacLapse")(sequelize, DataTypes);
 db.operations_son = require("./Opreations/OperationsSon")(sequelize, DataTypes);
 db.operations_son_lapse = require("./Opreations/OperationsSonLapse")(
     sequelize,
@@ -222,8 +221,6 @@ db.govt_charges = require("./Opreations/GovtCharges")(sequelize, DataTypes);
 db.shipping_lapse = require("./Opreations/ShippingLapse")(sequelize, DataTypes);
 db.add_shippment_container = require("./Opreations/AddShippingContainer.js")(sequelize, DataTypes);
 db.shippment_container_detail = require("./Opreations/ShippingContainerDetails.js")(sequelize, DataTypes);
-
-
 
 //Masters
 db.approval_matrix__master = require("./Masters/ApprovalMatrixMaster.js")(
@@ -254,6 +251,10 @@ db.shipping_lapse_master = require("./Masters/ShippingLapse")(
     DataTypes
 );
 
+//Packing
+db.PackageTypeMaster = require('./Packing/PackageType.js')(sequelize, DataTypes);
+
+
 
 //Shipping
 db.ShippingMaster = require('./Shipping/shiping_master.js')(sequelize, DataTypes);
@@ -261,14 +262,10 @@ db.Container = require('./Shipping/container.js')(sequelize, DataTypes);
 db.VesselDetails = require('./Shipping/vessel_details.js')(sequelize, DataTypes);
 db.ShippingExpenses = require('./Shipping/shipping_expensesModal.js')(sequelize, DataTypes);
 
-
 //document Master
+db.reqdocMaster = require('./required_doc_list.js')(sequelize, DataTypes);
 db.document = require("./Pfi/Document")(sequelize, DataTypes);
 db.assessment = require("./Opreations/Assessment.js")(sequelize, DataTypes);
-
-
-
-
 
 // Set up associations
 const models = { ...db };
@@ -279,7 +276,7 @@ Object.values(models).forEach((model) => {
 });
 
 sequelize
-    .sync({ alter: false })
+    .sync({ alter: true })
     .then(() => {
         console.log("Database & tables created!");
     })

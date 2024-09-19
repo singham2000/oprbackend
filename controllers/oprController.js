@@ -1,12 +1,11 @@
 // const { opr_master } = ('../models');
 const db = require('../models');
-const { OprMaster: opr_master, company_master, OprItems, Vertical } = db;
+const { OprMaster: opr_master, company_master, OprItems, Vertical, ItemsMaster } = db;
 const formattedDateTime = require("../middleware/time");
 const { Op } = require('sequelize');
-
-
-const {generateSeries} = require("./seriesGenerate");
+const { generateSeries } = require("./seriesGenerate");
 const { query } = require('express');
+
 
 ///******************this is on query we have remove query form this and use associaton*****************************/
 // const getVerticalNameById = require('../middleware/databyid/verticalName');
@@ -84,7 +83,7 @@ const getOpr = async (req, res, next) => {
         let opr_detials = await opr_master.findAll({
             where: opr_id ? { opr_id: opr_id } : {},
             include: [
-                { model: db.CompanyMaster, attributes: ['company_name','company_id'] },
+                { model: db.CompanyMaster, attributes: ['company_name', 'company_id'] },
                 { model: db.Vertical, attributes: ['vertical_name'] },
                 { model: db.Division, attributes: ['division_name'] },
                 { model: db.ShipMode, attributes: ['shipment_mode_name'] },
@@ -132,11 +131,6 @@ where rfq_id in (Select rfq_id from opr_items where opr_id=10)`
         next(err)
     }
 }
-
-
-
-
-
 
 // Controller method to delete by id
 const deleteOprById = async (req, res, next) => {
@@ -242,7 +236,7 @@ const updateOprById = async (req, res, next) => {
 const confirmOpr = async (req, res, next) => {
     try {
         const doc_code = 'OPR';
-        const opr_series = await generateSeries(doc_code);` `
+        const opr_series = await generateSeries(doc_code); ` `
         const opr_id = req.params.opr_id;
         //u
         const response = await opr_master.update(
@@ -272,15 +266,6 @@ const confirmOpr = async (req, res, next) => {
 
     }
 }
-
-oprController = {
-    confirmOpr,
-    getOpr,
-    deleteOprById,
-    createOpr,
-    updateOprById
-};
-
 
 // Controller method to Create  with address id
 const createOpr2 = async (req, res, next) => {
@@ -312,5 +297,30 @@ const createOpr2 = async (req, res, next) => {
         next(err)
     }
 };
+
+const itemforOpr = async (req, res, next) => {
+    try {
+        let { super_category_id } = req.query
+        let foundItem = await ItemsMaster.findAll({
+            where: { super_category_id },
+            attributes: { exclude: ['item_img'] }
+        })
+        res.status(200).json({ msg: "Sucess", data: foundItem })
+    } catch (err) {
+        next(err);
+    }
+}
+
+oprController = {
+    confirmOpr,
+    getOpr,
+    deleteOprById,
+    createOpr,
+    updateOprById,
+    itemforOpr
+};
+
+
+
 
 module.exports = oprController

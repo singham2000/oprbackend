@@ -1,16 +1,16 @@
 module.exports = (sequelize, DataTypes) => {
-    const ItemGroupMaster = sequelize.define('item_group_master', {
-        item_group_id: {
+    const ItemSuperGroupMaster = sequelize.define('item_super_group_master', {
+        item_super_group_id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
             allowNull: false
         },
-        item_group_name: {
+        item_super_group_name: {
             type: DataTypes.STRING(25),
             allowNull: true
         },
-        item_group_description: {
+        item_super_group_description: {
             type: DataTypes.STRING(250),
             allowNull: true
         },
@@ -27,15 +27,11 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         }
     }, {
-        tableName: 'item_group_master',
-        timestamps: true // Assuming you are not using Sequelize's automatic createdAt and updatedAt fields
+        tableName: 'item_super_group_master',
+        timestamps: true
     })
 
-    ItemGroupMaster.associate = (models) => {
-        ItemGroupMaster.hasMany(models.ItemsMaster, { foreignKey: 'group_name', targetKey:'item_group_id' });
-    };
-
-    return ItemGroupMaster;
+    return ItemSuperGroupMaster;
 }
 
 

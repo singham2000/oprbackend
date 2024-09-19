@@ -15,6 +15,7 @@ router
     .put('/opr', oprController.updateOprById)
     .delete('/opr/:id', oprController.deleteOprById)
     .post('/confirm/:opr_id', oprController.confirmOpr)
+    .get('/additems', oprController.itemforOpr)
 router
     .get('/items', oprItemsController.getOprItem)
     .get('/quotecompare', oprItemsController.getOprItemsforQuoteCompare)
@@ -28,5 +29,5 @@ router
     .put('/item', oprItemsController.updateOprItemById)
     .delete('/draftitem', oprItemsController.deleteOprdraftItem)
 
-    
+
 module.exports = router;

@@ -9,10 +9,6 @@ const {
 const setAuditFields = require('../middleware/setAuditFields.js');
 
 
-
-
-
-
 // API routes for item categories
 router
     .post('/itemcategory', setAuditFields, createItemCategory)

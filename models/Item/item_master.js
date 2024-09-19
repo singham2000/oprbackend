@@ -1,5 +1,3 @@
-const opr_items = require("../Opr/opr_items");
-
 module.exports = (sequelize, DataTypes) => {
     const ItemsMaster = sequelize.define('ItemsMaster', {
         item_id: {
@@ -34,6 +32,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         hsn_code: {
             type: DataTypes.STRING(255),
+            allowNull: true
+        },
+        super_category_id: {
+            type: DataTypes.INTEGER,
             allowNull: true
         },
         group_name: {
@@ -134,9 +136,10 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'item_master',
         timestamps: true,
     })
+    
 
     ItemsMaster.associate = (models) => {
-        ItemsMaster.belongsTo(models.UomMaster, { foreignKey: 'uom_id' });
+        // ItemsMaster.belongsTo(models.UomMaster, { foreignKey: 'uom_id' });
         ItemsMaster.belongsTo(models.ItemGroupMaster, { foreignKey: 'group_name' });
         ItemsMaster.hasMany(models.OprItems, { foreignKey: 'item_id' });
         ItemsMaster.hasMany(models.po_items, { foreignKey: 'item_id' });
@@ -144,7 +147,6 @@ module.exports = (sequelize, DataTypes) => {
         ItemsMaster.hasMany(models.quotation_items, { foreignKey: 'item_id' });
         ItemsMaster.hasMany(models.Pfi_line_items, { foreignKey: 'item_id' });
     };
-
 
     return ItemsMaster;
 };

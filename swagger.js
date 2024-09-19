@@ -7,7 +7,7 @@ const doc = {
     title: 'OPR API',
     description: 'Description'
   },
-  host: '192.168.1.21:5000'
+  host: '192.168.1.13:4000'
 };
 
 const outputFile = './swagger-output.json';

@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+        swift_code: {
+            type: DataTypes.STRING(25),
+            allowNull: true,
+        },
         bank_type_id: {
             type: DataTypes.INTEGER,
             allowNull: true,
@@ -71,6 +75,6 @@ module.exports = (sequelize, DataTypes) => {
     //     VendorsBanksDetailsMaster.belongsTo(models.VendorsMaster, { foreignKey: 'vendor_id' });
     //     VendorsBanksDetailsMaster.belongsTo(models.VendorBankTypeMaster, { foreignKey: 'bank_type_id' });
     // }; 
-    
+
     return VendorsBanksDetailsMaster;
 };

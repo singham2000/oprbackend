@@ -62,17 +62,21 @@ module.exports = (sequelize, DataTypes) => {
   document.associate = (models) => {
     document.belongsTo(models.form_m, {
       foreignKey: 'linked_id',
+      constraints: false
     });
     document.belongsTo(models.insurance, {
       foreignKey: 'linked_id',
+      constraints: false
     });
     document.belongsTo(models.letter_of_credit, {
       foreignKey: 'linked_id',
+      constraints: false
     });
     document.belongsTo(models.son_pfi, {
       foreignKey: 'linked_id',
+      constraints: false
     });
   };
 
-  return document; 
+  return document;
 };

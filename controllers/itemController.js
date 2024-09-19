@@ -3,12 +3,13 @@ const { ItemsMaster: Item } = db;
 const { generateSeries } = require('../utilites/genrateSeries')
 
 // Controller method to fetch all items
-const getAllItems = async (req, res) => {
+const getAllItems = async (req, res, next) => {
     try {
         const items = await Item.findAll({
-            include: [
-                { model: db.UomMaster, attributes: ['uom_id', 'uom_name'] },
-            ]
+            //to be correct
+            // include: [
+            //     { model: db.UomMaster, attributes: ['uom_id', 'uom_name'] },
+            // ]
         });
 
         res.status(200).json(items);
@@ -40,7 +41,7 @@ const getItemById = async (req, res) => {
 const createItem = async (req, res, next) => {
     const doc_code = 'ITM';
     const item_series = await generateSeries(doc_code);
-    
+
     req.body.item_series = item_series
     try {
         const fileBuffer = req.file.buffer;

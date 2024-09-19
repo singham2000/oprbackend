@@ -51,6 +51,8 @@ const createUser = async (req, res, next) => {
             registration_date
         } = req.body;
 
+
+
         // console.log(first_name, last_name, email, username, phone_number, password);
         const newItem = await User.create({
             first_name, last_name, email, username, phone_number, password_hash: password, address1_line1,

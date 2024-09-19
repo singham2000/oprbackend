@@ -117,11 +117,12 @@ const getRfqItemByRfqid = async (req, res, next) => {
       include: [
         {
           model: db.ItemsMaster,
-          include: {
-            model: db.UomMaster,
-            attributes: ["uom_name"],
-            // model: db.AddressMaster, attributes: ['city']
-          },
+          //to be correct
+          // include: {
+          //   model: db.UomMaster,
+          //   attributes: ["uom_name"],
+          //   // model: db.AddressMaster, attributes: ['city']
+          // },
           attributes: [
             "item_name",
             "item_type",
