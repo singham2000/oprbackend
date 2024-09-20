@@ -11,41 +11,49 @@ module.exports = (sequelize, DataTypes) => {
     quo_id: {
       type: DataTypes.INTEGER,
       allowNull: true
+    },    
+    quo_num: {
+      type: DataTypes.STRING(55),
+      allowNull: true
     },
     item_id: {
       type: DataTypes.INTEGER,
       allowNull: true
     },
-    rfq_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
-    vendor_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
-    item_type: {
+    item_code: {
       type: DataTypes.STRING(55),
       allowNull: true
     },
-    item_specification: {
-      type: DataTypes.STRING(255),
+    item_name: {
+      type: DataTypes.STRING(155),
       allowNull: true
     },
-    item_description: {
-      type: DataTypes.STRING(255),
+    item_type: {
+      type: DataTypes.STRING(155),
+      allowNull: true
+    },
+    line_total: {
+      type: DataTypes.DECIMAL(18, 2),
+      allowNull: true
+    },
+    no_packs: {
+      type: DataTypes.INTEGER,
       allowNull: true
     },
     opr_qty: {
-      type: DataTypes.DECIMAL(18, 2),
+      type: DataTypes.INTEGER,
       allowNull: true
     },
-    opo_qtd: {
-      type: DataTypes.DECIMAL(18, 2),
+    pack_size: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    pack_type: {
+      type: DataTypes.INTEGER,
       allowNull: true
     },
     quote_qtd: {
-      type: DataTypes.DECIMAL(18, 2),
+      type: DataTypes.INTEGER,
       allowNull: true
     },
     rate: {
@@ -53,11 +61,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     remarks: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    line_total: {
-      type: DataTypes.DECIMAL(18, 2),
+      type: DataTypes.STRING(155),
       allowNull: true
     },
     created_by: {
@@ -74,7 +78,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     tableName: 'quotation_items',
-    timestamps: false
+    timestamps: true
   });
 
 

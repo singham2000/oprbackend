@@ -14,44 +14,12 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(50),
             allowNull: true
         },
-        inland_charges: {
-            type: DataTypes.DECIMAL(10, 2),
+        charge_name: {
+            type: DataTypes.STRING(150),
             allowNull: true
         },
-        freight_charges: {
-            type: DataTypes.DECIMAL(10, 2),
-            allowNull: true
-        },
-        inspection_charges: {
-            type: DataTypes.DECIMAL(10, 2),
-            allowNull: true
-        },
-        thc: {
-            type: DataTypes.DECIMAL(10, 2),
-            allowNull: true
-        },
-        container_stuffing: {
-            type: DataTypes.DECIMAL(10, 2),
-            allowNull: true
-        },
-        container_seal: {
-            type: DataTypes.DECIMAL(10, 2),
-            allowNull: true
-        },
-        bl: {
-            type: DataTypes.DECIMAL(10, 2),
-            allowNull: true
-        },
-        vgm: {
-            type: DataTypes.DECIMAL(10, 2),
-            allowNull: true
-        },
-        miscellaneous: {
-            type: DataTypes.DECIMAL(10, 2),
-            allowNull: true
-        },
-        additional_cost: {
-            type: DataTypes.DECIMAL(10, 2),
+        charge_amount: {
+            type: DataTypes.STRING(50),
             allowNull: true
         },
         created_on: {

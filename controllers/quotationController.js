@@ -9,7 +9,7 @@ const {
   delivery_terms_quo,
   payment_terms_quo,
   lead_time_quo,
-  additional_cost
+  additional_cost, 
 } = db;
 const formattedDateTime = require("../middleware/time");
 const { Op, where } = require("sequelize");
@@ -43,7 +43,7 @@ const getQuotation = async (req, res, next) => {
       result.forEach((item) => (item.uom = "KG"));
       res.status(200).json(result);
     } else {
-      const query = `SELECT * ,[dbo].[fn_additionalCost]([quo_id]) As additionalCost,
+      const query = `SELECT * ,
                       [dbo].[fn_vendorName]([vendor_id]) As vendorName,
                       [dbo].[fn_rfqNum]([rfq_id]) as rfq_num
                       FROM quotations_master
@@ -138,20 +138,122 @@ const deleteQuotationById = async (req, res, next) => {
 };
 
 // Controller method to Create
+// const createQuotation = async (req, res, next) => {
+//   console.log(req.body);
+//   console.log(req.files);
+//   const { quotation_details, quotation_docslist, created_by } = req.body;
+
+//   try {
+//     const doc_code = "QUO";
+//     const quotation_series = await generateSeries(doc_code);
+
+//     const {
+//       rfq_id,
+//       vendor_id,
+//       reference_no,
+//       reference_date,
+//       quo_date,
+//       currency,
+//       delivery_terms,
+//       country_origin,
+//       country_supply,
+//       port_loading,
+//       lead_time,
+//       payment_terms,
+//       remarks,
+//       total_cost,
+//       opr_lead_time,
+//       port_of_loading,
+//       charges,
+//       ItemData,
+//     } = quotation_details;
+
+//     const currencies = currency.join(', ');
+
+//     // Generate quotation
+//     const newQuotationMaster = await quotation_master.create({
+//       quo_num: quotation_series,
+//       rfq_id,
+//       vendor_id,
+//       reference_no,
+//       reference_date,
+//       quo_date,
+//       currency: currencies,
+//       delivery_terms,
+//       country_origin,
+//       country_supply,
+//       port_loading,
+//       lead_time: `${lead_time} Weeks`,
+//       payment_terms,
+//       remarks,
+//       total_cost,
+//       opr_lead_time,
+//       port_of_loading,
+//       status: 1,
+//     });
+
+//     const lastInsertedId = newQuotationMaster.quo_id;
+
+//     // Process charges
+//     const processCharges = async () => {
+//       for (const key in charges) {
+//         await additional_cost.create({
+//           quo_id: lastInsertedId,
+//           quo_num: quotation_series,
+//           charge_name: key,
+//           charge_amount: charges[key],
+//           status: 1,
+//         });
+//       }
+//     };
+
+//     await processCharges(); // Await the charge processing
+
+//     // Prepare and insert quotation items
+//     const updatedItemdata = ItemData.map((item) => ({
+//       quo_id: lastInsertedId,
+//       quo_num: quotation_series,
+//       ...item,
+//       status: 1,
+//     }));
+
+//     await quotation_items.bulkCreate(updatedItemdata);
+
+//     // Transform and insert quotation documents
+//     const updatedQuotationDocs = quotation_docslist.map((data, index) => ({
+//       ...data,
+//       quotation_id: lastInsertedId,
+//       q_doc_filename: req.files[index].originalname,
+//       q_doc_file: req.files[index].buffer.toString("base64"),
+//     }));
+
+//     await QuoDoc.bulkCreate(updatedQuotationDocs);
+
+//     res.status(200).json({ message: "Quotation generated successfully" });
+//   } catch (err) {
+//     console.error("Error creating quotation:", err); // More specific logging
+//     next(err);
+//   }
+// };
+
+
 const createQuotation = async (req, res, next) => {
   console.log(req.body);
-  const { quotation_details, quotation_docslist, created_by } = req.body;
+  console.log(req.files);
+  const { quotation_details, quotation_docslist } = req.body;
+
+  const transaction = await sequelize.transaction(); // Start a transaction
 
   try {
     const doc_code = "QUO";
     const quotation_series = await generateSeries(doc_code);
+
     const {
       rfq_id,
       vendor_id,
       reference_no,
       reference_date,
       quo_date,
-      quote_qty: quote_qtd,
       currency,
       delivery_terms,
       country_origin,
@@ -161,20 +263,15 @@ const createQuotation = async (req, res, next) => {
       payment_terms,
       remarks,
       total_cost,
-      invalid_charges,
-      freight_charges,
-      inspection_charges,
-      thc,
-      container_stuffing,
-      container_seal,
-      bl,
-      vgm,
-      miscellaneous,
-      additional_charges,
+      opr_lead_time,
+      port_of_loading,
+      charges,
       ItemData,
     } = quotation_details;
 
-    //generate quotation
+    const currencies = currency.join(', ');
+
+    // Generate quotation
     const newQuotationMaster = await quotation_master.create({
       quo_num: quotation_series,
       rfq_id,
@@ -182,65 +279,69 @@ const createQuotation = async (req, res, next) => {
       reference_no,
       reference_date,
       quo_date,
-      currency,
+      currency: currencies,
       delivery_terms,
       country_origin,
       country_supply,
       port_loading,
-      lead_time,
+      lead_time: `${lead_time} Weeks`,
       payment_terms,
       remarks,
       total_cost,
+      opr_lead_time,
+      port_of_loading,
       status: 1,
-      created_by,
-      created_on: formattedDateTime,
-    });
+    }, { transaction });
 
-    //transform quotation items
     const lastInsertedId = newQuotationMaster.quo_id;
 
-    const result = await additional_cost.create({
+    // Process charges
+    const processCharges = async () => {
+      for (const key in charges) {
+        await additional_cost.create({
+          quo_id: lastInsertedId,
+          quo_num: quotation_series,
+          charge_name: key,
+          charge_amount: charges[key],
+          status: 1,
+        }, { transaction });
+      }
+    };
+
+    await processCharges(); // Await the charge processing
+
+    // Prepare and insert quotation items
+    const updatedItemdata = ItemData.map((item) => ({
       quo_id: lastInsertedId,
       quo_num: quotation_series,
-      inland_charges: invalid_charges,
-      freight_charges,
-      inspection_charges,
-      thc,
-      container_stuffing,
-      container_seal,
-      bl,
-      vgm,
-      miscellaneous,
-      additional_cost: additional_charges,
-      status: 1,
-  });
-
-    const updatedItemdata = ItemData.map((item) => ({
       ...item,
-      quo_id: lastInsertedId,
       status: 1,
-      rfq_id,
-      vendor_id,
     }));
-    //insert quotation item
-    await quotation_items.bulkCreate(updatedItemdata);
 
-    //transform quotation docs
-    await quotation_docslist.forEach((data, i) => {
-      data.quotation_id = lastInsertedId;
-      data.q_doc_filename = req.files[i].originalname;
-      data.q_doc_file = req.files[i].buffer.toString("base64");
-      i++;
-    });
+    await quotation_items.bulkCreate(updatedItemdata, { transaction });
 
-    // insert quotation documents
-    await QuoDoc.bulkCreate(quotation_docslist);
-    res.status(200).json({ message: "quotation genrated Suceesfully" });
+    // Transform and insert quotation documents
+    const updatedQuotationDocs = quotation_docslist.map((data, index) => ({
+      ...data,
+      quotation_id: lastInsertedId,
+      q_doc_filename: req.files[index].originalname,
+      q_doc_file: req.files[index].buffer.toString("base64"),
+    }));
+
+    await QuoDoc.bulkCreate(updatedQuotationDocs, { transaction });
+
+    await transaction.commit(); // Commit the transaction
+
+    res.status(200).json({ message: "Quotation generated successfully" });
   } catch (err) {
-    console.log(err);
+    await transaction.rollback(); // Rollback the transaction in case of error
+    console.error("Error creating quotation:", err); // More specific logging
     next(err);
   }
 };
+
+
+
 
 const updateQuotationById = async (req, res, next) => {
   const quo_id = req.query.quo_id;

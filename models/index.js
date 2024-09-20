@@ -250,6 +250,11 @@ db.shipping_lapse_master = require("./Masters/ShippingLapse")(
     sequelize,
     DataTypes
 );
+db.port_destination_master = require("./Masters/PortDestinationMaster.js")(
+    sequelize,
+    DataTypes
+);
+
 
 //Packing
 db.PackageTypeMaster = require('./Packing/PackageType.js')(sequelize, DataTypes);

@@ -65,6 +65,7 @@ const TransportPaymentTypeLapse = require("./routes/Masters/PaymentTypeTransport
 const AddExpenseChargesRoutes = require("./routes/Masters/AddExpenseChargesRoutes");
 const PaymentTypeChargesRoutes = require("./routes/Masters/PaymentTypeChargesRoutes.js");
 const ShippingLapsesRoutes = require("./routes/Masters/ShippingLapseRoutes");
+const PortDestinationRoutes = require("./routes/Masters/PortDestinationRoutes.js");
 
 //PFI
 const CommercialInvoiceRoutes = require("./routes/Pfi/commercialInvoiceRoutes.js");
@@ -205,6 +206,7 @@ app.use("/api/transport/payment/type", TransportPaymentTypeLapse);
 app.use("/api/charges/add/expense", AddExpenseChargesRoutes);
 app.use("/api/charges/payment/type", PaymentTypeChargesRoutes);
 app.use("/api/shipping/lapse", ShippingLapsesRoutes);
+app.use("/api/port/destination", PortDestinationRoutes);
 
 //payments
 app.use("/api/paymentterms", paymentTermsRouter);

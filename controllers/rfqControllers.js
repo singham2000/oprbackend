@@ -137,13 +137,16 @@ const getRfqById = async (req, res, next) => {
 // opr items stuatus will change to 3 and update rfq id
 
 const createRfq = async (req, res, next) => {
+  console.log(req.body);
 
   const transaction = await sequelize.transaction();
   try {
     const {
-      penalty_terms_id,
+      req_doc_id,
       opr_item_ids,
       vendor_ids,
+      remarks,
+      port_of_destination,
       item_list,
       created_by,
       updated_by,
@@ -159,7 +162,9 @@ const createRfq = async (req, res, next) => {
     const rfqres = await RfqMaster.create({
       rfq_num: rfq_series,
       vendor_list: vendor_ids.join(","),
-      penalty_terms_id: penalty_terms_id,
+      req_doc_id: req_doc_id,
+      remarks,
+      port_of_destination,
       created_by,
       updated_by,
     });

@@ -10,12 +10,16 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(55),
             allowNull: true,
         },
-        penalty_terms_id: {
+        req_doc_id: {
             type: DataTypes.STRING,
             allowNull: true,
         },
         remarks: {
             type: DataTypes.STRING(255),
+            allowNull: true
+        },
+        port_of_destination: {
+            type: DataTypes.STRING(155),
             allowNull: true
         },
         created_on: {
