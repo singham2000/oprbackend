@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     UomMaster.associate = (models) => {
         UomMaster.hasMany(models.ItemsMaster, { foreignKey: 'uom_id' });
     };
-    
+
     return UomMaster;
 
 };

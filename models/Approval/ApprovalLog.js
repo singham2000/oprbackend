@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
         from_user_id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING(200),
             allowNull: false,
         },
         from_user_level: {
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
         to_user_id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING(200),
             allowNull: false,
         },
         to_user_level: {

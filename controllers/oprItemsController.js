@@ -4,7 +4,7 @@ const formattedDateTime = require("../middleware/time");
 const { Op, where } = require('sequelize');
 const { sequelize } = db;
 const { QueryTypes } = require('sequelize');
-const {generateSeries} = require("./seriesGenerate");
+const { generateSeries } = require("./seriesGenerate");
 // const opr_items = require('../models/');
 
 const getOprItem = async (req, res, next) => {
@@ -25,7 +25,7 @@ const getOprItem = async (req, res, next) => {
                     model: db.ItemsMaster,
                     include: {
                         model: db.UomMaster,
-                        attributes: ['uom_name'] // Fetch the UOM name
+                        attributes: ['uom_name']
                     },
                     attributes: ['item_name', 'item_type', 'item_code', 'quantity_in_stock', 'quantity_on_order', 'nafdac_category',]
                 }
@@ -63,7 +63,7 @@ const getOprItem = async (req, res, next) => {
 //this function will send only those data which status is 2
 const getOprItemForRfq = async (req, res, next) => {
     try {
-        let {opr_id_list}= req.query
+        let { opr_id_list } = req.query
         let Opr_Items = await OprItems.findAll({
             where: {
                 [Op.and]: [
@@ -515,7 +515,7 @@ module.exports = oprItemsController;
 
 
 
-// opr 
+// opr
 
 // Opr Controller to fetch all items
 // const getOprItemForRfq = async (req, res, next) => {
@@ -524,7 +524,7 @@ module.exports = oprItemsController;
 //     try {
 //         if (!opr_id) {
 //             let query =
-//                 `   select   
+//                 `   select
 //                     opr_item_id,
 //                     opr_items.item_id as item_id,
 //                     opr_id,
@@ -551,7 +551,7 @@ module.exports = oprItemsController;
 //             //     where: {
 //             //         status: { [Op.eq]: 2 }
 //             //     }
-//             // }); 
+//             // });
 
 //             const [result, length] = await db.sequelize.query(query);
 //             res.status(200).json(result);
@@ -565,7 +565,7 @@ module.exports = oprItemsController;
 //             // });
 
 //             let query =
-//                 `   select   
+//                 `   select
 //                     opr_item_id,
 //                     opr_id,
 //                     opr_items.item_id as item_id,

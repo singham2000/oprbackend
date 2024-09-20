@@ -6,10 +6,10 @@ const { generateSeries } = require('../utilites/genrateSeries')
 const getAllItems = async (req, res, next) => {
     try {
         const items = await Item.findAll({
-            //to be correct
-            // include: [
-            //     { model: db.UomMaster, attributes: ['uom_id', 'uom_name'] },
-            // ]
+            // to be correct
+            include: [
+                { model: db.UomMaster, attributes: ['uom_id', 'uom_name'] },
+            ]
         });
 
         res.status(200).json(items);
