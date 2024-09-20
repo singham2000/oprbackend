@@ -62,6 +62,14 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(255),
             allowNull: true
         },
+        opr_lead_time: {
+            type: DataTypes.STRING(255),
+            allowNull: true
+        },
+        port_of_loading: {
+            type: DataTypes.STRING(255),
+            allowNull: true
+        },
         approval_status: {
             type: DataTypes.STRING(55),
             allowNull: true
@@ -74,8 +82,8 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(50),
             allowNull: true
         },
-        updated_on: {
-            type: DataTypes.DATE,
+        updated_by: {
+            type: DataTypes.STRING(50),
             allowNull: true
         },
         updated_by: {
@@ -106,9 +114,12 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(55),
             allowNull: true
         },
+       
     }, {
         tableName: 'quotations_master',
-        timestamps: false
+        timestamps: true,
+        createdAt: 'created_on', // Customize createdAt field name
+        updatedAt: 'updated_on' 
     });
     return quotation_master;
 };
