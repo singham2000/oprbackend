@@ -78,7 +78,6 @@ const { query } = require('express');
 
 const getOpr = async (req, res, next) => {
     const { opr_id } = req.query;
-
     try {
         let opr_detials = await opr_master.findAll({
             where: opr_id ? { opr_id: opr_id } : {},

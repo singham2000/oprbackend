@@ -94,8 +94,6 @@ const getVendorsByRfqId = async (req, res, next) => {
 const getAllRfq = async (req, res, next) => {
   try {
     const rfqs = await RfqMaster.findAll();
-
-
     //this funcation will add no of item included in a rfq
     const trnsFormData = await Promise.all(
       rfqs.map(async (rfqs) => {
