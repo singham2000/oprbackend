@@ -6,6 +6,7 @@ const {
   OprItems,
   VendorsMaster,
   sequelize,
+  reqdocMaster
 } = db;
 const getPenaltyTermsNameById = require("../middleware/databyid/penaltyTermsName");
 const { generateSeries } = require("./seriesGenerate");
@@ -29,6 +30,29 @@ const countItem2 = async (rfq_id) => {
     Where: { rfq_id: rfq_id },
   });
 };
+
+
+
+const getDocsRfqIds = async (docIdsString) => {
+  try {
+    // Split the book_ids string into an array
+    const docIds = docIdsString ? docIdsString.split(',').map(Number) : [];
+    // Fetch books based on the extracted IDs
+    const books = await reqdocMaster.findAll({
+      where: {
+        req_doc_id: docIds,
+      },
+    });
+
+    return books;
+  } catch (error) {
+    console.error('Error fetching books:', error);
+    throw new Error('Error fetching books');
+  }
+};
+
+
+
 
 const getVendorsByRfqId = async (req, res, next) => {
   const rfqid = req.query.rfqid;
@@ -63,18 +87,27 @@ const getVendorsByRfqId = async (req, res, next) => {
   }
 };
 
+
+
+
+
 const getAllRfq = async (req, res, next) => {
   try {
-    const items = await RfqMaster.findAll();
-    const updatedItems = await Promise.all(
-      items.map(async (item) => {
+    const rfqs = await RfqMaster.findAll();
+
+
+    //this funcation will add no of item included in a rfq
+    const trnsFormData = await Promise.all(
+      rfqs.map(async (rfqs) => {
         countItem2();
-        let count2 = await countItem(item.dataValues.rfq_id);
-        item.dataValues.items_count = count2;
-        return item;
+        let count2 = await countItem(rfqs.dataValues.rfq_id);
+        let doc_list = await getDocsRfqIds(rfqs.dataValues.penalty_terms_id)
+        rfqs.dataValues.items_count = count2;
+        rfqs.dataValues.req_doc_list = doc_list;
+        return rfqs;
       })
     );
-    res.status(200).json(updatedItems);
+    res.status(200).json(trnsFormData);
   } catch (err) {
     next(err);
   }
@@ -84,48 +117,14 @@ const getAllRfq = async (req, res, next) => {
 
 // Controller method to fetch item by rfq_id
 const getRfqById = async (req, res, next) => {
-  // console.log("Gertfdafda*************");
-  // console.log(req.body);
-  // const itemid = req.params.id;
-  // console.log(itemid);
-
-  // try {
-  //   const item = await RfqMaster.findAll({
-  //     where: { rfq_id: itemid },
-  //   });
-  //   if (!item) {
-  //     return res.status(404).json({ error: "Item not found" });
-  //   }
-
-  //   console.log(item);
-  //   // let newitem = await getPenaltyTermsNameById(item);
-
-  //   // let items = await RfqItemDetail.findAll({
-  //   //   where: { rfq_id: newitem[0].rfq_id },
-  //   // });
-
-  //   let items = await RfqItemDetail.findAll({
-  //     where: { rfq_id: itemid },
-  //   });
-
-
-  //   newitem[0].dataValues.items = items;
-  //   res.status(200).json(newitem);
-  // } catch (err) {
-  //   next(err);
-  // }
-
   try {
     const rfq_id = req.params.id;
-    console.log("*********rfq_iod*********")
-    console.log(rfq_id)
     let items = await RfqItemDetail.findAll({
       where: {
         rfq_id
       }
     })
     res.status(200).json(items);
-
   } catch (err) {
     next(err);
   }

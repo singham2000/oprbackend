@@ -102,6 +102,7 @@ const paymentRequestMasterRoutes = require("./routes/paymentRequestMasterRoutes"
 const paymentRequestTransactionsMasterRoutes = require("./routes/PaymentRequestTransactionsMaster.js");
 const paymentTermsRouter = require("./routes/paymentTermsRoutes");
 const payment = require("./routes/paymentRoutes.js");
+const ApprovalRoutes = require('./routes/approvalRoutes.js')
 
 //documents
 const documentRoutes = require('./routes/documentRoutes.js')
@@ -128,6 +129,7 @@ app.use('/api/reqdoc', reqdocRoutes);
 
 //category ye new wala jaha sare category jayega
 app.use("/api/category", itemGroupRouter);
+
 
 // Routes
 app.use("/api/user", userRoute);
@@ -168,10 +170,7 @@ app.use("/api/pfi", pfiRoutes);
 app.use("/api/vendor-types", vendorTypeMasterRoutes);
 app.use("/api/series", SeriesRoutes);
 app.use("/api/status", StatusRoutes);
-app.use("/api/package", packageRoutes)
-
-
-
+app.use("/api/package", packageRoutes);
 //PFI
 app.use("/api/commercial/invoice", CommercialInvoiceRoutes);
 app.use("/api/insurance", InsuranceRoutes);
@@ -179,21 +178,15 @@ app.use("/api/formm", FormMRoutes);
 app.use("/api/lc", LetterOfCreditTermsRoutes);
 app.use("/api/pfi/son", SonPfiRoutes);
 app.use("/api/pfi/paar", PaarRoutes);
-
 //Get Data CI against PFI, FormM,
 app.use("/api/ci/all", CommercialInvoiceAllData);
-const createMultipleUDFs = require("./models/UserDefinedFunction/UserDefinedFunctions.js");
-createMultipleUDFs();
 
 //Operations
 app.use("/api/operation/assessment", AssessmentRoutes);
 // app.use("/api/operation/nafdac", OperationsNafdacRoutes);
 app.use("/api/operation/nafdac", OperationsNafdacMasterRoutes);
 app.use("/api/operation/son", OperationsSonRoutes);
-app.use(
-  "/api/operation/transport/operation/lapse",
-  TransportOperationLapseRoutes
-);
+app.use("/api/operation/transport/operation/lapse", TransportOperationLapseRoutes);
 app.use("/api/operation/container/allocation", ContainerAllocationRoutes);
 app.use("/api/operation/govt/charges", GovtChargesRoutes);
 app.use("/api/operation/shipping/lapse", ShippingLapseRoutes);
@@ -219,11 +212,10 @@ app.use("/api/penaltyterms", penaltyTermsRoutes);
 app.use("/api/payment-types", paymentTypeMasterRoutes);
 app.use("/api/paymentrequests", paymentRequestMasterRoutes);
 app.use("/api/payment-transactions", paymentRequestTransactionsMasterRoutes);
-
-//this is new
 app.use("/api/payment", payment);
-
 // app.use('/api/payment',)
+app.use("/api/approval", ApprovalRoutes)
+
 //addresss new
 app.use("/api/address", addressRoutes);
 app.use("/api/bh", buyingHouseRoutes);
@@ -232,8 +224,14 @@ app.use("/api/bhouse", buyingHouseRoutes2);
 //services
 app.use("/api/service", serviceRoutes);
 
+
 // Error handling middleware
 app.use(handleError);
+
+const createMultipleUDFs = require("./models/UserDefinedFunction/UserDefinedFunctions.js");
+createMultipleUDFs();
+
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

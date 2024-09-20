@@ -263,6 +263,8 @@ db.VesselDetails = require('./Shipping/vessel_details.js')(sequelize, DataTypes)
 db.ShippingExpenses = require('./Shipping/shipping_expensesModal.js')(sequelize, DataTypes);
 
 //document Master
+db.ApprovalMatrix = require('./Approval/ApprovalMatrix.js')(sequelize, DataTypes);
+db.ApprovalLog = require('./Approval/ApprovalLog.js')(sequelize, DataTypes);
 db.reqdocMaster = require('./required_doc_list.js')(sequelize, DataTypes);
 db.document = require("./Pfi/Document")(sequelize, DataTypes);
 db.assessment = require("./Opreations/Assessment.js")(sequelize, DataTypes);
@@ -276,7 +278,7 @@ Object.values(models).forEach((model) => {
 });
 
 sequelize
-    .sync({ alter: true })
+    .sync({ alter: false })
     .then(() => {
         console.log("Database & tables created!");
     })

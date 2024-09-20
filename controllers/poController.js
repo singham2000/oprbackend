@@ -1,17 +1,16 @@
 // const { po_master } = ('../models');
 const db = require("../models");
-const { sequelize, document:Document } = db
+const { sequelize, document: Document } = db
 const { po_master, quotation_master, po_items } = db;
 const formattedDateTime = require("../middleware/time");
 const { Op } = require("sequelize");
 const { generateSeries } = require("./seriesGenerate");
 const { getQuotationItemByQuoId } = require('./quotationItemsController')
 
-
-
 //get all po
 const getPO = async (req, res, next) => {
   const po_id = req.query.po_id;
+  console.log(req.query);
   try {
     if (po_id) {
       const query = `SELECT po_master.*
@@ -20,22 +19,22 @@ const getPO = async (req, res, next) => {
       ON po_master.quo_id = quotations_master.quo_id where po_id = ${po_id}`;
 
       const result = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
-      const result2 = await po_master.findAll({
-        where: { po_id },
-        include: [
-          {
-            model: db.VendorsMaster,
-            attributes: ['vendor_name']
-          },
-          {
-            model: db.po_items
-          },
-          {
-            model: db.form_m
-          }
-        ]
-      })
-      res.status(200).json(result2);
+      // const result2 = await po_master.findAll({
+      //   where: { po_id },
+      //   include: [
+      //     {
+      //       model: db.VendorsMaster,
+      //       attributes: ['vendor_name']
+      //     },
+      //     {
+      //       model: db.po_items
+      //     },
+      //     {
+      //       model: db.form_m
+      //     }
+      //   ]
+      // })
+      res.status(200).json(result);
     }
     else {
       const query = `SELECT po_master.*
