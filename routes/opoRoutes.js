@@ -17,6 +17,7 @@ router
     .put('/update', opoController.updateOprById)
     .delete('/delete', opoController.deleteOprById)
     .post('/confirm', opoController.confirmOpr)
+    .put('/confirm',setAuditFields, opoController.sentforApproval)
 router
     .get('/items', oprItemsController.getOprItem)
     .put('/updateitem', oprItemsController.updateOprItemById)

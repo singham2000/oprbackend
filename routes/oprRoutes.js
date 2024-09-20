@@ -4,6 +4,7 @@ const router = express.Router();
 const oprController = require('../controllers/oprController');
 const oprItemsController = require('../controllers/oprItemsController');
 const setAuditFields = require('../middleware/setAuditFields.js');
+const sentApprovalRequest = require('../middleware/approvalMiddleware.js');
 // const oprItemsController = require('../controllers/oprItemsController');
 
 
@@ -16,6 +17,7 @@ router
     .delete('/opr/:id', oprController.deleteOprById)
     .post('/confirm/:opr_id', oprController.confirmOpr)
     .get('/additems', oprController.itemforOpr)
+    .put('/approval',setAuditFields,sentApprovalRequest, oprController.sentforApproval)
 router
     .get('/items', oprItemsController.getOprItem)
     .get('/quotecompare', oprItemsController.getOprItemsforQuoteCompare)

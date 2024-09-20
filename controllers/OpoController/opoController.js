@@ -42,9 +42,6 @@ exports.genrateOpo = async (req, res, next) => {
   console.log("Generate po ");
   console.log(req.body);
   let { quo_id, quo_num, vendor_id, itemList } = req.body;
-
-
-
   try {
     const doc_code = 'OPO';
     const opo_series = await generateSeries(doc_code);

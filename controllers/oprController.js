@@ -170,13 +170,13 @@ const createOpr = async (req, res, next) => {
 
         req.body.buying_house_id ? buying_house_id : 19
         req.body.status = 1;
-
         const result = await opr_master.create(req.body);
         res.status(201).json({ message: "Submit Successfully", opr_id: result.opr_id });
     } catch (err) {
         next(err)
     }
 };
+
 
 const updateOprById = async (req, res, next) => {
     const opr_id = req.query.opr_id;
@@ -267,6 +267,29 @@ const confirmOpr = async (req, res, next) => {
     }
 }
 
+
+const sentforApproval = async (req, res, next) => {
+    console.log("********sent for approval*********");
+    console.log(req.body);
+    const { doc_id, status } = req.body;
+    try {
+        const response = await opr_master.findByPk(doc_id);
+
+        if (!response) {
+            return res.status(404).json({ message: "Document not found" });
+        } else {
+            response.status = status; // Change to the new status
+            await response.save(); // Save the updated document
+            // res.status(200).json({ message: "OPR sent for approval successfully", data: response });
+            next();
+        }
+    } catch (err) {
+        console.error(err); // Log the error for debugging
+        res.status(500).json({ message: "An error occurred", error: err.message });
+    }
+}
+
+
 // Controller method to Create  with address id
 const createOpr2 = async (req, res, next) => {
     try {
@@ -317,7 +340,8 @@ oprController = {
     deleteOprById,
     createOpr,
     updateOprById,
-    itemforOpr
+    itemforOpr,
+    sentforApproval
 };
 
 

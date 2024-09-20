@@ -9,16 +9,32 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+        doc_type: {
+            type: DataTypes.STRING(20),
+            allowNull: false,
+        },
         doc_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        doc_number: {
+        doc_num: {
+            type: DataTypes.STRING(20),
+            allowNull: false,
+        },
+        from_user_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        user_id: {
+        from_user_level: {
+            type: DataTypes.STRING(20),
+            allowNull: false,
+        },
+        to_user_id: {
             type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        to_user_level: {
+            type: DataTypes.STRING(20),
             allowNull: false,
         },
         action: {
@@ -33,9 +49,7 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: true,
     });
 
-    // ApprovalLog.associate = (models) => {
-    //     ApprovalLog.belongsTo(models.ApprovalMatrix, { foreignKey: 'approval_id' });
-    // };
+
 
     return ApprovalLog;
 };

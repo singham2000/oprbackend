@@ -1,6 +1,7 @@
 const { ApprovalMatrix } = require('../../models');
 
 const ApprovalMatrixController = {
+    
     // Create a new approval matrix
     async create(req, res) {
         let { module_name, approval_level, user_id, status } = req.body
