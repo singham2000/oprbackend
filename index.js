@@ -47,7 +47,6 @@ const SeriesRoutes = require("./routes/seriesRoutes,js");
 const StatusRoutes = require("./routes/statusRoutes.js");
 
 
-
 //category
 const categoryRoute = require("./routes/categoryRoutes");
 const itemCategoryRouter = require("./routes/itemCategoryRoutes.js");
