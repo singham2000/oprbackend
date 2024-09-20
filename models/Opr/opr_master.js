@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: true
         },
-        opr_description: {
+        item_category_id: {
             type: DataTypes.STRING(500),
             allowNull: true
         },

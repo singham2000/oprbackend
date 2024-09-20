@@ -1,6 +1,6 @@
 // const { opr_master } = ('../models');
 const db = require('../models');
-const { OprMaster: opr_master, company_master, OprItems, Vertical, ItemsMaster } = db;
+const { OprMaster: opr_master, company_master, OprItems, Vertical, ItemsMaster, sequelize } = db;
 const formattedDateTime = require("../middleware/time");
 const { Op } = require('sequelize');
 const { generateSeries } = require("./seriesGenerate");
@@ -35,7 +35,7 @@ const { query } = require('express');
 //             buy_from,
 //             requested_by,
 //             no_quot_email_alert,
-//             opr_description,
+//             item_category_id,
 //             remarks,
 //             suppliers,
 //             [opr_master].[status]
@@ -60,7 +60,7 @@ const { query } = require('express');
 //                 buy_from,
 //                 requested_by,
 //                 no_quot_email_alert,
-//                 opr_description,
+//                 item_category_id,
 //                 remarks,
 //                 suppliers,
 //                 [opr_master].[status]
@@ -91,8 +91,8 @@ const getOpr = async (req, res, next) => {
                 { model: db.Department, attributes: ['dept_name'] },
                 { model: db.BuyingHouse, attributes: ['buying_house_name'] }
             ],
-            attributes: { exclude: ['department_id', 'delivery_timeline_id', 'buying_house_id', 'created_by', 'updated_by', 'createdAt', 'updatedAt', 'vertical_id', 'company_id', 'division_id'] }
-
+            attributes: { exclude: ['department_id', 'delivery_timeline_id', 'buying_house_id', 'created_by', 'updated_by', 'createdAt', 'updatedAt', 'vertical_id', 'company_id', 'division_id'], 
+            include: ['*', [sequelize.literal('dbo.fn_GetCategoryName(item_category_id)'), 'opr_description']]},
         })
 
         // Function to transform nested fields into top-level fields
@@ -162,7 +162,7 @@ const createOpr = async (req, res, next) => {
             department_id,
             requested_by,
             no_quot_email_alert,
-            opr_description,
+            item_category_id,
             remarks,
             suppliers,
             created_by
@@ -193,7 +193,7 @@ const updateOprById = async (req, res, next) => {
             department_id,
             requested_by,
             no_quot_email_alert,
-            opr_description,
+            item_category_id,
             remarks,
             suppliers,
             updated_by
@@ -212,7 +212,7 @@ const updateOprById = async (req, res, next) => {
             department_id,
             requested_by,
             no_quot_email_alert,
-            opr_description,
+            item_category_id,
             remarks,
             suppliers,
             opr_status: "Open",
@@ -305,7 +305,7 @@ const createOpr2 = async (req, res, next) => {
             department_id,
             requested_by,
             no_quot_email_alert,
-            opr_description,
+            item_category_id,
             remarks,
             suppliers,
             created_by

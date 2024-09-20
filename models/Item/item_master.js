@@ -139,7 +139,7 @@ module.exports = (sequelize, DataTypes) => {
     
 
     ItemsMaster.associate = (models) => {
-        // ItemsMaster.belongsTo(models.UomMaster, { foreignKey: 'uom_id' });
+        ItemsMaster.belongsTo(models.UomMaster, { foreignKey: 'uom_id' });
         ItemsMaster.belongsTo(models.ItemGroupMaster, { foreignKey: 'group_name' });
         ItemsMaster.hasMany(models.OprItems, { foreignKey: 'item_id' });
         ItemsMaster.hasMany(models.po_items, { foreignKey: 'item_id' });
