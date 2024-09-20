@@ -18,6 +18,8 @@ let db = {};
 //********************************************PO MODEL********************************************/
 
 //OTHER
+
+
 db.sequelize = sequelize;
 db.menu = require("./Masters/menu_master.js")(sequelize, DataTypes);
 db.purchaseLocation = require("./purchase_location_master.js")(
@@ -33,6 +35,8 @@ db.CurrencyConversion = require("./CurrencyConversion.js")(
     sequelize,
     DataTypes
 );
+
+
 
 //SHIPMENT
 db.DeliveryTimeline = require("./delivery_timeline_opr.js")(
@@ -78,18 +82,15 @@ db.SubCategoryMaster = require("./Item/item_sub_group_master.js")(
     DataTypes
 );
 db.ItemsMaster = require("./Item/item_master.js")(sequelize, DataTypes);
+db.UomMaster = require('./Masters/uom_master.js')(sequelize, DataTypes);
 
 db.ItemSuperGroupMaster = require("./Item/item_super_group_master.js")(sequelize, DataTypes);
 db.ItemGroupMaster = require("./Item/item_group_master.js")(sequelize, DataTypes);
 db.ItemSubGroupMaster = require("./Item/item_sub_group_master.js")(sequelize, DataTypes);
-
 db.Department = require("./department_master.js")(sequelize, DataTypes);
 db.CriaMaster = require("./cria_master.js")(sequelize, DataTypes); 1
 db.Nafdac = require("./nafdacMaster.js")(sequelize, DataTypes);
-db.NafdacCategoryMaster = require("./nafdac_category_master.js")(
-    sequelize,
-    DataTypes
-);
+db.NafdacCategoryMaster = require("./nafdac_category_master.js")(sequelize, DataTypes);
 
 //VENDOR
 db.vendor = require("./Vendor/vendor_master.js")(sequelize, DataTypes);
@@ -133,6 +134,7 @@ db.ServiceQUO = require("./Services/Service_Quotation.js")(
     sequelize,
     DataTypes
 );
+
 
 db.ServiceTypeMaster = require("./Services/services_type_master.js")(sequelize, DataTypes);
 
@@ -250,11 +252,6 @@ db.shipping_lapse_master = require("./Masters/ShippingLapse")(
     sequelize,
     DataTypes
 );
-db.port_destination_master = require("./Masters/PortDestinationMaster.js")(
-    sequelize,
-    DataTypes
-);
-
 
 //Packing
 db.PackageTypeMaster = require('./Packing/PackageType.js')(sequelize, DataTypes);
@@ -281,8 +278,13 @@ Object.values(models).forEach((model) => {
     }
 });
 
+console.log("**************modles")
+console.log(db);
+
+
+
 sequelize
-    .sync({ alter: false })
+    .sync({ alter: true })
     .then(() => {
         console.log("Database & tables created!");
     })
