@@ -121,5 +121,21 @@ module.exports = (sequelize, DataTypes) => {
         createdAt: 'created_on', // Customize createdAt field name
         updatedAt: 'updated_on' 
     });
+
+    quotation_master.associate = (models) => {
+        quotation_master.hasMany(models.quotation_items, {
+          foreignKey: "quo_id",
+        });
+        quotation_master.hasMany(models.QuoDoc, {
+            foreignKey: "quotation_id",
+          });
+          quotation_master.belongsTo(models.vendor, {
+            foreignKey: "vendor_id",
+          });
+          quotation_master.hasMany(models.additional_cost, {
+            foreignKey: "quo_id",
+          });
+      }
+
     return quotation_master;
 };

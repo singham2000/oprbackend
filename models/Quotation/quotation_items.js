@@ -11,7 +11,11 @@ module.exports = (sequelize, DataTypes) => {
     quo_id: {
       type: DataTypes.INTEGER,
       allowNull: true
-    },    
+    },  
+    rfq_item_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },  
     quo_num: {
       type: DataTypes.STRING(55),
       allowNull: true
