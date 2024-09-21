@@ -122,6 +122,28 @@ async function createUDFIfNotExists() {
           END;
         ');
       END;
+
+
+        -- Check and create fn_transportPaymentType if it does not exist
+      IF OBJECT_ID('dbo.fn_GetDeliveryTerm', 'FN') IS NULL
+      BEGIN
+        EXEC('
+          CREATE FUNCTION dbo.fn_GetDeliveryTerm(@DeliveryTermId INT)
+          RETURNS VARCHAR(150)
+          AS 
+          BEGIN
+              DECLARE @ret VARCHAR(100);
+              
+              -- Select delivery_terms_name from delivery_terms_quo
+              SELECT @ret = ISNULL(d.delivery_terms_name, ''Delivery Terms Invalid'')
+              FROM delivery_terms_quo d
+              WHERE d.delivery_terms_id = @DeliveryTermId;
+              
+              RETURN @ret;
+          END;
+        ');
+      END;
+      
     `;
 
     // Log the SQL query for debugging
