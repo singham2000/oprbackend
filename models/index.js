@@ -175,14 +175,9 @@ db.PenaltyTermsMaster = require("./Payments/PenaltyTermsMaster.js")(
     DataTypes
 );
 db.PaymentTerms = require("./Payments/PaymentTerms.js")(sequelize, DataTypes);
-db.PaymentTypeMaster = require("./Payments/paymentTypes.js")(
-    sequelize,
-    DataTypes
-);
-db.PaymentRequestMaster = require("./Payments/PaymentRequestMaster.js")(
-    sequelize,
-    DataTypes
-);
+db.PaymentTypeMaster = require("./Payments/paymentTypes.js")(sequelize, DataTypes);
+db.PaymentRequestMaster = require("./Payments/PaymentRequestMaster.js")(sequelize, DataTypes);
+db.PaymentTermsMilesStones = require("./Payments/PaymentsTermsMileStones.js")(sequelize, DataTypes);
 
 //OPO
 db.OpoMaster = require("./Opo/opo_master.js")(sequelize, DataTypes);

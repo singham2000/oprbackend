@@ -3,7 +3,9 @@ const express = require('express');
 const router = express.Router();
 const PaymentTermsController = require('../controllers/paymentTermsController');
 
+
 // API routes
+
 router
     .get('/', PaymentTermsController.getPaymentTerms)
     .post('/', PaymentTermsController.createPaymentTerms)
@@ -15,7 +17,4 @@ router
     .post('/create', PaymentTermsController.createPaymentTerms)
     .put('/update', PaymentTermsController.updatePaymentTermsById)
     .delete('/update', PaymentTermsController.deletePaymentTermsById)
-
-
-
 module.exports = router;

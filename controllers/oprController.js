@@ -77,6 +77,8 @@ const { query } = require('express');
 
 
 const getOpr = async (req, res, next) => {
+
+    console.log("Hello how are you *****************")
     const { opr_id } = req.query;
     try {
         let opr_detials = await opr_master.findAll({
@@ -90,7 +92,7 @@ const getOpr = async (req, res, next) => {
                 { model: db.Department, attributes: ['dept_name'] },
                 { model: db.BuyingHouse, attributes: ['buying_house_name'] }
             ],
-            attributes: { exclude: ['department_id', 'delivery_timeline_id', 'buying_house_id', 'created_by', 'updated_by', 'createdAt', 'updatedAt', 'vertical_id', 'company_id', 'division_id'] }
+            attributes: { exclude: ['department_id','opr_description','delivery_timeline_id', 'buying_house_id', 'created_by', 'updated_by', 'createdAt', 'updatedAt', 'vertical_id', 'company_id', 'division_id'] }
 
         })
 
@@ -122,7 +124,7 @@ const getOpr = async (req, res, next) => {
 
         opr_detials = await transformData(opr_detials);
         let rfqcountquery = `select COUNT(*) as qs from quotations_master
-where rfq_id in (Select rfq_id from opr_items where opr_id=10)`
+                                where rfq_id in (Select rfq_id from opr_items where opr_id=10)`
         opr_detials.received_quotatoins = await db.sequelize.query(rfqcountquery)
         res.status(200).json(opr_detials)
 
