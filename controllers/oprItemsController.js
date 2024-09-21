@@ -440,48 +440,51 @@ const getOprCompanyDropdown = async (req, res, next) => {
 const getOprItemsforQuoteCompare = async (req, res, next) => {
     let { opr_id, company_id } = req.query
 
-    //     let query = `select 
-    // opr_items.item_id,
-    // opr_items.company_id,
-    // opr_items.qty,
-    // opr_items.address_id,
-    // address_master.city,
-    // quotations_master.vendor_id,
-    // vendors_master.vendor_name,
-    // quotation_items.rate
-    // from opr_items
-    // inner join quotations_master
-    // on quotations_master.rfq_id = opr_items.rfq_id
-    // inner join quotation_items
-    // on quotation_items.quo_id = quotations_master.quo_id
-    // inner join address_master
-    // on address_master.address_id = opr_items.address_id
-    // inner join vendors_master
-    // on vendors_master.vendor_id = quotations_master.vendor_id
-    // where company_id = ${company_id} and opr_id = ${opr_id}
-    // `
+        let query = `select 
+    opr_items.item_id,
+    opr_items.company_id,
+    opr_items.qty,
+    opr_items.address_id,
+    address_master.city,
+    quotations_master.vendor_id,
+    vendors_master.vendor_name,
+    quotation_items.rate
+    from opr_items
+    inner join quotations_master
+    on quotations_master.rfq_id = opr_items.rfq_id
+    inner join quotation_items
+    on quotation_items.quo_id = quotations_master.quo_id
+    inner join address_master
+    on address_master.address_id = opr_items.address_id
+    inner join vendors_master
+    on vendors_master.vendor_id = quotations_master.vendor_id
+    where company_id = ${company_id} and opr_id = ${opr_id}
+    `
 
-    let query = `
-            select 
-            opr_items.item_id,
-            opr_items.company_id,
-            opr_items.qty,
-            opr_items.address_id,
-            quotation_items.rate as rate,
-            quotation_items.vendor_id as vendor_id,
-            vendors_master.vendor_name,
-            address_master.city,
-            quotation_items.quo_id,
-            quotation_items.rfq_id
-            from opr_items
-            inner join quotation_items
-            on quotation_items.rfq_id =opr_items.rfq_id
-            and quotation_items.item_id = opr_items.item_id
-            inner join address_master
-            on address_master.address_id = opr_items.address_id
-            inner join vendors_master
-            on vendors_master.vendor_id= quotation_items.vendor_id
-            where company_id = ${company_id} and opr_id = ${opr_id}`
+    console.log("************************")
+    console.log(query)
+
+    // let query = `
+    //         select 
+    //         opr_items.item_id,
+    //         opr_items.company_id,
+    //         opr_items.qty,
+    //         opr_items.address_id,
+    //         quotation_items.rate as rate,
+    //         quotation_items.vendor_id as vendor_id,
+    //         vendors_master.vendor_name,
+    //         address_master.city,
+    //         quotation_items.quo_id,
+    //         quotation_items.rfq_id
+    //         from opr_items
+    //         inner join quotation_items
+    //         on quotation_items.rfq_id =opr_items.rfq_id
+    //         and quotation_items.item_id = opr_items.item_id
+    //         inner join address_master
+    //         on address_master.address_id = opr_items.address_id
+    //         inner join vendors_master
+    //         on vendors_master.vendor_id= quotation_items.vendor_id
+    //         where company_id = ${company_id} and opr_id = ${opr_id}`
 
     let data = await db.sequelize.query(query, {
         // replacements: { opr_id: opr_id || null }, // Safe parameter binding

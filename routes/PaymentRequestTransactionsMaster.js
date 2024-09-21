@@ -15,7 +15,7 @@ router.post('/reject', paymentRequestMasterController.rejectPaymentRequestByTrea
 router.get('/transaction', paymentRequestTransactionsMasterController.getPaymentRequestTransactionsMasterRequestId);
 router.get('/transactionfile', paymentRequestTransactionsMasterController.getPaymentRequestTransactionsfileRequestId);
 router.get('/bydocid', paymentRequestTransactionsMasterController.getPaymentTransactionByCoID)
-router.put('/approval', setAuditFields,sentApprovalRequest, paymentRequestTransactionsMasterController.sentPaymentForApproval)
+router.put('/approval', setAuditFields, sentApprovalRequest, paymentRequestTransactionsMasterController.sentPaymentForApproval)
 // router.get('/:id', paymentRequestTransactionsMasterController.getPaymentRequestTransactionsMasterById);
 // router.put('/:id', paymentRequestTransactionsMasterController.updatePaymentRequestTransactionsMaster);
 // router.delete('/:id', paymentRequestTransactionsMasterController.deletePaymentRequestTransactionsMaster);

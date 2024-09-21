@@ -177,6 +177,26 @@
         }
       }
     },
+    "/api/reqdoc/list/byids": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
     "/api/category/group": {
       "post": {
         "description": "",
@@ -1640,6 +1660,12 @@
                   "example": "any"
                 },
                 "item_series": {
+                  "example": "any"
+                },
+                "super_category_id": {
+                  "example": "any"
+                },
+                "superCategory": {
                   "example": "any"
                 },
                 "item_img": {
