@@ -2888,13 +2888,6 @@
     "/api/opr/oprs": {
       "get": {
         "description": "",
-        "parameters": [
-          {
-            "name": "opr_id",
-            "in": "query",
-            "type": "string"
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -2962,7 +2955,7 @@
                 "no_quot_email_alert": {
                   "example": "any"
                 },
-                "opr_description": {
+                "item_category_id": {
                   "example": "any"
                 },
                 "remarks": {
@@ -3034,7 +3027,7 @@
                 "no_quot_email_alert": {
                   "example": "any"
                 },
-                "opr_description": {
+                "item_category_id": {
                   "example": "any"
                 },
                 "remarks": {
@@ -11695,6 +11688,9 @@
                 "created_by": {
                   "example": "any"
                 },
+                "milestone_data": {
+                  "example": "any"
+                },
                 "status": {
                   "example": "any"
                 }
@@ -11808,6 +11804,9 @@
                   "example": "any"
                 },
                 "created_by": {
+                  "example": "any"
+                },
+                "milestone_data": {
                   "example": "any"
                 },
                 "status": {

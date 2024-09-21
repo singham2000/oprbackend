@@ -82,6 +82,46 @@ async function createUDFIfNotExists() {
           END;
         ');
       END;
+
+     -- Check and create fn_transportPaymentType if it does not exist
+      IF OBJECT_ID('dbo.fn_GetCategoryName', 'FN') IS NULL
+      BEGIN
+        EXEC('
+          CREATE FUNCTION dbo.fn_GetCategoryName(@CategoryId INT)
+          RETURNS VARCHAR(150)
+          AS 
+          BEGIN
+              DECLARE @ret VARCHAR(100);
+              
+              -- Select payment_type_transport_name from payment_type_transport_master
+              SELECT @ret = ISNULL(c.category_name, ''Category Invalid'')
+              FROM item_category_master c
+              WHERE c.item_category_id = @CategoryId;
+              
+              RETURN @ret;
+          END;
+        ');
+      END;
+
+       -- Check and create fn_transportPaymentType if it does not exist
+      IF OBJECT_ID('dbo.fn_GetPortDestinationName', 'FN') IS NULL
+      BEGIN
+        EXEC('
+          CREATE FUNCTION dbo.fn_GetPortDestinationName(@PortDestinationId INT)
+          RETURNS VARCHAR(150)
+          AS 
+          BEGIN
+              DECLARE @ret VARCHAR(100);
+              
+              -- Select payment_type_transport_name from port_destination_master
+              SELECT @ret = ISNULL(p.port_destination_name, ''Port Destination Invalid'')
+              FROM port_destination_master p
+              WHERE p.port_destination_id = @PortDestinationId;
+              
+              RETURN @ret;
+          END;
+        ');
+      END;
     `;
 
     // Log the SQL query for debugging

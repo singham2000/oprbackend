@@ -93,7 +93,11 @@ const getVendorsByRfqId = async (req, res, next) => {
 
 const getAllRfq = async (req, res, next) => {
   try {
-    const rfqs = await RfqMaster.findAll();
+    const rfqs = await RfqMaster.findAll({
+      attributes: { include: ['*', [sequelize.literal('dbo.fn_GetPortDestinationName(port_of_destination)'), 'port_of_destination_name']]},
+    });
+
+
     //this funcation will add no of item included in a rfq
     const trnsFormData = await Promise.all(
       rfqs.map(async (rfqs) => {
@@ -163,6 +167,7 @@ const createRfq = async (req, res, next) => {
       req_doc_id: req_doc_id,
       remarks,
       port_of_destination,
+      status: 1,
       created_by,
       updated_by,
     });

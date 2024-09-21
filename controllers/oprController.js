@@ -1,6 +1,6 @@
 // const { opr_master } = ('../models');
 const db = require('../models');
-const { OprMaster: opr_master, company_master, OprItems, Vertical, ItemsMaster } = db;
+const { OprMaster: opr_master, company_master, OprItems, Vertical, ItemsMaster, sequelize } = db;
 const formattedDateTime = require("../middleware/time");
 const { Op } = require('sequelize');
 const { generateSeries } = require("./seriesGenerate");
@@ -35,7 +35,7 @@ const { query } = require('express');
 //             buy_from,
 //             requested_by,
 //             no_quot_email_alert,
-//             opr_description,
+//             item_category_id,
 //             remarks,
 //             suppliers,
 //             [opr_master].[status]
@@ -60,7 +60,7 @@ const { query } = require('express');
 //                 buy_from,
 //                 requested_by,
 //                 no_quot_email_alert,
-//                 opr_description,
+//                 item_category_id,
 //                 remarks,
 //                 suppliers,
 //                 [opr_master].[status]
@@ -78,8 +78,6 @@ const { query } = require('express');
 
 const getOpr = async (req, res, next) => {
 
-    console.log("Hello how are you *****************")
-    const { opr_id } = req.query;
     try {
         let opr_detials = await opr_master.findAll({
             where: opr_id ? { opr_id: opr_id } : {},
@@ -161,7 +159,7 @@ const createOpr = async (req, res, next) => {
             department_id,
             requested_by,
             no_quot_email_alert,
-            opr_description,
+            item_category_id,
             remarks,
             suppliers,
             created_by
@@ -191,7 +189,7 @@ const updateOprById = async (req, res, next) => {
             department_id,
             requested_by,
             no_quot_email_alert,
-            opr_description,
+            item_category_id,
             remarks,
             suppliers,
             updated_by
@@ -210,7 +208,7 @@ const updateOprById = async (req, res, next) => {
             department_id,
             requested_by,
             no_quot_email_alert,
-            opr_description,
+            item_category_id,
             remarks,
             suppliers,
             opr_status: "Open",
@@ -297,7 +295,7 @@ const createOpr2 = async (req, res, next) => {
             department_id,
             requested_by,
             no_quot_email_alert,
-            opr_description,
+            item_category_id,
             remarks,
             suppliers,
             created_by
