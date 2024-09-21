@@ -31,6 +31,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -129,6 +132,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "module_name": {
                   "example": "any"
                 },
@@ -171,6 +177,26 @@
         }
       }
     },
+    "/api/reqdoc/list/byids": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
     "/api/category/group": {
       "post": {
         "description": "",
@@ -190,6 +216,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 }
               }
@@ -278,6 +307,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "item_group_name": {
                   "example": "any"
                 }
@@ -348,6 +380,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -415,6 +450,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "item_group_name": {
                   "example": "any"
                 }
@@ -463,6 +501,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -503,6 +544,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "item_sub_group_name": {
@@ -576,6 +620,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -622,6 +669,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -662,6 +712,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "item_super_group_name": {
@@ -721,6 +774,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -765,6 +821,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -805,6 +864,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "item_sub_group_name": {
@@ -874,6 +936,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -918,6 +983,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -958,6 +1026,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "item_super_group_id": {
@@ -1039,6 +1110,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "first_name": {
@@ -1214,6 +1288,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "role_name": {
                   "example": "any"
                 },
@@ -1263,6 +1340,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "role_name": {
                   "example": "any"
                 }
@@ -1310,6 +1390,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 }
               }
@@ -1473,6 +1556,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "vendorData": {
                   "example": "any"
                 },
@@ -1570,7 +1656,16 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "item_series": {
+                  "example": "any"
+                },
+                "super_category_id": {
+                  "example": "any"
+                },
+                "superCategory": {
                   "example": "any"
                 },
                 "item_img": {
@@ -1625,6 +1720,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "item_id": {
@@ -1853,6 +1951,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -1940,6 +2041,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "item_group_name": {
                   "example": "any"
                 }
@@ -2010,6 +2114,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -2077,6 +2184,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "item_group_name": {
                   "example": "any"
                 }
@@ -2125,6 +2235,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -2165,6 +2278,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "item_sub_group_name": {
@@ -2238,6 +2354,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -2284,6 +2403,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -2324,6 +2446,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "item_super_group_name": {
@@ -2383,6 +2508,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -2427,6 +2555,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -2467,6 +2598,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "item_sub_group_name": {
@@ -2536,6 +2670,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -2580,6 +2717,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -2620,6 +2760,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "item_super_group_id": {
@@ -2691,6 +2834,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "item_sub_group_name": {
@@ -2775,6 +2921,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "buying_house_id": {
@@ -2987,6 +3136,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "action": {
                   "example": "any"
                 },
@@ -3000,9 +3152,6 @@
                   "example": "any"
                 },
                 "doc_num": {
-                  "example": "any"
-                },
-                "user_id": {
                   "example": "any"
                 },
                 "user_level": {
@@ -3194,6 +3343,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "status": {
                   "example": "any"
                 },
@@ -3372,6 +3524,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -3414,13 +3569,22 @@
                 "updated_by": {
                   "example": "any"
                 },
-                "penalty_terms_id": {
+                "user_id": {
+                  "example": "any"
+                },
+                "req_doc_id": {
                   "example": "any"
                 },
                 "opr_item_ids": {
                   "example": "any"
                 },
                 "vendor_ids": {
+                  "example": "any"
+                },
+                "remarks": {
+                  "example": "any"
+                },
+                "port_of_destination": {
                   "example": "any"
                 },
                 "item_list": {
@@ -3482,6 +3646,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "status": {
@@ -3645,6 +3812,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "quo_id": {
                   "example": "any"
                 },
@@ -3781,6 +3951,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "po_id": {
@@ -3951,6 +4124,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "branch_name": {
                   "example": "any"
                 },
@@ -3997,6 +4173,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -4037,6 +4216,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "branch_name": {
@@ -4098,6 +4280,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "dept_name": {
@@ -4452,6 +4637,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "unit_of_measurement_name": {
                   "example": "any"
                 }
@@ -4523,6 +4711,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -4568,6 +4759,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 }
               }
@@ -4728,6 +4922,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "delivery_timeline_name": {
@@ -4990,6 +5187,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "quotation_details": {
                   "example": "any"
                 },
@@ -5118,6 +5318,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "status": {
                   "example": "any"
                 },
@@ -5241,6 +5444,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "quo_id": {
@@ -5389,6 +5595,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "category_code": {
@@ -5621,6 +5830,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "company_code": {
                   "example": "any"
                 },
@@ -5735,6 +5947,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "companyData": {
@@ -5874,6 +6089,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "companyData": {
                   "example": "any"
                 },
@@ -5924,6 +6142,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 }
               }
@@ -5985,6 +6206,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "division_name": {
@@ -6056,6 +6280,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -6101,6 +6328,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 }
               }
@@ -6157,6 +6387,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "delivery_terms_name": {
@@ -6268,6 +6501,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "quo_id": {
                   "example": "any"
                 },
@@ -6345,6 +6581,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "delivery_timeline_name": {
                   "example": "any"
                 }
@@ -6387,6 +6626,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 }
               }
@@ -6440,6 +6682,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "lead_time_name": {
@@ -6645,6 +6890,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "pfi_num": {
@@ -7059,6 +7307,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "package_type": {
                   "example": "any"
                 },
@@ -7117,6 +7368,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -7155,6 +7409,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 }
               }
@@ -7224,6 +7481,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "pfiId": {
@@ -7378,6 +7638,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "penalty_terms_name": {
                   "example": "any"
                 },
@@ -7450,6 +7713,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "pfiId": {
@@ -7550,6 +7816,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "penalty_terms_name": {
                   "example": "any"
                 },
@@ -7641,6 +7910,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "pfiNum": {
                   "example": "any"
                 },
@@ -7713,6 +7985,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "penalty_terms_name": {
@@ -7804,6 +8079,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "pfiNum": {
@@ -7907,6 +8185,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "penalty_terms_name": {
                   "example": "any"
                 },
@@ -7998,6 +8279,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "pfiId": {
                   "example": "any"
                 },
@@ -8056,6 +8340,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "pfi_id": {
@@ -8152,6 +8439,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "pfi_id": {
                   "example": "any"
                 },
@@ -8233,6 +8523,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "penalty_terms_name": {
@@ -8317,6 +8610,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "rotation_no": {
@@ -8426,6 +8722,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "penalty_terms_name": {
                   "example": "any"
                 },
@@ -8503,6 +8802,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "penalty_terms_name": {
@@ -8591,6 +8893,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "pfi_id": {
                   "example": "any"
                 },
@@ -8665,6 +8970,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "operations_nafdac_master_id": {
                   "example": "any"
                 },
@@ -8731,6 +9039,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "ci_id": {
@@ -8810,6 +9121,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "penalty_terms_name": {
                   "example": "any"
                 },
@@ -8867,6 +9181,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "operations_son_id": {
@@ -8934,6 +9251,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "ci_id": {
                   "example": "any"
                 },
@@ -8994,6 +9314,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "penalty_terms_name": {
@@ -9070,6 +9393,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "map((allocation": {
                   "example": "any"
                 }
@@ -9107,6 +9433,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "container_allocation_id": {
@@ -9183,6 +9512,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "container_allocation_id": {
@@ -9265,6 +9597,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "pfi_id": {
                   "example": "any"
                 },
@@ -9339,6 +9674,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "penalty_terms_name": {
                   "example": "any"
                 },
@@ -9396,6 +9734,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "pfi_id": {
@@ -9460,6 +9801,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "ci_id": {
                   "example": "any"
                 },
@@ -9514,6 +9858,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "penalty_terms_name": {
@@ -9590,6 +9937,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "cpackageDetail": {
                   "example": "any"
                 },
@@ -9633,6 +9983,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "shippment_container_detail_id": {
@@ -9742,6 +10095,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "pfi_id": {
                   "example": "any"
                 },
@@ -9784,6 +10140,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "pfi_id": {
@@ -9830,6 +10189,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "pfi_id": {
                   "example": "any"
                 },
@@ -9872,6 +10234,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "ci_id": {
@@ -10018,6 +10383,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "document_name": {
                   "example": "any"
                 },
@@ -10116,6 +10484,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "shipping_id": {
                   "example": "any"
                 },
@@ -10187,6 +10558,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "container_expenses": {
                   "example": "any"
                 }
@@ -10226,6 +10600,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "shiping_id": {
@@ -10300,6 +10677,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 }
               }
@@ -10382,6 +10762,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "container_type_name": {
@@ -10498,6 +10881,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "payment_term_container_name": {
                   "example": "any"
                 },
@@ -10610,6 +10996,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "transport_operation_lapse_name": {
@@ -10726,6 +11115,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "payment_type_transport_name": {
                   "example": "any"
                 },
@@ -10838,6 +11230,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "add_expense_charges_name": {
@@ -10954,6 +11349,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "payment_type_charges_name": {
                   "example": "any"
                 },
@@ -11068,6 +11466,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "shipping_lapse_name": {
                   "example": "any"
                 },
@@ -11137,6 +11538,123 @@
       }
     },
     "/api/shipping/lapse/dropdown": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/port/destination/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "port_destination_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
+                },
+                "port_destination_name": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "port_destination_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "port_destination_name": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "port_destination_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/port/destination/dropdown": {
       "get": {
         "description": "",
         "responses": {
@@ -11883,6 +12401,74 @@
         }
       }
     },
+    "/api/payment-transactions/approval": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
+                },
+                "action": {
+                  "example": "any"
+                },
+                "comments": {
+                  "example": "any"
+                },
+                "doc_type": {
+                  "example": "any"
+                },
+                "doc_id": {
+                  "example": "any"
+                },
+                "doc_num": {
+                  "example": "any"
+                },
+                "user_level": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/api/payment/type_list": {
       "get": {
         "description": "",
@@ -11940,6 +12526,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "payment_type_name": {
                   "example": "any"
                 },
@@ -11988,6 +12577,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -12033,6 +12625,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 }
               }
@@ -12112,6 +12707,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "penalty_terms_name": {
                   "example": "any"
                 },
@@ -12159,6 +12757,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 }
               }
@@ -12208,6 +12809,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 }
               }
@@ -12287,6 +12891,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "payment_terms_name": {
                   "example": "any"
                 },
@@ -12341,6 +12948,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -12390,6 +13000,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -12430,6 +13043,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "pr_num": {
@@ -12495,6 +13111,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "receipt_image": {
@@ -12579,6 +13198,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "approval_matrix_id": {
                   "example": "any"
                 },
@@ -12586,9 +13208,6 @@
                   "example": "any"
                 },
                 "doc_number": {
-                  "example": "any"
-                },
-                "user_id": {
                   "example": "any"
                 },
                 "action": {
@@ -12610,17 +13229,6 @@
           },
           "401": {
             "description": "Unauthorized"
-          }
-        }
-      },
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         }
       }
@@ -12673,6 +13281,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -12717,6 +13328,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 }
               }
@@ -12763,13 +13377,13 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "module_name": {
                   "example": "any"
                 },
                 "approval_level": {
-                  "example": "any"
-                },
-                "user_id": {
                   "example": "any"
                 },
                 "status": {
@@ -12851,6 +13465,9 @@
                 },
                 "updated_by": {
                   "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
                 }
               }
             }
@@ -12895,6 +13512,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 }
               }
@@ -13108,6 +13728,9 @@
                 "updated_by": {
                   "example": "any"
                 },
+                "user_id": {
+                  "example": "any"
+                },
                 "buying_house_code": {
                   "example": "any"
                 },
@@ -13254,6 +13877,9 @@
                   "example": "any"
                 },
                 "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
                   "example": "any"
                 },
                 "buying_house_id": {

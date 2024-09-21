@@ -6,10 +6,10 @@ const { generateSeries } = require('../utilites/genrateSeries')
 const getAllItems = async (req, res, next) => {
     try {
         const items = await Item.findAll({
-            //to be correct
-            // include: [
-            //     { model: db.UomMaster, attributes: ['uom_id', 'uom_name'] },
-            // ]
+            // to be correct
+            include: [
+                { model: db.UomMaster, attributes: ['uom_id', 'uom_name'] },
+            ]
         });
 
         res.status(200).json(items);
@@ -41,8 +41,9 @@ const getItemById = async (req, res) => {
 const createItem = async (req, res, next) => {
     const doc_code = 'ITM';
     const item_series = await generateSeries(doc_code);
-
     req.body.item_series = item_series
+    req.body.super_category_id = req.body.superCategory
+
     try {
         const fileBuffer = req.file.buffer;
         const base64String = await fileBuffer.toString("base64");

@@ -78,7 +78,6 @@ const { query } = require('express');
 
 const getOpr = async (req, res, next) => {
     const { opr_id } = req.query;
-
     try {
         let opr_detials = await opr_master.findAll({
             where: opr_id ? { opr_id: opr_id } : {},
@@ -132,7 +131,6 @@ where rfq_id in (Select rfq_id from opr_items where opr_id=10)`
     }
 }
 
-// Controller method to delete by id
 const deleteOprById = async (req, res, next) => {
     const opr_id = req.query.opr_id;
     try {
@@ -147,7 +145,6 @@ const deleteOprById = async (req, res, next) => {
     }
 };
 
-// Controller method to Create
 const createOpr = async (req, res, next) => {
     try {
         const {
@@ -176,7 +173,6 @@ const createOpr = async (req, res, next) => {
         next(err)
     }
 };
-
 
 const updateOprById = async (req, res, next) => {
     const opr_id = req.query.opr_id;
@@ -232,7 +228,6 @@ const updateOprById = async (req, res, next) => {
     }
 };
 
-
 const confirmOpr = async (req, res, next) => {
     try {
         const doc_code = 'OPR';
@@ -267,10 +262,7 @@ const confirmOpr = async (req, res, next) => {
     }
 }
 
-
 const sentforApproval = async (req, res, next) => {
-    console.log("********sent for approval*********");
-    console.log(req.body);
     const { doc_id, status } = req.body;
     try {
         const response = await opr_master.findByPk(doc_id);
@@ -289,8 +281,6 @@ const sentforApproval = async (req, res, next) => {
     }
 }
 
-
-// Controller method to Create  with address id
 const createOpr2 = async (req, res, next) => {
     try {
         const {

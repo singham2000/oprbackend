@@ -136,11 +136,11 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'item_master',
         timestamps: true,
     })
-    
+
 
     ItemsMaster.associate = (models) => {
-        ItemsMaster.belongsTo(models.UomMaster, { foreignKey: 'uom_id' });
         ItemsMaster.belongsTo(models.ItemGroupMaster, { foreignKey: 'group_name' });
+        ItemsMaster.belongsTo(models.UomMaster, { foreignKey: 'uom_id' });
         ItemsMaster.hasMany(models.OprItems, { foreignKey: 'item_id' });
         ItemsMaster.hasMany(models.po_items, { foreignKey: 'item_id' });
         ItemsMaster.hasMany(models.rfqitem, { foreignKey: 'item_id' });

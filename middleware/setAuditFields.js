@@ -19,7 +19,6 @@ const setAuditFields = async (req, res, next) => {
     }
 
     jwt.verify(token, jwtSecretKey, (err, decoded) => {
-
         if (err) {
             console.log("jwterro", err);
             return res.status(401).json({ message: 'Token verification failed' });
@@ -28,11 +27,17 @@ const setAuditFields = async (req, res, next) => {
         if (req.method === 'POST') {
             req.body.created_by = userinfo.first_name || 'NA';
             req.body.updated_by = '';
+            req.body.user_id =userinfo.email || "N/A";
         } else if (req.method === 'PUT') {
             req.body.updated_by = userinfo.first_name || 'NA';
+            req.body.user_id =userinfo.email || "N/A";
+
         }
         else if (req.method === 'DELETE') {
             req.body.updated_by = userinfo.first_name || 'NA';
+            req.body.user_id =userinfo.email || "N/A";
+
+
         }
         next();
     });

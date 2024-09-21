@@ -32,6 +32,26 @@ exports.getAllRequiredDocuments = async (req, res) => {
     }
 };
 
+
+// Get all required documents
+exports.getAllRequiredDocumentsByIds = async (req, res) => {
+    let { ids } = req.query;
+    //convert incoming into array
+    let idsArray = ids.replace(/[()]/g, '').split(',').map(Number);
+    try {
+        const requiredDocuments = await reqdocMaster.findAll({
+            where: { 
+                status: { [Op.ne]: 0 } ,
+                req_doc_id:{[Op.in]: idsArray}
+            } // Assuming 0 means deleted
+        });
+        res.status(200).json(requiredDocuments);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+
 // Get a required document by ID
 exports.getRequiredDocumentById = async (req, res) => {
     try {

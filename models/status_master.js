@@ -45,4 +45,4 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     return status_master;
-};
+};  

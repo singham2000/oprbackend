@@ -1,4 +1,4 @@
-    const { PaymentRequestTransactionsMaster, PaymentRequestMaster, po_master, Pfi_master, sequelize } = require('../models'); // Adjust the path to your models file
+const { PaymentRequestTransactionsMaster, PaymentRequestMaster, po_master, Pfi_master, sequelize } = require('../models'); // Adjust the path to your models file
 
 //this funcation will insert data in transaction table and same time i will also insert data in pfi master without pfi number(series)
 exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {
@@ -55,7 +55,6 @@ exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {
         next(error);
     }
 };
-
 
 // Get all PaymentRequestTransactionsMaster records
 exports.getAllPaymentRequestTransactionsMasters = async (req, res) => {
@@ -215,7 +214,6 @@ exports.deletePaymentRequestTransactionsMaster = async (req, res) => {
 
 
 //get payment id by doc_id
-
 exports.getPaymentTransactionByCoID = async (req, res, next) => {
     try {
         const { doc_id } = req.query;
@@ -234,6 +232,24 @@ exports.getPaymentTransactionByCoID = async (req, res, next) => {
     }
 }
 
+
+exports.sentPaymentForApproval = async (req, res, next) => {
+    const { doc_id, status } = req.body;
+    try {
+        const response = await PaymentRequestTransactionsMaster.findByPk(doc_id);
+        if (!response) {
+            return res.status(404).json({ message: "Document not found" });
+        } else {
+            response.status = status; // Change to the new status
+            await response.save(); // Save the updated document
+            // res.status(200).json({ message: "OPR sent for approval successfully", data: response });
+            next();
+        }
+    } catch (err) {
+        console.error(err); // Log the error for debugging
+        res.status(500).json({ message: "An error occurred", error: err.message });
+    }
+}
 
 
 
