@@ -140,9 +140,10 @@ exports.deletePaymentTermsById = async (req, res, next) => {
 exports.createPaymentTerms = async (req, res, next) => {
     try {
         const { payment_terms_name, created_by, milestone_data, status } = req.body;
+        console.log(req.body);
         const result = await payment_terms_quo.create({
             payment_terms_name,
-            status: status || 1,
+            status: status ? 1 : 0,
             payment_type_id: 1,
             penalty_terms_id: 1,
             created_by
@@ -151,7 +152,8 @@ exports.createPaymentTerms = async (req, res, next) => {
 
         milestone_data.map((item) => {
             item.payment_term_id = last_id,
-                item.status = status || 1
+            item.status = status ? 1 : 0,
+            item.created_by = created_by
         })
         const milestone = await PaymentTermsMilesStones.bulkCreate(milestone_data)
         res.status(201).json({ message: "Payment term created successfully", data: result });
@@ -159,6 +161,21 @@ exports.createPaymentTerms = async (req, res, next) => {
         next(err);
     }
 };
+
+
+//Get milestone list by paymentTerms Id
+exports.getMileStoneList = async (req, res, next) => {
+    try {
+        const { payment_term_id } = req.query;
+        const milestone = await PaymentTermsMilesStones.findAll({
+            where: { payment_term_id }
+        })
+        res.status(201).json({ message: "List Fetch Sucessfully", data: milestone });
+    } catch (err) {
+        next(err);
+    }
+
+}
 
 // Controller method to update a payment term by ID
 exports.updatePaymentTermsById = async (req, res, next) => {

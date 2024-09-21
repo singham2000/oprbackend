@@ -139,6 +139,7 @@ const generatePo = async (req, res, next) => {
 
 //update po status after send mail to vendor
 //po status will become 2 when po sent to vendor
+
 const po_email_conformation = async (req, res, next) => {
   try {
     const { po_id } = req.body;
@@ -151,7 +152,6 @@ const po_email_conformation = async (req, res, next) => {
     next(err);
   }
 };
-
 
 const AcceptPO = async (req, res, next) => {
   try {
@@ -328,4 +328,43 @@ const getVendorDeailsByPoId = async (req, res, next) => {
 }
 
 
-module.exports = { confimPoFinalPaymentsbyVendor, completePo, confimPoPaymentsbyVendor, getVendorDeailsByPoId, getPOforGrn, po_email_conformation, AcceptPO, getPO, deletePOById, generatePo, updatePOById, getPoItemsbypoid };
+const poStatusController = async (req, res, next) => {
+  let { po_id, action } = req.body
+  try {
+    let foundPo = await po_master.findByPk(po_id)
+    if (!foundPo) {
+      res.status(404).json({ message: "Document not found" })
+    } else {
+      switch (action) {
+        case 'approve':
+          foundPo.status = 1;
+          await foundPo.save();
+          break;
+        case 'reject':
+          foundPo.status = 1;
+          await foundPo.save();
+          break;
+        case 'archive':
+          foundPo.status = 1;
+          await foundPo.save();
+          break;
+        default:
+          return res.status(400).json({ message: 'Invalid action' });
+      }
+      // Common response
+      res.status(200).json({ message: 'Action processed successfully' });
+    }
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = {
+  poStatusController,
+  confimPoFinalPaymentsbyVendor,
+  completePo, confimPoPaymentsbyVendor,
+  getVendorDeailsByPoId, getPOforGrn,
+  po_email_conformation, AcceptPO,
+  getPO, deletePOById, generatePo,
+  updatePOById, getPoItemsbypoid
+};

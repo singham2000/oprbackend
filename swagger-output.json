@@ -11823,6 +11823,23 @@
         }
       }
     },
+    "/api/paymentterms/milesstones": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "payment_term_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
     "/api/paymentterms/update": {
       "put": {
         "description": "",

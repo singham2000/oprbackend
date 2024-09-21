@@ -212,7 +212,6 @@ exports.deletePaymentRequestTransactionsMaster = async (req, res) => {
     }
 };
 
-
 //get payment id by doc_id
 exports.getPaymentTransactionByCoID = async (req, res, next) => {
     try {
@@ -232,7 +231,6 @@ exports.getPaymentTransactionByCoID = async (req, res, next) => {
     }
 }
 
-
 exports.sentPaymentForApproval = async (req, res, next) => {
     const { doc_id, status } = req.body;
     try {
@@ -250,6 +248,3 @@ exports.sentPaymentForApproval = async (req, res, next) => {
         res.status(500).json({ message: "An error occurred", error: err.message });
     }
 }
-
-
-
