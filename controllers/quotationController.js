@@ -323,7 +323,6 @@ const createQuotation = async (req, res, next) => {
       ItemData,
     } = quotation_details;
 
-    const currencies = currency.join(", ");
 
     // Generate quotation
     const newQuotationMaster = await quotation_master.create(
@@ -334,7 +333,7 @@ const createQuotation = async (req, res, next) => {
         reference_no,
         reference_date,
         quo_date,
-        currency: currencies,
+        currency,
         delivery_terms,
         country_origin,
         country_supply,
