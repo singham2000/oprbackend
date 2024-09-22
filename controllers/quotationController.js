@@ -87,6 +87,10 @@ const getQuotation = async (req, res, next) => {
                     sequelize.literal("dbo.fn_GetDeliveryTerm(delivery_terms)"),
                     "delivery_terms_name",
                   ],
+                  [
+                    sequelize.literal("dbo.fn_GetPaymentTerm(payment_terms)"),
+                    "payment_terms_name",
+                  ],
                 ],
                 include: [
                   {
@@ -116,6 +120,10 @@ const getQuotation = async (req, res, next) => {
                       "quo_num",
                       "item_code",
                       "rfq_item_id",
+                      [
+                        sequelize.literal("dbo.fn_GetPackageType(pack_type)"),
+                        "pack_type_name",
+                      ],
                     ],
                   },
                   {
@@ -166,6 +174,10 @@ const getQuotation = async (req, res, next) => {
             sequelize.literal("dbo.fn_GetDeliveryTerm(delivery_terms)"),
             "delivery_terms_name",
           ],
+          [
+            sequelize.literal("dbo.fn_GetPaymentTerm(payment_terms)"),
+            "payment_terms_name",
+          ], 
         ],
         include: [
           {
@@ -195,6 +207,10 @@ const getQuotation = async (req, res, next) => {
               "quo_num",
               "item_code",
               "rfq_item_id",
+              [
+                sequelize.literal("dbo.fn_GetPackageType(pack_type)"),
+                "pack_type_name",
+              ], 
             ],
           },
           {
