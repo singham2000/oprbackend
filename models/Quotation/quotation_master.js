@@ -136,6 +136,9 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: "quo_id",
             constraints: false
         });
+        quotation_master.hasOne(models.po_master, {
+            foreignKey: "quo_id",
+        });
     }
 
     return quotation_master;

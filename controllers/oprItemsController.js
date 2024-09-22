@@ -70,6 +70,7 @@ const getOprItemForRfq = async (req, res, next) => {
             opr_id_list = opr_id_list.split(',').map(Number); // Convert to numbers if needed
         }
 
+        
         // Check if opr_id_list is valid
         if (!opr_id_list || opr_id_list.length === 0) {
             return res.status(400).json({ message: 'No opr_id provided' });

@@ -99,6 +99,9 @@ module.exports = (sequelize, DataTypes) => {
         po_master.belongsTo(models.VendorsMaster, {
             foreignKey: 'vendor_id',
         });
+        po_master.belongsTo(models.quotation_master, {
+            foreignKey: 'quo_id',
+        });
     };
 
     return po_master;

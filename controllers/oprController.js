@@ -25,19 +25,6 @@ const getOpr = async (req, res, next) => {
             attributes: { exclude: ['department_id', 'opr_description', 'delivery_timeline_id', 'buying_house_id', 'created_by', 'updated_by', 'createdAt', 'updatedAt', 'vertical_id', 'company_id', 'division_id'] }
         })
 
-        const itemCount = await db.OprItems.count({ where: { opr_id: 1086 } });
-        console.log("**********************");
-        console.log(itemCount);
-
-
-        // // After fetching the results, you can add the count to each result
-        // opr_detials = await Promise.all(opr_detials.map(async (opr) => {
-
-        //     // return { ...opr.toJSON(), itemCount }; // Append itemCount to each opr
-        // }));
-
-
-
 
         // Function to transform nested fields into top-level fields
         const transformData = (data) => {

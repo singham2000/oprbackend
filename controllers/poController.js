@@ -10,7 +10,6 @@ const { getQuotationItemByQuoId } = require('./quotationItemsController')
 //get all po
 const getPO = async (req, res, next) => {
   const po_id = req.query.po_id;
-  console.log(req.query);
   try {
     if (po_id) {
       const query = `SELECT po_master.*
@@ -18,23 +17,26 @@ const getPO = async (req, res, next) => {
       INNER JOIN quotations_master
       ON po_master.quo_id = quotations_master.quo_id where po_id = ${po_id}`;
 
-      const result = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
-      // const result2 = await po_master.findAll({
-      //   where: { po_id },
-      //   include: [
-      //     {
-      //       model: db.VendorsMaster,
-      //       attributes: ['vendor_name']
-      //     },
-      //     {
-      //       model: db.po_items
-      //     },
-      //     {
-      //       model: db.form_m
-      //     }
-      //   ]
-      // })
-      res.status(200).json(result);
+      // const result = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
+      const result2 = await po_master.findAll({
+        where: { po_id },
+        include: [
+          {
+            model: db.VendorsMaster,
+            attributes: ['vendor_name']
+          },
+          {
+            model: db.po_items
+          },
+          {
+            model: db.quotation_master
+          }
+          // {
+          //   model: db.form_m
+          // }
+        ]
+      })
+      res.status(200).json(result2);
     }
     else {
       const query = `SELECT po_master.*
@@ -49,6 +51,7 @@ const getPO = async (req, res, next) => {
     throw error;
   }
 };
+
 
 //get po for grn
 const getPOforGrn = async (req, res, next) => {
