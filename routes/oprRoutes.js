@@ -7,8 +7,6 @@ const setAuditFields = require('../middleware/setAuditFields.js');
 const sentApprovalRequest = require('../middleware/approvalMiddleware.js');
 // const oprItemsController = require('../controllers/oprItemsController');
 
-
-
 // API routes 
 router
     .get('/oprs', oprController.getOpr)

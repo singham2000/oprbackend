@@ -98,9 +98,8 @@ module.exports = (sequelize, DataTypes) => {
             {
                 foreignKey: 'item_category_id',
                 targetKey: 'item_super_group_id'
-            })
+            }
+        )
     };
-
-
     return OprMaster;
 };

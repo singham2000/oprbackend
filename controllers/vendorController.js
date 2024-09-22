@@ -21,13 +21,20 @@ getAllVendor = async (req, res) => {
 
 // Controller method to fetch item by id
 const getVendorById = async (req, res, next) => {
-    const itemid = req.params.id;
-    try { 
-        if (!item) {
+    const vendro_id = req.params.id;
+    try {
+        if (!vendro_id) {
             return res.status(404).json({ error: 'Item not found' });
         }
-
-        res.status(200).json(item);
+        const result = await VendorsMaster.findByPk(vendro_id, {
+            attributes: {
+                exclude: ['last_audited_docs']
+            }
+        });
+        if (!result) {
+            return { message: 'Vendor not found' };
+        }
+        res.status(200).json(result);
     } catch (err) {
         next(err);
     }
@@ -42,7 +49,7 @@ const getAllBankDropDn = async (req, res) => {
             attributes: ['v_banks_detail_id', 'bank_name']
         });
         res.json(banksdropdn);
-        
+
     } catch (err) {
         console.error('Error fetching vendors details:', err);
         res.status(500).json({ error: 'Failed to fetch vendors details' });

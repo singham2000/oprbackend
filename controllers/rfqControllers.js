@@ -8,6 +8,7 @@ const {
   sequelize,
   reqdocMaster
 } = db;
+
 const getPenaltyTermsNameById = require("../middleware/databyid/penaltyTermsName");
 const { generateSeries } = require("./seriesGenerate");
 const { Where } = require("sequelize/lib/utils");
@@ -32,7 +33,6 @@ const countItem2 = async (rfq_id) => {
 };
 
 
-
 const getDocsRfqIds = async (docIdsString) => {
   try {
     // Split the book_ids string into an array
@@ -50,8 +50,6 @@ const getDocsRfqIds = async (docIdsString) => {
     throw new Error('Error fetching books');
   }
 };
-
-
 
 
 const getVendorsByRfqId = async (req, res, next) => {
@@ -88,13 +86,10 @@ const getVendorsByRfqId = async (req, res, next) => {
 };
 
 
-
-
-
 const getAllRfq = async (req, res, next) => {
   try {
     const rfqs = await RfqMaster.findAll({
-      attributes: { include: ['*', [sequelize.literal('dbo.fn_GetPortDestinationName(port_of_destination)'), 'port_of_destination_name']]},
+      attributes: { include: ['*', [sequelize.literal('dbo.fn_GetPortDestinationName(port_of_destination)'), 'port_of_destination_name']] },
     });
 
 
@@ -114,8 +109,6 @@ const getAllRfq = async (req, res, next) => {
     next(err);
   }
 };
-
-
 
 // Controller method to fetch item by rfq_id
 const getRfqById = async (req, res, next) => {
@@ -139,7 +132,8 @@ const getRfqById = async (req, res, next) => {
 // opr items stuatus will change to 3 and update rfq id
 
 const createRfq = async (req, res, next) => {
-  console.log(req.body);
+ 
+
 
   const transaction = await sequelize.transaction();
   try {

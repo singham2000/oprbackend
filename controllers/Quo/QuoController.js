@@ -3,7 +3,6 @@ const { ServiceQUO, ServiceRFQ } = db;
 const { Op } = require('sequelize');
 
 
-
 //generate service rfq
 exports.createServiceQuotation = async (req, res, next) => {
     try {

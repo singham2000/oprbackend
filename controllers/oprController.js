@@ -2,12 +2,11 @@
 const db = require('../models');
 const { OprMaster: opr_master, company_master, OprItems, Vertical, ItemsMaster, sequelize } = db;
 const formattedDateTime = require("../middleware/time");
-const { Op } = require('sequelize');
+const { Op, count } = require('sequelize');
 const { generateSeries } = require("./seriesGenerate");
 const { query } = require('express');
 
 const getOpr = async (req, res, next) => {
-
     try {
         let { opr_id } = req.query
         let opr_detials = await opr_master.findAll({
@@ -20,10 +19,25 @@ const getOpr = async (req, res, next) => {
                 { model: db.DeliveryTimeline, attributes: ['delivery_timeline_name'] },
                 { model: db.Department, attributes: ['dept_name'] },
                 { model: db.BuyingHouse, attributes: ['buying_house_name'] },
-                { model: db.ItemSuperGroupMaster, attributes: ['item_super_group_name'] }
+                { model: db.ItemSuperGroupMaster, attributes: ['item_super_group_name'] },
+                { model: db.OprItems }
             ],
             attributes: { exclude: ['department_id', 'opr_description', 'delivery_timeline_id', 'buying_house_id', 'created_by', 'updated_by', 'createdAt', 'updatedAt', 'vertical_id', 'company_id', 'division_id'] }
         })
+
+        const itemCount = await db.OprItems.count({ where: { opr_id: 1086 } });
+        console.log("**********************");
+        console.log(itemCount);
+
+
+        // // After fetching the results, you can add the count to each result
+        // opr_detials = await Promise.all(opr_detials.map(async (opr) => {
+
+        //     // return { ...opr.toJSON(), itemCount }; // Append itemCount to each opr
+        // }));
+
+
+
 
         // Function to transform nested fields into top-level fields
         const transformData = (data) => {
@@ -36,9 +50,10 @@ const getOpr = async (req, res, next) => {
                     shipment_mode_name: item.ShipMode ? item.ShipMode.shipment_mode_name : null,
                     delivery_timeline_name: item.DeliveryTimeline ? item.DeliveryTimeline.delivery_timeline_name : null,
                     dept_name: item.Department ? item.Department.dept_name : null,
+                    buying_house_name: item.BuyingHouse ? item.BuyingHouse.buying_house_name : null,
                     buying_house_name: item.BuyingHouse ? item.BuyingHouse.buying_house_name : null
-                };
 
+                };
                 // Remove the now redundant nested objects
                 delete transformed.company_master;
                 delete transformed.vertical_opr;
@@ -52,11 +67,27 @@ const getOpr = async (req, res, next) => {
         };
 
         opr_detials = await transformData(opr_detials);
+
+
+        await Promise.all(opr_detials.map(async (item) => {
+            item.total_item_count = await db.OprItems.count({ where: { opr_id: item.opr_id } });
+            item.remaining_item_count = await db.OprItems.count({
+                where: {
+                    opr_id: item.opr_id,
+                    rfq_id: {
+                        [Op.is]: null // Checks that rfq_id is null
+                    }
+                }
+            });
+
+            return item; // Ensure each item is returned
+        }));
+
         let rfqcountquery = `select COUNT(*) as qs from quotations_master
                                 where rfq_id in (Select rfq_id from opr_items where opr_id=10)`
         opr_detials.received_quotatoins = await db.sequelize.query(rfqcountquery)
-        res.status(200).json(opr_detials)
 
+        res.status(200).json(opr_detials);
     } catch (err) {
         next(err)
     }
@@ -78,9 +109,8 @@ const deleteOprById = async (req, res, next) => {
 
 const createOpr = async (req, res, next) => {
     try {
-        // opr_description: 1,
         const doc_code = 'OPR';
-        const opr_series = await generateSeries(doc_code); ` `
+        const opr_series = await generateSeries(doc_code);
         req.body.opr_num = opr_series
 
         const {
@@ -106,6 +136,7 @@ const createOpr = async (req, res, next) => {
         req.body.status = 1;
         const result = await opr_master.create(req.body);
         res.status(201).json({ message: "Submit Successfully", opr_id: result.opr_id });
+
     } catch (err) {
         next(err)
     }

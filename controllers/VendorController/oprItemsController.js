@@ -4,7 +4,7 @@ const formattedDateTime = require("../middleware/time");
 const { Op, where } = require('sequelize');
 const { sequelize } = db;
 const { QueryTypes } = require('sequelize');
-const {generateSeries} = require("./seriesGenerate");
+const { generateSeries } = require("./seriesGenerate");
 // const opr_items = require('../models/');
 
 const getOprItem = async (req, res, next) => {
@@ -299,7 +299,6 @@ const getOprItemForRfq2 = async (req, res, next) => {
 //GET OPR ITEM BY opr id
 
 const getOprItembyOprId = async (req, res, next) => {
-    console.log('******second**********************')
     const opr_id = req.query.opr_id;
     try {
         const result = await OprItems.findAll({

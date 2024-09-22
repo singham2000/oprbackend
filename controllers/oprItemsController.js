@@ -65,6 +65,15 @@ const getOprItem = async (req, res, next) => {
 const getOprItemForRfq = async (req, res, next) => {
     try {
         let { opr_id_list } = req.query
+        // Convert to array if it's a string
+        if (typeof opr_id_list === 'string') {
+            opr_id_list = opr_id_list.split(',').map(Number); // Convert to numbers if needed
+        }
+
+        // Check if opr_id_list is valid
+        if (!opr_id_list || opr_id_list.length === 0) {
+            return res.status(400).json({ message: 'No opr_id provided' });
+        }
         let Opr_Items = await OprItems.findAll({
             where: {
                 [Op.and]: [
@@ -74,7 +83,15 @@ const getOprItemForRfq = async (req, res, next) => {
             },
             include: [
                 { model: db.CompanyMaster, attributes: ['company_name'] },
-                { model: db.OprMaster, attributes: ['opr_num'] },
+                // { model: db.OprMaster, attributes: ['opr_num', 'delivery_timeline_id', 'buy_from', 'buying_house_id'] },
+                {
+                    model: db.OprMaster,
+                    include: {
+                        model: db.DeliveryTimeline,
+                        attributes: ['delivery_timeline_name']
+                    },
+                    attributes: ['opr_num', 'buy_from', 'buying_house_id']
+                },
                 { model: db.AddressMaster, attributes: ['city', 'address_id'] },
                 {
                     model: db.ItemsMaster,
@@ -93,13 +110,23 @@ const getOprItemForRfq = async (req, res, next) => {
     }
 };
 
+
+
+
 const getOprItemForRfq3 = async (req, res, next) => {
     try {
         let Opr_Items = await OprItems.findAll({
             where: { status: 2 },
             include: [
                 { model: db.company_master, attributes: ['company_name'] },
-                { model: db.OprMaster, attributes: ['opr_num'] },
+                {
+                    model: db.OprMaster,
+                    include: {
+                        model: db.DeliveryTimeline,
+                        attributes: ['delivery_timeline_name']
+                    },
+                    attributes: ['opr_num']
+                },
                 {
                     model: db.ItemsMaster,
                     include: {
@@ -188,36 +215,8 @@ const getOprItemForRfq2 = async (req, res, next) => {
     }
 };
 
-// // get opr item for rfq this function will send only those item which have staus 2
-// const getOprItemsforRFQ = async (req, res, next) => {
-//     const opr_item_id = req.query.opr_item_id;
-//     try {
-//         if (!opr_item_id) {
-//             const result = await OprItems.findAll({
-//                 where: {
-//                     status: { [Op.eq]: 2 }
-//                 }
-//             });
-//             res.status(200).json(result);
-//         } else {
-//             const result = await OprItems.findAll({
-//                 where: {
-//                     opr_item_id: opr_item_id,
-//                     status: { [Op.ne]: 0 }
-//                 }
-
-//             });
-//             res.status(200).json(result);
-//         }
-
-//     } catch (err) {
-//         next(err);
-//     }
-
-// }
 
 //GET OPR ITEM BY opr id
-
 const getOprItembyOprId = async (req, res, next) => {
     console.log('******second**********************')
     const opr_id = req.query.opr_id;

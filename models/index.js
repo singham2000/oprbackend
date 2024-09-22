@@ -243,7 +243,7 @@ db.payment_type_charges_master = require("./Masters/PaymentTypeCharges.js")(
     sequelize,
     DataTypes
 );
-db.shipping_lapse_master = require("./Masters/ShippingLapse")(sequelize,DataTypes);
+db.shipping_lapse_master = require("./Masters/ShippingLapse")(sequelize, DataTypes);
 db.port_destination_master = require("./Masters/PortDestinationMaster.js")(
     sequelize,
     DataTypes
@@ -257,7 +257,6 @@ db.ShippingMaster = require('./Shipping/shiping_master.js')(sequelize, DataTypes
 db.Container = require('./Shipping/container.js')(sequelize, DataTypes);
 db.VesselDetails = require('./Shipping/vessel_details.js')(sequelize, DataTypes);
 db.ShippingExpenses = require('./Shipping/shipping_expensesModal.js')(sequelize, DataTypes);
-
 
 //document Master
 db.ApprovalMatrix = require('./Approval/ApprovalMatrix.js')(sequelize, DataTypes);
@@ -274,20 +273,15 @@ Object.values(models).forEach((model) => {
     }
 });
 
-console.log("**************modles")
-console.log(db);
-
-
-
 sequelize
-    .sync({ alter: true })
+    .sync({ alter: false })
     .then(() => {
         console.log("Database & tables created!");
     })
     .catch((error) => {
         console.error("Error synchronizing the database:", error);
     });
-
+    
 module.exports = {
     sequelize,
     ...models,

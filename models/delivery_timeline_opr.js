@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
             autoIncrement: true
         },
         delivery_timeline_name: {
-            type: DataTypes.STRING(100),
+            type: DataTypes.INTEGER,
             allowNull: true
         },
         created_on: {
@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         }
     }, {
-        tableName: 'delivery_timeline_opr',
+        tableName: 'delivery_timeline',
         timestamps: false
     });
 

@@ -2,10 +2,9 @@
 const db = require("../models");
 const { sequelize } = db
 const { OpoMaster, OpoItems, quotation_master, po_items } = db;
-
 const { Op, where } = require("sequelize");
 const { generateSeries } = require("./seriesGenerate");
-const { getQuotationItemByQuoId } = require('./quotationItemsController')
+const { getQuotationItemByQuoId } = require('./quotationItemsController');
 
 exports.getOpo = async (req, res, next) => {
   try {
@@ -35,10 +34,8 @@ exports.deleteOpo = async (req, res, next) => {
   }
 };
 
-
 // Controller method to Create OPO with status 1
 exports.genrateOpo = async (req, res, next) => {
-
   console.log("Generate po ");
   console.log(req.body);
   let { quo_id, quo_num, vendor_id, itemList } = req.body;
@@ -84,7 +81,6 @@ exports.genrateOpo = async (req, res, next) => {
   }
 };
 
-
 //update po status after send mail to vendor
 exports.po_email_conformation = async (req, res, next) => {
   try {
@@ -99,7 +95,6 @@ exports.po_email_conformation = async (req, res, next) => {
     next(err);
   }
 };
-
 
 
 exports.updatePOById = async (req, res, next) => {

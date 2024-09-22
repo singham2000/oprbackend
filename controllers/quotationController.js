@@ -12,6 +12,7 @@ const {
   lead_time_quo,
   additional_cost,
 } = db;
+
 const formattedDateTime = require("../middleware/time");
 const { Op, where } = require("sequelize");
 const { generateSeries } = require("./seriesGenerate");
@@ -452,6 +453,8 @@ const updateQuotationById = async (req, res, next) => {
     next(err);
   }
 };
+
+
 
 //this function will genrate po with status 2 after finalize quotation
 // const generatePo = async (req, res, next) => {

@@ -22,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(155),
             allowNull: true
         },
+        delivery_timeline_in_weeks: {
+            type: DataTypes.STRING(500),
+            allowNull: true
+        },
         created_on: {
             type: DataTypes.DATE,
             allowNull: true
@@ -52,12 +56,9 @@ module.exports = (sequelize, DataTypes) => {
         createdAt: 'created_on',
         updatedAt: 'updated_on'
     })
-
     rfq.associate = (models) => {
         rfq.hasMany(models.quotation_master, { foreignKey: 'rfq_id' });
     };
-
-
     return rfq;
 };
 
