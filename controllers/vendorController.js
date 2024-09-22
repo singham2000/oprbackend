@@ -20,10 +20,9 @@ getAllVendor = async (req, res) => {
 
 
 // Controller method to fetch item by id
-const getVendorById = async (req, res) => {
+const getVendorById = async (req, res, next) => {
     const itemid = req.params.id;
-    try {
-        const item = await Vendor.findByPk(itemid);
+    try { 
         if (!item) {
             return res.status(404).json({ error: 'Item not found' });
         }

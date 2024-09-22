@@ -48,16 +48,16 @@ const getQuotation = async (req, res, next) => {
       res.status(200).json(result);
     } else if (company_id && opr_id) {
       let opr_details = await OprItems.findAll({
-         where: {
-          company_id: company_id, 
-          opr_id: opr_id, 
+        where: {
+          company_id: company_id,
+          opr_id: opr_id,
         },
         include: [
           {
             model: db.rfq,
             include: [
               {
-                model: db.quotation_master, 
+                model: db.quotation_master,
                 attributes: [
                   "quo_id",
                   "quo_num",
@@ -323,7 +323,6 @@ const createQuotation = async (req, res, next) => {
       ItemData,
     } = quotation_details;
 
-    const currencies = currency.join(", ");
 
     // Generate quotation
     const newQuotationMaster = await quotation_master.create(
@@ -334,7 +333,7 @@ const createQuotation = async (req, res, next) => {
         reference_no,
         reference_date,
         quo_date,
-        currency: currencies,
+        currency,
         delivery_terms,
         country_origin,
         country_supply,
@@ -359,6 +358,8 @@ const createQuotation = async (req, res, next) => {
           {
             quo_id: lastInsertedId,
             quo_num: quotation_series,
+            rfq_id,
+            vendor_id,
             charge_name: key,
             charge_amount: charges[key],
             status: 1,
@@ -380,12 +381,13 @@ const createQuotation = async (req, res, next) => {
 
     await quotation_items.bulkCreate(updatedItemdata, { transaction });
 
+    console.log("quotation_docslist", quotation_docslist);
     // Transform and insert quotation documents
     const updatedQuotationDocs = quotation_docslist.map((data, index) => ({
       ...data,
       quotation_id: lastInsertedId,
       q_doc_filename: req.files[index]?.originalname,
-      q_doc_file: req.files[index]?.buffer?.toString("base64"),
+      q_doc_file: req.files[index]?.buffer.toString("base64"),
     }));
 
     await QuoDoc.bulkCreate(updatedQuotationDocs, { transaction });
