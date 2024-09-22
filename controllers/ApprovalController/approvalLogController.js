@@ -35,6 +35,19 @@ const ApprovalLogController = {
         }
     },
 
+    // Get an approval log by ID
+    async findAll(req, res) {
+        try {
+            const approvalLog = await ApprovalLog.findAll();
+            if (!approvalLog) {
+                return res.status(404).json({ error: 'Approval log not found' });
+            }
+            return res.status(200).json(approvalLog);
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    },
+
     // Update an approval log by ID
     async update(req, res) {
         try {

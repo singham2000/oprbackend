@@ -8,7 +8,8 @@ const {
     Pfi_master,
     sequelize,
     Pfi_line_items,
-    ServiceQUO
+    ServiceQUO,
+    PaymentTermsMilesStones
 } = require('../models')
 
 const { Op } = require('sequelize')
@@ -220,6 +221,8 @@ exports.deletePaymentTerm = async (req, res, next) => {
 //************************************************Penalty terms  Controller************************************************/
 // Create a new penalty term
 exports.createPenaltyTerm = async (req, res, next) => {
+
+
     try {
         const { penalty_terms_name, created_by, updated_by, status } = req.body;
         const penaltyTerm = await PenaltyTermsMaster.create({
@@ -228,6 +231,7 @@ exports.createPenaltyTerm = async (req, res, next) => {
             updated_by,
             status
         });
+        console.log(penaltyTerm);
         res.status(201).json({ message: 'Penalty term created successfully', data: penaltyTerm });
     } catch (error) {
         next(error);
@@ -667,7 +671,7 @@ const updateDocumentStatus = async (doc_type, doc_id, res, payment_request_id, r
                             AND opr_items.item_id = po_items.item_id
                             WHERE po_items.po_id = ${po_id}
                         `;
-    console.log(query);
+                console.log(query);
                 // Execute the query with replacements
                 let itemsforPfi = await sequelize.query(query, {
                     replacements: { po_id: po_id },

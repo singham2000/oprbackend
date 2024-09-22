@@ -95,7 +95,7 @@
 
 
 const db = require('../models');
-const { PenaltyTermsMaster: payment_terms_quo } = db;
+const { PaymentTerms: payment_terms_quo, PaymentTermsMilesStones } = db;
 const { Op } = require('sequelize');
 
 // Controller method to fetch all payment terms or a specific one
@@ -139,32 +139,53 @@ exports.deletePaymentTermsById = async (req, res, next) => {
 // Controller method to create a new payment term
 exports.createPaymentTerms = async (req, res, next) => {
     try {
-        const { payment_terms_name, created_by, status } = req.body;
-
+        const { payment_terms_name, created_by, milestone_data, status } = req.body;
+        console.log(req.body);
         const result = await payment_terms_quo.create({
             payment_terms_name,
-            status,
+            status: status ? 1 : 0,
+            payment_type_id: 1,
+            penalty_terms_id: 1,
             created_by
         });
+        let last_id = result.dataValues.payment_terms_id
 
+        milestone_data.map((item) => {
+            item.payment_term_id = last_id,
+            item.status = status ? 1 : 0,
+            item.created_by = created_by
+        })
+        const milestone = await PaymentTermsMilesStones.bulkCreate(milestone_data)
         res.status(201).json({ message: "Payment term created successfully", data: result });
     } catch (err) {
         next(err);
     }
 };
 
+
+//Get milestone list by paymentTerms Id
+exports.getMileStoneList = async (req, res, next) => {
+    try {
+        const { payment_term_id } = req.query;
+        const milestone = await PaymentTermsMilesStones.findAll({
+            where: { payment_term_id }
+        })
+        res.status(201).json({ message: "List Fetch Sucessfully", data: milestone });
+    } catch (err) {
+        next(err);
+    }
+
+}
+
 // Controller method to update a payment term by ID
 exports.updatePaymentTermsById = async (req, res, next) => {
     const payment_terms_id = req.query.payment_terms_id;
     try {
         const { payment_terms_name, updated_by } = req.body;
-
         const paymentTerm = await payment_terms_quo.findByPk(payment_terms_id);
-
         if (!paymentTerm) {
             return res.status(404).json({ message: 'Payment term not found' });
         }
-
         await paymentTerm.update({
             payment_terms_name,
             updated_by,

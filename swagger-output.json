@@ -2888,13 +2888,6 @@
     "/api/opr/oprs": {
       "get": {
         "description": "",
-        "parameters": [
-          {
-            "name": "opr_id",
-            "in": "query",
-            "type": "string"
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -2962,7 +2955,7 @@
                 "no_quot_email_alert": {
                   "example": "any"
                 },
-                "opr_description": {
+                "item_category_id": {
                   "example": "any"
                 },
                 "remarks": {
@@ -3034,7 +3027,7 @@
                 "no_quot_email_alert": {
                   "example": "any"
                 },
-                "opr_description": {
+                "item_category_id": {
                   "example": "any"
                 },
                 "remarks": {
@@ -11695,6 +11688,9 @@
                 "created_by": {
                   "example": "any"
                 },
+                "milestone_data": {
+                  "example": "any"
+                },
                 "status": {
                   "example": "any"
                 }
@@ -11810,11 +11806,31 @@
                 "created_by": {
                   "example": "any"
                 },
+                "milestone_data": {
+                  "example": "any"
+                },
                 "status": {
                   "example": "any"
                 }
               }
             }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/api/paymentterms/milesstones": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "payment_term_id",
+            "in": "query",
+            "type": "string"
           }
         ],
         "responses": {
@@ -13229,6 +13245,17 @@
           },
           "401": {
             "description": "Unauthorized"
+          }
+        }
+      },
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }

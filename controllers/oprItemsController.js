@@ -30,7 +30,7 @@ const getOprItem = async (req, res, next) => {
                     attributes: ['item_name', 'item_type', 'item_code', 'quantity_in_stock', 'quantity_on_order', 'nafdac_category',]
                 }
             ],
-            attributes: { exclude: ['created_by', 'updated_by', 'createdAt', 'updatedAt', 'vertical_id', 'company_id', 'division_id'] }
+            attributes: { exclude: ['created_by', 'updated_by', 'createdAt', 'updatedAt', 'vertical_id', 'company_id', 'division_id', 'rfq_id'] }
         })
 
         // Transform the data
@@ -440,60 +440,60 @@ const getOprCompanyDropdown = async (req, res, next) => {
 const getOprItemsforQuoteCompare = async (req, res, next) => {
     let { opr_id, company_id } = req.query
 
-        let query = `select 
-    opr_items.item_id,
-    opr_items.company_id,
-    opr_items.qty,
-    opr_items.address_id,
-    address_master.city,
-    quotations_master.vendor_id,
-    vendors_master.vendor_name,
-    quotation_items.rate
-    from opr_items
-    inner join quotations_master
-    on quotations_master.rfq_id = opr_items.rfq_id
-    inner join quotation_items
-    on quotation_items.quo_id = quotations_master.quo_id
-    inner join address_master
-    on address_master.address_id = opr_items.address_id
-    inner join vendors_master
-    on vendors_master.vendor_id = quotations_master.vendor_id
-    where company_id = ${company_id} and opr_id = ${opr_id}
-    `
 
-    console.log("************************")
+
+    //     let query = `select 
+    // opr_items.item_id,
+    // opr_items.company_id,
+    // opr_items.qty,
+    // opr_items.address_id,
+    // address_master.city,
+    // quotations_master.vendor_id,
+    // vendors_master.vendor_name,
+    // quotation_items.rate
+    // from opr_items
+    // inner join quotations_master
+    // on quotations_master.rfq_id = opr_items.rfq_id
+    // inner join quotation_items
+    // on quotation_items.quo_id = quotations_master.quo_id
+    // inner join address_master
+    // on address_master.address_id = opr_items.address_id
+    // inner join vendors_master
+    // on vendors_master.vendor_id = quotations_master.vendor_id
+    // where company_id = ${company_id} and opr_id = ${opr_id}
+    // `
+
+    let query = `
+            select 
+            opr_items.item_id,
+            opr_items.company_id,
+            opr_items.qty,
+            opr_items.address_id,
+            quotation_items.rate as rate,
+            quotation_items.vendor_id as vendor_id,
+            vendors_master.vendor_name,
+            address_master.city,
+            quotation_items.quo_id,
+            quotation_items.rfq_id
+            from opr_items
+            inner join quotation_items
+            on quotation_items.rfq_id =opr_items.rfq_id
+            and quotation_items.item_id = opr_items.item_id
+            inner join address_master
+            on address_master.address_id = opr_items.address_id
+            inner join vendors_master
+            on vendors_master.vendor_id= quotation_items.vendor_id
+            where company_id = ${company_id} and opr_id = ${opr_id}`
+
+    console.log("************auery")
     console.log(query)
-
-    // let query = `
-    //         select 
-    //         opr_items.item_id,
-    //         opr_items.company_id,
-    //         opr_items.qty,
-    //         opr_items.address_id,
-    //         quotation_items.rate as rate,
-    //         quotation_items.vendor_id as vendor_id,
-    //         vendors_master.vendor_name,
-    //         address_master.city,
-    //         quotation_items.quo_id,
-    //         quotation_items.rfq_id
-    //         from opr_items
-    //         inner join quotation_items
-    //         on quotation_items.rfq_id =opr_items.rfq_id
-    //         and quotation_items.item_id = opr_items.item_id
-    //         inner join address_master
-    //         on address_master.address_id = opr_items.address_id
-    //         inner join vendors_master
-    //         on vendors_master.vendor_id= quotation_items.vendor_id
-    //         where company_id = ${company_id} and opr_id = ${opr_id}`
 
     let data = await db.sequelize.query(query, {
         // replacements: { opr_id: opr_id || null }, // Safe parameter binding
         type: db.sequelize.QueryTypes.SELECT
     });
-    // transform data   
-
+    // transform data 
     res.status(200).json(data);
-
 }
 
 // this middle
@@ -513,89 +513,3 @@ const oprItemsController = {
     getOprItemsforQuoteCompare
 };
 module.exports = oprItemsController;
-
-
-
-
-
-// opr
-
-// Opr Controller to fetch all items
-// const getOprItemForRfq = async (req, res, next) => {
-//     console.log("******************")
-//     const opr_id = req.query.opr_id;
-//     try {
-//         if (!opr_id) {
-//             let query =
-//                 `   select
-//                     opr_item_id,
-//                     opr_items.item_id as item_id,
-//                     opr_id,
-// 					[dbo].[fn_oprnum](opr_id) as opr_num,
-//                     qty,
-//                     stock_in_transit,
-//                     stock_in_hand,
-//                     monthly_consumption,
-//                     opr_items.item_description,
-//                     opr_items.[status],
-//                     item_master.item_type as item_type,
-//                     item_master.item_code as item_code,
-//                     item_master.item_name as item_name,
-//                     item_master.quantity_in_stock  as quantity_in_stock,
-//                     item_master.quantity_on_order  as quantity_on_order,
-//                     item_master.nafdac_category  as nafdac_category,
-//                     [dbo].[fn_SubGrpName](item_master.sub_group) as sub_group,
-//                     [dbo].[fn_UomName](item_master.uom_id) as uom
-//                     from opr_items
-//                     inner join  item_master on opr_items.item_id = item_master.item_id
-//                     where opr_items.status = 2`
-
-//             // const result = await OprItems.findAll({
-//             //     where: {
-//             //         status: { [Op.eq]: 2 }
-//             //     }
-//             // });
-
-//             const [result, length] = await db.sequelize.query(query);
-//             res.status(200).json(result);
-//         } else {
-//             // const result = await OprItems.findAll({
-//             //     where: {
-//             //         opr_id: opr_id,
-//             //         status: { [Op.ne]: 0 }
-//             //     }
-
-//             // });
-
-//             let query =
-//                 `   select
-//                     opr_item_id,
-//                     opr_id,
-//                     opr_items.item_id as item_id,
-// 					[dbo].[fn_oprnum](opr_id) as opr_num,
-//                     qty,
-//                     stock_in_transit,
-//                     stock_in_hand,
-//                     monthly_consumption,
-//                     opr_items.item_description,
-//                     opr_items.[status],
-//                     item_master.item_type as item_type,
-//                     item_master.item_code as item_code,
-//                     item_master.item_name as item_name,
-//                     item_master.quantity_in_stock  as quantity_in_stock,
-//                     item_master.quantity_on_order  as quantity_on_order,
-//                     item_master.nafdac_category  as nafdac_category,
-//                     [dbo].[fn_SubGrpName](item_master.sub_group) as sub_group,
-//                     [dbo].[fn_UomName](item_master.uom_id) as uom
-//                     from opr_items
-//                     inner join  item_master on opr_items.item_id = item_master.item_id
-//                     where opr_id = ${opr_id} `
-//             const [result, length] = await db.sequelize.query(query);
-//             res.status(200).json(result);
-//         }
-
-//     } catch (err) {
-//         next(err);
-//     }
-
-//     };

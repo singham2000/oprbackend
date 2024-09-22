@@ -8,6 +8,7 @@ const setAuditFields = require('../middleware/setAuditFields.js');
 // ApprovalLog Routes
 router.post('/logs', setAuditFields,ApprovalLogController.create);
 router.get('/logs/:id', ApprovalLogController.findById);
+router.get('/logs', ApprovalLogController.findAll);
 router.put('/logs/:id',setAuditFields, ApprovalLogController.update);
 router.delete('/logs/:id',setAuditFields, ApprovalLogController.delete);
 

@@ -6,79 +6,10 @@ const { Op } = require('sequelize');
 const { generateSeries } = require("./seriesGenerate");
 const { query } = require('express');
 
-
-///******************this is on query we have remove query form this and use associaton*****************************/
-// const getVerticalNameById = require('../middleware/databyid/verticalName');
-// const getCompnayNameById = require('../middleware/databyid/companyName');
-// const getDivisionNameById = require('../middleware/databyid/divisionName');
-// const getBuyingNameById = require('../middleware/databyid/buyingHouseName');
-// const getShipModeNameById = require('../middleware/databyid/shipModeName');
-// const getDepartmentNameById = require('../middleware/databyid/deptName');
-// const getDTimelineNameById = require('../middleware/databyid/deliveryTimelineName');
-// Controller method to fetch all items
-// const getOpr = async (req, res, next) => {
-//     const opr_id = req.query.opr_id;
-//     try {
-//         if (!opr_id) {
-//             let query = `
-//             select 
-//             opr_id,
-//             opr_num,
-//             opr_date,
-//             [dbo].[fn_verticalName](opr_master.vertical_id) as vertical_name,
-//             [dbo].fn_companyName(opr_master.company_id) as company_name,
-//             [dbo].[fn_divisionName](opr_master.division_id)as division_name,
-//             [dbo].[fn_shipModeName](opr_master.shipment_mode_id) as shipment_mode_name,
-//             [dbo].[fn_delivery_timelineName](opr_master.delivery_timeline_id) as delivery_timeline_name,
-//             dbo.fn_companyName(buying_house_id) as buying_house_name,
-//             [dbo].[fn_departmentName](opr_master.department_id) as department_name,
-//             buy_from,
-//             requested_by,
-//             no_quot_email_alert,
-//             item_category_id,
-//             remarks,
-//             suppliers,
-//             [opr_master].[status]
-//             from opr_master
-//             `
-//             let [result, length] = await db.sequelize.query(query);
-//             res.status(200).json(result);
-
-//         } else {
-//             let query = `
-//                 select 
-//                 opr_id,
-//                 opr_num,
-//                 opr_date,
-//                 [dbo].[fn_verticalName](opr_master.vertical_id) as vertical_name,
-//                 [dbo].fn_companyName(opr_master.company_id) as company_name,
-//                 [dbo].[fn_divisionName](opr_master.division_id)as division_name,
-//                 [dbo].[fn_shipModeName](opr_master.shipment_mode_id) as shipment_mode_name,
-//                 [dbo].[fn_delivery_timelineName](opr_master.delivery_timeline_id) as delivery_timeline_name,
-//                 dbo.fn_companyName(buying_house_id) as buying_house_name,
-//                 [dbo].[fn_departmentName](opr_master.department_id) as department_name,
-//                 buy_from,
-//                 requested_by,
-//                 no_quot_email_alert,
-//                 item_category_id,
-//                 remarks,
-//                 suppliers,
-//                 [opr_master].[status]
-//                 from opr_master
-//                 where opr_id= ${opr_id}
-//                 `
-//             let [result, length] = await db.sequelize.query(query);
-//             res.status(200).json(result);
-//         }
-//     } catch (err) {
-//         next(err)
-//     }
-// };
-
-
 const getOpr = async (req, res, next) => {
-    const { opr_id } = req.query;
+
     try {
+        let { opr_id } = req.query
         let opr_detials = await opr_master.findAll({
             where: opr_id ? { opr_id: opr_id } : {},
             include: [
@@ -90,8 +21,8 @@ const getOpr = async (req, res, next) => {
                 { model: db.Department, attributes: ['dept_name'] },
                 { model: db.BuyingHouse, attributes: ['buying_house_name'] }
             ],
-            attributes: { exclude: ['department_id', 'delivery_timeline_id', 'buying_house_id', 'created_by', 'updated_by', 'createdAt', 'updatedAt', 'vertical_id', 'company_id', 'division_id'], 
-            include: ['*', [sequelize.literal('dbo.fn_GetCategoryName(item_category_id)'), 'opr_description']]},
+            attributes: { exclude: ['department_id', 'opr_description', 'delivery_timeline_id', 'buying_house_id', 'created_by', 'updated_by', 'createdAt', 'updatedAt', 'vertical_id', 'company_id', 'division_id'] }
+
         })
 
         // Function to transform nested fields into top-level fields
@@ -122,7 +53,7 @@ const getOpr = async (req, res, next) => {
 
         opr_detials = await transformData(opr_detials);
         let rfqcountquery = `select COUNT(*) as qs from quotations_master
-where rfq_id in (Select rfq_id from opr_items where opr_id=10)`
+                                where rfq_id in (Select rfq_id from opr_items where opr_id=10)`
         opr_detials.received_quotatoins = await db.sequelize.query(rfqcountquery)
         res.status(200).json(opr_detials)
 
@@ -333,8 +264,5 @@ oprController = {
     itemforOpr,
     sentforApproval
 };
-
-
-
 
 module.exports = oprController
