@@ -31,6 +31,17 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: true
     })
 
+    // Define associations
+    ItemSuperGroupMaster.associate = (models) => {
+        // ItemSuperGroupMaster.hasMany(models.OprItems, { foreignKey: 'opr_id' });
+        ItemSuperGroupMaster.hasOne(models.OprMaster, {
+            foreignKey: 'item_category_id', // This is the foreign key in OprMaster
+            targetKey: 'item_super_group_id' // This is the primary key in ItemSuperGroupMaste
+        })
+    };
+
+
+
     return ItemSuperGroupMaster;
 }
 

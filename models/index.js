@@ -243,10 +243,7 @@ db.payment_type_charges_master = require("./Masters/PaymentTypeCharges.js")(
     sequelize,
     DataTypes
 );
-db.shipping_lapse_master = require("./Masters/ShippingLapse")(
-    sequelize,
-    DataTypes
-);
+db.shipping_lapse_master = require("./Masters/ShippingLapse")(sequelize,DataTypes);
 db.port_destination_master = require("./Masters/PortDestinationMaster.js")(
     sequelize,
     DataTypes
@@ -283,7 +280,7 @@ console.log(db);
 
 
 sequelize
-    .sync({ alter: false })
+    .sync({ alter: true })
     .then(() => {
         console.log("Database & tables created!");
     })

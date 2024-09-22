@@ -19,10 +19,10 @@ const getOpr = async (req, res, next) => {
                 { model: db.ShipMode, attributes: ['shipment_mode_name'] },
                 { model: db.DeliveryTimeline, attributes: ['delivery_timeline_name'] },
                 { model: db.Department, attributes: ['dept_name'] },
-                { model: db.BuyingHouse, attributes: ['buying_house_name'] }
+                { model: db.BuyingHouse, attributes: ['buying_house_name'] },
+                { model: db.ItemSuperGroupMaster, attributes: ['item_super_group_name'] }
             ],
             attributes: { exclude: ['department_id', 'opr_description', 'delivery_timeline_id', 'buying_house_id', 'created_by', 'updated_by', 'createdAt', 'updatedAt', 'vertical_id', 'company_id', 'division_id'] }
-
         })
 
         // Function to transform nested fields into top-level fields
@@ -78,6 +78,11 @@ const deleteOprById = async (req, res, next) => {
 
 const createOpr = async (req, res, next) => {
     try {
+        // opr_description: 1,
+        const doc_code = 'OPR';
+        const opr_series = await generateSeries(doc_code); ` `
+        req.body.opr_num = opr_series
+
         const {
             vertical_id,
             company_id,
@@ -95,6 +100,7 @@ const createOpr = async (req, res, next) => {
             suppliers,
             created_by
         } = req.body;
+
 
         req.body.buying_house_id ? buying_house_id : 19
         req.body.status = 1;
@@ -161,14 +167,10 @@ const updateOprById = async (req, res, next) => {
 
 const confirmOpr = async (req, res, next) => {
     try {
-        const doc_code = 'OPR';
-        const opr_series = await generateSeries(doc_code); ` `
         const opr_id = req.params.opr_id;
-        //u
         const response = await opr_master.update(
             {
                 status: 2,
-                opr_num: opr_series
             },
             {
                 where: {

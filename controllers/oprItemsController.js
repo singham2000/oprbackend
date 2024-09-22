@@ -27,10 +27,11 @@ const getOprItem = async (req, res, next) => {
                         model: db.UomMaster,
                         attributes: ['uom_name']
                     },
-                    attributes: ['item_name', 'item_type', 'item_code', 'quantity_in_stock', 'quantity_on_order', 'nafdac_category',]
+                    attributes: { exclude: ['item_img'] }
+                    // attributes: ['item_name', 'item_type', 'item_code', 'quantity_in_stock', 'quantity_on_order', 'nafdac_category',]
                 }
             ],
-            attributes: { exclude: ['created_by', 'updated_by', 'createdAt', 'updatedAt', 'vertical_id', 'company_id', 'division_id', 'rfq_id'] }
+            attributes: { exclude: ['created_by', 'updated_by', 'updatedAt', 'vertical_id', 'company_id', 'division_id', 'rfq_id'] }
         })
 
         // Transform the data
