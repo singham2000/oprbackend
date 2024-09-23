@@ -35,10 +35,8 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'delivery_timeline',
         timestamps: false
     });
-
-    DeliveryTimeline.associate = (models) => {
-        DeliveryTimeline.hasMany(models.OprMaster, { foreignKey: 'delivery_timeline_id' });
-    };
-
+    // DeliveryTimeline.associate = (models) => {
+    //     DeliveryTimeline.hasMany(models.OprMaster, { foreignKey: 'delivery_timeline_id' });
+    // };
     return DeliveryTimeline;
 };

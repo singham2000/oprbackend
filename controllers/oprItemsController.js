@@ -87,11 +87,7 @@ const getOprItemForRfq = async (req, res, next) => {
                 // { model: db.OprMaster, attributes: ['opr_num', 'delivery_timeline_id', 'buy_from', 'buying_house_id'] },
                 {
                     model: db.OprMaster,
-                    include: {
-                        model: db.DeliveryTimeline,
-                        attributes: ['delivery_timeline_name']
-                    },
-                    attributes: ['opr_num', 'buy_from', 'buying_house_id']
+                    attributes: ['opr_num', 'buy_from', 'buying_house_id','delivery_timeline_id']
                 },
                 { model: db.AddressMaster, attributes: ['city', 'address_id'] },
                 {

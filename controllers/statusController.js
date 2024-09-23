@@ -1,20 +1,27 @@
 const db = require("../models");
-const { status_master } = db;
+const { StatusMaster } = db;
 const { Op } = require("sequelize");
+
 
 // Create a new penalty term
 const createStatus = async (req, res, next) => {
   try {
-    const { module, table_name, field_name, value, description } = req.body;
-    const result = await status_master.create({
-      module,
-      table_name,
-      field_name,
-      value,
-      description,
+    const {
+      doc_type,
+      status_code,
+      status_name,
+      status_description
+    } = req.body;
+
+    const result = await StatusMaster.create({
+      doc_type,
+      status_code,
+      status_name,
+      status_description,
       status: 1,
     });
     return res.status(201).json({ message: "Submit Successfully" });
+
   } catch (err) {
     next(err);
   }
@@ -22,28 +29,14 @@ const createStatus = async (req, res, next) => {
 
 // Get a single penalty term by ID
 const getAllStatus = async (req, res, next) => {
-  const status_id = req.query.status_id;
   try {
-    if (!status_id) {
-      const result = await status_master.findAll({
-        where: {
-          status: { [Op.ne]: 0 },
-        },
-        order: [["status_id", "DESC"]],
-      });
-      return res.status(200).json(result);
-    } else {
-      const result = await status_master.findByPk(status_id, {
-        where: {
-          status: { [Op.ne]: 0 },
-        },
-      });
-      return res.status(200).json(result);
-    }
+    const result = await StatusMaster.findAll();
+    return res.status(200).json(result);
   } catch (err) {
     next(err);
   }
 };
+
 
 // Update a penalty term by ID
 const updateStatus = async (req, res, next) => {
@@ -51,7 +44,7 @@ const updateStatus = async (req, res, next) => {
 
   try {
     // Find the shipment mode by primary key
-    const StatusTerms = await status_master.findByPk(status_id);
+    const StatusTerms = await StatusMaster.findByPk(status_id);
 
     // Update the shipment mode
     const { module, table_name, field_name, value, description } = req.body;
@@ -73,7 +66,7 @@ const updateStatus = async (req, res, next) => {
 const deleteStatus = async (req, res, next) => {
   const status_id = req.query.status_id;
   try {
-    const result = await status_master.update(
+    const result = await StatusMaster.update(
       { status: 0 },
       {
         where: {

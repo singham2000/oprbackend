@@ -107,6 +107,8 @@ const ApprovalRoutes = require('./routes/approvalRoutes.js')
 //documents
 const documentRoutes = require('./routes/documentRoutes.js')
 const reqdocRoutes = require('./routes/reqdocmasterRoutes.js')
+const masterRoutes = require("./routes/Masters/MasterRoutes.js")
+
 
 //services
 const serviceRoutes = require("./routes/ServiceOpr/OPRserviceRoutes.js");
@@ -129,6 +131,10 @@ app.use('/api/reqdoc', reqdocRoutes);
 
 //category ye new wala jaha sare category jayega
 app.use("/api/category", itemGroupRouter);
+
+
+//Master
+app.use("/api/master",masterRoutes)
 
 
 // Routes

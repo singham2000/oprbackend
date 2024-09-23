@@ -26,6 +26,9 @@ db.purchaseLocation = require("./purchase_location_master.js")(
     sequelize,
     DataTypes
 );
+
+db.StatusMaster = require("./Masters/StatusMaster.js")(sequelize, DataTypes);
+
 db.role = require("./Masters/role_master.js")(sequelize, DataTypes);
 db.user = require("./user_master.js")(sequelize, DataTypes);
 db.ShipMode = require("./Masters/ship_mode_master.js")(sequelize, DataTypes);
@@ -57,6 +60,8 @@ db.AddressTypeMaster = require("./Address/address_type.js")(
     sequelize,
     DataTypes
 );
+db.DocTypeMaster = require('./Masters/DocTypeMaster.js')(sequelize, DataTypes);
+
 
 //buying house related
 db.BuyingHouse = require("./BuyingHouse/buyinghouse_master.js")(
@@ -119,7 +124,6 @@ db.rfqitem = require("./Rfq/rfq_Item_master.js")(sequelize, DataTypes);
 db.RfqItemDetail = require("./Rfq/rfq_Item_master.js")(sequelize, DataTypes);
 db.rfq = require("./Rfq/rfq_master.js")(sequelize, DataTypes);
 db.rfqitem = require("./Rfq/rfq_Item_master.js")(sequelize, DataTypes);
-db.status_master = require("./status_master")(sequelize, DataTypes);
 
 //service rfq
 db.ServiceMaster = require("./Services/services_master.js")(
@@ -281,7 +285,7 @@ sequelize
     .catch((error) => {
         console.error("Error synchronizing the database:", error);
     });
-    
+
 module.exports = {
     sequelize,
     ...models,

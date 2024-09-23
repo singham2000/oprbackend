@@ -4,6 +4,7 @@ const { OprMaster: opr_master, company_master, OprItems, Vertical, ItemsMaster, 
 const formattedDateTime = require("../middleware/time");
 const { Op, count } = require('sequelize');
 const { generateSeries } = require("./seriesGenerate");
+const { getStatusName } = require("../utilites/getStausName");
 const { query } = require('express');
 
 const getOpr = async (req, res, next) => {
@@ -16,13 +17,12 @@ const getOpr = async (req, res, next) => {
                 { model: db.Vertical, attributes: ['vertical_name'] },
                 { model: db.Division, attributes: ['division_name'] },
                 { model: db.ShipMode, attributes: ['shipment_mode_name'] },
-                { model: db.DeliveryTimeline, attributes: ['delivery_timeline_name'] },
                 { model: db.Department, attributes: ['dept_name'] },
                 { model: db.BuyingHouse, attributes: ['buying_house_name'] },
                 { model: db.ItemSuperGroupMaster, attributes: ['item_super_group_name'] },
                 { model: db.OprItems }
             ],
-            attributes: { exclude: ['department_id', 'opr_description', 'delivery_timeline_id', 'buying_house_id', 'created_by', 'updated_by', 'createdAt', 'updatedAt', 'vertical_id', 'company_id', 'division_id'] }
+            attributes: { exclude: ['department_id', 'opr_description', 'buying_house_id', 'created_by', 'updated_by', 'createdAt', 'updatedAt', 'vertical_id', 'company_id', 'division_id'] }
         })
 
 
@@ -55,7 +55,6 @@ const getOpr = async (req, res, next) => {
 
         opr_detials = await transformData(opr_detials);
 
-
         await Promise.all(opr_detials.map(async (item) => {
             item.total_item_count = await db.OprItems.count({ where: { opr_id: item.opr_id } });
             item.remaining_item_count = await db.OprItems.count({
@@ -66,7 +65,7 @@ const getOpr = async (req, res, next) => {
                     }
                 }
             });
-
+            item.status = await getStatusName('opr', item.status)
             return item; // Ensure each item is returned
         }));
 
@@ -123,7 +122,6 @@ const createOpr = async (req, res, next) => {
         req.body.status = 1;
         const result = await opr_master.create(req.body);
         res.status(201).json({ message: "Submit Successfully", opr_id: result.opr_id });
-
     } catch (err) {
         next(err)
     }
@@ -211,26 +209,25 @@ const confirmOpr = async (req, res, next) => {
     } catch (err) {
 
     }
-}
+};
 
 const sentforApproval = async (req, res, next) => {
     const { doc_id, status } = req.body;
     try {
         const response = await opr_master.findByPk(doc_id);
-
         if (!response) {
             return res.status(404).json({ message: "Document not found" });
         } else {
-            response.status = status; // Change to the new status
-            await response.save(); // Save the updated document
-            // res.status(200).json({ message: "OPR sent for approval successfully", data: response });
-            next();
+            response.status = status;
+            await response.save();
+            console.log({ message: "OPR sent for approval successfully", data: response });
+            res.status(200).json({ message: "OPR sent for approval successfully", data: response });
         }
     } catch (err) {
-        console.error(err); // Log the error for debugging
-        res.status(500).json({ message: "An error occurred", error: err.message });
+        next(err);
     }
 }
+
 
 const createOpr2 = async (req, res, next) => {
     try {
@@ -275,6 +272,45 @@ const itemforOpr = async (req, res, next) => {
     }
 }
 
+
+
+const oprAction = async (req, res, next) => {
+    const { opr_id, action } = req.query;
+    let newStatus;
+    try {
+        switch (action) {
+            case 'delete':
+                newStatus = 0; // Mark as deleted
+                break;
+            case 'send_for_approval':
+                newStatus = 1.1; // Mark as approved
+                break;
+            case 'approved':
+                newStatus = 1.2; // Mark as rejected
+                break;  
+            case 'reject':
+                newStatus = 1.3; // Mark as pending
+                break;
+            default:
+                return res.status(400).json({ message: 'Invalid action specified' });
+        }
+
+        const result = await opr_master.update({ status: newStatus }, {
+            where: { opr_id: opr_id }
+        });
+
+        if (result[0] === 0) {
+            return res.status(404).json({ message: 'Document not found or status unchanged' });
+        }
+
+        res.status(200).json({ message: 'Status updated successfully' });
+    } catch (err) {
+
+        next(err);
+    }
+};
+
+
 oprController = {
     confirmOpr,
     getOpr,
@@ -282,7 +318,9 @@ oprController = {
     createOpr,
     updateOprById,
     itemforOpr,
-    sentforApproval
+    sentforApproval,
+    oprAction
 };
+
 
 module.exports = oprController

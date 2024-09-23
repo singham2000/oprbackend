@@ -15,6 +15,7 @@ router
     .delete('/opr/:id', oprController.deleteOprById)
     .post('/confirm/:opr_id', oprController.confirmOpr)
     .get('/additems', oprController.itemforOpr)
+    .put('/action', oprController.oprAction)
     .put('/approval',setAuditFields,sentApprovalRequest, oprController.sentforApproval)
 router
     .get('/items', oprItemsController.getOprItem)

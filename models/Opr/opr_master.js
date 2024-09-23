@@ -66,10 +66,9 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         },
         status: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING(255),
             allowNull: true
         },
-
         created_by: {
             type: DataTypes.STRING(50),
             allowNull: true
@@ -90,7 +89,7 @@ module.exports = (sequelize, DataTypes) => {
         OprMaster.belongsTo(models.Vertical, { foreignKey: 'vertical_id' });
         OprMaster.belongsTo(models.Division, { foreignKey: 'division_id' });
         OprMaster.belongsTo(models.ShipMode, { foreignKey: 'shipment_mode_id' });
-        OprMaster.belongsTo(models.DeliveryTimeline, { foreignKey: 'delivery_timeline_id' });
+        // OprMaster.belongsTo(models.DeliveryTimeline, { foreignKey: 'delivery_timeline_id' });
         OprMaster.belongsTo(models.Department, { foreignKey: 'department_id' });
         OprMaster.belongsTo(models.BuyingHouse, { foreignKey: 'buying_house_id' });
         OprMaster.hasMany(models.OprItems, { foreignKey: 'opr_id' });

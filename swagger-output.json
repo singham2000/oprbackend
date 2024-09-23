@@ -1081,6 +1081,165 @@
         }
       }
     },
+    "/api/master/doctype": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
+                },
+                "doc_name": {
+                  "example": "any"
+                },
+                "doc_description": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/master/status": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "doc_type": {
+                  "example": "any"
+                },
+                "status_code": {
+                  "example": "any"
+                },
+                "status_name": {
+                  "example": "any"
+                },
+                "status_description": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "status_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "module": {
+                  "example": "any"
+                },
+                "table_name": {
+                  "example": "any"
+                },
+                "field_name": {
+                  "example": "any"
+                },
+                "value": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "status_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/user/users": {
       "get": {
         "description": "",
@@ -2888,6 +3047,13 @@
     "/api/opr/oprs": {
       "get": {
         "description": "",
+        "parameters": [
+          {
+            "name": "opr_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -2917,6 +3083,9 @@
                   "example": "any"
                 },
                 "user_id": {
+                  "example": "any"
+                },
+                "opr_num": {
                   "example": "any"
                 },
                 "buying_house_id": {
@@ -3108,6 +3277,34 @@
         }
       }
     },
+    "/api/opr/action": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "opr_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "action",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/opr/approval": {
       "put": {
         "description": "",
@@ -3238,6 +3435,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           }
         }
       }
@@ -5131,6 +5331,16 @@
         "parameters": [
           {
             "name": "quo_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "company_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "opr_id",
             "in": "query",
             "type": "string"
           }
@@ -7177,13 +7387,6 @@
     "/api/status/": {
       "get": {
         "description": "",
-        "parameters": [
-          {
-            "name": "status_id",
-            "in": "query",
-            "type": "string"
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -7199,19 +7402,16 @@
             "schema": {
               "type": "object",
               "properties": {
-                "module": {
+                "doc_type": {
                   "example": "any"
                 },
-                "table_name": {
+                "status_code": {
                   "example": "any"
                 },
-                "field_name": {
+                "status_name": {
                   "example": "any"
                 },
-                "value": {
-                  "example": "any"
-                },
-                "description": {
+                "status_description": {
                   "example": "any"
                 }
               }
@@ -11795,15 +11995,26 @@
         "description": "",
         "parameters": [
           {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
             "name": "body",
             "in": "body",
             "schema": {
               "type": "object",
               "properties": {
-                "payment_terms_name": {
+                "created_by": {
                   "example": "any"
                 },
-                "created_by": {
+                "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
+                },
+                "payment_terms_name": {
                   "example": "any"
                 },
                 "milestone_data": {
@@ -11819,6 +12030,12 @@
         "responses": {
           "201": {
             "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }
@@ -12467,9 +12684,6 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
           "400": {
             "description": "Bad Request"
           },
