@@ -8769,6 +8769,148 @@
         }
       }
     },
+    "/api/notes/gdn": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
+                },
+                "agency_code": {
+                  "example": "any"
+                },
+                "agency_id": {
+                  "example": "any"
+                },
+                "ref_doc": {
+                  "example": "any"
+                },
+                "ref_doc_id": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                },
+                "gnditemsdata": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "gdn_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/notes/grn": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "gdn_id": {
+                  "example": "any"
+                },
+                "agency_code": {
+                  "example": "any"
+                },
+                "agency_id": {
+                  "example": "any"
+                },
+                "ref_doc": {
+                  "example": "any"
+                },
+                "ref_doc_id": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                },
+                "gnditemsdata": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "grn_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/operation/assessment/": {
       "get": {
         "description": "",

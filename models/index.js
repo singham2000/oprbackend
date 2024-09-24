@@ -69,6 +69,11 @@ db.BuyingHouse = require("./BuyingHouse/buyinghouse_master.js")(
     DataTypes
 );
 db.GrnMaster = require("./BuyingHouse/grn_master.js")(sequelize, DataTypes);
+db.GrnMaster2 = require("./GrnGdn/GrnMaster.js")(sequelize, DataTypes);
+db.GdnItems = require("./GrnGdn/GrnItems.js")(sequelize, DataTypes);
+
+db.GdnMaster = require("./GrnGdn/GdnMaster.js")(sequelize, DataTypes);
+db.GdnItems = require("./GrnGdn/GdnItems.js")(sequelize, DataTypes);
 
 db.DeptDesigMapping = require("./dept_desig_mapping.js")(sequelize, DataTypes);
 db.branch = require("./branch_master.js")(sequelize, DataTypes);
@@ -278,7 +283,7 @@ Object.values(models).forEach((model) => {
 });
 
 sequelize
-    .sync({ alter: false })
+    .sync({ alter: true })
     .then(() => {
         console.log("Database & tables created!");
     })

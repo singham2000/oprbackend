@@ -29,7 +29,6 @@ const quotationItemsRouter = require("./routes/quotationItemsRoutes");
 const criaRouter = require("./routes/criaRoutes.js");
 const nafdacCategoryRouter = require("./routes/nafdacCategoryRotues.js");
 const nafdacRouter = require("./routes/nafdacRoutes.js");
-
 const verticalRouter = require("./routes/verticalRoutes");
 const companyRouter = require("./routes/companyRoutes");
 const deliveryTimelineRouter = require("./routes/deliveryTimelineRoutes");
@@ -45,6 +44,7 @@ const buyingHouseRoutes = require("./routes/buyHouseRoutes.js");
 const buyingHouseRoutes2 = require("./routes/BuyingHouse/buyingHouseRoutes.js");
 const SeriesRoutes = require("./routes/seriesRoutes,js");
 const StatusRoutes = require("./routes/statusRoutes.js");
+const GdnGrnNotes = require("./routes/GdnGrnRoutes.js")
 
 
 //category
@@ -52,9 +52,6 @@ const categoryRoute = require("./routes/categoryRoutes");
 const itemCategoryRouter = require("./routes/itemCategoryRoutes.js");
 const itemGroupRouter = require("./routes/itemGroupRotues.js");
 const itemSubGroupRouter = require("./routes/itemSubGroupRotues.js");
-
-
-
 
 //Masters
 const ContainerTypesMasters = require("./routes/Masters/ContainerTypesMastersRoutes.js");
@@ -76,6 +73,7 @@ const PaarRoutes = require("./routes/Pfi/PaarRoutes");
 
 //Get Data CI against PFI, FormM,
 const CommercialInvoiceAllData = require("./routes/Pfi/AssociationRoutes");
+
 
 //Opreations
 const AssessmentRoutes = require("./routes/Opreations/AssessmentRoutes");
@@ -134,7 +132,7 @@ app.use("/api/category", itemGroupRouter);
 
 
 //Master
-app.use("/api/master",masterRoutes)
+app.use("/api/master", masterRoutes)
 
 
 // Routes
@@ -188,6 +186,7 @@ app.use("/api/pfi/paar", PaarRoutes);
 app.use("/api/ci/all", CommercialInvoiceAllData);
 
 //Operations
+app.use("/api/notes", GdnGrnNotes)
 app.use("/api/operation/assessment", AssessmentRoutes);
 // app.use("/api/operation/nafdac", OperationsNafdacRoutes);
 app.use("/api/operation/nafdac", OperationsNafdacMasterRoutes);
@@ -197,6 +196,9 @@ app.use("/api/operation/container/allocation", ContainerAllocationRoutes);
 app.use("/api/operation/govt/charges", GovtChargesRoutes);
 app.use("/api/operation/shipping/lapse", ShippingLapseRoutes);
 app.use("/api/service/container", AddServiceContainer);
+
+
+
 
 //shipping
 app.use("/api/shipping", ShippingMasterRoutes);
