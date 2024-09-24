@@ -177,7 +177,7 @@ const getQuotation = async (req, res, next) => {
           [
             sequelize.literal("dbo.fn_GetPaymentTerm(payment_terms)"),
             "payment_terms_name",
-          ], 
+          ],
         ],
         include: [
           {
@@ -210,7 +210,7 @@ const getQuotation = async (req, res, next) => {
               [
                 sequelize.literal("dbo.fn_GetPackageType(pack_type)"),
                 "pack_type_name",
-              ], 
+              ],
             ],
           },
           {
@@ -310,7 +310,7 @@ const deleteQuotationById = async (req, res, next) => {
 // Controller method to Create
 const createQuotation = async (req, res, next) => {
   // console.log(req.body);
-  console.log(req.files);
+  // console.log(req.files);
   const { quotation_details, quotation_docslist } = req.body;
 
   const transaction = await sequelize.transaction(); // Start a transaction
@@ -339,7 +339,6 @@ const createQuotation = async (req, res, next) => {
       charges,
       ItemData,
     } = quotation_details;
-
 
     // Generate quotation
     const newQuotationMaster = await quotation_master.create(
@@ -371,12 +370,11 @@ const createQuotation = async (req, res, next) => {
     // Process charges
     const processCharges = async () => {
       for (const key in charges) {
+        console.log("rfq and vendor", rfq_id, vendor_id);
         await additional_cost.create(
           {
             quo_id: lastInsertedId,
             quo_num: quotation_series,
-            rfq_id,
-            vendor_id,
             charge_name: key,
             charge_amount: charges[key],
             status: 1,
@@ -391,7 +389,9 @@ const createQuotation = async (req, res, next) => {
     // Prepare and insert quotation items
     const updatedItemdata = ItemData.map((item) => ({
       quo_id: lastInsertedId,
-      quo_num: quotation_series,
+      quo_num: quotation_series,      
+      rfq_id: rfq_id,
+      vendor_id: vendor_id,
       ...item,
       status: 1,
     }));
@@ -469,8 +469,6 @@ const updateQuotationById = async (req, res, next) => {
     next(err);
   }
 };
-
-
 
 //this function will genrate po with status 2 after finalize quotation
 // const generatePo = async (req, res, next) => {

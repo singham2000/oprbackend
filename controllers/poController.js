@@ -1,57 +1,127 @@
 // const { po_master } = ('../models');
 const db = require("../models");
-const { sequelize, document: Document } = db
-const { po_master, quotation_master, po_items } = db;
+const { sequelize, document: Document } = db;
+const { po_master, opo_master, po_items } = db;
 const formattedDateTime = require("../middleware/time");
 const { Op } = require("sequelize");
 const { generateSeries } = require("./seriesGenerate");
-const { getQuotationItemByQuoId } = require('./quotationItemsController')
+const { getQuotationItemByQuoId } = require("./quotationItemsController");
 
 //get all po
 const getPO = async (req, res, next) => {
   const po_id = req.query.po_id;
   try {
     if (po_id) {
-      const query = `SELECT po_master.*
-      FROM po_master
-      INNER JOIN quotations_master
-      ON po_master.quo_id = quotations_master.quo_id where po_id = ${po_id}`;
-
-      // const result = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
-      const result2 = await po_master.findAll({
+      let result = await po_master.findAll({
         where: { po_id },
         include: [
           {
-            model: db.VendorsMaster,
-            attributes: ['vendor_name']
+            model: db.po_items,
+            attributes: [
+              "po_item_id",
+              "po_id",
+              "po_num",
+              "opo_id",
+              "item_id",
+              "item_code",
+              "item_name",
+              "item_type",
+              "line_total",
+              "no_packs",
+              "pack_size",
+              "pack_type",
+              "rate",
+              "remarks",
+              "address_id",
+              "po_qty",
+              "grn_qty",
+            ],
           },
           {
-            model: db.po_items
+            model: db.vendor,
+            attributes: [
+              "vendor_series",
+              "vendor_name",
+              "phone_number",
+              "alternate_phone_number",
+              "email",
+              "contact_person",
+              "contact_person_phone",
+              "contact_person_email",
+              "tax_id",
+              "payment_terms_id",
+              "pan_num",
+              "tin_num",
+              "gst_num",
+              "vat_num",
+              "reference_by",
+              "vendor_type_id",
+              "vendor_status",
+              "registration_date",
+              "compliance_status",
+            ],
+          },
+        ],
+      });
+      res.status(200).json(result);
+    } else {
+      let result = await po_master.findAll({
+        include: [
+          {
+            model: db.po_items,
+            attributes: [
+              "po_item_id",
+              "po_id",
+              "po_num",
+              "opo_id",
+              "item_id",
+              "item_code",
+              "item_name",
+              "item_type",
+              "line_total",
+              "no_packs",
+              "pack_size",
+              "pack_type",
+              "rate",
+              "remarks",
+              "address_id",
+              "po_qty",
+              "grn_qty",
+            ],
           },
           {
-            model: db.quotation_master
-          }
-          // {
-          //   model: db.form_m
-          // }
-        ]
-      })
-      res.status(200).json(result2);
-    }
-    else {
-      const query = `SELECT po_master.*
-      FROM po_master
-      INNER JOIN quotations_master
-      ON po_master.quo_id = quotations_master.quo_id;`;
-      const result = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
+            model: db.vendor,
+            attributes: [
+              "vendor_series",
+              "vendor_name",
+              "phone_number",
+              "alternate_phone_number",
+              "email",
+              "contact_person",
+              "contact_person_phone",
+              "contact_person_email",
+              "tax_id",
+              "payment_terms_id",
+              "pan_num",
+              "tin_num",
+              "gst_num",
+              "vat_num",
+              "reference_by",
+              "vendor_type_id",
+              "vendor_status",
+              "registration_date",
+              "compliance_status",
+            ],
+          },
+        ],
+      });
       res.status(200).json(result);
     }
   } catch (error) {
-    console.error('Error calling UDF:', error);
+    console.error("Error calling UDF:", error);
     throw error;
   }
 };
-
 
 //get po for grn
 const getPOforGrn = async (req, res, next) => {
@@ -60,10 +130,12 @@ const getPOforGrn = async (req, res, next) => {
       FROM po_master
       INNER JOIN quotations_master
       ON po_master.quo_id = quotations_master.quo_id where  po_master.[status] > 8 and po_master.grn_status is  null`;
-    const result = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
+    const result = await sequelize.query(query, {
+      type: sequelize.QueryTypes.SELECT,
+    });
     res.status(200).json(result);
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
@@ -85,63 +157,99 @@ const deletePOById = async (req, res, next) => {
   }
 };
 
-//This method will run when quotation gets confirm of final
-//On this event po generate with status 1 and quota status update
-//and po items also genrated and insert into po_item table 
-
 const generatePo = async (req, res, next) => {
+  const transaction = await db.sequelize.transaction(); // Start a transaction
   try {
-    const { quo_id, quo_num, total_cost, rfq_id, opr_id, vendor_id, item_list, created_by } = req.body;
-    // Validate input
-    if (!quo_id || !quo_num || !total_cost || !rfq_id || !opr_id || !vendor_id || !item_list || !created_by) {
-      return res.status(400).json({ message: "Invalid input data" });
-    }
+    console.log(req.body);
+    const {
+      opo_ids,
+      opo_nums,
+      total_cost,
+      vendor_id,
+      lead_time,
+      payment_terms,
+      delivery_terms,
+      created_by,
+      items_list,
+    } = req.body;
 
-    //generate series
-    const doc_code = 'PO';
+    const doc_code = "PO";
     const po_series = await generateSeries(doc_code);
 
-    //genrate po
-    const po_response = await po_master.create({
-      po_num: po_series,
-      vendor_id,
-      quo_id,
-      opr_id,
-      quo_num,
-      total_cost,
-      status: 1,
-      created_by,
-      created_on: formattedDateTime,
-    });
+    const items2 = items_list.map((element) => ({
+      line_total: Number(element.opr_qty) * Number(element.rate),
+    }));
 
-    //update quotation po status 1
-    await quotation_master.update(
+    function calculateTotalLineTotal(itemsList) {
+      return itemsList.reduce((total, item) => {
+        return total + item.line_total; // Accumulate the line total
+      }, 0); // Start with 0
+    }
+    const totalAmount = calculateTotalLineTotal(items2)
+    // Generate PO
+    const po_response = await po_master.create(
       {
-        po_status: 1,
+        po_num: po_series,
+        vendor_id,
+        opo_ids,
+        opo_nums,
+        total_cost: totalAmount,
+        lead_time,
+        payment_terms,
+        delivery_terms,
+        status: 1,
+        created_by,
+        created_on: new Date(), // Adjust date format if necessary
+      },
+      { transaction } // Pass the transaction
+    );
+
+    const arr = opo_ids.split(",").map(Number); // Convert to array of numbers
+
+    console.log("before updating opo_master");
+    await opo_master.update(
+      {
+        status: 2,
       },
       {
-        where: { quo_id },
+        where: {
+          opo_master_id: {
+            [Op.in]: arr, // Use the Op.in operator for the array of IDs
+          },
+        },
+        transaction, // Pass the transaction
       }
     );
 
-    let po_id = po_response.dataValues.po_id;
+    let lastInserted = po_response.po_id;
 
-    // insert items in po_items
-    await item_list.forEach(element => {
-      element.po_id = po_id, element.rfq_id = rfq_id
-    });
+    const items = items_list.map((element) => ({
+      po_id: lastInserted,
+      po_num: po_series,
+      opo_id: element.opo_id,
+      item_id: element.item_id,
+      item_code: element.item_code,
+      item_name: element.item_name,
+      item_type: element.item_type,
+      line_total: Number(element.opr_qty) * Number(element.rate),
+      no_packs: Number(element.opr_qty) / Number(element.pack_size),
+      pack_size: element.pack_size,
+      pack_type: element.pack_type,
+      rate: element.rate,
+      status: 1,
+      po_qty: element.opr_qty,
+    }));
 
-    const response = await po_items.bulkCreate(item_list)
+    console.log("Items to be inserted:", items);
+    const response = await po_items.bulkCreate(items, { transaction }); // Pass the transaction
+
+    await transaction.commit(); // Commit the transaction if all is well
     res.status(201).json({ message: "Submit Successfully" });
-
   } catch (err) {
+    await transaction.rollback(); // Rollback the transaction on error
     next(err);
   }
 };
-
-
-//update po status after send mail to vendor
-//po status will become 2 when po sent to vendor
 
 const po_email_conformation = async (req, res, next) => {
   try {
@@ -224,7 +332,7 @@ const confimPoFinalPaymentsbyVendor = async (req, res, next) => {
 };
 
 const completePo = async (req, res, next) => {
-  const { po_id, pocompletion_docslist, created_by } = req.body
+  const { po_id, pocompletion_docslist, created_by } = req.body;
 
   try {
     //change po_master Status
@@ -242,7 +350,7 @@ const completePo = async (req, res, next) => {
     //transform quotation docs
     await pocompletion_docslist.map((data, i) => {
       data.linked_id = po_id;
-      data.table_name = 'PO';
+      data.table_name = "PO";
       data.doc_name = req.files[i].originalname;
       data.doc_base64 = req.files[i].buffer.toString("base64");
       data.uploaded_by = created_by;
@@ -251,16 +359,14 @@ const completePo = async (req, res, next) => {
     // insert quotation documents
     await Document.bulkCreate(pocompletion_docslist);
     res.status(200).json({ message: "Po completion update Suceesfully" });
-
   } catch (err) {
     next(err);
   }
-}
+};
 
 const getPoItemsbypoid = async (req, res, next) => {
   try {
     const { po_id } = req.query;
-
 
     let FoundPoItems = await po_items.findAll({
       where: { po_id: po_id },
@@ -270,19 +376,25 @@ const getPoItemsbypoid = async (req, res, next) => {
           include: [
             {
               model: db.UomMaster,
-              attributes: ['uom_name']
-            }
+              attributes: ["uom_name"],
+            },
           ],
-          attributes: ['item_name', 'item_type', 'item_code', 'quantity_in_stock', 'quantity_on_order', 'nafdac_category',]
-        }
+          attributes: [
+            "item_name",
+            "item_type",
+            "item_code",
+            "quantity_in_stock",
+            "quantity_on_order",
+            "nafdac_category",
+          ],
+        },
       ],
     });
-    res.status(201).json(FoundPoItems)
-
+    res.status(201).json(FoundPoItems);
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 const updatePOById = async (req, res, next) => {
   const po_id = req.query.po_id;
   try {
@@ -305,7 +417,6 @@ const updatePOById = async (req, res, next) => {
   }
 };
 
-
 const getVendorDeailsByPoId = async (req, res, next) => {
   try {
     const { po_id } = req.query;
@@ -317,57 +428,60 @@ const getVendorDeailsByPoId = async (req, res, next) => {
           include: [
             {
               model: db.VendorsAddressDetailsMaster,
-            }
+            },
           ],
-
-        }
+        },
       ],
     });
-    res.status(201).json(foudnVendor)
-
+    res.status(201).json(foudnVendor);
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
-
+};
 
 const poStatusController = async (req, res, next) => {
-  let { po_id, action } = req.body
+  let { po_id, action } = req.body;
   try {
-    let foundPo = await po_master.findByPk(po_id)
+    let foundPo = await po_master.findByPk(po_id);
     if (!foundPo) {
-      res.status(404).json({ message: "Document not found" })
+      res.status(404).json({ message: "Document not found" });
     } else {
       switch (action) {
-        case 'approve':
+        case "approve":
           foundPo.status = 1;
           await foundPo.save();
           break;
-        case 'reject':
+        case "reject":
           foundPo.status = 1;
           await foundPo.save();
           break;
-        case 'archive':
+        case "archive":
           foundPo.status = 1;
           await foundPo.save();
           break;
         default:
-          return res.status(400).json({ message: 'Invalid action' });
+          return res.status(400).json({ message: "Invalid action" });
       }
       // Common response
-      res.status(200).json({ message: 'Action processed successfully' });
+      res.status(200).json({ message: "Action processed successfully" });
     }
   } catch (err) {
     next(err);
   }
-}
+};
 
 module.exports = {
   poStatusController,
   confimPoFinalPaymentsbyVendor,
-  completePo, confimPoPaymentsbyVendor,
-  getVendorDeailsByPoId, getPOforGrn,
-  po_email_conformation, AcceptPO,
-  getPO, deletePOById, generatePo,
-  updatePOById, getPoItemsbypoid
+  completePo,
+  confimPoPaymentsbyVendor,
+  getVendorDeailsByPoId,
+  getPOforGrn,
+  po_email_conformation,
+  AcceptPO,
+  getPO,
+  deletePOById,
+  generatePo,
+  updatePOById,
+  getPoItemsbypoid,
 };
