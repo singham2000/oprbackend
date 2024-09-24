@@ -10,11 +10,11 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(100),
             allowNull: true
         },
-        quo_id: {
-            type: DataTypes.INTEGER,
+        opo_ids: {
+            type: DataTypes.STRING(100),
             allowNull: true
         },
-        quo_num: {
+        opo_nums: {
             type: DataTypes.STRING(100),
             allowNull: true
         },
@@ -92,17 +92,23 @@ module.exports = (sequelize, DataTypes) => {
     //     })
     // };
 
+    // po_master.associate = (models) => {
+    //     po_master.hasMany(models.po_items, {
+    //         foreignKey: 'po_id',
+    //     });
+    //     po_master.belongsTo(models.VendorsMaster, {
+    //         foreignKey: 'vendor_id',
+    //     });
+    // };
+
     po_master.associate = (models) => {
         po_master.hasMany(models.po_items, {
-            foreignKey: 'po_id',
+            foreignKey: "po_id",
         });
-        po_master.belongsTo(models.VendorsMaster, {
-            foreignKey: 'vendor_id',
+        po_master.belongsTo(models.vendor, {
+            foreignKey: "vendor_id",
         });
-        po_master.belongsTo(models.quotation_master, {
-            foreignKey: 'quo_id',
-        });
-    };
+      }
 
     return po_master;
 };

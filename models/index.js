@@ -129,6 +129,7 @@ db.rfqitem = require("./Rfq/rfq_Item_master.js")(sequelize, DataTypes);
 db.RfqItemDetail = require("./Rfq/rfq_Item_master.js")(sequelize, DataTypes);
 db.rfq = require("./Rfq/rfq_master.js")(sequelize, DataTypes);
 db.rfqitem = require("./Rfq/rfq_Item_master.js")(sequelize, DataTypes);
+// db.status_master = require("./status_master")(sequelize, DataTypes);
 
 //service rfq
 db.ServiceMaster = require("./Services/services_master.js")(
@@ -257,6 +258,12 @@ db.port_destination_master = require("./Masters/PortDestinationMaster.js")(
     sequelize,
     DataTypes
 );
+
+//OPO
+db.opo_master = require('./OverseasPurchaseOrder/Opo.js')(sequelize, DataTypes);
+db.opo_items = require('./OverseasPurchaseOrder/OpoItems.js')(sequelize, DataTypes);
+
+
 
 //Packing
 db.PackageTypeMaster = require('./Packing/PackageType.js')(sequelize, DataTypes);

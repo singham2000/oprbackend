@@ -1,27 +1,29 @@
+const { DataTypes } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
-  const po_items = sequelize.define("po_items", {
-    po_item_id: {
+  const opo_items = sequelize.define("opo_items", {
+    opo_items_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    po_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
-    po_num: {
-      type: DataTypes.STRING(155),
-      allowNull: true
-    },
     opo_id: {
       type: DataTypes.INTEGER,
       allowNull: true
-    },
+    },  
+    rfq_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    }, 
+    vendor_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    }, 
     item_id: {
       type: DataTypes.INTEGER,
       allowNull: true
-    },    
+    },
     item_code: {
       type: DataTypes.STRING(55),
       allowNull: true
@@ -42,11 +44,19 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: true
     },
+    opr_qty: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
     pack_size: {
       type: DataTypes.INTEGER,
       allowNull: true
     },
     pack_type: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    quote_qtd: {
       type: DataTypes.INTEGER,
       allowNull: true
     },
@@ -58,22 +68,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(155),
       allowNull: true
     },
-    address_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
-    po_qty: {
-      type: DataTypes.DECIMAL(18, 2),
-      allowNull: true
-    },
-    grn_qty: {
-      type: DataTypes.DECIMAL(18, 2),
-      allowNull: true
-    },
-    status: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
     created_by: {
       type: DataTypes.STRING(50),
       allowNull: true
@@ -81,28 +75,17 @@ module.exports = (sequelize, DataTypes) => {
     updated_by: {
       type: DataTypes.STRING(50),
       allowNull: true
+    },
+    status: {
+      type: DataTypes.STRING(50),
+      allowNull: true
     }
   }, {
-    tableName: 'po_items',
+    tableName: 'opo_items',
     timestamps: true
   });
 
-  // po_items.associate = (model) => {
-  //   po_items.hasMany(model.po_master, {
-  //     foreignKey: 'po_id'
-  //   });
-  // };
 
-  // po_items.associate = (models) => {
-  //   po_items.belongsTo(models.po_master, {
-  //     foreignKey: 'po_id',
-  //   });
-  //   po_items.belongsTo(models.ItemsMaster, {
-  //     foreignKey: 'item_id',
-  //   });
-  // };
+  return opo_items;
 
- 
-
-  return po_items;
-}; 
+};

@@ -102,6 +102,11 @@ const paymentTermsRouter = require("./routes/paymentTermsRoutes");
 const payment = require("./routes/paymentRoutes.js");
 const ApprovalRoutes = require('./routes/approvalRoutes.js')
 
+//OPO
+const OpoRoutes = require('./routes/OverseasPurchaseOrder/OpoRoutes')
+
+
+
 //documents
 const documentRoutes = require('./routes/documentRoutes.js')
 const reqdocRoutes = require('./routes/reqdocmasterRoutes.js')
@@ -224,6 +229,10 @@ app.use("/api/payment-transactions", paymentRequestTransactionsMasterRoutes);
 app.use("/api/payment", payment);
 // app.use('/api/payment',)
 app.use("/api/approval", ApprovalRoutes)
+
+//OPO
+app.use("/api/opo", OpoRoutes);
+
 
 //addresss new
 app.use("/api/address", addressRoutes);
