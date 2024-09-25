@@ -185,6 +185,37 @@ async function createUDFIfNotExists() {
         ');
       END;
       
+
+      IF OBJECT_ID('dbo.GetNamesFromIds', 'FN') IS NULL
+BEGIN
+    EXEC('
+        CREATE FUNCTION dbo.GetNamesFromIds (@Ids VARCHAR(MAX))
+        RETURNS VARCHAR(MAX)
+        AS 
+        BEGIN
+            DECLARE @Result VARCHAR(MAX) = '''';
+            DECLARE @Id INT;
+
+            -- Create a table variable to hold split IDs
+            DECLARE @IdTable TABLE (Id INT);
+
+            -- Split the IDs and insert them into the table variable
+            WHILE LEN(@Ids) > 0
+            BEGIN
+                SET @Id = CAST(LEFT(@Ids, CHARINDEX('','', @Ids + '','') - 1) AS INT);
+                INSERT INTO @IdTable (Id) VALUES (@Id);
+                SET @Ids = STUFF(@Ids, 1, CHARINDEX('','', @Ids + '',''), '''');
+            END
+
+            -- Concatenate vendor_name and vendor_series
+            SELECT @Result = STRING_AGG(vendor_name + '' ('' + vendor_series + '')'', '','') 
+            FROM vendors_master 
+            WHERE vendor_id IN (SELECT Id FROM @IdTable);
+
+            RETURN @Result;
+        END;
+    ');
+END;
     `;
 
     // Log the SQL query for debugging

@@ -14,9 +14,9 @@ const {
 } = db;
 
 const formattedDateTime = require("../middleware/time");
-const { Op, where } = require("sequelize");
 const { generateSeries } = require("./seriesGenerate");
 const { sequelize, po_items } = require("../models/index");
+const { Op, where, col } = require("sequelize");
 
 const getQuotation = async (req, res, next) => {
   const quo_id = req.query.quo_id;
@@ -48,6 +48,17 @@ const getQuotation = async (req, res, next) => {
       result.forEach((item) => (item.uom = "KG"));
       res.status(200).json(result);
     } else if (company_id && opr_id) {
+      const oprItems = await OprItems.findAll({
+        where: {
+          company_id: company_id,
+          opr_id: opr_id,
+        },
+        attributes: ["item_id"],
+      });
+
+      // Extract item_ids from the retrieved OprItems
+      const item_ids = oprItems.map((item) => item.item_id);
+
       let opr_details = await OprItems.findAll({
         where: {
           company_id: company_id,
@@ -125,6 +136,9 @@ const getQuotation = async (req, res, next) => {
                         "pack_type_name",
                       ],
                     ],
+                    where: {
+                      item_id: item_ids, // Filter using the item_id directly
+                    },
                   },
                   {
                     model: db.QuoDoc,
@@ -389,7 +403,7 @@ const createQuotation = async (req, res, next) => {
     // Prepare and insert quotation items
     const updatedItemdata = ItemData.map((item) => ({
       quo_id: lastInsertedId,
-      quo_num: quotation_series,      
+      quo_num: quotation_series,
       rfq_id: rfq_id,
       vendor_id: vendor_id,
       ...item,
