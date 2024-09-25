@@ -89,7 +89,8 @@ const getVendorsByRfqId = async (req, res, next) => {
 const getAllRfq = async (req, res, next) => {
   try {
     const rfqs = await RfqMaster.findAll({
-      attributes: { include: ['*', [sequelize.literal('dbo.fn_GetPortDestinationName(port_of_destination)'), 'port_of_destination_name']] },
+      attributes: { include: ['*', [sequelize.literal('dbo.fn_GetPortDestinationName(port_of_destination)'), 'port_of_destination_name'], 
+        [sequelize.literal('dbo.GetNamesFromIds(vendor_list)'), 'vendors'] ]},
     });
 
 
