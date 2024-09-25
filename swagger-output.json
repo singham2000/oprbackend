@@ -3989,44 +3989,36 @@
         "description": "",
         "parameters": [
           {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
             "name": "body",
             "in": "body",
             "schema": {
               "type": "object",
               "properties": {
-                "created_by": {
+                "opo_ids": {
                   "example": "any"
                 },
-                "updated_by": {
-                  "example": "any"
-                },
-                "user_id": {
-                  "example": "any"
-                },
-                "quo_id": {
-                  "example": "any"
-                },
-                "quo_num": {
+                "opo_nums": {
                   "example": "any"
                 },
                 "total_cost": {
                   "example": "any"
                 },
-                "rfq_id": {
-                  "example": "any"
-                },
-                "opr_id": {
-                  "example": "any"
-                },
                 "vendor_id": {
                   "example": "any"
                 },
-                "item_list": {
+                "lead_time": {
+                  "example": "any"
+                },
+                "payment_terms": {
+                  "example": "any"
+                },
+                "delivery_terms": {
+                  "example": "any"
+                },
+                "created_by": {
+                  "example": "any"
+                },
+                "items_list": {
                   "example": "any"
                 }
               }
@@ -4036,12 +4028,6 @@
         "responses": {
           "201": {
             "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
           }
         }
       }
@@ -8831,11 +8817,6 @@
         "description": "",
         "parameters": [
           {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
             "name": "gdn_id",
             "in": "query",
             "type": "string"
@@ -8844,12 +8825,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
           }
         }
       }
@@ -13919,6 +13894,148 @@
           },
           "500": {
             "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/opo/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "opo_master_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
+                },
+                "quo_id": {
+                  "example": "any"
+                },
+                "quo_num": {
+                  "example": "any"
+                },
+                "total_cost": {
+                  "example": "any"
+                },
+                "opr_id": {
+                  "example": "any"
+                },
+                "opr_num": {
+                  "example": "any"
+                },
+                "vendor_id": {
+                  "example": "any"
+                },
+                "item_list": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "opo_master_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "created_by": {
+                  "example": "any"
+                },
+                "updated_by": {
+                  "example": "any"
+                },
+                "user_id": {
+                  "example": "any"
+                },
+                "penalty_terms_name": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "opo_master_id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }

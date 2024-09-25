@@ -221,8 +221,6 @@ exports.deletePaymentTerm = async (req, res, next) => {
 //************************************************Penalty terms  Controller************************************************/
 // Create a new penalty term
 exports.createPenaltyTerm = async (req, res, next) => {
-
-
     try {
         const { penalty_terms_name, created_by, updated_by, status } = req.body;
         const penaltyTerm = await PenaltyTermsMaster.create({
@@ -528,6 +526,8 @@ exports.PaymentRequestListForTreasury = async (req, res, next) => {
 }
 
 
+
+
 // exports.confirmPaymentRequest = async (req, res, next) => {
 //     let { payment_request_id } = req.body
 //     console.log(payment_request_id);
@@ -744,7 +744,6 @@ const updateDocumentStatus = async (doc_type, doc_id, res, payment_request_id, r
 
 
 exports.createPaymentTransactions = async (req, res, next) => {
-
     try {
         const { payment_request_id, doc_type, doc_id } = req.body;
         updateDocumentStatus(doc_type, doc_id, res, payment_request_id, req);
@@ -769,3 +768,21 @@ exports.createPaymentTransactions = async (req, res, next) => {
         next(error);
     }
 };
+
+
+
+const sentPaymentforApproval = async (req, res, next) => {
+    const { doc_id, status } = req.body;
+    try {
+        const response = await PaymentRequestMaster.findByPk(doc_id);
+        if (!response) {
+            return res.status(404).json({ message: "Document not found" });
+        } else {
+            response.status = status;
+            await response.save();
+            res.status(200).json({ message: "Payment sent for approval successfully", data: response });
+        }
+    } catch (err) {
+        next(err);
+    }
+}

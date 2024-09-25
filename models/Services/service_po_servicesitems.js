@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
-    },
+    }, 
     po_id: {
       type: DataTypes.INTEGER,
       allowNull: true
@@ -63,11 +63,6 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: true
   });
 
-  // po_items.associate = (model) => {
-  //   po_items.hasMany(model.po_master, {
-  //     foreignKey: 'po_id'
-  //   });
-  // };
 
   po_items.associate = (models) => {
     po_items.belongsTo(models.po_master, {

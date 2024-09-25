@@ -87,4 +87,13 @@ router.post('/transaction', upload.any(), setAuditFields, PaymentController.crea
 router.get('/terms/dropdown', PaymentController.getAllPaymentTerms);
 router.get('/terms/dropdown2', PaymentController.getAllPaymentTerms);
 
+
+
+
+//Payments Approval
+// router
+// .put('/approval',setAuditFields,sentApprovalRequest, PaymentController.sentforApproval)
+
+
+
 module.exports = router;

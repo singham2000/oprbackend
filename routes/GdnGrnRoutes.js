@@ -9,7 +9,7 @@ const setAuditFields = require('../middleware/setAuditFields.js');
 //GDN Routes
 router
     .post('/gdn', setAuditFields, GdnController.createGdn)
-    .get('/gdn', setAuditFields, GdnController.getAllGdn);
+    .get('/gdn',  GdnController.getAllGdn);
 
 
 

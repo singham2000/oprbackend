@@ -372,6 +372,7 @@ const getPoItemsbypoid = async (req, res, next) => {
       where: { po_id: po_id },
       include: [
         {
+          // model: db.po_items,
           model: db.ItemsMaster,
           include: [
             {
@@ -379,14 +380,14 @@ const getPoItemsbypoid = async (req, res, next) => {
               attributes: ["uom_name"],
             },
           ],
-          attributes: [
-            "item_name",
-            "item_type",
-            "item_code",
-            "quantity_in_stock",
-            "quantity_on_order",
-            "nafdac_category",
-          ],
+          // attributes: [
+          //   "item_name",
+          //   "item_type",
+          //   "item_code",
+          //   "quantity_in_stock",
+          //   "quantity_on_order",
+          //   "nafdac_category",
+          // ],
         },
       ],
     });

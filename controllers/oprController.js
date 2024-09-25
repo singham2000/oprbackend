@@ -21,11 +21,9 @@ const getOpr = async (req, res, next) => {
                 { model: db.BuyingHouse, attributes: ['buying_house_name'] },
                 { model: db.ItemSuperGroupMaster, attributes: ['item_super_group_name'] },
                 { model: db.OprItems }
-            ],
-            attributes: { exclude: ['department_id', 'opr_description', 'buying_house_id', 'created_by', 'updated_by', 'createdAt', 'updatedAt', 'vertical_id', 'company_id', 'division_id'] }
+            ]
         })
-
-
+        
         // Function to transform nested fields into top-level fields
         const transformData = (data) => {
             return data.map(item => {
@@ -72,6 +70,9 @@ const getOpr = async (req, res, next) => {
         let rfqcountquery = `select COUNT(*) as qs from quotations_master
                                 where rfq_id in (Select rfq_id from opr_items where opr_id=10)`
         opr_detials.received_quotatoins = await db.sequelize.query(rfqcountquery)
+
+        console.log("********opr master*******")
+        console.log(opr_detials)
 
         res.status(200).json(opr_detials);
     } catch (err) {
@@ -287,7 +288,7 @@ const oprAction = async (req, res, next) => {
                 break;
             case 'approved':
                 newStatus = 1.2; // Mark as rejected
-                break;  
+                break;
             case 'reject':
                 newStatus = 1.3; // Mark as pending
                 break;

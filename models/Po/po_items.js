@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     item_id: {
       type: DataTypes.INTEGER,
       allowNull: true
-    },    
+    },
     item_code: {
       type: DataTypes.STRING(55),
       allowNull: true
@@ -102,7 +102,21 @@ module.exports = (sequelize, DataTypes) => {
   //   });
   // };
 
+  po_items.associate = (models) => {
+    po_items.belongsTo(models.po_master, {
+      foreignKey: 'po_id',
+    });
+    po_items.belongsTo(models.ItemsMaster, {
+      foreignKey: 'item_id',
+    });
+  };
  
+    
+
+   
+  
+
+
 
   return po_items;
 }; 
