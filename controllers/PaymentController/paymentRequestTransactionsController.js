@@ -3,7 +3,7 @@ const { PaymentRequestTransactionsMaster, PaymentRequestMaster, po_master, Pfi_m
 //this funcation will insert data in transaction table and same time i will also insert data in pfi master without pfi number(series)
 
 exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {
-    console.log(req.body)
+    console.log("hello  **********************")
     try {
         const { payment_request_id, po_id } = req.body;
 
@@ -39,7 +39,8 @@ exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {
         const P_transaction = await PaymentRequestTransactionsMaster.create(req.body);
         console.log(P_transaction.transactions_id);
 
-        //create data for pfi
+        //create item data for pfi
+        //this query will return matich itesms
         let query = `select  distinct  opr_items.company_id ,dbo.fn_companyname(opr_items.company_id)  as comp_name
             from opr_items            
             inner join po_items

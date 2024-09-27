@@ -5,9 +5,9 @@ const setAuditFields = require("../../middleware/setAuditFields.js");
 
 // API routes
 router
-  .get("/", OpoController.getOpoTerms)
-  .post("/", setAuditFields, OpoController.createOpoTerm)
-  .put("/", setAuditFields, OpoController.updateOpoTerm)
-  .delete("/", OpoController.deleteOpoTerm);
+  .get("/", OpoController.getOpo)
+  .post("/", setAuditFields, OpoController.createOpo)
+  .put("/", setAuditFields, OpoController.updateOpo)
+  .delete("/", OpoController.deleteOpo);
 
 module.exports = router;

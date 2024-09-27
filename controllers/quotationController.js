@@ -12,6 +12,7 @@ const {
   lead_time_quo,
   additional_cost,
 } = db;
+const getApprovalData = require("./GlobalFunction/GetApprovalData.js");
 
 const formattedDateTime = require("../middleware/time");
 const { generateSeries } = require("./seriesGenerate");
@@ -22,6 +23,7 @@ const getQuotation = async (req, res, next) => {
   const quo_id = req.query.quo_id;
   const company_id = req.query.company_id;
   const opr_id = req.query.opr_id;
+  const rfq_id = req.query.rfq_id;
   console.log(company_id, opr_id);
   try {
     if (quo_id) {
@@ -158,6 +160,92 @@ const getQuotation = async (req, res, next) => {
         ],
       });
       res.status(200).json(opr_details);
+    } else if (rfq_id) {
+      let quo_details = await quotation_master.findAll({
+        where: {
+          rfq_id: rfq_id,
+        },
+        attributes: [
+          "quo_id",
+          "quo_num",
+          "rfq_id",
+          "vendor_id",
+          "reference_no",
+          "reference_date",
+          "quo_date",
+          "currency",
+          "delivery_terms",
+          "country_origin",
+          "country_supply",
+          "port_loading",
+          "lead_time",
+          "payment_terms",
+          "remarks",
+          "approval_status",
+          "total_cost",
+          "po_status",
+          "opo_status",
+          "quote_doc",
+          "quote_doc_name",
+          "opr_lead_time",
+          "port_of_loading",
+          [
+            sequelize.literal("dbo.fn_GetDeliveryTerm(delivery_terms)"),
+            "delivery_terms_name",
+          ],
+          [
+            sequelize.literal("dbo.fn_GetPaymentTerm(payment_terms)"),
+            "payment_terms_name",
+          ],
+        ],
+        include: [
+          {
+            model: db.additional_cost,
+            attributes: ["charge_name", "charge_amount"],
+          },
+          {
+            model: db.vendor,
+            attributes: ["vendor_name", "vendor_series"],
+          },
+          {
+            model: db.quotation_items,
+            attributes: [
+              "quo_item_id",
+              "quo_id",
+              "item_id",
+              "item_type",
+              "line_total",
+              "opr_qty",
+              "quote_qtd",
+              "rate",
+              "remarks",
+              "item_name",
+              "no_packs",
+              "pack_size",
+              "pack_type",
+              "quo_num",
+              "item_code",
+              "rfq_item_id",
+              [
+                sequelize.literal("dbo.fn_GetPackageType(pack_type)"),
+                "pack_type_name",
+              ],
+            ],
+          },
+          {
+            model: db.QuoDoc,
+            attributes: [
+              "q_doc_id",
+              "quotation_id",
+              "q_doc_name",
+              "q_doc_remarks",
+              "q_doc_filename",
+              "q_doc_file",
+            ],
+          },
+        ],
+      });
+      res.status(200).json(quo_details);
     } else {
       let quo_details = await quotation_master.findAll({
         attributes: [
@@ -300,6 +388,16 @@ const getQuotationbyrfqId = async (req, res, next) => {
     }
   } catch (error) {
     next(error);
+  }
+};
+
+const GetApprovalsByQuoId = async (req, res, next) => {
+  const { quo_id, quo_num } = req.query;
+  try {
+    const result = await getApprovalData("QUO", quo_id, quo_num);
+    res.status(200).json(result);
+  } catch (err) {
+    next(err);
   }
 };
 
@@ -534,6 +632,7 @@ quotationController = {
   createQuotation,
   updateQuotationById,
   getQuotationbyrfqId,
+  GetApprovalsByQuoId,
   // generatePo
 };
 

@@ -85,6 +85,11 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: true
   });
 
+  opo_items.associate = (models) => {
+    opo_items.belongsTo(models.ItemsMaster, {
+        foreignKey: "item_id",
+    });
+  }
 
   return opo_items;
 

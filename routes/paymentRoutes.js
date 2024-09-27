@@ -83,6 +83,7 @@ router.post('/pr_create', setAuditFields, PaymentController.createPaymentRequest
 router.post('/transaction', upload.any(), setAuditFields, PaymentController.createPaymentTransactions);
 
 
+
 //payment terms
 router.get('/terms/dropdown', PaymentController.getAllPaymentTerms);
 router.get('/terms/dropdown2', PaymentController.getAllPaymentTerms);

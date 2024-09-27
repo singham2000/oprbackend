@@ -48,6 +48,18 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
+      unit_justification: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
+      opo_description: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
+      procurement_justification: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
     },
     {
       tableName: "opo_master",
