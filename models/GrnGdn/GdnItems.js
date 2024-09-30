@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true
         },
-        gdn_master_id: {
+        gdn_id: {
             type: DataTypes.INTEGER,
             allowNull: true
         },
@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         address_id: {
             type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        po_item_qty: {
+            type: DataTypes.DECIMAL(18, 2),
             allowNull: true
         },
         gdn_item_qty: {
@@ -49,9 +53,7 @@ module.exports = (sequelize, DataTypes) => {
 
     // Association
     GdnItems.associate = (models) => {
-        GdnItems.belongsTo(models.GdnMaster, { foreignKey: 'gdn_master_id' });
+        GdnItems.belongsTo(models.GdnMaster, { foreignKey: 'gdn_id' });
     };
-
-
     return GdnItems;
 };

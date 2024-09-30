@@ -49,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
 
     // Association
     GdnMaster.associate = (models) => {
-        GdnMaster.hasMany(models.GdnItems, { foreignKey: 'gdn_master_id' });
+        GdnMaster.hasMany(models.GdnItems, { foreignKey: 'gdn_id' });
     };
 
     return GdnMaster;
