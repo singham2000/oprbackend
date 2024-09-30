@@ -7,7 +7,7 @@ const createAddContainer = async (req, res, next) => {
   console.log(req.body);
   try {
     const { po_id, po_num, cpackageDetail } = req.body;
-    console.log(req.body.cpackageDetail[0].packageDetail[0]);
+    console.log(req.body.cpackageDetail[0].packing_info[0]);
     console.log(req.body);
 
     // Step 1: Create containers
@@ -15,8 +15,10 @@ const createAddContainer = async (req, res, next) => {
       const createdContainer = await add_shippment_container.create({
         container_no: container.container_no,
         container_type: container.container_type,
-        net_weight: container.net_weight,
-        gross_weight: container.gross_weight,
+        container_size: container.container_size,
+        packet_uom: container.p_uom,
+        gross_weight: container.total_gross_wt,
+        net_weight: container.total_net_wt,
         po_id: po_id,
         po_num: po_num,
         status: 1, // Assuming status 1 means active or something similar
@@ -25,12 +27,12 @@ const createAddContainer = async (req, res, next) => {
       const lastInsertedId = createdContainer.add_shippment_container_id;
 
       // Create details for each container
-      const detailPromises = container.packageDetail.map(async (detail) => {
+      const detailPromises = container.packing_info.map(async (detail) => {
         await shippment_container_detail.create({
           add_shippment_container_id: lastInsertedId,
-          uom: detail.uom,
-          no_packets: detail.no_packets,
-          packet_weight: detail.packet_weight,
+          packet_qty: detail.p_qty,
+          no_package: detail.no_package,
+          packet_weight: detail.p_net_wt,
           status: 1, // Assuming status 1 means active or something similar
         });
       });
@@ -41,6 +43,14 @@ const createAddContainer = async (req, res, next) => {
 
     // Wait for all containers and their details to be created
     await Promise.all(containerPromises);
+
+    await db.po_master.update({
+      status: 11
+  },
+      {
+          where: { po_id }
+      }
+  )
 
     // Respond once everything is done
     res
@@ -57,6 +67,11 @@ const getAddContainer = async (req, res, next) => {
   try {
     if (!shippment_container_detail_id) {
       const result = await add_shippment_container.findAll({
+        attributes: {
+          include: [[ db.sequelize.literal("dbo.fn_UomName(packet_uom)"), "uom" ],
+          [ db.sequelize.literal("dbo.fn_containerType(container_size)"), "containerSize" ],
+          [ db.sequelize.literal("dbo.fn_GetShippingContainerType(container_type)"), "containerType" ]]
+        },
         where: {
           status: { [Op.ne]: 0 },
         },

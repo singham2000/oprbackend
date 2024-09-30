@@ -1,33 +1,17 @@
 module.exports = (sequelize, DataTypes) => {
-    const shippment_container_detail = sequelize.define(
-      "shippment_container_detail",
+    const shipping_advise_container_type_master = sequelize.define(
+      "shipping_advise_container_type_master",
       {
-        shippment_container_detail_id: {
+        shipping_advise_container_type_master_id: {
           type: DataTypes.INTEGER,
           allowNull: false,
           primaryKey: true,
           autoIncrement: true,
         },
-        add_shippment_container_id: {
-          type: DataTypes.INTEGER,
+        container_type_name: {
+          type: DataTypes.STRING(100),
           allowNull: true,
         },
-        uom: {
-          type: DataTypes.STRING(50),
-          allowNull: true,
-        },
-        packet_qty: {
-          type: DataTypes.STRING(50),
-          allowNull: true,
-        },
-        no_package: {
-          type: DataTypes.INTEGER,
-          allowNull: true,
-        },
-        packet_weight: {
-          type: DataTypes.STRING(155),
-          allowNull: true,
-        },        
         created_on: {
           type: DataTypes.DATE,
           allowNull: true,
@@ -50,11 +34,11 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       {
-        tableName: "shippment_container_detail",
+        tableName: "shipping_advise_container_type_master",
         timestamps: false,
       }
     );
   
-    return shippment_container_detail;
+    return shipping_advise_container_type_master;
   };
   

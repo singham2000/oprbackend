@@ -5,7 +5,6 @@ const { po_master, opo_master, po_items } = db;
 const formattedDateTime = require("../middleware/time");
 const { Op } = require("sequelize");
 const { generateSeries } = require("./seriesGenerate");
-const { getQuotationItemByQuoId } = require("./quotationItemsController");
 
 //get all po
 const getPO = async (req, res, next) => {
@@ -17,6 +16,18 @@ const getPO = async (req, res, next) => {
         include: [
           {
             model: db.po_items,
+            include: [
+              {model: db.ItemsMaster,
+                attributes: {
+                  include: [
+                    [
+                      sequelize.literal("dbo.fn_UomName(uom_id)"),
+                      "uom"
+                    ]
+                  ]
+                }
+              }
+            ],
             attributes: [
               "po_item_id",
               "po_id",
@@ -34,7 +45,11 @@ const getPO = async (req, res, next) => {
               "remarks",
               "address_id",
               "po_qty",
-              "grn_qty",
+              "grn_qty",              
+              [
+                sequelize.literal("dbo.GetOpoNum(opo_id)"),
+                "opo_num",
+              ],
             ],
           },
           {
@@ -69,6 +84,18 @@ const getPO = async (req, res, next) => {
         include: [
           {
             model: db.po_items,
+            include: [
+              {model: db.ItemsMaster,
+                attributes: {
+                  include: [
+                    [
+                      sequelize.literal("dbo.fn_UomName(uom_id)"),
+                      "uom"
+                    ]
+                  ]
+                }
+              }
+            ],
             attributes: [
               "po_item_id",
               "po_id",
@@ -86,7 +113,11 @@ const getPO = async (req, res, next) => {
               "remarks",
               "address_id",
               "po_qty",
-              "grn_qty",
+              "grn_qty",              
+              [
+                sequelize.literal("dbo.GetOpoNum(opo_id)"),
+                "opo_num",
+              ],
             ],
           },
           {

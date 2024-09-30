@@ -237,6 +237,66 @@ async function createUDFIfNotExists() {
                 END;
             ');
         END;
+
+
+
+        IF OBJECT_ID('dbo.GetOpoNum', 'FN') IS NULL
+          BEGIN
+              EXEC('
+                  CREATE FUNCTION dbo.GetOpoNum(@opoID INT)
+                  RETURNS VARCHAR(50)
+                  AS 
+                  BEGIN
+                      DECLARE @ret VARCHAR(100);
+                      
+                      SELECT @ret = ISNULL(o.opo_num, ''OPO Invalid'')
+                      FROM opo_master o
+                      WHERE o.opo_master_id = @opoID;
+                      
+                      RETURN @ret;
+                  END;
+              ');
+          END;
+
+
+          IF OBJECT_ID('dbo.fn_UomName', 'FN') IS NULL
+          BEGIN
+              EXEC('
+                  CREATE FUNCTION dbo.fn_UomName(@uomId INT)
+                  RETURNS VARCHAR(50)
+                  AS 
+                  BEGIN
+                      DECLARE @ret VARCHAR(50);
+                      
+                      -- Select uom_name from unit_of_measurement
+                      SELECT @ret = ISNULL(v.uom_name, ''Invalid Vertical Code'')
+                      FROM unit_of_measurement v
+                      WHERE v.uom_id = @uomId;
+                      
+                      RETURN @ret;
+                  END;
+              ');
+          END;
+
+
+          IF OBJECT_ID('dbo.fn_GetShippingContainerType', 'FN') IS NULL
+          BEGIN
+              EXEC('
+                  CREATE FUNCTION dbo.fn_GetShippingContainerType(@containerTypeId INT)
+                  RETURNS VARCHAR(50)
+                  AS 
+                  BEGIN
+                      DECLARE @ret VARCHAR(50);
+                      
+                      -- Select container_type_name from shipping_advise_container_type_master
+                      SELECT @ret = ISNULL(s.container_type_name, ''Invalid Vertical Code'')
+                      FROM shipping_advise_container_type_master s
+                      WHERE s.shipping_advise_container_type_master_id = @containerTypeId;
+                      
+                      RETURN @ret;
+                  END;
+              ');
+          END;
     `;
 
     // Log the SQL query for debugging

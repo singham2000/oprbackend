@@ -235,6 +235,7 @@ db.approval_matrix__master = require("./Masters/ApprovalMatrixMaster.js")(
     DataTypes
 );
 db.approval_matrix = require("./Masters/ApprovalMatrix")(sequelize, DataTypes);
+db.shipping_advise_container_type_master = require("./Masters/ShippingAdviseContainerType.js")(sequelize, DataTypes);
 db.transport_operation_lapse_master =
     require("./Masters/TransportOperationLapseMaster.js")(sequelize, DataTypes);
 db.container_type_master = require("./Masters/ContainerTypesMasters")(

@@ -55,6 +55,7 @@ const itemSubGroupRouter = require("./routes/itemSubGroupRotues.js");
 
 //Masters
 const ContainerTypesMasters = require("./routes/Masters/ContainerTypesMastersRoutes.js");
+const ShippingAdviseContainerTypesMasters = require("./routes/Masters/ShippingAdviseContainerTypeRoutes");
 const PaymentTermContainer = require("./routes/Masters/PaymentTermContainerMasterRoutes.js");
 const TransportOperationLapse = require("./routes/Masters/TransportOperationLapseMasterRoutes.js");
 const TransportPaymentTypeLapse = require("./routes/Masters/PaymentTypeTransportRoutes.js");
@@ -212,6 +213,7 @@ app.use("/api/vessel", VesselRoutes);
 
 //Masters
 app.use("/api/operation/container/type", ContainerTypesMasters);
+app.use("/api/shipping/advise/container/type", ShippingAdviseContainerTypesMasters);
 app.use("/api/operation/container/payment/term", PaymentTermContainer);
 app.use("/api/transport/operation/lapse", TransportOperationLapse);
 app.use("/api/transport/payment/type", TransportPaymentTypeLapse);

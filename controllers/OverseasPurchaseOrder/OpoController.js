@@ -327,10 +327,11 @@ const createOpo = async (req, res, next) => {
 const getOpo = async (req, res, next) => {
   const opo_master_id = req.query.opo_master_id; // Get OPO ID from query parameters
   try {
-    if (!opo_master_id) {
+    if (opo_master_id) {
       // If no specific OPO ID is provided, fetch all active OPOs
       const result = await opo_master.findAll({
         where: {
+          opo_master_id: opo_master_id,
           status: {
             [Op.ne]: 0, // Exclude inactive OPOs
           },
@@ -469,11 +470,143 @@ const getOpo = async (req, res, next) => {
       });
       return res.status(200).json(result); // Respond with the list of OPOs
     } else {
-      // If a specific OPO ID is provided, fetch that OPO
-      const result = await opo_master.findByPk(opo_master_id, {
+      const result = await opo_master.findAll({
         where: {
-          status: { [Op.ne]: 0 }, // Exclude inactive OPOs
+          status: {
+            [Op.ne]: 0, // Exclude inactive OPOs
+          },
         },
+        attributes: [
+          "opo_master_id",
+          "opo_num",
+          "quo_id",
+          "quo_num",
+          "opr_id",
+          "opr_num",
+          "vendor_id",
+          "total_cost",
+          "status",
+          "procurement_justification",
+          "unit_justification",
+          "opo_description",
+        ],
+        include: [
+          {
+            model: db.quotation_master, // Include related quotation details
+            include: [
+              {
+                model: db.additional_cost,
+                attributes: ["charge_name", "charge_amount"],
+              },
+            ],
+            attributes: [
+              "rfq_id",
+              "reference_no",
+              "reference_date",
+              "quo_date",
+              "currency",
+              "delivery_terms",
+              "country_origin",
+              "country_supply",
+              "port_loading",
+              "lead_time",
+              "payment_terms",
+              "remarks",
+              "total_cost",
+              "opr_lead_time",
+              "port_of_loading",
+              [
+                db.sequelize.literal("dbo.fn_GetPaymentTerm(payment_terms)"),
+                "payment_terms_name", // Alias for payment term
+              ],
+              [
+                db.sequelize.literal("dbo.fn_GetDeliveryTerm(delivery_terms)"),
+                "delivery_terms_name", // Alias for delivery term
+              ],
+            ],
+          },
+          {
+            model: db.OprMaster, // Include related OPR details
+            attributes: [
+              "vertical_id",
+              "company_id",
+              "opr_date",
+              "division_id",
+              "buy_from",
+              "buying_house_id",
+              "shipment_mode_id",
+              "delivery_timeline_id",
+              "department_id",
+              "requested_by",
+              "no_quot_email_alert",
+              "remarks",
+              "suppliers",
+              "item_category_id",
+            ],
+            include: [
+              {
+                model: db.CompanyMaster,
+                attributes: ["company_name", "company_id"],
+              }, // Include company details
+              { model: db.Vertical, attributes: ["vertical_name"] }, // Include vertical details
+              { model: db.Division, attributes: ["division_name"] }, // Include division details
+              { model: db.ShipMode, attributes: ["shipment_mode_name"] }, // Include shipment mode details
+              { model: db.Department, attributes: ["dept_name"] }, // Include department details
+              { model: db.BuyingHouse, attributes: ["buying_house_name"] }, // Include buying house details
+            ],
+          },
+          {
+            model: db.vendor, // Include vendor details
+            attributes: [
+              "vendor_series",
+              "vendor_name",
+              "phone_number",
+              "alternate_phone_number",
+              "email",
+              "contact_person",
+              "contact_person_phone",
+              "contact_person_email",
+              "tax_id",
+              "payment_terms_id",
+              "pan_num",
+              "tin_num",
+              "gst_num",
+              "vat_num",
+              "reference_by",
+              "vendor_type_id",
+              "vendor_status",
+              "registration_date",
+              "compliance_status",
+            ],
+          },
+          {
+            model: db.opo_items, // Include related OPO items
+            attributes: [
+              "opo_items_id",
+              "opo_id",
+              "rfq_id",
+              "vendor_id",
+              "item_id",
+              "item_code",
+              "item_name",
+              "item_type",
+              "line_total",
+              "no_packs",
+              "opr_qty",
+              "pack_size",
+              "pack_type",
+              "quote_qtd",
+              "rate",
+              [
+                db.sequelize.literal("dbo.fn_GetPackageType(pack_type)"),
+                "pack_type_name", // Alias for package type
+              ],
+            ],
+            include: [
+              { model: db.ItemsMaster }, // Include ItemMaster details
+            ],
+          },
+        ],
       });
       return res.status(200).json(result); // Respond with the specific OPO
     }
