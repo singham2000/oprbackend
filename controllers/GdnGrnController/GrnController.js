@@ -4,12 +4,11 @@ const { GrnMaster2, GrnItems, GdnMaster } = db
 
 const createGrn = async (req, res, next) => {
     try {
-        let { gdn_id, agency_code, agency_id, ref_doc, ref_doc_id, status, gnditemsdata } = req.body;
+        let { gdn_id, agency_code, agency_id, ref_doc, ref_doc_id, status, gdnitemsdata } = req.body;
 
         // Create the GDN master record
         const result = await GrnMaster2.create({
             gdn_id,
-            agency_code,
             agency_id,
             ref_doc,
             ref_doc_id,
@@ -20,7 +19,7 @@ const createGrn = async (req, res, next) => {
         let lastInsertId = result.dataValues.grn_id;
 
         // Prepare GDN items data by adding gdn_master_id
-        const itemsWithGdnId = gnditemsdata.map((item) => ({
+        const itemsWithGdnId = gdnitemsdata.map((item) => ({
             ...item,
             grn_id: lastInsertId
         }));

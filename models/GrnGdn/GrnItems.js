@@ -10,12 +10,24 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: true
         },
+        gdn_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
         item_id: {
             type: DataTypes.INTEGER,
             allowNull: true
         },
         address_id: {
             type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        po_item_qty: {
+            type: DataTypes.DECIMAL(18, 2),
+            allowNull: true
+        },
+        gdn_item_qty: {
+            type: DataTypes.DECIMAL(18, 2),
             allowNull: true
         },
         grn_item_qty: {
@@ -46,12 +58,9 @@ module.exports = (sequelize, DataTypes) => {
         tableName: ' grn_items',
         timestamps: true
     });
-
     // Association
     GrnItems.associate = (models) => {
         GrnItems.belongsTo(models.GrnMaster, { foreignKey: ' grn_master_id' });
     };
-
-
     return GrnItems;
 };
