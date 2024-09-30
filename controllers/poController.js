@@ -190,7 +190,7 @@ const deletePOById = async (req, res, next) => {
 
 const generatePo = async (req, res, next) => {
   const transaction = await db.sequelize.transaction(); // Start a transaction
-  try {
+  try {console.log("Surya");
     console.log(req.body);
     const {
       opo_ids,

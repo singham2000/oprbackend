@@ -70,7 +70,7 @@ db.BuyingHouse = require("./BuyingHouse/buyinghouse_master.js")(
 );
 db.GrnMaster = require("./BuyingHouse/grn_master.js")(sequelize, DataTypes);
 db.GrnMaster2 = require("./GrnGdn/GrnMaster.js")(sequelize, DataTypes);
-db.GdnItems = require("./GrnGdn/GrnItems.js")(sequelize, DataTypes);
+db.GrnItems = require("./GrnGdn/GrnItems.js")(sequelize, DataTypes);
 
 db.GdnMaster = require("./GrnGdn/GdnMaster.js")(sequelize, DataTypes);
 db.GdnItems = require("./GrnGdn/GdnItems.js")(sequelize, DataTypes);

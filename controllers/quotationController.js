@@ -484,8 +484,8 @@ const deleteQuotationById = async (req, res, next) => {
 
 // Controller method to Create
 const createQuotation = async (req, res, next) => {
-  // console.log(req.body);
-  // console.log(req.files);
+  console.log(req.body);
+  console.log(req.files);
   const { quotation_details, quotation_docslist } = req.body;
 
   const transaction = await sequelize.transaction(); // Start a transaction

@@ -463,7 +463,12 @@ const getOpo = async (req, res, next) => {
               ],
             ],
             include: [
-              { model: db.ItemsMaster }, // Include ItemMaster details
+              {
+                model: db.ItemsMaster,
+                attributes: {
+                  exclude: ["item_img", "item_img_name"],
+                },
+              }, // Include ItemMaster details
             ],
           },
         ],
@@ -603,7 +608,12 @@ const getOpo = async (req, res, next) => {
               ],
             ],
             include: [
-              { model: db.ItemsMaster }, // Include ItemMaster details
+              {
+                model: db.ItemsMaster,
+                attributes: {
+                  exclude: ["item_img", "item_img_name"],
+                },
+              }, // Include ItemMaster details
             ],
           },
         ],
