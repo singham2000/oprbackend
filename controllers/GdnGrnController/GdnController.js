@@ -31,22 +31,19 @@ const createGdn = async (req, res, next) => {
     const itemResult = await GdnItems.bulkCreate(itemsWithGdnId);
 
     if (agency_code === "bh") {
-      const UpdatePoItems = async () => {
-        const updates = gdnitemsdata.map(async (item) => {
-          return await po_items.update(
-            { grn_qty: item.gdn_item_qty },
-            { where: { item_id: item.item_id, po_id: ref_doc_id } } // or the appropriate condition
-          );
-        });
-      };
+      const updates = gdnitemsdata.map(async (item) => {
+        return await db.po_items.update(
+          { grn_qty: item.gdn_item_qty },
+          { where: { item_id: item.item_id, po_id: ref_doc_id } }
+        );
+      });
+      await Promise.all(updates); // Await all updates
     }
 
-    //update po staus
+    const statusUpdate = agency_code === "bh" ? 11 : 8;
     await po_master.update(
-      { status: 11 },
-      {
-        where: { po_id: ref_doc_id },
-      }
+      { status: statusUpdate },
+      { where: { po_id: ref_doc_id } }
     );
 
     res.status(200).json({ msg: "GDN Created Successfully", data: result });
