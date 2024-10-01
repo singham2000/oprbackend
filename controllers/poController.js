@@ -91,8 +91,9 @@ const getPO = async (req, res, next) => {
                     [
                       sequelize.literal("dbo.fn_UomName(uom_id)"),
                       "uom"
-                    ]
-                  ]
+                    ],
+                  ],
+                  exclude: ["item_img", "item_img_name"]
                 }
               }
             ],

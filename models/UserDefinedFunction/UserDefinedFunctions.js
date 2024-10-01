@@ -144,27 +144,6 @@ async function createUDFIfNotExists() {
         ');
       END;
 
-
-        -- Check and create fn_transportPaymentType if it does not exist
-      IF OBJECT_ID('dbo.fn_GetPaymentTerm', 'FN') IS NULL
-      BEGIN
-        EXEC('
-          CREATE FUNCTION dbo.fn_GetPaymentTerm(@PaymentTermId INT)
-          RETURNS VARCHAR(150)
-          AS 
-          BEGIN
-              DECLARE @ret VARCHAR(100);
-              
-              -- Select payment_terms_name from payment_term_master_new
-              SELECT @ret = ISNULL(p.payment_terms_name, ''Payment Terms Invalid'')
-              FROM payment_term_master_new p
-              WHERE p.payment_terms_id = @PaymentTermId;
-              
-              RETURN @ret;
-          END;
-        ');
-      END;
-
        -- Check and create fn_transportPaymentType if it does not exist
       IF OBJECT_ID('dbo.fn_GetPackageType', 'FN') IS NULL
       BEGIN

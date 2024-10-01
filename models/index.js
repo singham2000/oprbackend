@@ -162,6 +162,7 @@ db.quotation_items = require("./Quotation/quotation_items.js")(
     DataTypes
 );
 db.QuoDoc = require("./Quotation/quotation_docs.js")(sequelize, DataTypes);
+db.payment_milestone = require("./Quotation/PaymentMileStone.js")(sequelize, DataTypes);
 db.quotation_master = require("./Quotation/quotation_master.js")(
     sequelize,
     DataTypes

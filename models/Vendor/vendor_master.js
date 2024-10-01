@@ -94,6 +94,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(555),
             allowNull: true
         },
+        currency: {
+            type: DataTypes.STRING(150),
+            allowNull: true
+        },
         status: {
             type: DataTypes.INTEGER,
             allowNull: true

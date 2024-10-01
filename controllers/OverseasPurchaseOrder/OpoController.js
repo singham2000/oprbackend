@@ -376,10 +376,6 @@ const getOpo = async (req, res, next) => {
               "opr_lead_time",
               "port_of_loading",
               [
-                db.sequelize.literal("dbo.fn_GetPaymentTerm(payment_terms)"),
-                "payment_terms_name", // Alias for payment term
-              ],
-              [
                 db.sequelize.literal("dbo.fn_GetDeliveryTerm(delivery_terms)"),
                 "delivery_terms_name", // Alias for delivery term
               ],
@@ -520,10 +516,6 @@ const getOpo = async (req, res, next) => {
               "total_cost",
               "opr_lead_time",
               "port_of_loading",
-              [
-                db.sequelize.literal("dbo.fn_GetPaymentTerm(payment_terms)"),
-                "payment_terms_name", // Alias for payment term
-              ],
               [
                 db.sequelize.literal("dbo.fn_GetDeliveryTerm(delivery_terms)"),
                 "delivery_terms_name", // Alias for delivery term

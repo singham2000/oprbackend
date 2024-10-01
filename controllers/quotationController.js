@@ -59,10 +59,6 @@ const getQuotation = async (req, res, next) => {
             sequelize.literal("dbo.fn_GetDeliveryTerm(delivery_terms)"),
             "delivery_terms_name",
           ],
-          [
-            sequelize.literal("dbo.fn_GetPaymentTerm(payment_terms)"),
-            "payment_terms_name",
-          ],
         ],
         include: [
           {
@@ -163,10 +159,6 @@ const getQuotation = async (req, res, next) => {
                     sequelize.literal("dbo.fn_GetDeliveryTerm(delivery_terms)"),
                     "delivery_terms_name",
                   ],
-                  [
-                    sequelize.literal("dbo.fn_GetPaymentTerm(payment_terms)"),
-                    "payment_terms_name",
-                  ],
                 ],
                 include: [
                   {
@@ -256,10 +248,6 @@ const getQuotation = async (req, res, next) => {
             sequelize.literal("dbo.fn_GetDeliveryTerm(delivery_terms)"),
             "delivery_terms_name",
           ],
-          [
-            sequelize.literal("dbo.fn_GetPaymentTerm(payment_terms)"),
-            "payment_terms_name",
-          ],
         ],
         include: [
           {
@@ -338,10 +326,6 @@ const getQuotation = async (req, res, next) => {
           [
             sequelize.literal("dbo.fn_GetDeliveryTerm(delivery_terms)"),
             "delivery_terms_name",
-          ],
-          [
-            sequelize.literal("dbo.fn_GetPaymentTerm(payment_terms)"),
-            "payment_terms_name",
           ],
         ],
         include: [
@@ -484,8 +468,8 @@ const deleteQuotationById = async (req, res, next) => {
 
 // Controller method to Create
 const createQuotation = async (req, res, next) => {
-  console.log(req.body);
-  console.log(req.files);
+  console.log(req.body.quotation_details.payment_milestone);
+  // console.log(req.files);
   const { quotation_details, quotation_docslist } = req.body;
 
   const transaction = await sequelize.transaction(); // Start a transaction
@@ -513,6 +497,7 @@ const createQuotation = async (req, res, next) => {
       port_of_loading,
       charges,
       ItemData,
+      payment_milestone,
     } = quotation_details;
 
     // Generate quotation
@@ -545,7 +530,7 @@ const createQuotation = async (req, res, next) => {
     // Process charges
     const processCharges = async () => {
       for (const key in charges) {
-        console.log("rfq and vendor", rfq_id, vendor_id);
+        // console.log("rfq and vendor", rfq_id, vendor_id);
         await additional_cost.create(
           {
             quo_id: lastInsertedId,
@@ -561,6 +546,23 @@ const createQuotation = async (req, res, next) => {
 
     await processCharges(); // Await the charge processing
 
+        const promises = payment_milestone.map(async (i) => {
+          await db.payment_milestone.create(
+            {
+              quo_id: lastInsertedId,
+              quo_num: quotation_series,
+              vendor_id: vendor_id,
+              milestone: i.milestone,
+              percentage: i.percentage_value,
+              payment_status: 0,
+              status: 1,
+            },
+            { transaction }
+          );
+        });
+
+        await Promise.all(promises);
+
     // Prepare and insert quotation items
     const updatedItemdata = ItemData.map((item) => ({
       quo_id: lastInsertedId,
@@ -573,7 +575,7 @@ const createQuotation = async (req, res, next) => {
 
     await quotation_items.bulkCreate(updatedItemdata, { transaction });
 
-    console.log("quotation_docslist", quotation_docslist);
+    // console.log("quotation_docslist", quotation_docslist);
     // Transform and insert quotation documents
     const updatedQuotationDocs = quotation_docslist.map((data, index) => ({
       ...data,
