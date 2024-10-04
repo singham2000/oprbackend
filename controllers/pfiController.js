@@ -12,7 +12,7 @@ const {
     operations_nafdac,
     paar,
     operations_nafdac_master,
-    govt_charges
+    govt_charges, nafdac_pfi
 } = require("../models");
 
 const formattedDateTime = require("../middleware/time");
@@ -43,7 +43,7 @@ const getPfi = async (req, res, next) => {
                     {model: paar},
                     {model: operations_nafdac_master},
                     {model: govt_charges},
-
+                    {model: nafdac_pfi},
                 ]
             });
 
@@ -69,6 +69,7 @@ const getPfi = async (req, res, next) => {
                 { model: paar},
                 { model: operations_nafdac_master},
                 { model: govt_charges},
+                {model: nafdac_pfi},
 
             ]
         });

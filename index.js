@@ -70,6 +70,7 @@ const InsuranceRoutes = require("./routes/Pfi/InsuranceRoutes.js");
 const FormMRoutes = require("./routes/Pfi/formMRoutes");
 const LetterOfCreditTermsRoutes = require("./routes/Pfi/LetterOfCreditRoutes.js");
 const SonPfiRoutes = require("./routes/Pfi/SonPfiRoutes");
+const NafdacPfiRoutes = require("./routes/Pfi/NafdacPfiRoutes");
 const PaarRoutes = require("./routes/Pfi/PaarRoutes");
 
 //Get Data CI against PFI, FormM,
@@ -187,6 +188,7 @@ app.use("/api/insurance", InsuranceRoutes);
 app.use("/api/formm", FormMRoutes);
 app.use("/api/lc", LetterOfCreditTermsRoutes);
 app.use("/api/pfi/son", SonPfiRoutes);
+app.use("/api/pfi/nafdac", NafdacPfiRoutes);
 app.use("/api/pfi/paar", PaarRoutes);
 //Get Data CI against PFI, FormM,
 app.use("/api/ci/all", CommercialInvoiceAllData);

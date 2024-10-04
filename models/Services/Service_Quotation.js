@@ -26,6 +26,63 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true,
         },
 
+        valid_from: {
+            type: DataTypes.DATEONLY,
+            allowNull: true
+        },
+        valid_to: {
+            type: DataTypes.DATEONLY,
+            allowNull: true
+        },
+        shipping_line: {
+            type: DataTypes.STRING(155),
+            allowNull: true
+        },
+        from_port: {
+            type: DataTypes.STRING(155),
+            allowNull: true
+        },
+        to_port: {
+            type: DataTypes.STRING(100),
+            allowNull: true
+        },
+        vehicle_schedule_ets: {
+            type: DataTypes.DATEONLY,
+            allowNull: true
+        },
+        vehicle_schedule_ets2: {
+            type: DataTypes.DATEONLY,
+            allowNull: true
+        },
+        vehicle_schedule_ets3: {
+            type: DataTypes.DATEONLY,
+            allowNull: true
+        },
+        vehicle_schedule_eta: {
+            type: DataTypes.DATEONLY,
+            allowNull: true
+        },
+        vehicle_schedule_eta2: {
+            type: DataTypes.DATEONLY,
+            allowNull: true
+        },
+        vehicle_schedule_eta3: {
+            type: DataTypes.DATEONLY,
+            allowNull: true
+        },
+        currency: {
+            type: DataTypes.STRING(155),
+            allowNull: true
+        },
+        quote_date: {
+            type: DataTypes.DATEONLY,
+            allowNull: true
+        },
+        container_type: {
+            type: DataTypes.STRING(155),
+            allowNull: true
+        },
+
         remarks: {
             type: DataTypes.STRING(255),
             allowNull: true

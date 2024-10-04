@@ -203,6 +203,7 @@ db.commercial_invoice = require("./Pfi/CommercialInvoice")(
 db.insurance = require("./Pfi/Insurance")(sequelize, DataTypes);
 db.letter_of_credit = require("./Pfi/LetterOfCredit")(sequelize, DataTypes);
 db.son_pfi = require("./Pfi/SonPfi")(sequelize, DataTypes);
+db.nafdac_pfi = require("./Pfi/NafdacPfi")(sequelize, DataTypes);
 db.paar = require("./Pfi/Paar")(sequelize, DataTypes);
 
 

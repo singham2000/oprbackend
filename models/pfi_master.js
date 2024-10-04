@@ -281,6 +281,9 @@ module.exports = (sequelize, DataTypes) => {
         pfi_master.hasOne(models.paar, { foreignKey: 'pfi_id' });
         pfi_master.hasOne(models.operations_nafdac_master, { foreignKey: 'pfi_id' });
         pfi_master.hasOne(models.govt_charges, { foreignKey: 'pfi_id' });
+        pfi_master.hasOne(models.nafdac_pfi, {
+            foreignKey: 'pfi_id',  // Ensure this matches the foreign key in insuranc
+        });
     };
 
     return pfi_master;
