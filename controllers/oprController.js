@@ -20,6 +20,7 @@ const getOpr = async (req, res, next) => {
     if (id) {
       let opr_detials = await opr_master.findAll({
         where: { opr_id: id },
+        order: [["opr_id", "DESC"]],
         include: [
           {
             model: db.CompanyMaster,
@@ -106,6 +107,7 @@ const getOpr = async (req, res, next) => {
       res.status(200).json(opr_detials);
     } else {
       let opr_detials = await opr_master.findAll({
+        order: [["opr_id", "DESC"]],
         include: [
           {
             model: db.CompanyMaster,
@@ -238,7 +240,7 @@ const createOpr = async (req, res, next) => {
     } = req.body;
 
     req.body.buying_house_id ? buying_house_id : 19;
-    req.body.status = 15;
+    req.body.status = 3;
     const result = await opr_master.create(req.body);
     res
       .status(201)
@@ -307,7 +309,7 @@ const confirmOpr = async (req, res, next) => {
     const opr_id = req.params.opr_id;
     const response = await opr_master.update(
       {
-        status: 2,
+        status: 15,
       },
       {
         where: {
