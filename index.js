@@ -94,7 +94,10 @@ const AddServiceContainer = require("./routes/Opreations/AddShippingContainerRou
 const ShippingMasterRoutes = require("./routes/Shipping/shippingMasterRoutes.js");
 const ContainerRoutes = require("./routes/Shipping/containerRoutes.js");
 const VesselRoutes = require("./routes/Shipping/vesselRoutes.js");
+const ShippingInstructionsRoutes = require("./routes/Shipping/ShippingInstructionsRoutes.js");
 const packageRoutes = require('./routes/packageRoutes.js');
+const ShippingAdviseRoutes = require('./routes/Shipping/ShippingAdviseRoutes.js');
+
 
 //payments
 const paymentTypeMasterRoutes = require("./routes/paymentTypeMasterRoutes");
@@ -212,6 +215,10 @@ app.use("/api/service/container", AddServiceContainer);
 app.use("/api/shipping", ShippingMasterRoutes);
 app.use("/api/container", ContainerRoutes);
 app.use("/api/vessel", VesselRoutes);
+app.use("/api/shipping/instructions", ShippingInstructionsRoutes);
+app.use("/api/shipping/advise", ShippingAdviseRoutes);
+
+
 
 //Masters
 app.use("/api/operation/container/type", ContainerTypesMasters);

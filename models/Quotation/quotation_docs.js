@@ -37,7 +37,19 @@ module.exports = (sequelize, DataTypes) => {
         updated_by: {
             type: DataTypes.STRING(55),
             allowNull: true
-        }
+        },
+        doc_id: {
+            type: DataTypes.STRING(50),
+            allowNull: true
+        },
+        doc_num: {
+            type: DataTypes.STRING(50),
+            allowNull: true
+        },
+        module: {
+            type: DataTypes.STRING(50),
+            allowNull: true
+        },
     }, {
         tableName: 'quotation_file_master',
         timestamps: true

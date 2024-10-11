@@ -35,9 +35,12 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: true
     });
 
-    // ApprovalMatrix.associate = (models) => {
-    //     ApprovalMatrix.belongsTo(models.User, { foreignKey: 'user_id' });
-    // };
+    ApprovalMatrix.associate = (models) => {
+        // ApprovalMatrix.belongsTo(models.User, { foreignKey: 'user_id' });
+        ApprovalMatrix.belongsTo(models.user, {
+                foreignKey: "user_id",
+            });
+    };
 
     return ApprovalMatrix;
 };

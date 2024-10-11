@@ -92,6 +92,8 @@ const updateDocumentStatus = async (doc_type, doc_id, res) => {
 // };
 exports.createPaymentRequestMaster = async (req, res) => {
     try {
+        console.log(req.body);
+        console.log("Check");
         const doc_code = 'PR';
         const pr_series = await generateSeries(doc_code);
         req.body.pr_num = pr_series;
@@ -102,10 +104,10 @@ exports.createPaymentRequestMaster = async (req, res) => {
         updateDocumentStatus(doc_type, doc_id, res);
 
         // Ensure payment_type_id is valid
-        const paymentType = await PaymentTypeMaster.findByPk(payment_type_id);
-        if (!paymentType) {
-            return res.status(404).json({ message: 'PaymentTypeMaster not found' });
-        }
+        // const paymentType = await PaymentTypeMaster.findByPk(payment_type_id);
+        // if (!paymentType) {
+        //     return res.status(404).json({ message: 'PaymentTypeMaster not found' });
+        // }
 
         const response = await PaymentRequestMaster.create({
             po_id: doc_id,
@@ -117,8 +119,13 @@ exports.createPaymentRequestMaster = async (req, res) => {
             advice_amount,
             advice_remarks: remarks,
             status: 2,
-            payment_type_id
+            // payment_type_id
         });
+
+        await db.payment_milestone.update(
+            { status: 2 },
+            { where: { payment_milestone_id: payment_type_id } }
+          );
 
         res.status(201).json(response);
     } catch (error) {
@@ -146,10 +153,10 @@ exports.createPaymentRequestMaster = async (req, res) => {
 exports.getAllPaymentRequestMasters = async (req, res) => {
     try {
         const paymentRequests = await PaymentRequestMaster.findAll({
-            include: [{
-                model: PaymentTypeMaster,
-                as: 'paymentType'
-            }]
+            // include: [{
+            //     model: PaymentTypeMaster,
+            //     as: 'paymentType'
+            // }]
         });
         res.status(200).json(paymentRequests);
     } catch (error) {
@@ -273,10 +280,10 @@ exports.rejectPaymentRequestByTreasury = async (req, res, next) => {
 exports.PaymentRequestListForTreasury = async (req, res, next) => {
     try {
         const paymentRequests = await PaymentRequestMaster.findAll({
-            include: [{
-                model: PaymentTypeMaster,
-                as: 'paymentType'
-            }],
+            // include: [{
+            //     model: PaymentTypeMaster,
+            //     as: 'paymentType'
+            // }],
             where: {
                 status: [2, 4, 3]
             }

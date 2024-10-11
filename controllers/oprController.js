@@ -238,7 +238,7 @@ const createOpr = async (req, res, next) => {
     } = req.body;
 
     req.body.buying_house_id ? buying_house_id : 19;
-    req.body.status = 1;
+    req.body.status = 15;
     const result = await opr_master.create(req.body);
     res
       .status(201)

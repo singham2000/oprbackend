@@ -43,11 +43,24 @@ module.exports = (sequelize, DataTypes) => {
         comments: {
             type: DataTypes.STRING(255),
             allowNull: true,
+        },
+        status: {
+            type: DataTypes.STRING(55),
+            allowNull: true,
         }
     }, {
         tableName: 'approval_log',
         timestamps: true,
     });
+
+    ApprovalLog.associate = (models) => {
+        ApprovalLog.belongsTo(models.ApprovalMatrix, {
+            foreignKey: "approval_matrix_id",
+        });
+        ApprovalLog.belongsTo(models.user, {
+            foreignKey: "to_user_id",
+        });
+    }
 
     return ApprovalLog;
 };

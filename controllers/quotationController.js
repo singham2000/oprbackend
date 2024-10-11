@@ -205,7 +205,7 @@ const getQuotation = async (req, res, next) => {
                       "q_doc_name",
                       "q_doc_remarks",
                       "q_doc_filename",
-                      "q_doc_file",
+                      // "q_doc_file",
                     ],
                   },
                 ],
@@ -298,6 +298,7 @@ const getQuotation = async (req, res, next) => {
       });
       res.status(200).json(quo_details);
     } else {
+      console.log("check");
       let quo_details = await quotation_master.findAll({
         attributes: [
           "quo_id",
@@ -333,6 +334,17 @@ const getQuotation = async (req, res, next) => {
             model: db.additional_cost,
             attributes: ["charge_name", "charge_amount"],
           },
+           {
+            model: db.QuoDoc,
+            attributes: [
+              "q_doc_id",
+              "quotation_id",
+              "q_doc_name",
+              "q_doc_remarks",
+              "q_doc_filename",
+              // "q_doc_file",
+            ],
+          },
           {
             model: db.vendor,
             attributes: ["vendor_name", "vendor_series"],
@@ -360,17 +372,6 @@ const getQuotation = async (req, res, next) => {
                 sequelize.literal("dbo.fn_GetPackageType(pack_type)"),
                 "pack_type_name",
               ],
-            ],
-          },
-          {
-            model: db.QuoDoc,
-            attributes: [
-              "q_doc_id",
-              "quotation_id",
-              "q_doc_name",
-              "q_doc_remarks",
-              "q_doc_filename",
-              "q_doc_file",
             ],
           },
         ],
@@ -647,6 +648,29 @@ const updateQuotationById = async (req, res, next) => {
   }
 };
 
+const getQuotationmilestone = async (req, res, next) => {
+  const quo_id = req.query.quo_id;
+  try {
+    const result = await db.payment_milestone.findAll({
+      where: {
+        quo_id: quo_id,
+        status: { [Op.eq]: 1 },
+      },
+      attributes: [  "payment_milestone_id",
+        "quo_num",
+        "quo_id",
+        "vendor_id",
+        "milestone",
+        "percentage",
+        "payment_status"]
+    });
+    res.status(200).json(result);
+    
+  } catch (err) {
+    next(err);
+  }
+};
+
 //this function will genrate po with status 2 after finalize quotation
 // const generatePo = async (req, res, next) => {
 //   const doc_code = 'PO';
@@ -698,6 +722,7 @@ quotationController = {
   updateQuotationById,
   getQuotationbyrfqId,
   GetApprovalsByQuoId,
+  getQuotationmilestone,
   // generatePo
 };
 

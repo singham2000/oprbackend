@@ -66,10 +66,10 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     PaymentRequestMaster.associate = models => {
-        PaymentRequestMaster.belongsTo(models.PaymentTypeMaster, {
-            foreignKey: 'payment_type_id',
-            as: 'paymentType'
-        });
+        // PaymentRequestMaster.belongsTo(models.PaymentTypeMaster, {
+        //     foreignKey: 'payment_type_id',
+        //     as: 'paymentType'
+        // });
         PaymentRequestMaster.hasMany(models.PaymentRequestTransactionsMaster, {
             foreignKey: 'payment_request_id',
             as: 'transactions'
