@@ -45,6 +45,7 @@ const ApprovalLogController = {
         });
 
         let table_name = GetTableNameByDocType(doc_type);
+        console.log("db[table_name[0]]", db[table_name[0]]);
         const UpdateOPRStatus = await db[table_name[0]].update(
           {
             status: 16,

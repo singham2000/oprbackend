@@ -10,6 +10,8 @@ const GetTableNameByDocType = (doc_type) => {
             return ["opo_master", "opo_master_id"];
         case "CI":
             return ["commercial_invoice", "commercial_invoice_id"];
+            case "PO":
+            return ["po_master", "po_id"];
         default:
             return "Not Defined"; 
     }
