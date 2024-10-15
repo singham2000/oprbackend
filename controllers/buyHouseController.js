@@ -50,7 +50,7 @@ const deleteBuyHouseById = async (req, res, next) => {
 const createBuyHouse = async (req, res, next) => {
     try {
         const {
-            buy_house_name,
+            buy_house_name, 
         } = req.body;
         const result = await buy_house_opr.create({
             buy_house_name,

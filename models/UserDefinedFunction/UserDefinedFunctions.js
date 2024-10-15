@@ -4,6 +4,62 @@ async function createUDFIfNotExists() {
   try {
     // SQL script to conditionally create the UDF if it does not exist
     const sql = `
+
+       IF OBJECT_ID('dbo.fn_CountryName', 'FN') IS NULL
+      BEGIN
+        EXEC('
+          CREATE FUNCTION dbo.fn_CountryName(@countryId INT)
+          RETURNS VARCHAR(150)
+          AS 
+          BEGIN
+              DECLARE @ret VARCHAR(150);
+              -- Select country from country
+              SELECT @ret = ISNULL(c.country, ''Invalid Country Code'')
+              FROM country c
+              WHERE c.country_id = @countryId;
+              
+              RETURN @ret;
+          END;
+        ');
+      END;
+
+         IF OBJECT_ID('dbo.fn_StateName', 'FN') IS NULL
+      BEGIN
+        EXEC('
+          CREATE FUNCTION dbo.fn_StateName(@stateId INT)
+          RETURNS VARCHAR(150)
+          AS 
+          BEGIN
+              DECLARE @ret VARCHAR(150);
+              -- Select state from state
+              SELECT @ret = ISNULL(s.state, ''Invalid state Code'')
+              FROM state s
+              WHERE s.state_id = @stateId;
+              
+              RETURN @ret;
+          END;
+        ');
+      END;
+
+       IF OBJECT_ID('dbo.fn_CityName', 'FN') IS NULL
+      BEGIN
+        EXEC('
+          CREATE FUNCTION dbo.fn_CityName(@cityId INT)
+          RETURNS VARCHAR(150)
+          AS 
+          BEGIN
+              DECLARE @ret VARCHAR(150);
+              -- Select city from city
+              SELECT @ret = ISNULL(c.city, ''Invalid city Code'')
+              FROM city c
+              WHERE c.city_id = @cityId;
+              
+              RETURN @ret;
+          END;
+        ');
+      END;
+
+
       IF OBJECT_ID('dbo.fn_UomName', 'FN') IS NULL
       BEGIN
         EXEC('

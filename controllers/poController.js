@@ -464,6 +464,9 @@ const getVendorDeailsByPoId = async (req, res, next) => {
             {
               model: db.VendorsAddressDetailsMaster,
             },
+            {
+              model: db.VendorsBanksDetailsMaster,
+            },
           ],
         },
       ],

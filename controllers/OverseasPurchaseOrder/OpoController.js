@@ -490,7 +490,7 @@ const getOpo = async (req, res, next) => {
           "procurement_justification",
           "unit_justification",
           "opo_description",
-          "status"
+          "status",
         ],
         include: [
           {
@@ -618,6 +618,28 @@ const getOpo = async (req, res, next) => {
   }
 };
 
+// Get OPO details or a list of OPOs
+const getOpoItemByOpoIds = async (req, res, next) => {
+  const opo_ids = req.query.opo_ids; // Get OPO ID from query parameters
+  const ids = opo_ids.includes(",") ? opo_ids.split(",") : opo_ids;
+  console.log("ids", ids);
+  try {
+    const result = await db.opo_items.findAll({
+      where: {
+        opo_id: {
+          [Op.in]: ids, // Use Op.in to specify multiple IDs
+        },
+        status: {
+          [Op.ne]: 0, // Exclude inactive OPOs
+        },
+      },
+    });
+    return res.status(200).json(result); // Respond with the list of OPOs
+  } catch (err) {
+    next(err); // Pass the error to the error handling middleware
+  }
+};
+
 // Update a penalty term by ID
 const updateOpo = async (req, res, next) => {
   const opo_master_id = req.query.opo_master_id; // Get OPO ID from query parameters
@@ -660,6 +682,7 @@ const deleteOpo = async (req, res, next) => {
 // Export the controller methods
 const OpoController = {
   createOpo,
+  getOpoItemByOpoIds,
   getOpo,
   updateOpo,
   deleteOpo,

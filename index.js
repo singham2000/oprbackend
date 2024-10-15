@@ -63,6 +63,11 @@ const AddExpenseChargesRoutes = require("./routes/Masters/AddExpenseChargesRoute
 const PaymentTypeChargesRoutes = require("./routes/Masters/PaymentTypeChargesRoutes.js");
 const ShippingLapsesRoutes = require("./routes/Masters/ShippingLapseRoutes");
 const PortDestinationRoutes = require("./routes/Masters/PortDestinationRoutes.js");
+const CountryRoutes = require("./routes/Masters/CountryRoutes.js");
+const StateRoutes = require("./routes/Masters/StateRoutes.js");
+const CityRoutes = require("./routes/Masters/CityRoutes.js");
+
+
 
 //PFI
 const CommercialInvoiceRoutes = require("./routes/Pfi/commercialInvoiceRoutes.js");
@@ -230,6 +235,12 @@ app.use("/api/charges/add/expense", AddExpenseChargesRoutes);
 app.use("/api/charges/payment/type", PaymentTypeChargesRoutes);
 app.use("/api/shipping/lapse", ShippingLapsesRoutes);
 app.use("/api/port/destination", PortDestinationRoutes);
+app.use("/api/country", CountryRoutes);
+app.use("/api/state", StateRoutes);
+app.use("/api/city", CityRoutes);
+
+
+
 
 //payments
 app.use("/api/paymentterms", paymentTermsRouter);
@@ -265,3 +276,4 @@ createMultipleUDFs();
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+

@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
-    po_id: {
+    opo_item_id: {
       type: DataTypes.INTEGER,
       allowNull: true
     },
@@ -32,12 +32,32 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: true
     },
-    item_description: {
+    item_code: {
       type: DataTypes.STRING(255),
       allowNull: true
     },
-    po_qty: {
+    item_name: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    item_type: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    opo_qty: {
       type: DataTypes.DECIMAL(18, 2),
+      allowNull: true
+    },
+    pack_size: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    pack_type: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    no_packs: {
+      type: DataTypes.INTEGER,
       allowNull: true
     },
     rate: {
@@ -45,6 +65,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     margin_percent: {
+      type: DataTypes.DECIMAL(18, 2),
+      allowNull: true
+    },
+    line_total: {
       type: DataTypes.DECIMAL(18, 2),
       allowNull: true
     },

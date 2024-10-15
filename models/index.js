@@ -261,6 +261,10 @@ db.port_destination_master = require("./Masters/PortDestinationMaster.js")(
     sequelize,
     DataTypes
 );
+db.country = require("./Masters/Country.js")(sequelize, DataTypes);
+db.state = require("./Masters/State.js")(sequelize, DataTypes);
+db.city = require("./Masters/City.js")(sequelize, DataTypes);
+
 
 //OPO
 db.opo_master = require('./OverseasPurchaseOrder/Opo.js')(sequelize, DataTypes);

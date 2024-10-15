@@ -38,6 +38,14 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(255),
             allowNull: true
         },
+        payment_type_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        payment_milestone_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
         status: {
             type: DataTypes.INTEGER,
             allowNull: true
@@ -70,9 +78,8 @@ module.exports = (sequelize, DataTypes) => {
         //     foreignKey: 'payment_type_id',
         //     as: 'paymentType'
         // });
-        PaymentRequestMaster.hasMany(models.PaymentRequestTransactionsMaster, {
-            foreignKey: 'payment_request_id',
-            as: 'transactions'
+        PaymentRequestMaster.belongsTo(models.payment_milestone, {
+            foreignKey: 'payment_milestone_id',
         });
     };
 
