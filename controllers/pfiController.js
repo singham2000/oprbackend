@@ -172,14 +172,39 @@ const getPfiData = async (req, res, next) => {
                 "suppliers",
                 "item_category_id",
                 [
-                  sequelize.literal(
+                  db.sequelize.literal(
                     "dbo.fn_ShipmentModeName(shipment_mode_id)"
                   ),
                   "shipment_mode_name",
                 ],
               ],
               include: [
-                { model: db.BuyingHouse },
+                {
+                  model: db.BuyingHouse,
+                  include: [
+                    {
+                      model: db.country, // Include the country model
+                      as: 'CountryData', // Use the alias for the association
+                      attributes: [
+                        "country",
+                      ],
+                    },
+                    {
+                      model: db.state, // Include the country model
+                      as: 'StateData', // Use the alias for the association
+                      attributes: [
+                        "state",
+                      ],
+                    },
+                    {
+                      model: db.city, // Include the country model
+                      as: 'CityData', // Use the alias for the association
+                      attributes: [
+                        "city",
+                      ],
+                    },
+                  ],
+                },
                 {
                   model: db.CompanyMaster,
                   include: [{ model: db.AddressMaster }],
@@ -199,7 +224,7 @@ const getPfiData = async (req, res, next) => {
                     "port_of_destination",
                     "delivery_timeline_in_weeks",
                     [
-                      sequelize.literal(
+                      db.sequelize.literal(
                         "dbo.fn_GetPortDestinationName(port_of_destination)"
                       ),
                       "port_destination_name",

@@ -26,7 +26,7 @@ async function createUDFIfNotExists() {
        IF OBJECT_ID('dbo.fn_CountryName', 'FN') IS NULL
       BEGIN
         EXEC('
-          CREATE FUNCTION dbo.fn_CountryName(@countryId INT)
+          CREATE FUNCTION dbo.fn_CountryName(@countryId VARCHAR(55))
           RETURNS VARCHAR(150)
           AS 
           BEGIN
@@ -44,7 +44,7 @@ async function createUDFIfNotExists() {
          IF OBJECT_ID('dbo.fn_StateName', 'FN') IS NULL
       BEGIN
         EXEC('
-          CREATE FUNCTION dbo.fn_StateName(@stateId INT)
+          CREATE FUNCTION dbo.fn_StateName(@stateId VARCHAR(55))
           RETURNS VARCHAR(150)
           AS 
           BEGIN
@@ -62,7 +62,7 @@ async function createUDFIfNotExists() {
        IF OBJECT_ID('dbo.fn_CityName', 'FN') IS NULL
       BEGIN
         EXEC('
-          CREATE FUNCTION dbo.fn_CityName(@cityId INT)
+          CREATE FUNCTION dbo.fn_CityName(@cityId VARCHAR(55))
           RETURNS VARCHAR(150)
           AS 
           BEGIN

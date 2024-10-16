@@ -17,16 +17,14 @@ const getPO = async (req, res, next) => {
           {
             model: db.po_items,
             include: [
-              {model: db.ItemsMaster,
+              {
+                model: db.ItemsMaster,
                 attributes: {
                   include: [
-                    [
-                      sequelize.literal("dbo.fn_UomName(uom_id)"),
-                      "uom"
-                    ]
-                  ]
-                }
-              }
+                    [sequelize.literal("dbo.fn_UomName(uom_id)"), "uom"],
+                  ],
+                },
+              },
             ],
             attributes: [
               "po_item_id",
@@ -45,11 +43,8 @@ const getPO = async (req, res, next) => {
               "remarks",
               "address_id",
               "po_qty",
-              "grn_qty",              
-              [
-                sequelize.literal("dbo.GetOpoNum(opo_id)"),
-                "opo_num",
-              ],
+              "grn_qty",
+              [sequelize.literal("dbo.GetOpoNum(opo_id)"), "opo_num"],
             ],
           },
           {
@@ -83,19 +78,101 @@ const getPO = async (req, res, next) => {
       let result = await po_master.findAll({
         include: [
           {
+            model: db.opo_master,
+            include: [
+              {
+                model: db.OprMaster,
+                attributes: [
+                  "opr_id",
+                  "opr_num",
+                  "vertical_id",
+                  "company_id",
+                  "opr_date",
+                  "division_id",
+                  "buy_from",
+                  "buying_house_id",
+                  "shipment_mode_id",
+                  "delivery_timeline_id",
+                  "department_id",
+                  "requested_by",
+                  "no_quot_email_alert",
+                  "remarks",
+                  "suppliers",
+                  "item_category_id",
+                  [
+                    db.sequelize.literal(
+                      "dbo.fn_ShipmentModeName(shipment_mode_id)"
+                    ),
+                    "shipment_mode_name",
+                  ],
+                ],
+                include: [
+                  {
+                    model: db.BuyingHouse,
+                    include: [
+                      {
+                        model: db.country, // Include the country model
+                        as: "CountryData", // Use the alias for the association
+                        attributes: ["country"],
+                      },
+                      {
+                        model: db.state, // Include the country model
+                        as: "StateData", // Use the alias for the association
+                        attributes: ["state"],
+                      },
+                      {
+                        model: db.city, // Include the country model
+                        as: "CityData", // Use the alias for the association
+                        attributes: ["city"],
+                      },
+                    ],
+                  },
+                  {
+                    model: db.CompanyMaster,
+                    include: [{ model: db.AddressMaster }],
+                  },
+                ],
+              },
+              {
+                model: db.quotation_master,
+                include: [
+                  {
+                    model: db.rfq,
+                    attributes: [
+                      "rfq_num",
+                      "remarks",
+                      "vendor_list",
+                      "req_doc_id",
+                      "port_of_destination",
+                      "delivery_timeline_in_weeks",
+                      [
+                        db.sequelize.literal(
+                          "dbo.fn_GetPortDestinationName(port_of_destination)"
+                        ),
+                        "port_destination_name",
+                      ],
+                    ],
+                  },
+                  {
+                    model: db.additional_cost,
+                    attributes: ["charge_name", "charge_amount", "heading"],
+                  },
+                ],
+              },
+            ],
+          },
+          {
             model: db.po_items,
             include: [
-              {model: db.ItemsMaster,
+              {
+                model: db.ItemsMaster,
                 attributes: {
                   include: [
-                    [
-                      sequelize.literal("dbo.fn_UomName(uom_id)"),
-                      "uom"
-                    ],
+                    [sequelize.literal("dbo.fn_UomName(uom_id)"), "uom"],
                   ],
-                  exclude: ["item_img", "item_img_name"]
-                }
-              }
+                  exclude: ["item_img", "item_img_name"],
+                },
+              },
             ],
             attributes: [
               "po_item_id",
@@ -114,11 +191,8 @@ const getPO = async (req, res, next) => {
               "remarks",
               "address_id",
               "po_qty",
-              "grn_qty",              
-              [
-                sequelize.literal("dbo.GetOpoNum(opo_id)"),
-                "opo_num",
-              ],
+              "grn_qty",
+              [sequelize.literal("dbo.GetOpoNum(opo_id)"), "opo_num"],
             ],
           },
           {
@@ -191,8 +265,11 @@ const deletePOById = async (req, res, next) => {
 
 const generatePo = async (req, res, next) => {
   const transaction = await db.sequelize.transaction(); // Start a transaction
-  try {console.log("Surya");
+  try {
+    console.log("Surya");
     console.log(req.body);
+    const opo_id = req.body.opo_ids.split(",");
+    console.log("opo_id", opo_id);
     const {
       opo_ids,
       opo_nums,
@@ -218,12 +295,13 @@ const generatePo = async (req, res, next) => {
         return total + item.line_total; // Accumulate the line total
       }, 0); // Start with 0
     }
-    const totalAmount = calculateTotalLineTotal(items2)
+    const totalAmount = calculateTotalLineTotal(items2);
     // Generate PO
     const po_response = await po_master.create(
       {
         po_num: po_series,
         vendor_id,
+        selected_opo_id: opo_id[0],
         opo_ids,
         opo_nums,
         total_cost: totalAmount,

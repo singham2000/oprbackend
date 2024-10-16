@@ -10,6 +10,14 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(100),
             allowNull: true
         },
+        selected_opo_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        quo_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
         opo_ids: {
             type: DataTypes.STRING(100),
             allowNull: true
@@ -107,6 +115,12 @@ module.exports = (sequelize, DataTypes) => {
         });
         po_master.belongsTo(models.vendor, {
             foreignKey: "vendor_id",
+        });
+        po_master.belongsTo(models.quotation_master, {
+            foreignKey: "quo_id",
+        });
+        po_master.belongsTo(models.opo_master, {
+            foreignKey: "selected_opo_id",
         });
       }
 

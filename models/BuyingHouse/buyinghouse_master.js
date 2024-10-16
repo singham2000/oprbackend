@@ -73,6 +73,9 @@ module.exports = (sequelize, DataTypes) => {
 
   BuyingHouse.associate = (models) => {
     BuyingHouse.hasMany(models.OprMaster, { foreignKey: "buying_house_id" });
+    BuyingHouse.hasOne(models.country, { foreignKey: "country_id", sourceKey: "country", as: 'CountryData' });
+    BuyingHouse.hasOne(models.state, { foreignKey: "state_id", sourceKey: "state", as: 'StateData' });
+    BuyingHouse.hasOne(models.city, { foreignKey: "city_id", sourceKey: "city", as: 'CityData' });
   };
 
   return BuyingHouse;
