@@ -474,7 +474,8 @@ const getOpo = async (req, res, next) => {
       const result = await opo_master.findAll({
         where: {
           status: {
-            [Op.eq]: 1,
+            [Op.ne]: 0,
+            
           },
         },
         attributes: [

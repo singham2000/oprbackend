@@ -5,6 +5,24 @@ async function createUDFIfNotExists() {
     // SQL script to conditionally create the UDF if it does not exist
     const sql = `
 
+      IF OBJECT_ID('dbo.fn_ShipmentModeName', 'FN') IS NULL
+      BEGIN
+        EXEC('
+          CREATE FUNCTION dbo.fn_ShipmentModeName(@ShipmentModeID INT)
+          RETURNS VARCHAR(150)
+          AS 
+          BEGIN
+              DECLARE @ret VARCHAR(150);
+              -- Select shipment_mode from shipment_mode
+              SELECT @ret = ISNULL(s.shipment_mode_name, ''Invalid Shipment Code'')
+              FROM shipment_mode s
+              WHERE s.shipment_mode_id = @ShipmentModeID;
+              RETURN @ret;
+          END;
+        ');
+      END;
+
+
        IF OBJECT_ID('dbo.fn_CountryName', 'FN') IS NULL
       BEGIN
         EXEC('

@@ -334,7 +334,7 @@ const getQuotation = async (req, res, next) => {
             model: db.additional_cost,
             attributes: ["charge_name", "charge_amount"],
           },
-           {
+          {
             model: db.QuoDoc,
             attributes: [
               "q_doc_id",
@@ -538,6 +538,20 @@ const createQuotation = async (req, res, next) => {
             quo_num: quotation_series,
             charge_name: key,
             charge_amount: charges[key],
+            heading:
+              key === "load_transportation" ||
+              key === "special_packaging" ||
+              key === "inspection_charges" ||
+              key === "miscellaneous_inland"
+                ? "Inland_Charges"
+                : key === "bl" ||
+                  key === "container_seal" ||
+                  key === "container_stuffing" ||
+                  key === "thc" ||
+                  key === "vgm" ||
+                  key === "miscellaneous"
+                ? "FOB"
+                : "Freight_Charges",
             status: 1,
           },
           { transaction }
@@ -547,22 +561,22 @@ const createQuotation = async (req, res, next) => {
 
     await processCharges(); // Await the charge processing
 
-        const promises = payment_milestone.map(async (i) => {
-          await db.payment_milestone.create(
-            {
-              quo_id: lastInsertedId,
-              quo_num: quotation_series,
-              vendor_id: vendor_id,
-              milestone: i.milestone,
-              percentage: i.percentage_value,
-              payment_status: 0,
-              status: 1,
-            },
-            { transaction }
-          );
-        });
+    const promises = payment_milestone.map(async (i) => {
+      await db.payment_milestone.create(
+        {
+          quo_id: lastInsertedId,
+          quo_num: quotation_series,
+          vendor_id: vendor_id,
+          milestone: i.milestone,
+          percentage: i.percentage_value,
+          payment_status: 0,
+          status: 1,
+        },
+        { transaction }
+      );
+    });
 
-        await Promise.all(promises);
+    await Promise.all(promises);
 
     // Prepare and insert quotation items
     const updatedItemdata = ItemData.map((item) => ({
@@ -656,16 +670,17 @@ const getQuotationmilestone = async (req, res, next) => {
         quo_id: quo_id,
         status: { [Op.eq]: 1 },
       },
-      attributes: [  "payment_milestone_id",
+      attributes: [
+        "payment_milestone_id",
         "quo_num",
         "quo_id",
         "vendor_id",
         "milestone",
         "percentage",
-        "payment_status"]
+        "payment_status",
+      ],
     });
     res.status(200).json(result);
-    
   } catch (err) {
     next(err);
   }

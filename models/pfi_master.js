@@ -251,6 +251,31 @@ module.exports = (sequelize, DataTypes) => {
         form_m_certificate_id: {
             type: DataTypes.INTEGER,
             allowNull: true
+        },
+
+        opo_selected_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        opo_selected_num: {
+            type: DataTypes.STRING(55),
+            allowNull: true
+        },
+        opo_ids: {
+            type: DataTypes.STRING(255),
+            allowNull: true
+        },
+        opo_nums: {
+            type: DataTypes.STRING(255),
+            allowNull: true
+        },
+        remarks: {
+            type: DataTypes.STRING(255),
+            allowNull: true
+        },
+        amount: {
+            type: DataTypes.DECIMAL(18, 2),
+            allowNull: true
         }
     }, {
         tableName: 'pfi_master',
@@ -284,6 +309,10 @@ module.exports = (sequelize, DataTypes) => {
         pfi_master.hasOne(models.nafdac_pfi, {
             foreignKey: 'pfi_id',  // Ensure this matches the foreign key in insuranc
         });
+        pfi_master.belongsTo(models.opo_master, {
+            foreignKey: 'opo_selected_id',  // Ensure this matches the foreign key in insuranc
+        });
+        pfi_master.hasMany(models.Pfi_line_items, { foreignKey: 'pfi_id' });
     };
 
     return pfi_master;

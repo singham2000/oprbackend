@@ -41,7 +41,11 @@ module.exports = (sequelize, DataTypes) => {
         status: {
             type: DataTypes.INTEGER,
             allowNull: true
-        }
+        },
+        heading: {
+            type: DataTypes.STRING(255),
+            allowNull: true
+        },
     }, {
         tableName: 'additional_cost',
         timestamps: false

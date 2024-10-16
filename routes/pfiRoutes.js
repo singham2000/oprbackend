@@ -10,6 +10,7 @@ const setAuditFields = require('../middleware/setAuditFields.js');
 // API routes
 router
     .get('/get', pfiController.getPfi)
+    .get('/', pfiController.getPfiData)
     .get('/pfibypoid', pfiController.getPfibyPoid)
     .get('/pfibyid', pfiController.getPfibyid)
     .post('/create', setAuditFields, pfiController.genratePfi)
