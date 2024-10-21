@@ -5,12 +5,13 @@ const oprController = require('../controllers/oprController');
 const oprItemsController = require('../controllers/oprItemsController');
 const setAuditFields = require('../middleware/setAuditFields.js');
 const sentApprovalRequest = require('../middleware/approvalMiddleware.js');
+const { uploadMulti } = require('../middleware/fileHandler.js');
 // const oprItemsController = require('../controllers/oprItemsController');
 
 // API routes 
 router
     .get('/oprs', oprController.getOpr)
-    .post('/opr', setAuditFields, oprController.createOpr)
+    .post('/opr', setAuditFields, uploadMulti.any(), oprController.createOpr)
     .put('/opr', oprController.updateOprById)
     .delete('/opr/:id', oprController.deleteOprById)
     .post('/confirm/:opr_id', oprController.confirmOpr)

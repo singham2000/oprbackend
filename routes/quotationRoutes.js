@@ -11,6 +11,7 @@ router
     .get('/quotes', quotationController.getQuotation)
     .get('/quotes/milestone', quotationController.getQuotationmilestone)
     .get('/approvals', quotationController.GetApprovalsByQuoId)
+    .put('/additional/cost', quotationController.updateAdditionalCost)
     .get('/quotebyrfqid', quotationController.getQuotationbyrfqId)
     .post('/quote', upload.any(), setAuditFields, quotationController.createQuotation)
     .put('/quote', quotationController.updateQuotationById)

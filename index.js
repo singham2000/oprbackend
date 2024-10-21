@@ -66,6 +66,8 @@ const PortDestinationRoutes = require("./routes/Masters/PortDestinationRoutes.js
 const CountryRoutes = require("./routes/Masters/CountryRoutes.js");
 const StateRoutes = require("./routes/Masters/StateRoutes.js");
 const CityRoutes = require("./routes/Masters/CityRoutes.js");
+const ShipmentTypeRoutes = require("./routes/Masters/ShipmentTypeRoutes.js");
+
 
 
 
@@ -238,6 +240,8 @@ app.use("/api/port/destination", PortDestinationRoutes);
 app.use("/api/country", CountryRoutes);
 app.use("/api/state", StateRoutes);
 app.use("/api/city", CityRoutes);
+app.use("/api/shipment/type", ShipmentTypeRoutes);
+
 
 
 

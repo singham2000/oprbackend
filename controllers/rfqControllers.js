@@ -6,7 +6,7 @@ const {
   OprItems,
   VendorsMaster,
   sequelize,
-  reqdocMaster
+  reqdocMaster,
 } = db;
 
 const getPenaltyTermsNameById = require("../middleware/databyid/penaltyTermsName");
@@ -32,11 +32,10 @@ const countItem2 = async (rfq_id) => {
   });
 };
 
-
 const getDocsRfqIds = async (docIdsString) => {
   try {
     // Split the book_ids string into an array
-    const docIds = docIdsString ? docIdsString.split(',').map(Number) : [];
+    const docIds = docIdsString ? docIdsString.split(",").map(Number) : [];
     // Fetch books based on the extracted IDs
     const books = await reqdocMaster.findAll({
       where: {
@@ -46,11 +45,10 @@ const getDocsRfqIds = async (docIdsString) => {
 
     return books;
   } catch (error) {
-    console.error('Error fetching books:', error);
-    throw new Error('Error fetching books');
+    console.error("Error fetching books:", error);
+    throw new Error("Error fetching books");
   }
 };
-
 
 const getVendorsByRfqId = async (req, res, next) => {
   const rfqid = req.query.rfqid;
@@ -85,21 +83,32 @@ const getVendorsByRfqId = async (req, res, next) => {
   }
 };
 
-
 const getAllRfq = async (req, res, next) => {
   try {
     const rfqs = await RfqMaster.findAll({
-      attributes: { include: ['*', [sequelize.literal('dbo.fn_GetPortDestinationName(port_of_destination)'), 'port_of_destination_name'], 
-        [sequelize.literal('dbo.GetNamesFromIds(vendor_list)'), 'vendors'], [sequelize.literal('dbo.GetMinDeliveryTimelineByRfqID(rfq_id)'), 'deliveryTime'] ]},
+      attributes: {
+        include: [
+          "*",
+          [
+            sequelize.literal(
+              "dbo.fn_GetPortDestinationName(port_of_destination)"
+            ),
+            "port_of_destination_name",
+          ],
+          [sequelize.literal("dbo.GetNamesFromIds(vendor_list)"), "vendors"],
+        ],
+      },
+      include: [
+        { model: db.rfq_req_doc_master, attributes: ["rfq_req_doc_master_name", "description"] },
+      ],
     });
-
 
     //this funcation will add no of item included in a rfq
     const trnsFormData = await Promise.all(
       rfqs.map(async (rfqs) => {
         countItem2();
         let count2 = await countItem(rfqs.dataValues.rfq_id);
-        let doc_list = await getDocsRfqIds(rfqs.dataValues.penalty_terms_id)
+        let doc_list = await getDocsRfqIds(rfqs.dataValues.penalty_terms_id);
         rfqs.dataValues.items_count = count2;
         rfqs.dataValues.req_doc_list = doc_list;
         return rfqs;
@@ -117,15 +126,13 @@ const getRfqById = async (req, res, next) => {
     const rfq_id = req.params.id;
     let items = await RfqItemDetail.findAll({
       where: {
-        rfq_id
-      }
-    })
+        rfq_id,
+      },
+    });
     res.status(200).json(items);
   } catch (err) {
     next(err);
   }
-
-
 };
 
 // this is create rfq
@@ -133,17 +140,15 @@ const getRfqById = async (req, res, next) => {
 // opr items stuatus will change to 3 and update rfq id
 
 const createRfq = async (req, res, next) => {
- 
-
-
   const transaction = await sequelize.transaction();
   try {
     const {
-      req_doc_id,
+      selectedDoc,
       opr_item_ids,
       vendor_ids,
       remarks,
       port_of_destination,
+      delivery_timeline,
       item_list,
       created_by,
       updated_by,
@@ -159,9 +164,9 @@ const createRfq = async (req, res, next) => {
     const rfqres = await RfqMaster.create({
       rfq_num: rfq_series,
       vendor_list: vendor_ids.join(","),
-      req_doc_id: req_doc_id,
       remarks,
       port_of_destination,
+      delivery_timeline_in_weeks: delivery_timeline,
       status: 1,
       created_by,
       updated_by,
@@ -175,11 +180,19 @@ const createRfq = async (req, res, next) => {
     });
 
     // Bulk create RFQ item details
-    const rfqitemres = await RfqItemDetail.bulkCreate(item_list);
+    await RfqItemDetail.bulkCreate(item_list);
+
+    const RequireRFQDocs = selectedDoc.map((data, index) => ({
+      rfq_id: rfq_id,
+      rfq_req_doc_master_name: data.req_doc_name,
+      description: data.req_doc_description,
+      status: 1,
+    }));
+
+    await db.rfq_req_doc_master.bulkCreate(RequireRFQDocs);
 
     //here  opr_items update status 3 and insert rfq id in opr_line item
     await OprItems.update(
-
       { status: 3, rfq_id: rfq_id },
 
       {
@@ -196,8 +209,6 @@ const createRfq = async (req, res, next) => {
     next(err);
   }
 };
-
-
 
 // Controller method to delete RFQ by id
 const deleteRfqById = async (req, res, next) => {
@@ -223,16 +234,18 @@ const vendorListbyrfqid = async (req, res, next) => {
     let rfq_id = req.query.rfq_id;
 
     let rfqMasterRecord = await RfqMaster.findByPk(rfq_id, {
-      attributes: ['vendor_list']
+      attributes: ["vendor_list"],
     });
 
     if (!rfqMasterRecord) {
-      return res.status(404).json({ message: 'RFQ not found' });
+      return res.status(404).json({ message: "RFQ not found" });
     }
 
     // Extract the 'vendor_list' value and convert it to an array of numbers
     const vendorListString = rfqMasterRecord.dataValues.vendor_list;
-    const vendorIds = vendorListString ? vendorListString.split(',').map(Number) : [];
+    const vendorIds = vendorListString
+      ? vendorListString.split(",").map(Number)
+      : [];
 
     if (vendorIds.length === 0) {
       return res.status(200).json([]); // Return an empty array if no vendors are found
@@ -242,23 +255,22 @@ const vendorListbyrfqid = async (req, res, next) => {
     let vendors = await VendorsMaster.findAll({
       where: {
         vendor_id: {
-          [Op.in]: vendorIds
-        }
+          [Op.in]: vendorIds,
+        },
       },
       attributes: [
-        'vendor_id',
-        'vendor_series',
-        'vendor_name',
-        'phone_number',
-        'email',
-        'contact_person',
-        'contact_person_phone',
-        'contact_person_email'
-      ]
+        "vendor_id",
+        "vendor_series",
+        "vendor_name",
+        "phone_number",
+        "email",
+        "contact_person",
+        "contact_person_phone",
+        "contact_person_email",
+      ],
     });
 
     res.status(200).json(vendors);
-
   } catch (err) {
     next(err);
   }
@@ -270,5 +282,5 @@ module.exports = {
   deleteRfqById,
   createRfq,
   getVendorsByRfqId,
-  vendorListbyrfqid
+  vendorListbyrfqid,
 };

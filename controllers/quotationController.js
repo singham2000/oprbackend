@@ -63,7 +63,7 @@ const getQuotation = async (req, res, next) => {
         include: [
           {
             model: db.additional_cost,
-            attributes: ["charge_name", "charge_amount"],
+            attributes: ["charge_name", "charge_amount", "heading"],
           },
           {
             model: db.vendor,
@@ -163,7 +163,7 @@ const getQuotation = async (req, res, next) => {
                 include: [
                   {
                     model: db.additional_cost,
-                    attributes: ["charge_name", "charge_amount"],
+                    attributes: ["charge_name", "charge_amount", "heading"],
                   },
                   {
                     model: db.vendor,
@@ -252,7 +252,7 @@ const getQuotation = async (req, res, next) => {
         include: [
           {
             model: db.additional_cost,
-            attributes: ["charge_name", "charge_amount"],
+            attributes: ["charge_name", "charge_amount", "heading"],
           },
           {
             model: db.vendor,
@@ -300,6 +300,7 @@ const getQuotation = async (req, res, next) => {
     } else {
       console.log("check");
       let quo_details = await quotation_master.findAll({
+        order: [["quo_id", "DESC"]],
         attributes: [
           "quo_id",
           "quo_num",
@@ -330,9 +331,10 @@ const getQuotation = async (req, res, next) => {
           ],
         ],
         include: [
+          {model: db.quo_require_docs},
           {
             model: db.additional_cost,
-            attributes: ["charge_name", "charge_amount"],
+            attributes: ["charge_name", "charge_amount", "heading"],
           },
           {
             model: db.QuoDoc,
@@ -499,6 +501,7 @@ const createQuotation = async (req, res, next) => {
       charges,
       ItemData,
       payment_milestone,
+      ReuireDocData
     } = quotation_details;
 
     // Generate quotation
@@ -601,6 +604,16 @@ const createQuotation = async (req, res, next) => {
 
     await QuoDoc.bulkCreate(updatedQuotationDocs, { transaction });
 
+
+    const RequireQuotationDocs = ReuireDocData.map((data, index) => ({
+      quo_id: lastInsertedId,
+      doc_name: data.name,
+      doc_remarks: data.remark,
+      isAvailable: data.available
+    }));
+
+    await db.quo_require_docs.bulkCreate(RequireQuotationDocs, { transaction });
+
     await transaction.commit(); // Commit the transaction
 
     res.status(200).json({ message: "Quotation generated successfully" });
@@ -657,6 +670,77 @@ const updateQuotationById = async (req, res, next) => {
       }
     );
     res.status(201).json({ message: "Updated Successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const updateAdditionalCost = async (req, res, next) => {
+  try {
+    const { quo_id, additional_cost, quo_num } = req.body;
+    console.log(req.body);
+
+    const results = await Promise.all(
+      additional_cost.map(async (i) => {
+        const data = await db.additional_cost.findAll({
+          where: { status: 1, quo_id: quo_id, charge_name: i.name },
+        });
+
+        if (data.length === 1) {
+          // Update existing charge amount
+          await db.additional_cost.update(
+            { charge_amount: i.cost },
+            {
+              where: {
+                quo_id: quo_id,
+                charge_name: i.name,
+                status: 1,
+              },
+            }
+          );
+          return { message: `Updated charge for ${i.name} successfully` };
+        } else if (data.length === 0) {
+          // Create new additional cost entry
+          await db.additional_cost.create({
+            quo_id: quo_id,
+            quo_num: quo_num,
+            charge_name: i.name,
+            charge_amount: i.cost,
+            heading: [
+              "load_transportation",
+              "special_packaging",
+              "inspection_charges",
+              "miscellaneous_inland",
+            ].includes(i.name)
+              ? "Inland_Charges"
+              : [
+                  "bl",
+                  "container_seal",
+                  "container_stuffing",
+                  "thc",
+                  "vgm",
+                  "miscellaneous",
+                ].includes(i.name)
+              ? "FOB"
+              : "Freight_Charges",
+            status: 1,
+          });
+          return { message: `Added new charge for ${i.name} successfully` };
+        } else {
+          return { message: `Error processing ${i.name}` };
+        }
+      })
+    );
+
+    // Filter and handle responses
+    const successMessages = results.filter(
+      (result) => result && result.message
+    );
+    if (successMessages.length > 0) {
+      res.status(200).json(successMessages); // You might use 200 or 201 based on your requirement
+    } else {
+      res.status(400).json({ message: "No changes made or an error occurred" });
+    }
   } catch (err) {
     next(err);
   }
@@ -738,6 +822,7 @@ quotationController = {
   getQuotationbyrfqId,
   GetApprovalsByQuoId,
   getQuotationmilestone,
+  updateAdditionalCost,
   // generatePo
 };
 

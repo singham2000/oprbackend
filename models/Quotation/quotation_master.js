@@ -143,6 +143,15 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: "rfq_id",
             constraints: false
         });
+        quotation_master.hasMany(models.payment_milestone, {
+            foreignKey: "quo_id",
+        });
+        quotation_master.belongsTo(models.delivery_terms_quo, {
+            foreignKey: "delivery_terms",
+        });
+        quotation_master.hasMany(models.quo_require_docs, {
+            foreignKey: "quo_id",
+        });
     }
 
     return quotation_master;

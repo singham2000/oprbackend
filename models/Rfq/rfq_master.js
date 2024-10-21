@@ -58,6 +58,7 @@ module.exports = (sequelize, DataTypes) => {
     })
     rfq.associate = (models) => {
         rfq.hasMany(models.quotation_master, { foreignKey: 'rfq_id' });
+        rfq.hasMany(models.rfq_req_doc_master, { foreignKey: 'rfq_id' });
     };
     return rfq;
 };

@@ -110,6 +110,18 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: true
         },
+        criaRequired: {
+            type: DataTypes.STRING(50),
+            allowNull: true
+        },
+        nafdacAvailable: {
+            type: DataTypes.STRING(50),
+            allowNull: true
+        },
+        nafdacRequired: {
+            type: DataTypes.STRING(50),
+            allowNull: true
+        },
         status: {
             type: DataTypes.STRING(50),
             allowNull: true,
@@ -146,6 +158,7 @@ module.exports = (sequelize, DataTypes) => {
         ItemsMaster.hasMany(models.rfqitem, { foreignKey: 'item_id' });
         ItemsMaster.hasMany(models.quotation_items, { foreignKey: 'item_id' });
         ItemsMaster.hasMany(models.Pfi_line_items, { foreignKey: 'item_id' });
+        ItemsMaster.belongsTo(models.ItemSuperGroupMaster, { foreignKey: 'super_category_id' });
     };
 
     return ItemsMaster;

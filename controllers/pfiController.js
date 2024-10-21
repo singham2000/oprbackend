@@ -114,6 +114,8 @@ const getPfiData = async (req, res, next) => {
         "amount",
         "createdAt",
         "updatedAt",
+        "created_by",
+        "updated_by",
       ],
       include: [
         {
@@ -180,28 +182,26 @@ const getPfiData = async (req, res, next) => {
               ],
               include: [
                 {
+                  model: db.ItemSuperGroupMaster,
+                  attributes: ["item_super_group_name"],
+                },
+                {
                   model: db.BuyingHouse,
                   include: [
                     {
                       model: db.country, // Include the country model
-                      as: 'CountryData', // Use the alias for the association
-                      attributes: [
-                        "country",
-                      ],
+                      as: "CountryData", // Use the alias for the association
+                      attributes: ["country"],
                     },
                     {
                       model: db.state, // Include the country model
-                      as: 'StateData', // Use the alias for the association
-                      attributes: [
-                        "state",
-                      ],
+                      as: "StateData", // Use the alias for the association
+                      attributes: ["state"],
                     },
                     {
                       model: db.city, // Include the country model
-                      as: 'CityData', // Use the alias for the association
-                      attributes: [
-                        "city",
-                      ],
+                      as: "CityData", // Use the alias for the association
+                      attributes: ["city"],
                     },
                   ],
                 },
@@ -214,6 +214,8 @@ const getPfiData = async (req, res, next) => {
             {
               model: db.quotation_master,
               include: [
+                { model: db.delivery_terms_quo, attributes: ["delivery_terms_name"] },
+                { model: db.vendor },
                 {
                   model: db.rfq,
                   attributes: [

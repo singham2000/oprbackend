@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { reqdocMaster } = require('../models'); // Adjust the path as necessary
+const { reqdocMaster, rfq_req_doc_master } = require('../models'); // Adjust the path as necessary
 
 // Create a new required document
 exports.createRequiredDocument = async (req, res) => {
@@ -35,15 +35,15 @@ exports.getAllRequiredDocuments = async (req, res) => {
 
 // Get all required documents
 exports.getAllRequiredDocumentsByIds = async (req, res) => {
-    let { ids } = req.query;
+    let { rfq_id } = req.query;
     //convert incoming into array
-    let idsArray = ids.replace(/[()]/g, '').split(',').map(Number);
     try {
-        const requiredDocuments = await reqdocMaster.findAll({
+        const requiredDocuments = await rfq_req_doc_master.findAll({
+            attributes: ["rfq_req_doc_master_name", "description"],
             where: { 
-                status: { [Op.ne]: 0 } ,
-                req_doc_id:{[Op.in]: idsArray}
-            } // Assuming 0 means deleted
+                status: { [Op.ne]: 0 },
+                rfq_id: rfq_id
+            }
         });
         res.status(200).json(requiredDocuments);
     } catch (error) {

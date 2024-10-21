@@ -162,6 +162,7 @@ db.quotation_items = require("./Quotation/quotation_items.js")(
     DataTypes
 );
 db.QuoDoc = require("./Quotation/quotation_docs.js")(sequelize, DataTypes);
+db.quo_require_docs = require("./Quotation/QuotationRequireDocs")(sequelize, DataTypes);
 db.payment_milestone = require("./Quotation/PaymentMileStone.js")(sequelize, DataTypes);
 // db.quotation_master = require("./Quotation/quotation_master.js")(
 //     sequelize,
@@ -237,6 +238,7 @@ db.approval_matrix__master = require("./Masters/ApprovalMatrixMaster.js")(
     DataTypes
 );
 db.approval_matrix = require("./Masters/ApprovalMatrix")(sequelize, DataTypes);
+db.shipment_type_master = require("./Masters/ShipmentType.js")(sequelize, DataTypes);
 db.shipping_advise_container_type_master = require("./Masters/ShippingAdviseContainerType.js")(sequelize, DataTypes);
 db.transport_operation_lapse_master =
     require("./Masters/TransportOperationLapseMaster.js")(sequelize, DataTypes);
@@ -257,6 +259,7 @@ db.payment_type_charges_master = require("./Masters/PaymentTypeCharges.js")(
     DataTypes
 );
 db.shipping_lapse_master = require("./Masters/ShippingLapse")(sequelize, DataTypes);
+db.rfq_req_doc_master = require("./Masters/RfqReqDocs")(sequelize, DataTypes);
 db.port_destination_master = require("./Masters/PortDestinationMaster.js")(
     sequelize,
     DataTypes

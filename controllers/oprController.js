@@ -31,6 +31,7 @@ const getOpr = async (req, res, next) => {
           { model: db.ShipMode, attributes: ["shipment_mode_name"] },
           { model: db.Department, attributes: ["dept_name"] },
           { model: db.BuyingHouse, attributes: ["buying_house_name"] },
+          { model: db.shipment_type_master, attributes: ["shipment_type_name"] },
           {
             model: db.ItemSuperGroupMaster,
             attributes: ["item_super_group_name"],
@@ -118,6 +119,7 @@ const getOpr = async (req, res, next) => {
           { model: db.ShipMode, attributes: ["shipment_mode_name"] },
           { model: db.Department, attributes: ["dept_name"] },
           { model: db.BuyingHouse, attributes: ["buying_house_name"] },
+          { model: db.shipment_type_master, attributes: ["shipment_type_name"] },
           {
             model: db.ItemSuperGroupMaster,
             attributes: ["item_super_group_name"],
@@ -220,6 +222,8 @@ const createOpr = async (req, res, next) => {
     const doc_code = "OPR";
     const opr_series = await generateSeries(doc_code);
     req.body.opr_num = opr_series;
+    console.log("file: ", req.files);
+
 
     const {
       vertical_id,
@@ -229,6 +233,7 @@ const createOpr = async (req, res, next) => {
       buy_from,
       buying_house_id,
       shipment_mode_id,
+      shipment_type_id,
       delivery_timeline_id,
       department_id,
       requested_by,
@@ -238,10 +243,30 @@ const createOpr = async (req, res, next) => {
       suppliers,
       created_by,
     } = req.body;
+    
 
-    req.body.buying_house_id ? buying_house_id : 19;
+    // req.body.buying_house_id ? buying_house_id : 19;
     req.body.status = 3;
     const result = await opr_master.create(req.body);
+
+    const lastInsertedId = result.opr_id;
+
+    if (req.files && req.files.length > 0) {
+      await Promise.all(
+        req.files.map(async (file) => {
+          const base64 = file.buffer.toString("base64");
+          await db.document.create({
+            linked_id: lastInsertedId,
+            table_name: "opr_master",
+            type: "OPR Document",
+            doc_name: file.originalname,
+            doc_base64: base64,
+            status: 1,
+          });
+        })
+      );
+    }
+
     res
       .status(201)
       .json({ message: "Submit Successfully", opr_id: result.opr_id });

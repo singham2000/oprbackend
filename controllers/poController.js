@@ -76,6 +76,7 @@ const getPO = async (req, res, next) => {
       res.status(200).json(result);
     } else {
       let result = await po_master.findAll({
+        attributes: { exclude: ["delivery_terms"] },
         include: [
           {
             model: db.opo_master,
@@ -137,6 +138,10 @@ const getPO = async (req, res, next) => {
                 model: db.quotation_master,
                 include: [
                   {
+                    model: db.delivery_terms_quo,
+                    attributes: ["delivery_terms_name"],
+                  },
+                  {
                     model: db.rfq,
                     attributes: [
                       "rfq_num",
@@ -156,6 +161,10 @@ const getPO = async (req, res, next) => {
                   {
                     model: db.additional_cost,
                     attributes: ["charge_name", "charge_amount", "heading"],
+                  },
+                  {
+                    model: db.payment_milestone,
+                    attributes: ["milestone", "percentage"],
                   },
                 ],
               },
@@ -197,6 +206,11 @@ const getPO = async (req, res, next) => {
           },
           {
             model: db.vendor,
+            include: [
+              {
+                model: db.VendorsAddressDetailsMaster,
+              },
+            ],
             attributes: [
               "vendor_series",
               "vendor_name",

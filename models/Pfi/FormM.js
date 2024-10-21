@@ -80,10 +80,6 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   form_m.associate = (models) => {
-    form_m.hasMany(models.document, {
-      foreignKey: 'linked_id',
-
-    });
     form_m.belongsTo(models.Pfi_master, {
       foreignKey: 'pfi_id',  // Ensure this matches the foreign key in pfi_master
     });

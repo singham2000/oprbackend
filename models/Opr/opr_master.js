@@ -37,6 +37,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: true
         },
+        shipment_type_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
         delivery_timeline_id: {
             type: DataTypes.INTEGER,
             allowNull: true
@@ -93,6 +97,7 @@ module.exports = (sequelize, DataTypes) => {
         OprMaster.belongsTo(models.Department, { foreignKey: 'department_id' });
         OprMaster.belongsTo(models.BuyingHouse, { foreignKey: 'buying_house_id' });
         OprMaster.hasMany(models.OprItems, { foreignKey: 'opr_id' });
+        OprMaster.belongsTo(models.shipment_type_master, { foreignKey: 'shipment_type_id' });
         OprMaster.belongsTo(models.ItemSuperGroupMaster,
             {
                 foreignKey: 'item_category_id',

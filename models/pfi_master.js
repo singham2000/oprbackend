@@ -276,6 +276,14 @@ module.exports = (sequelize, DataTypes) => {
         amount: {
             type: DataTypes.DECIMAL(18, 2),
             allowNull: true
+        },
+        created_by: {
+            type: DataTypes.STRING(255),
+            allowNull: true
+        },
+        updated_by: {
+            type: DataTypes.STRING(255),
+            allowNull: true
         }
     }, {
         tableName: 'pfi_master',
