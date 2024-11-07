@@ -25,15 +25,23 @@ module.exports = (sequelize, DataTypes) => {
         updated_by: {
             type: DataTypes.STRING(55),
             allowNull: true
-        }
+        },
+        mimimun_uom: {
+            type: DataTypes.STRING(150),
+            allowNull: true
+        },
+        conversion_rate: {
+            type: DataTypes.STRING(150),
+            allowNull: true
+        },
     }, {
         tableName: 'unit_of_measurement',
         timestamps: true,
     });
 
-    UomMaster.associate = (models) => {
-        UomMaster.hasMany(models.ItemsMaster, { foreignKey: 'uom_id' });
-    };
+    // UomMaster.associate = (models) => {
+    //     UomMaster.hasMany(models.ItemsMaster, { foreignKey: 'uom_id' });
+    // };
 
     return UomMaster;
 

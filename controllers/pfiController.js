@@ -146,7 +146,6 @@ const getPfiData = async (req, res, next) => {
                 "unit_price",
                 "msrp",
                 "uom_id",
-                [sequelize.literal("dbo.fn_UomName(uom_id)"), "uom_name"],
               ],
             },
           ],

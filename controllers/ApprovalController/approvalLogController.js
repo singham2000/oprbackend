@@ -131,7 +131,7 @@ const ApprovalLogController = {
         }
       } else if (
         from_level > 0 &&
-        ApprovalPersonData.length > 0 &&
+        ApprovalPersonData.length > 0 && 
         action == "Accept"
       ) {
         console.log("B4");

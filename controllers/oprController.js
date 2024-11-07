@@ -13,13 +13,24 @@ const { Op, count } = require("sequelize");
 const { generateSeries } = require("./seriesGenerate");
 const { getStatusName } = require("../utilites/getStausName");
 const { query } = require("express");
+const {
+  GetDocByIdAndTableName,
+} = require("../utilites/GetDocByIdAndTableName");
+
+const GetOprDocByOprId = async (req, res, next) => {
+  try {
+    const opr_id = req.query.opr_id;
+    const result = await GetDocByIdAndTableName(opr_id, "opr_master");
+    res.status(201).json(result);
+  } catch (err) {}
+};
 
 const getOpr = async (req, res, next) => {
   try {
     let { id } = req.query;
     if (id) {
       let opr_detials = await opr_master.findAll({
-        where: { opr_id: id },
+        where: { opr_id: id, status: { [Op.ne]: 0 } },
         order: [["opr_id", "DESC"]],
         include: [
           {
@@ -31,7 +42,10 @@ const getOpr = async (req, res, next) => {
           { model: db.ShipMode, attributes: ["shipment_mode_name"] },
           { model: db.Department, attributes: ["dept_name"] },
           { model: db.BuyingHouse, attributes: ["buying_house_name"] },
-          { model: db.shipment_type_master, attributes: ["shipment_type_name"] },
+          {
+            model: db.shipment_type_master,
+            attributes: ["shipment_type_name"],
+          },
           {
             model: db.ItemSuperGroupMaster,
             attributes: ["item_super_group_name"],
@@ -102,12 +116,13 @@ const getOpr = async (req, res, next) => {
                                     where rfq_id in (Select rfq_id from opr_items where opr_id=10)`;
       opr_detials.received_quotatoins = await db.sequelize.query(rfqcountquery);
 
-    //   console.log("********opr master*******");
-    //   console.log(opr_detials);
+      //   console.log("********opr master*******");
+      //   console.log(opr_detials);
 
       res.status(200).json(opr_detials);
     } else {
       let opr_detials = await opr_master.findAll({
+        where: { status: { [Op.ne]: 0 } },
         order: [["opr_id", "DESC"]],
         include: [
           {
@@ -119,7 +134,10 @@ const getOpr = async (req, res, next) => {
           { model: db.ShipMode, attributes: ["shipment_mode_name"] },
           { model: db.Department, attributes: ["dept_name"] },
           { model: db.BuyingHouse, attributes: ["buying_house_name"] },
-          { model: db.shipment_type_master, attributes: ["shipment_type_name"] },
+          {
+            model: db.shipment_type_master,
+            attributes: ["shipment_type_name"],
+          },
           {
             model: db.ItemSuperGroupMaster,
             attributes: ["item_super_group_name"],
@@ -211,7 +229,7 @@ const deleteOprById = async (req, res, next) => {
         },
       }
     );
-    res.status(200).json({ message: "Deleted successfully" });
+    res.status(204).json({ message: "Deleted successfully" });
   } catch (err) {
     next(err);
   }
@@ -223,7 +241,6 @@ const createOpr = async (req, res, next) => {
     const opr_series = await generateSeries(doc_code);
     req.body.opr_num = opr_series;
     console.log("file: ", req.files);
-
 
     const {
       vertical_id,
@@ -243,7 +260,6 @@ const createOpr = async (req, res, next) => {
       suppliers,
       created_by,
     } = req.body;
-    
 
     // req.body.buying_house_id ? buying_house_id : 19;
     req.body.status = 3;
@@ -276,52 +292,83 @@ const createOpr = async (req, res, next) => {
 };
 
 const updateOprById = async (req, res, next) => {
-  const opr_id = req.query.opr_id;
+  console.log("file: ", req.files);
+  console.log("file: ", req.body);
   try {
     const {
-      vertical_company,
-      company_name,
+      opr_id,
+      opr_num,
+      vertical_id,
+      company_id,
       opr_date,
       division_id,
       buy_from,
-      buy_house,
+      buying_house_id,
       shipment_mode_id,
+      shipment_type_id,
       delivery_timeline_id,
       department_id,
       requested_by,
       no_quot_email_alert,
       item_category_id,
       remarks,
-      suppliers,
-      updated_by,
     } = req.body;
+
+    const data = await opr_master.findByPk(opr_id);
+    const value = data.item_category_id == item_category_id ? true : false;
+    console.log("data.item_category_id", value);
+    if (!value) {
+      await OprItems.update(
+        { status: 0 },
+        {
+          where: {
+            opr_id: opr_id,
+          },
+        }
+      );
+    }
 
     const result = await opr_master.update(
       {
-        vertical_company,
-        company_name,
+        vertical_id,
+        company_id,
         opr_date,
         division_id,
         buy_from,
-        buy_house,
+        buying_house_id,
         shipment_mode_id,
+        shipment_type_id,
         delivery_timeline_id,
         department_id,
         requested_by,
         no_quot_email_alert,
         item_category_id,
         remarks,
-        suppliers,
-        opr_status: "Open",
-        updated_by,
         updated_on: formattedDateTime,
       },
       {
         where: {
-          opr_id: opr_id,
+          [Op.or]: [{ opr_id: opr_id }, { opr_num: opr_num }],
         },
       }
     );
+
+    if (req.files && req.files.length > 0) {
+      await Promise.all(
+        req.files.map(async (file) => {
+          const base64 = file.buffer.toString("base64");
+          await db.document.create({
+            linked_id: opr_id,
+            table_name: "opr_master",
+            type: "OPR Document",
+            doc_name: file.originalname,
+            doc_base64: base64,
+            title: "OPR Added Documents",
+            status: 1,
+          });
+        })
+      );
+    }
 
     res.status(201).json({ message: "Updated Successfully" });
   } catch (err) {
@@ -468,6 +515,7 @@ const oprAction = async (req, res, next) => {
 oprController = {
   confirmOpr,
   getOpr,
+  GetOprDocByOprId,
   deleteOprById,
   createOpr,
   updateOprById,

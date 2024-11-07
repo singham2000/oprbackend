@@ -12,6 +12,6 @@ router.get('/bydoc_id', documentController.getDocumentById);
 router.get('/docbyentityid', documentController.getpoDocumentById);
 // router.get('/:id', documentController.getDocumentById);
 // router.put('/:id', documentController.updateDocument);
-// router.delete('/:id', documentController.deleteDocument);
+router.delete('/', documentController.deleteDocument);
 
 module.exports = router;

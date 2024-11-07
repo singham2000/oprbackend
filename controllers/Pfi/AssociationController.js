@@ -52,7 +52,6 @@ const GetAllCiDataWithPfi = async (req, res, next) => {
         "pfi_id",
         "pfi_num",
         "ci_num",
-        [sequelize.literal('dbo.fn_UomName(4)'), 'udf_result']
       ],
       where: {
         status: { [Op.ne]: 0 },

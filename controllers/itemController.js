@@ -4,13 +4,24 @@ const { generateSeries } = require("../utilites/genrateSeries");
 
 // Controller method to fetch all items
 const getAllItems = async (req, res, next) => {
+  const uom_ids = req.query.uom_ids;
   try {
-    const items = await Item.findAll({
-      // to be correct
-      include: [{ model: db.UomMaster, attributes: ["uom_id", "uom_name"] }],
-    });
-
-    res.status(200).json(items);
+    if(uom_ids){
+      const items = await Item.findAll({
+        where: {uom_id : uom_ids},
+        include: [{ model: db.UomMaster, attributes: ["uom_id", "uom_name"] }],
+      });
+  
+      res.status(200).json(items);
+    }else{
+      const items = await Item.findAll({
+        // to be correct
+        include: [{ model: db.UomMaster, attributes: ["uom_id", "uom_name"] }],
+      });
+  
+      res.status(200).json(items);
+    }
+    
   } catch (err) {
     next(err);
   }

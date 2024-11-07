@@ -63,7 +63,13 @@ const getQuotation = async (req, res, next) => {
         include: [
           {
             model: db.additional_cost,
-            attributes: ["charge_name", "charge_amount", "heading"],
+            attributes: [
+              "charge_name",
+              "charge_amount",
+              "charges_by",
+              "heading",
+              "for_delivery_term",
+            ],
           },
           {
             model: db.vendor,
@@ -163,7 +169,13 @@ const getQuotation = async (req, res, next) => {
                 include: [
                   {
                     model: db.additional_cost,
-                    attributes: ["charge_name", "charge_amount", "heading"],
+                    attributes: [
+                      "charge_name",
+                      "charge_amount",
+                      "heading",
+                      "charges_by",
+                      "for_delivery_term",
+                    ],
                   },
                   {
                     model: db.vendor,
@@ -252,7 +264,12 @@ const getQuotation = async (req, res, next) => {
         include: [
           {
             model: db.additional_cost,
-            attributes: ["charge_name", "charge_amount", "heading"],
+            attributes: [
+              "charge_name",
+              "charge_amount",
+              "heading",
+              "for_delivery_term",
+            ],
           },
           {
             model: db.vendor,
@@ -331,10 +348,15 @@ const getQuotation = async (req, res, next) => {
           ],
         ],
         include: [
-          {model: db.quo_require_docs},
+          { model: db.quo_require_docs },
           {
             model: db.additional_cost,
-            attributes: ["charge_name", "charge_amount", "heading"],
+            attributes: [
+              "charge_name",
+              "charge_amount",
+              "heading",
+              "for_delivery_term",
+            ],
           },
           {
             model: db.QuoDoc,
@@ -501,7 +523,7 @@ const createQuotation = async (req, res, next) => {
       charges,
       ItemData,
       payment_milestone,
-      ReuireDocData
+      ReuireDocData,
     } = quotation_details;
 
     // Generate quotation
@@ -541,6 +563,7 @@ const createQuotation = async (req, res, next) => {
             quo_num: quotation_series,
             charge_name: key,
             charge_amount: charges[key],
+            charges_by: "Supplier",
             heading:
               key === "load_transportation" ||
               key === "special_packaging" ||
@@ -604,12 +627,11 @@ const createQuotation = async (req, res, next) => {
 
     await QuoDoc.bulkCreate(updatedQuotationDocs, { transaction });
 
-
     const RequireQuotationDocs = ReuireDocData.map((data, index) => ({
       quo_id: lastInsertedId,
       doc_name: data.name,
       doc_remarks: data.remark,
-      isAvailable: data.available
+      isAvailable: data.available,
     }));
 
     await db.quo_require_docs.bulkCreate(RequireQuotationDocs, { transaction });
@@ -677,17 +699,23 @@ const updateQuotationById = async (req, res, next) => {
 
 const updateAdditionalCost = async (req, res, next) => {
   try {
-    const { quo_id, additional_cost, quo_num } = req.body;
+    const { quo_id, additional_cost, quo_num, for_delivery_term } = req.body;
     console.log(req.body);
 
     const results = await Promise.all(
       additional_cost.map(async (i) => {
         const data = await db.additional_cost.findAll({
-          where: { status: 1, quo_id: quo_id, charge_name: i.name },
+          where: {
+            status: 1,
+            quo_id: quo_id,
+            charge_name: i.name,
+            charges_by: "Buyer",
+            for_delivery_term: for_delivery_term,
+          },
         });
+        console.log("i.name", i.name);
 
         if (data.length === 1) {
-          // Update existing charge amount
           await db.additional_cost.update(
             { charge_amount: i.cost },
             {
@@ -700,12 +728,13 @@ const updateAdditionalCost = async (req, res, next) => {
           );
           return { message: `Updated charge for ${i.name} successfully` };
         } else if (data.length === 0) {
-          // Create new additional cost entry
           await db.additional_cost.create({
             quo_id: quo_id,
             quo_num: quo_num,
             charge_name: i.name,
             charge_amount: i.cost,
+            charges_by: "Buyer",
+            for_delivery_term: for_delivery_term,
             heading: [
               "load_transportation",
               "special_packaging",
@@ -745,6 +774,53 @@ const updateAdditionalCost = async (req, res, next) => {
     next(err);
   }
 };
+
+// const updateAdditionalCost = async (req, res, next) => {
+//   try {
+//     const { quo_id, additional_cost, quo_num } = req.body;
+//     console.log("put");
+//     console.log(req.body);
+
+//     const processCharges = async () => {
+//       const addChargesPromises = additional_cost.map(async (i) => {
+//         return db.additional_cost.create({
+//           quo_id: quo_id,
+//           quo_num: quo_num,
+//           charge_name: i.name,
+//           charge_amount: i.cost,
+//           charges_by: 'Buyer',
+//           heading: [
+//             "load_transportation",
+//             "special_packaging",
+//             "inspection_charges",
+//             "miscellaneous_inland",
+//           ].includes(i.name)
+//             ? "Inland_Charges"
+//             : [
+//                 "bl",
+//                 "container_seal",
+//                 "container_stuffing",
+//                 "thc",
+//                 "vgm",
+//                 "miscellaneous",
+//               ].includes(i.name)
+//             ? "FOB"
+//             : "Freight_Charges",
+//           status: 1,
+//         });
+//       });
+
+//       // Wait for all promises to resolve
+//       await Promise.all(addChargesPromises);
+//     };
+//     processCharges();
+
+//     res.status(200).json({message: "Add Additional Cost Successfully"}); // You might use 200 or 201 based on your requirement
+
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 
 const getQuotationmilestone = async (req, res, next) => {
   const quo_id = req.query.quo_id;

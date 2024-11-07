@@ -331,26 +331,6 @@ async function createUDFIfNotExists() {
           END;
 
 
-          IF OBJECT_ID('dbo.fn_UomName', 'FN') IS NULL
-          BEGIN
-              EXEC('
-                  CREATE FUNCTION dbo.fn_UomName(@uomId INT)
-                  RETURNS VARCHAR(50)
-                  AS 
-                  BEGIN
-                      DECLARE @ret VARCHAR(50);
-                      
-                      -- Select uom_name from unit_of_measurement
-                      SELECT @ret = ISNULL(v.uom_name, ''Invalid Vertical Code'')
-                      FROM unit_of_measurement v
-                      WHERE v.uom_id = @uomId;
-                      
-                      RETURN @ret;
-                  END;
-              ');
-          END;
-
-
           IF OBJECT_ID('dbo.fn_GetShippingContainerType', 'FN') IS NULL
           BEGIN
               EXEC('

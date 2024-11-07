@@ -122,11 +122,6 @@ const getRfqItemByRfqid = async (req, res, next) => {
               model: db.ItemSuperGroupMaster,
               attributes: ["item_super_group_name"],
             },
-            {
-              model: db.UomMaster,
-              attributes: ["uom_name"],
-              // model: db.AddressMaster, attributes: ['city']
-            },
           ],
           attributes: {exclude: ["item_img"]}
         },

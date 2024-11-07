@@ -99,7 +99,10 @@ const getAllRfq = async (req, res, next) => {
         ],
       },
       include: [
-        { model: db.rfq_req_doc_master, attributes: ["rfq_req_doc_master_name", "description"] },
+        {
+          model: db.rfq_req_doc_master,
+          attributes: ["rfq_req_doc_master_name", "description"],
+        },
       ],
     });
 
@@ -153,6 +156,7 @@ const createRfq = async (req, res, next) => {
       created_by,
       updated_by,
     } = req.body;
+    console.log("item_list", item_list);
     const rfq_series = await generateSeries("RFQ");
 
     // Check if all necessary data is provided
@@ -194,7 +198,6 @@ const createRfq = async (req, res, next) => {
     //here  opr_items update status 3 and insert rfq id in opr_line item
     await OprItems.update(
       { status: 3, rfq_id: rfq_id },
-
       {
         where: {
           opr_item_id: {

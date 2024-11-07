@@ -36,7 +36,11 @@ module.exports = (sequelize, DataTypes) => {
         status: {
             type: DataTypes.INTEGER,
             allowNull: false,
-        }
+        },
+        uom_name: {
+            type: DataTypes.STRING(155),
+            allowNull: true
+        },
     }, {
         timestamps: true, // Disable timestamps if you don't need them
         tableName: 'rfq_items' // Ensure the table name matches your SQL table name exactly

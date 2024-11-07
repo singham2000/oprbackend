@@ -11,9 +11,10 @@ const { uploadMulti } = require('../middleware/fileHandler.js');
 // API routes 
 router
     .get('/oprs', oprController.getOpr)
+    .get('/opr/docs', oprController.GetOprDocByOprId)
     .post('/opr', setAuditFields, uploadMulti.any(), oprController.createOpr)
-    .put('/opr', oprController.updateOprById)
-    .delete('/opr/:id', oprController.deleteOprById)
+    .put('/opr', setAuditFields, uploadMulti.any(), oprController.updateOprById)
+    .delete('/opr', oprController.deleteOprById)
     .post('/confirm/:opr_id', oprController.confirmOpr)
     .get('/additems', oprController.itemforOpr)
     .put('/action', oprController.oprAction)

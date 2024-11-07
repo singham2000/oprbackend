@@ -42,6 +42,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(500),
       allowNull: true,
     },
+    uom_name: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
     status: {
       type: DataTypes.INTEGER,
       allowNull: true,
@@ -56,6 +60,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     updated_by: {
       type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+    selected_qty: {
+      type: DataTypes.STRING(155),
+      allowNull: true,
+    },
+    selected_uom: {
+      type: DataTypes.STRING(155),
       allowNull: true,
     },
   }, {

@@ -10,68 +10,118 @@ const { generateSeries } = require("./seriesGenerate");
 const getOprItem = async (req, res, next) => {
   const opr_id = req.query.opr_id;
   try {
-    const whereCondition = {};
     if (opr_id) {
-      whereCondition.opr_id = opr_id;
-    }
-
-    let Opr_Items = await OprItems.findAll({
-      where: whereCondition,
-      include: [
-        { model: db.CompanyMaster, attributes: ["company_name"] },
-        { model: db.OprMaster, attributes: ["opr_num"] },
-        { model: db.AddressMaster, attributes: ["city", "address_id"] },
-        {
-          model: db.ItemsMaster,
-          include: [
-            {
-              model: db.ItemSuperGroupMaster,
-              attributes: ["item_super_group_name"],
-            },
-            {
-              model: db.UomMaster,
-              attributes: ["uom_name"],
-            },
-          ],
-          attributes: { exclude: ["item_img"] },
-          // attributes: ['item_name', 'item_type', 'item_code', 'quantity_in_stock', 'quantity_on_order', 'nafdac_category',]
+      let Opr_Items = await OprItems.findAll({
+        where: {
+          opr_id: opr_id,
+          status: { [Op.ne]: 0 }, // status is not equal to 0
         },
-      ],
-      attributes: {
-        exclude: [
-          "created_by",
-          "updated_by",
-          "updatedAt",
-          "vertical_id",
-          "company_id",
-          "division_id",
-          "rfq_id",
+        include: [
+          { model: db.CompanyMaster, attributes: ["company_name"] },
+          { model: db.OprMaster, attributes: ["opr_num"] },
+          { model: db.AddressMaster, attributes: ["city", "address_id"] },
+          {
+            model: db.ItemsMaster,
+            include: [
+              {
+                model: db.ItemSuperGroupMaster,
+                attributes: ["item_super_group_name"],
+              },
+            ],
+            attributes: { exclude: ["item_img"] },
+            // attributes: ['item_name', 'item_type', 'item_code', 'quantity_in_stock', 'quantity_on_order', 'nafdac_category',]
+          },
         ],
-      },
-    });
+        attributes: {
+          exclude: [
+            "created_by",
+            "updated_by",
+            "updatedAt",
+            "vertical_id",
+            "company_id",
+            "division_id",
+            "rfq_id",
+          ],
+        },
+      });
 
-    // Transform the data
-    const transformedData = Opr_Items.map((item) => ({
-      opr_item_id: item.opr_item_id,
-      item_id: item.item_id,
-      opr_id: item.opr_id,
-      opr_num: item.OprMaster.opr_num,
-      qty: item.qty,
-      stock_in_transit: item.stock_in_transit,
-      stock_in_hand: item.stock_in_hand,
-      monthly_consumption: item.monthly_consumption,
-      item_description: item.item_description,
-      status: item.status,
-      item_type: item.ItemsMaster.item_type,
-      item_code: item.ItemsMaster.item_code,
-      item_name: item.ItemsMaster.item_name,
-      quantity_in_stock: item.ItemsMaster.quantity_in_stock,
-      quantity_on_order: item.ItemsMaster.quantity_on_order,
-      nafdac_category: item.ItemsMaster.nafdac_category,
-      sub_group: item.ItemsMaster.sub_group,
-      uom: item.ItemsMaster.UomMaster.uom_name || "null",
-    }));
-    res.status(200).json(Opr_Items);
+      // Transform the data
+      const transformedData = Opr_Items.map((item) => ({
+        opr_item_id: item.opr_item_id,
+        item_id: item.item_id,
+        opr_id: item.opr_id,
+        opr_num: item.OprMaster.opr_num,
+        qty: item.qty,
+        stock_in_transit: item.stock_in_transit,
+        stock_in_hand: item.stock_in_hand,
+        monthly_consumption: item.monthly_consumption,
+        item_description: item.item_description,
+        status: item.status,
+        item_type: item.ItemsMaster.item_type,
+        item_code: item.ItemsMaster.item_code,
+        item_name: item.ItemsMaster.item_name,
+        quantity_in_stock: item.ItemsMaster.quantity_in_stock,
+        quantity_on_order: item.ItemsMaster.quantity_on_order,
+        nafdac_category: item.ItemsMaster.nafdac_category,
+        sub_group: item.ItemsMaster.sub_group,
+      }));
+      res.status(200).json(Opr_Items);
+    } else {
+      let Opr_Items = await OprItems.findAll({
+        where: {
+          status: { [Op.ne]: 0 }, // status is not equal to 0
+        },
+        include: [
+          { model: db.CompanyMaster, attributes: ["company_name"] },
+          { model: db.OprMaster, attributes: ["opr_num"] },
+          { model: db.AddressMaster, attributes: ["city", "address_id"] },
+          {
+            model: db.ItemsMaster,
+            include: [
+              {
+                model: db.ItemSuperGroupMaster,
+                attributes: ["item_super_group_name"],
+              },
+            ],
+            attributes: { exclude: ["item_img"] },
+            // attributes: ['item_name', 'item_type', 'item_code', 'quantity_in_stock', 'quantity_on_order', 'nafdac_category',]
+          },
+        ],
+        attributes: {
+          exclude: [
+            "created_by",
+            "updated_by",
+            "updatedAt",
+            "vertical_id",
+            "company_id",
+            "division_id",
+            "rfq_id",
+          ],
+        },
+      });
+
+      // Transform the data
+      const transformedData = Opr_Items.map((item) => ({
+        opr_item_id: item.opr_item_id,
+        item_id: item.item_id,
+        opr_id: item.opr_id,
+        opr_num: item.OprMaster.opr_num,
+        qty: item.qty,
+        stock_in_transit: item.stock_in_transit,
+        stock_in_hand: item.stock_in_hand,
+        monthly_consumption: item.monthly_consumption,
+        item_description: item.item_description,
+        status: item.status,
+        item_type: item.ItemsMaster.item_type,
+        item_code: item.ItemsMaster.item_code,
+        item_name: item.ItemsMaster.item_name,
+        quantity_in_stock: item.ItemsMaster.quantity_in_stock,
+        quantity_on_order: item.ItemsMaster.quantity_on_order,
+        nafdac_category: item.ItemsMaster.nafdac_category,
+        sub_group: item.ItemsMaster.sub_group,
+      }));
+      res.status(200).json(Opr_Items);
+    }
   } catch (err) {
     next(err);
   }
@@ -109,10 +159,6 @@ const getOprItemForRfq = async (req, res, next) => {
         { model: db.AddressMaster, attributes: ["city", "address_id"] },
         {
           model: db.ItemsMaster,
-          include: {
-            model: db.UomMaster,
-            attributes: ["uom_name"], // Fetch the UOM name
-          },
           attributes: [
             "item_name",
             "item_type",
@@ -315,14 +361,16 @@ const getOprItembyOprId = async (req, res, next) => {
 
 // Opr Controller to delete by id
 const deleteOprdraftItem = async (req, res, next) => {
-  const opr_item_id = req.query.opr_item_id;
   try {
-    await OprItems.destroy({
-      where: {
-        [Op.and]: [{ opr_item_id: opr_item_id }, { status: 1 }],
-      },
-    });
-    res.status(200).json({ message: "Deleted successfully" });
+    await OprItems.update(
+      { status: 0 },
+      {
+        where: {
+          opr_item_id: req.query.opr_item_id,
+        },
+      }
+    );
+    res.status(204).json({ message: "Deleted successfully" });
   } catch (err) {
     next(err);
   }
@@ -335,6 +383,8 @@ const createOprItem = async (req, res, next) => {
       opr_id,
       company_id,
       item_id,
+      address_id,
+      uom_name,
       qty,
       stock_in_transit,
       stock_in_hand,
@@ -342,12 +392,81 @@ const createOprItem = async (req, res, next) => {
       item_description,
     } = req.body;
     console.log(req.body);
-    // await itemsList.forEach(data => {
-    //     data.opr_id = opr_id;
-    // });
-    req.body.status = 1;
-    const result = await OprItems.create(req.body);
-    res.status(201).json({ message: "Submit Successfully" });
+
+    if (req.body.opr_item_id) {
+      console.log("req.body.opr_item_id", req.body.opr_item_id);
+      const result2 = await db.UomMaster.findAll({
+        where: {
+          uom_name: uom_name,
+          status: { [Op.ne]: 0 },
+        },
+      });
+      console.log("result2", result2);
+      const convertedUom =
+        uom_name === result2[0].mimimun_uom ? uom_name : result2[0].mimimun_uom;
+      const convertedQty =
+        uom_name === result2[0].mimimun_uom
+          ? qty
+          : qty * result2[0].conversion_rate;
+
+      console.log("convertedUom", convertedUom);
+      console.log("convertedQty", convertedQty);
+      const result = await OprItems.update(
+        {
+          opr_id,
+          company_id,
+          item_id,
+          address_id,
+          uom_name: convertedUom,
+          qty: convertedQty,
+          stock_in_transit,
+          stock_in_hand,
+          monthly_consumption,
+          item_description,
+          selected_qty: qty,
+          selected_uom: uom_name,
+        },
+        {
+          where: {
+            opr_item_id: req.body.opr_item_id,
+          },
+        }
+      );
+      res.status(201).json({ message: "Updated Successfully" });
+    } else {
+      const result2 = await db.UomMaster.findAll({
+        where: {
+          uom_name: uom_name,
+          status: { [Op.ne]: 0 },
+        },
+      });
+      console.log("result2", result2);
+      const convertedUom =
+        uom_name === result2[0].mimimun_uom ? uom_name : result2[0].mimimun_uom;
+      const convertedQty =
+        uom_name === result2[0].mimimun_uom
+          ? qty
+          : qty * result2[0].conversion_rate;
+
+      console.log("convertedUom", convertedUom);
+      console.log("convertedQty", convertedQty);
+      const result = await OprItems.create({
+        opr_id,
+        company_id,
+        item_id,
+        address_id,
+        uom_name: convertedUom,
+        qty: convertedQty,
+        stock_in_transit,
+        stock_in_hand,
+        monthly_consumption,
+        item_description,
+        selected_qty: qty,
+        selected_uom: uom_name,
+        status: 2,
+      });
+      res.status(201).json({ message: "Submit Successfully" });
+    }
   } catch (err) {
     next(err);
   }
@@ -497,7 +616,7 @@ const getOprCompanyDropdown = async (req, res, next) => {
   try {
     let oprCompanyList = await OprItems.findAll({
       distinct: true,
-      wher: { status: { [Op.e]: 2 } },
+      where: { status: { [Op.e]: 2 } },
       include: [
         {
           model: db.CompanyMaster,

@@ -18,12 +18,7 @@ const getPO = async (req, res, next) => {
             model: db.po_items,
             include: [
               {
-                model: db.ItemsMaster,
-                attributes: {
-                  include: [
-                    [sequelize.literal("dbo.fn_UomName(uom_id)"), "uom"],
-                  ],
-                },
+                model: db.ItemsMaster
               },
             ],
             attributes: [
@@ -176,9 +171,6 @@ const getPO = async (req, res, next) => {
               {
                 model: db.ItemsMaster,
                 attributes: {
-                  include: [
-                    [sequelize.literal("dbo.fn_UomName(uom_id)"), "uom"],
-                  ],
                   exclude: ["item_img", "item_img_name"],
                 },
               },

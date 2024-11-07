@@ -110,11 +110,16 @@ exports.updateDocument = async (req, res) => {
 // Delete a document by ID
 exports.deleteDocument = async (req, res) => {
   try {
-    const deleted = await document.destroy({
-      where: { document_id: req.params.id },
-    });
+    const deleted = await document.update(
+      { status: 0 },
+      {
+        where: {
+          document_id: req.query.document_id
+        },
+      }
+    );
     if (deleted) {
-      res.status(204).send();
+      res.status(204).send("Deleted Successfully");
     } else {
       res.status(404).json({ message: 'Document not found' });
     }
