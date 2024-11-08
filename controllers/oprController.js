@@ -41,7 +41,7 @@ const getOpr = async (req, res, next) => {
           { model: db.Division, attributes: ["division_name"] },
           { model: db.ShipMode, attributes: ["shipment_mode_name"] },
           { model: db.Department, attributes: ["dept_name"] },
-          { model: db.BuyingHouse, attributes: ["buying_house_name"] },
+          { model: db.BuyingHouse, attributes: ["buying_house_name", "country"] },
           {
             model: db.shipment_type_master,
             attributes: ["shipment_type_name"],
@@ -133,7 +133,7 @@ const getOpr = async (req, res, next) => {
           { model: db.Division, attributes: ["division_name"] },
           { model: db.ShipMode, attributes: ["shipment_mode_name"] },
           { model: db.Department, attributes: ["dept_name"] },
-          { model: db.BuyingHouse, attributes: ["buying_house_name"] },
+          { model: db.BuyingHouse, attributes: ["buying_house_name", "country"] },
           {
             model: db.shipment_type_master,
             attributes: ["shipment_type_name"],
@@ -166,10 +166,7 @@ const getOpr = async (req, res, next) => {
               : null,
             dept_name: item.Department ? item.Department.dept_name : null,
             buying_house_name: item.BuyingHouse
-              ? item.BuyingHouse.buying_house_name
-              : null,
-            buying_house_name: item.BuyingHouse
-              ? item.BuyingHouse.buying_house_name
+              ? item.BuyingHouse.country
               : null,
           };
           // Remove the now redundant nested objects
@@ -262,7 +259,7 @@ const createOpr = async (req, res, next) => {
     } = req.body;
 
     // req.body.buying_house_id ? buying_house_id : 19;
-    req.body.status = 3;
+    req.body.status = 15;
     const result = await opr_master.create(req.body);
 
     const lastInsertedId = result.opr_id;
@@ -344,6 +341,7 @@ const updateOprById = async (req, res, next) => {
         no_quot_email_alert,
         item_category_id,
         remarks,
+        status: 15,
         updated_on: formattedDateTime,
       },
       {

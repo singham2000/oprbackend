@@ -104,24 +104,7 @@ const getPO = async (req, res, next) => {
                 ],
                 include: [
                   {
-                    model: db.BuyingHouse,
-                    include: [
-                      {
-                        model: db.country, // Include the country model
-                        as: "CountryData", // Use the alias for the association
-                        attributes: ["country"],
-                      },
-                      {
-                        model: db.state, // Include the country model
-                        as: "StateData", // Use the alias for the association
-                        attributes: ["state"],
-                      },
-                      {
-                        model: db.city, // Include the country model
-                        as: "CityData", // Use the alias for the association
-                        attributes: ["city"],
-                      },
-                    ],
+                    model: db.BuyingHouse
                   },
                   {
                     model: db.CompanyMaster,
@@ -492,12 +475,6 @@ const getPoItemsbypoid = async (req, res, next) => {
         {
           // model: db.po_items,
           model: db.ItemsMaster,
-          include: [
-            {
-              model: db.UomMaster,
-              attributes: ["uom_name"],
-            },
-          ],
           // attributes: [
           //   "item_name",
           //   "item_type",

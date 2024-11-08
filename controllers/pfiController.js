@@ -185,24 +185,7 @@ const getPfiData = async (req, res, next) => {
                   attributes: ["item_super_group_name"],
                 },
                 {
-                  model: db.BuyingHouse,
-                  include: [
-                    {
-                      model: db.country, // Include the country model
-                      as: "CountryData", // Use the alias for the association
-                      attributes: ["country"],
-                    },
-                    {
-                      model: db.state, // Include the country model
-                      as: "StateData", // Use the alias for the association
-                      attributes: ["state"],
-                    },
-                    {
-                      model: db.city, // Include the country model
-                      as: "CityData", // Use the alias for the association
-                      attributes: ["city"],
-                    },
-                  ],
+                  model: db.BuyingHouse
                 },
                 {
                   model: db.CompanyMaster,

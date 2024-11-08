@@ -7,19 +7,31 @@ exports.createBuyingHouse = async (req, res) => {
   try {
     let {
       buying_house_name,
-      status,
+      contact_number,
+      contact_email,
       address_line1,
       address_line2,
       city,
-      contact_email,
-      contact_number,
+      state,
       country,
       postal_code,
-      state,
+      status
     } = req.body;
     console.log("req.body", req.body)
-    req.body.buying_house_code = await generateSeries("BH");
-    const buyingHouse = await BuyingHouse.create(req.body);
+    const code = await generateSeries("BH");
+    const buyingHouse = await BuyingHouse.create({
+      buying_house_code: code,
+      buying_house_name: buying_house_name,
+      status: status,
+      address_line1: address_line1,
+      address_line2: address_line2,
+      city: city,
+      contact_email: contact_email,
+      contact_number: contact_number,
+      country: country,
+      postal_code: postal_code,
+      state: state,
+    });
     res.status(201).json(buyingHouse);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -45,7 +57,7 @@ exports.getAllBuyingHouses = async (req, res) => {
 exports.getBhdropDown = async (req, res) => {
   try {
     const buyingHouses = await BuyingHouse.findAll({
-      attributes: ["buying_house_id", "buying_house_name"],
+      attributes: ["buying_house_id", "buying_house_name", "country"],
     });
     res.status(200).json(buyingHouses);
   } catch (error) {

@@ -217,7 +217,7 @@ const getQuotation = async (req, res, next) => {
                       "q_doc_name",
                       "q_doc_remarks",
                       "q_doc_filename",
-                      // "q_doc_file",
+                      "q_doc_file",
                     ],
                   },
                 ],
