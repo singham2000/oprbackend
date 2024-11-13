@@ -395,6 +395,8 @@ const getOpo = async (req, res, next) => {
           {
             model: db.OprMaster, // Include related OPR details
             attributes: [
+              "opr_id",
+              "opr_num",
               "vertical_id",
               "company_id",
               "opr_date",
@@ -539,6 +541,8 @@ const getOpo = async (req, res, next) => {
           {
             model: db.OprMaster, // Include related OPR details
             attributes: [
+              "opr_id",
+              "opr_num",
               "vertical_id",
               "company_id",
               "opr_date",
