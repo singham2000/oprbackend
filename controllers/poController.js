@@ -14,11 +14,12 @@ const getPO = async (req, res, next) => {
       let result = await po_master.findAll({
         where: { po_id },
         include: [
+          { model: db.quotation_master },
           {
             model: db.po_items,
             include: [
               {
-                model: db.ItemsMaster
+                model: db.ItemsMaster,
               },
             ],
             attributes: [
@@ -44,6 +45,9 @@ const getPO = async (req, res, next) => {
           },
           {
             model: db.vendor,
+            include: [
+              {model: db.VendorsBanksDetailsMaster}
+            ],
             attributes: [
               "vendor_series",
               "vendor_name",
@@ -104,7 +108,7 @@ const getPO = async (req, res, next) => {
                 ],
                 include: [
                   {
-                    model: db.BuyingHouse
+                    model: db.BuyingHouse,
                   },
                   {
                     model: db.CompanyMaster,
@@ -519,6 +523,86 @@ const getVendorDeailsByPoId = async (req, res, next) => {
     let foudnVendor = await po_master.findAll({
       where: { po_id: po_id },
       include: [
+        {
+          model: db.quotation_master,
+          attributes: [
+            "quo_id",
+            "quo_num",
+            "rfq_id",
+            "vendor_id",
+            "reference_no",
+            "reference_date",
+            "quo_date",
+            "currency",
+            "delivery_terms",
+            "country_origin",
+            "country_supply",
+            "port_loading",
+            "lead_time",
+            "payment_terms",
+            "remarks",
+            "approval_status",
+            "total_cost",
+            "po_status",
+            "opo_status",
+            "quote_doc",
+            "quote_doc_name",
+            "opr_lead_time",
+            "port_of_loading",
+          ],
+          include: [
+            { model: db.quo_require_docs },
+            {
+              model: db.additional_cost,
+              attributes: [
+                "charge_name",
+                "charge_amount",
+                "heading",
+                "for_delivery_term",
+              ],
+            },
+            {
+              model: db.QuoDoc,
+              attributes: [
+                "q_doc_id",
+                "quotation_id",
+                "q_doc_name",
+                "q_doc_remarks",
+                "q_doc_filename",
+                // "q_doc_file",
+              ],
+            },
+            {
+              model: db.vendor,
+              attributes: ["vendor_name", "vendor_series"],
+            },
+            {
+              model: db.quotation_items,
+              attributes: [
+                "quo_item_id",
+                "quo_id",
+                "item_id",
+                "item_type",
+                "line_total",
+                "opr_qty",
+                "quote_qtd",
+                "rate",
+                "remarks",
+                "item_name",
+                "no_packs",
+                "pack_size",
+                "pack_type",
+                "quo_num",
+                "item_code",
+                "rfq_item_id",
+                [
+                  sequelize.literal("dbo.fn_GetPackageType(pack_type)"),
+                  "pack_type_name",
+                ],
+              ],
+            },
+          ],
+        },
         {
           model: db.VendorsMaster,
           include: [

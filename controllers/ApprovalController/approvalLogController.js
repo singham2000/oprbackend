@@ -102,7 +102,7 @@ const ApprovalLogController = {
 
           const approvalLog = await ApprovalLog.create({
             approval_matrix_id:
-              ApprovalPersonData[ApprovalIndex].approval_matrix_id, // Ensure you have the correct ID
+              ApprovalPersonData[ApprovalIndex - 1].approval_matrix_id, // Ensure you have the correct ID
             doc_type,
             doc_id,
             doc_num: doc_number,

@@ -161,6 +161,7 @@ const getQuotation = async (req, res, next) => {
                   "quote_doc_name",
                   "opr_lead_time",
                   "port_of_loading",
+                  "status",
                   [
                     sequelize.literal("dbo.fn_GetDeliveryTerm(delivery_terms)"),
                     "delivery_terms_name",
@@ -262,6 +263,12 @@ const getQuotation = async (req, res, next) => {
           ],
         ],
         include: [
+          {model: db.payment_milestone,   attributes: [
+            "quo_id",
+            "milestone",
+            "percentage",
+            "status",
+          ]},
           {
             model: db.additional_cost,
             attributes: [

@@ -315,6 +315,17 @@ const createOpo = async (req, res, next) => {
       })
     );
 
+    const result5 = await db.quotation_master.update(
+      {
+        status: 20
+      },
+      {
+        where: {
+          quo_id: quo_id,
+        },
+      }
+    );
+
     await transaction.commit(); // Commit the transaction
     return res.status(201).json({ message: "Submit Successfully" }); // Respond with success
   } catch (err) {

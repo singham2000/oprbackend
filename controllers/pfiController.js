@@ -118,6 +118,18 @@ const getPfiData = async (req, res, next) => {
         "updated_by",
       ],
       include: [
+        { model: insurance },
+          { model: form_m },
+          { model: letter_of_credit },
+          { model: son_pfi },
+          { model: assessment },
+          { model: ShippingMaster },
+          { model: CompanyMaster },
+          { model: operations_nafdac },
+          { model: paar },
+          { model: operations_nafdac_master },
+          { model: govt_charges },
+          { model: nafdac_pfi },
         {
           model: db.Pfi_line_items,
           include: [
