@@ -31,7 +31,19 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         },
         advice_amount: {
+            type: DataTypes.DECIMAL(18, 2),
+            allowNull: true
+        },
+        amount_payment_term: {
             type: DataTypes.DECIMAL(10, 2),
+            allowNull: true
+        },
+        vendor_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        bank_type_id: {
+            type: DataTypes.INTEGER,
             allowNull: true
         },
         advice_remarks: {

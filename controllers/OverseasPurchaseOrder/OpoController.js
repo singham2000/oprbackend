@@ -367,7 +367,7 @@ const getOpo = async (req, res, next) => {
             include: [
               {
                 model: db.additional_cost,
-                attributes: ["charge_name", "charge_amount"],
+                // attributes: ["charge_name", "charge_amount"],
               },
             ],
             attributes: [
@@ -513,7 +513,7 @@ const getOpo = async (req, res, next) => {
             include: [
               {
                 model: db.additional_cost,
-                attributes: ["charge_name", "charge_amount"],
+                // attributes: ["charge_name", "charge_amount"],
               },
             ],
             attributes: [

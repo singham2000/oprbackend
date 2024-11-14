@@ -46,6 +46,7 @@ const getPO = async (req, res, next) => {
           {
             model: db.vendor,
             include: [
+              {model: db.VendorsBanksDetailsMaster},
               {model: db.VendorsBanksDetailsMaster}
             ],
             attributes: [
@@ -189,6 +190,7 @@ const getPO = async (req, res, next) => {
               {
                 model: db.VendorsAddressDetailsMaster,
               },
+              {model: db.VendorsBanksDetailsMaster}
             ],
             attributes: [
               "vendor_series",
