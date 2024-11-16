@@ -694,7 +694,7 @@ const updateDocumentStatus = async (doc_type, doc_id, res, payment_request_id, r
 
 exports.createPaymentTransactions = async (req, res, next) => {
        try {
-        const { payment_request_id, doc_type, doc_id, payment_milestone_id } = req.body;
+        const { payment_request_id, doc_type, doc_id, payment_milestone_id, value_date } = req.body;
         updateDocumentStatus(doc_type, doc_id, res, payment_request_id, req);
         //update request status 
         const paymentRequest = await PaymentRequestMaster.update(

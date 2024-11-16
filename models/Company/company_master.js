@@ -67,7 +67,6 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: true
     })
 
-
     // Define associations
     company.associate = (models) => {
         company.hasMany(models.AddressMaster, {

@@ -18,6 +18,11 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DATEONLY,
             allowNull: false
         },
+        
+        value_date: {
+            type: DataTypes.DATEONLY,
+            allowNull: false
+        },
         payment_amount: {
             type: DataTypes.DECIMAL(10, 2),
             allowNull: false
