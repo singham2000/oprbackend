@@ -6,7 +6,7 @@ const { Op } = require("sequelize");
 const getAllUom = async (req, res, next) => {
   const uom_ids = req.query.uom_ids;
   console.log(uom_ids);
-  const uom = uom_ids.split(",").map(Number);
+  const uom = uom_ids?.split(",").map(Number);
   try {
     if (uom_ids) {
       const items = await Uom.findAll({

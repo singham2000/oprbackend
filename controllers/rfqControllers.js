@@ -153,10 +153,13 @@ const createRfq = async (req, res, next) => {
       port_of_destination,
       delivery_timeline,
       item_list,
+      shipment_type,
+      shipment_mode,
       created_by,
       updated_by,
     } = req.body;
     console.log("item_list", item_list);
+    console.log("req.body", req.body);
     const rfq_series = await generateSeries("RFQ");
 
     // Check if all necessary data is provided
@@ -169,6 +172,8 @@ const createRfq = async (req, res, next) => {
       rfq_num: rfq_series,
       vendor_list: vendor_ids.join(","),
       remarks,
+      shipment_type: shipment_type.join(","),
+      shipment_mode,
       port_of_destination,
       delivery_timeline_in_weeks: delivery_timeline,
       status: 1,

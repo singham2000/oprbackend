@@ -7,6 +7,9 @@ const { uploadMulti } = require("../../middleware/fileHandler.js");
 // API routes
 router
   .get("/", ShippingAdviseController.getShippingAdviseTerms)
+  .get("/byid", ShippingAdviseController.getShippingAdviseTypeByID)
+  .post("/creategrn", ShippingAdviseController.createGrn)
+  .post("/createci", ShippingAdviseController.createCommercialInvoice)
   .post(
     "/",
     setAuditFields,

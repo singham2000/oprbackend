@@ -25,16 +25,16 @@ const createGrn = async (req, res, next) => {
     });
 
     // Get the last inserted GDN ID
-    let lastInsertId = result.dataValues.grn_id;
+    // let lastInsertId = result.dataValues.grn_id;
 
     // Prepare GDN items data by adding gdn_master_id
-    const itemsWithGdnId = gdnitemsdata.map((item) => ({
-      ...item,
-      grn_id: lastInsertId,
-    }));
+    // const itemsWithGdnId = gdnitemsdata.map((item) => ({
+    //   ...item,
+    //   grn_id: lastInsertId,
+    // }));
 
-    // Bulk create the GDN items
-    const itemResult = await GrnItems.bulkCreate(itemsWithGdnId);
+    // // Bulk create the GDN items
+    // const itemResult = await GrnItems.bulkCreate(itemsWithGdnId);
 
     //change Gdn status
     await GdnMaster.update({ status: 2 });

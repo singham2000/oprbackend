@@ -110,13 +110,5 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'item_id',
     });
   };
- 
-    
-
-   
-  
-
-
-
   return po_items;
 }; 

@@ -21,7 +21,7 @@ const createAddContainer = async (req, res, next) => {
         net_weight: container.total_net_wt,
         po_id: po_id,
         po_num: po_num,
-        status: 1, // Assuming status 1 means active or something similar
+        status: 1, 
       });
       console.log(createdContainer.add_shippment_container_id);
       const lastInsertedId = createdContainer.add_shippment_container_id;
@@ -33,11 +33,9 @@ const createAddContainer = async (req, res, next) => {
           packet_qty: detail.p_qty,
           no_package: detail.no_package,
           packet_weight: detail.p_net_wt,
-          status: 1, // Assuming status 1 means active or something similar
+          status: 1, 
         });
       });
-
-      // Wait for all details to be created before moving on
       await Promise.all(detailPromises);
     });
 

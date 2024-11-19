@@ -14,7 +14,7 @@ router
     .get('/vendors', rfqControllers.getVendorsByRfqId)
     .get('/rfq/:id', rfqControllers.getRfqById)
     .delete('/rfq/:id', setAuditFields, rfqControllers.deleteRfqById)
-    .post('/rfq', setAuditFields, rfqControllers.createRfq)
+    .post('/rfq', rfqControllers.createRfq)
     .get('/vendor_list', rfqControllers.vendorListbyrfqid)
 
 // sevice rfq

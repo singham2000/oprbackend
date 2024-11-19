@@ -9,59 +9,37 @@ const createShippingInstructionsTerm = async (req, res, next) => {
     console.log("file: ", req.files);
 
     const {
-        po_id,
-        vendor_id,
-        quo_date,
-        currency,
-        delivery_terms,
-        lead_time,
-        payment_terms,
-        remarks,
-        buyer_name,
-        buyer_address,
-        shipper_po_vendor,
-        po_number,
-        supplier_ref_no,
-        delivery_term,
-        shipment_mode,
-        no_of_previous_shipment,
-        shipper,
-        consignee,
-        notify,
-        port_of_loading,
-        port_of_discharge,
-        final_destination,
-        goods_description,
-        label_check,
-        bill_of_loading_check
+      po_id,
+      po_number,
+      shipper,
+      goods_description,
+      port_of_discharge,
+      final_destination,
+      marks_nos,
+      no_of_og_bl_req,
+      notify_party,
+      no_of_non_negotiable_bl_copy_req,
+      additional_information1,
+      additional_information2,
+      label_check, 
+      bill_of_loading_check
     } = req.body;
 
     const result = await shippment_instructions.create({
-        po_id,
-        po_num: po_number,
-        vendor_id,
-        quo_date,
-        currency,
-        delivery_terms,
-        lead_time,
-        payment_terms,
-        remarks,
-        buyer_name,
-        buyer_address,
-        shipper_po_vendor,
-        supplier_ref_no,
-        delivery_term,
-        shipment_mode,
-        no_of_previous_shipment,
-        shipper,
-        consignee,
-        notify,
-        port_of_loading,
-        port_of_discharge,
-        final_destination,
-        goods_description,
-        label_check,
-        bill_of_loading_check,
+      po_id,
+      po_num: po_number,
+      shipper,
+      goods_description,
+      port_of_discharge,
+      final_destination,
+      marks_nos,
+      no_of_og_bl_req,
+      notify_party,
+      no_of_non_negotiable_bl_copy_req,
+      additional_information1,
+      additional_information2,
+      label_check, 
+      bill_of_loading_check,
       status: 1,
     });
 
@@ -103,11 +81,14 @@ const getShippingInstructionsTerms = async (req, res, next) => {
       });
       return res.status(200).json(result);
     } else {
-      const result = await shippment_instructions.findByPk(shippment_instructions_id, {
-        where: {
-          status: { [Op.ne]: 0 },
-        },
-      });
+      const result = await shippment_instructions.findByPk(
+        shippment_instructions_id,
+        {
+          where: {
+            status: { [Op.ne]: 0 },
+          },
+        }
+      );
       return res.status(200).json(result);
     }
   } catch (err) {
@@ -121,7 +102,9 @@ const updateShippingInstructionsTerm = async (req, res, next) => {
 
   try {
     // Find the shipment mode by primary key
-    const PenaltyTerms = await shippment_instructions.findByPk(shippment_instructions_id);
+    const PenaltyTerms = await shippment_instructions.findByPk(
+      shippment_instructions_id
+    );
 
     // Update the shipment mode
     const { penalty_terms_name, status } = req.body;

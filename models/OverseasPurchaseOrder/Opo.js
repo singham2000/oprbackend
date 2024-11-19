@@ -80,6 +80,12 @@ module.exports = (sequelize, DataTypes) => {
     opo_master.hasMany(models.opo_items, {
         foreignKey: "opo_id",
     });
+    opo_master.hasMany(models.Pfi_master, {
+      foreignKey: "opo_selected_id",
+  });
+  opo_master.hasMany(models.po_master, {
+    foreignKey: "selected_opo_id",
+});
 }
 
   return opo_master;

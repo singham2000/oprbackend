@@ -18,6 +18,14 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(255),
             allowNull: true
         },
+        shipment_mode: {
+            type: DataTypes.STRING(155),
+            allowNull: true
+        },
+        shipment_type: {
+            type: DataTypes.STRING(155),
+            allowNull: true
+        },
         port_of_destination: {
             type: DataTypes.STRING(155),
             allowNull: true

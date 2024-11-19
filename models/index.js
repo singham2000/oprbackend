@@ -294,6 +294,8 @@ db.ApprovalLog = require('./Approval/ApprovalLog.js')(sequelize, DataTypes);
 db.reqdocMaster = require('./required_doc_list.js')(sequelize, DataTypes);
 db.document = require("./Pfi/Document")(sequelize, DataTypes);
 db.assessment = require("./Opreations/Assessment.js")(sequelize, DataTypes);
+db.shipment_advise_items = require("./Opreations/ShippmentAdviceItems.js")(sequelize, DataTypes);
+
 
 // Set up associations
 const models = { ...db };

@@ -73,6 +73,7 @@ const getPfi = async (req, res, next) => {
         { model: operations_nafdac_master },
         { model: govt_charges },
         { model: nafdac_pfi },
+        // { model: db.shippment_instructions },
       ],
     });
 
@@ -165,6 +166,7 @@ const getPfiData = async (req, res, next) => {
         {
           model: db.opo_master,
           include: [
+            {model: db.po_master},
             {
               model: db.OprMaster,
               attributes: [
@@ -307,6 +309,7 @@ const genratePfi = async (req, res, next) => {
     opo_nums,
     selectedOPOid,
     selectedOPOnum,
+    pfiDescription,
     remarks,
     items,
   } = req.body;
@@ -321,6 +324,7 @@ const genratePfi = async (req, res, next) => {
       opo_selected_id: selectedOPOid,
       opo_selected_num: selectedOPOnum,
       remarks: remarks,
+      pfi_description: pfiDescription,
       opo_nums,
       opo_ids,
       amount,

@@ -16,6 +16,14 @@ module.exports = (sequelize, DataTypes) => {
           type: DataTypes.STRING(50),
           allowNull: true,
         },
+        ci_id: {
+          type: DataTypes.INTEGER,
+          allowNull: true,
+        },
+        ci_num: {
+          type: DataTypes.STRING(100),
+          allowNull: true,
+        },
         shipment_status: {
           type: DataTypes.STRING(55),
           allowNull: true,
@@ -122,6 +130,18 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: false,
       }
     );
+
+    shippment_advise_master.associate = (models) => {
+      shippment_advise_master.belongsTo(models.po_master, {
+          foreignKey: "po_id",
+      });
+      shippment_advise_master.hasMany(models.shippment_advise_additional_instruction, {
+          foreignKey: "shippment_advise_id",
+      });
+      shippment_advise_master.hasMany(models.shipment_advise_items, {
+          foreignKey: "shipment_advise_id",
+      });
+    }
   
     return shippment_advise_master;
   };

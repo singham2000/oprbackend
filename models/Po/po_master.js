@@ -122,6 +122,15 @@ module.exports = (sequelize, DataTypes) => {
         po_master.belongsTo(models.opo_master, {
             foreignKey: "selected_opo_id",
         });
+        po_master.hasOne(models.shippment_instructions, {
+            foreignKey: "po_id",
+        });
+        po_master.hasOne(models.shippment_advise_master, {
+            foreignKey: "po_id",
+        });
+        po_master.hasMany(models.add_shippment_container, {
+            foreignKey: "po_id",
+        });
       }
 
     return po_master;

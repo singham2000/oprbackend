@@ -320,6 +320,9 @@ module.exports = (sequelize, DataTypes) => {
         pfi_master.belongsTo(models.opo_master, {
             foreignKey: 'opo_selected_id',  // Ensure this matches the foreign key in insuranc
         });
+        pfi_master.hasOne(models.commercial_invoice, {
+            foreignKey: 'pfi_id',  // Ensure this matches the foreign key in insuranc
+        });
         pfi_master.hasMany(models.Pfi_line_items, { foreignKey: 'pfi_id' });
     };
 

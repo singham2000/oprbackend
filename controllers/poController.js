@@ -46,8 +46,8 @@ const getPO = async (req, res, next) => {
           {
             model: db.vendor,
             include: [
-              {model: db.VendorsBanksDetailsMaster},
-              {model: db.VendorsBanksDetailsMaster}
+              { model: db.VendorsBanksDetailsMaster },
+              { model: db.VendorsBanksDetailsMaster },
             ],
             attributes: [
               "vendor_series",
@@ -79,8 +79,40 @@ const getPO = async (req, res, next) => {
         attributes: { exclude: ["delivery_terms"] },
         include: [
           {
+            model: db.add_shippment_container,
+            include: [{ model: db.shippment_container_detail }],
+          },
+          { model: db.shippment_instructions },
+          {
+            model: db.shippment_advise_master,
+            include: [
+              { model: db.shippment_advise_additional_instruction },
+              {
+                model: db.shipment_advise_items,
+              },
+            ],
+          },
+          {
             model: db.opo_master,
             include: [
+              {
+                model: db.Pfi_master,
+                include: [
+                  { model: db.commercial_invoice, attributes: ["commercial_invoice_id", "ci_num", "pfi_id", "pfi_num"] },
+                  { model: db.insurance },
+                  { model: db.form_m },
+                  { model: db.letter_of_credit },
+                  { model: db.son_pfi },
+                  { model: db.assessment },
+                  { model: db.ShippingMaster },
+                  { model: db.CompanyMaster },
+                  { model: db.operations_nafdac },
+                  { model: db.paar },
+                  { model: db.operations_nafdac_master },
+                  { model: db.govt_charges },
+                  { model: db.nafdac_pfi },
+                ],
+              },
               {
                 model: db.OprMaster,
                 attributes: [
@@ -143,7 +175,6 @@ const getPO = async (req, res, next) => {
                   },
                   {
                     model: db.additional_cost,
-                    attributes: ["charge_name", "charge_amount", "heading"],
                   },
                   {
                     model: db.payment_milestone,
@@ -190,7 +221,7 @@ const getPO = async (req, res, next) => {
               {
                 model: db.VendorsAddressDetailsMaster,
               },
-              {model: db.VendorsBanksDetailsMaster}
+              { model: db.VendorsBanksDetailsMaster },
             ],
             attributes: [
               "vendor_series",
@@ -556,12 +587,6 @@ const getVendorDeailsByPoId = async (req, res, next) => {
             { model: db.quo_require_docs },
             {
               model: db.additional_cost,
-              attributes: [
-                "charge_name",
-                "charge_amount",
-                "heading",
-                "for_delivery_term",
-              ],
             },
             {
               model: db.QuoDoc,
