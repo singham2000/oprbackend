@@ -21,6 +21,10 @@ module.exports = (sequelize, DataTypes) => {
         updated_by: {
             type: DataTypes.STRING(55),
             allowNull: true
+        },
+        country_name: {
+            type: DataTypes.STRING(255),
+            allowNull: true
         }
     }, {
         tableName: 'port_destination_master',

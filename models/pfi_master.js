@@ -1,57 +1,3 @@
-// require('dotenv').config();
-
-// module.exports = (sequelize, DataTypes) => {
-//     const pfi_master = sequelize.define("pfi_master", {
-//         pfi_id: {
-//             type: DataTypes.INTEGER,
-//             primaryKey: true,
-//             autoIncrement: true
-//         },
-//         pfi_num: {
-//             type: DataTypes.STRING(100),
-//             allowNull: true
-//         },
-//         payment_request_id: {
-//             type: DataTypes.INTEGER,
-//             allowNull: true
-//         },
-// po_id: {
-//     type: DataTypes.INTEGER,
-//     allowNull: true
-// },
-//         company_id: {
-//             type: DataTypes.INTEGER,
-//             allowNull: true
-//         },
-//         status: {
-//             type: DataTypes.INTEGER,
-//             allowNull: true
-//         },
-//         remarks: {
-//             type: DataTypes.STRING(255),
-//             allowNull: true
-//         },
-//         amount: {
-//             type: DataTypes.DECIMAL(10, 2),
-//             allowNull: true
-//         },
-
-//     }, {
-//         tableName: 'pfi_master',
-//         timestamps: true,
-//         logging: process.env.NODE_ENV === 'development' ? console.log : false
-//     });
-
-//     return pfi_master;
-// };
-
-// ------------------------------------------
-//chage on : 27 Aug 2024
-// ------------------------------------------
-
-
-// controllers/Pfi/FormMController.js
-
 module.exports = (sequelize, DataTypes) => {
     const pfi_master = sequelize.define("pfi_master", {
         pfi_id: {
@@ -101,6 +47,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         shipment_mode: {
             type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        payment_mode: {
+            type: DataTypes.STRING(255),
             allowNull: true
         },
         delivery_time: {

@@ -120,17 +120,17 @@ const getPfiData = async (req, res, next) => {
       ],
       include: [
         { model: insurance },
-          { model: form_m },
-          { model: letter_of_credit },
-          { model: son_pfi },
-          { model: assessment },
-          { model: ShippingMaster },
-          { model: CompanyMaster },
-          { model: operations_nafdac },
-          { model: paar },
-          { model: operations_nafdac_master },
-          { model: govt_charges },
-          { model: nafdac_pfi },
+        { model: form_m },
+        { model: letter_of_credit },
+        { model: son_pfi },
+        { model: assessment },
+        { model: ShippingMaster },
+        { model: CompanyMaster },
+        { model: operations_nafdac },
+        { model: paar },
+        { model: operations_nafdac_master },
+        { model: govt_charges },
+        { model: nafdac_pfi },
         {
           model: db.Pfi_line_items,
           include: [
@@ -166,7 +166,7 @@ const getPfiData = async (req, res, next) => {
         {
           model: db.opo_master,
           include: [
-            {model: db.po_master},
+            { model: db.po_master },
             {
               model: db.OprMaster,
               attributes: [
@@ -199,7 +199,7 @@ const getPfiData = async (req, res, next) => {
                   attributes: ["item_super_group_name"],
                 },
                 {
-                  model: db.BuyingHouse
+                  model: db.BuyingHouse,
                 },
                 {
                   model: db.CompanyMaster,
@@ -210,7 +210,10 @@ const getPfiData = async (req, res, next) => {
             {
               model: db.quotation_master,
               include: [
-                { model: db.delivery_terms_quo, attributes: ["delivery_terms_name"] },
+                {
+                  model: db.delivery_terms_quo,
+                  attributes: ["delivery_terms_name"],
+                },
                 { model: db.vendor },
                 {
                   model: db.rfq,
@@ -312,8 +315,14 @@ const genratePfi = async (req, res, next) => {
     pfiDescription,
     remarks,
     items,
+    shipment_mode,
+    payment_mode,
+    addAdditinalCostArr,
+    quo_id,
+    quo_num,
+    for_delivery_term
   } = req.body;
-  console.log("sharma", req.body);
+  console.log(req.body);
   try {
     const doc_code = "PFI";
     pfi_num = await generateSeries(doc_code);
@@ -328,9 +337,27 @@ const genratePfi = async (req, res, next) => {
       opo_nums,
       opo_ids,
       amount,
+      shipment_mode,
+      payment_mode,
       status: 1,
     });
     LastInsertedId = PFI_response.pfi_id;
+
+    if(addAdditinalCostArr.length > 0){
+      addAdditinalCostArr.map(async(i)=>(
+        await db.additional_cost.create({
+          reference_id: LastInsertedId,
+          quo_id,
+          quo_num,
+          charge_name: i.charge_name,
+          reference_table_name: 'pfi_master',
+          charge_amount: i.charge_amount,
+          charges_by: "Buyer",
+          heading: 'Add Charges in PFI',
+          for_delivery_term
+        })
+      ))
+    }
 
     const pfiItems = await Promise.all(
       items.map(async (item) => {

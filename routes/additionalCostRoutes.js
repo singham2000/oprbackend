@@ -9,6 +9,7 @@ const setAuditFields = require('../middleware/setAuditFields.js');
 // API routes
 router
     .get('/', additionalCostController.getAdditionalCost)
+    .get('/compressdata', additionalCostController.getAdditionalCostByQuoIdCompressData)
     .post('/', setAuditFields, additionalCostController.createAdditionalCost)
     .put('/', setAuditFields, additionalCostController.updateAdditionalCostById)
     .delete('/', setAuditFields, additionalCostController.deleteAdditionalCostById)

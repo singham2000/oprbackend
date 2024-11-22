@@ -6,9 +6,6 @@ const { generatePo } = require('../controllers/quotationController');
 const upload = require('../utilites/handlefile.js');
 const setAuditFields = require('../middleware/setAuditFields.js');
 
-
-
-
 // API routes
 router
     .get('/list', POController.getPO)

@@ -61,7 +61,7 @@ db.AddressTypeMaster = require("./Address/address_type.js")(
     DataTypes
 );
 db.DocTypeMaster = require('./Masters/DocTypeMaster.js')(sequelize, DataTypes);
-
+db.additional_cost_freigth = require('./AdditionalCostFreigth.js')(sequelize, DataTypes);
 
 //buying house related
 db.BuyingHouse = require("./BuyingHouse/buyinghouse_master.js")(

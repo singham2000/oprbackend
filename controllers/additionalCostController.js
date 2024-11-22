@@ -46,6 +46,31 @@ const createAdditionalCost = async (req, res, next) => {
   }
 };
 
+const getAdditionalCostByQuoIdCompressData = async (req, res, next) => {
+  const quo_id = req.query.quo_id;
+  try {
+    const result = await additional_cost.findAll({
+      attributes: [
+        'heading',
+        'charge_name',
+        [db.sequelize.fn('SUM', db.sequelize.literal("CASE WHEN charges_by = 'Supplier' THEN charge_amount ELSE 0 END")), 'supp_charges'],
+        [db.sequelize.fn('SUM', db.sequelize.literal("CASE WHEN charges_by = 'Buyer' THEN charge_amount ELSE 0 END")), 'buyer_charges'],
+      ],
+      where: {
+        quo_id: quo_id,
+      },
+      group: ['heading', 'charge_name'], // Group by heading and charge_name
+      order: [
+        ['heading', 'ASC'],  // Order by heading in ascending order
+        ['charge_name', 'ASC'] // Order by charge_name in ascending order
+      ]
+    });
+      res.status(200).json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
 // Controller method to getAdditionalCost
 const getAdditionalCost = async (req, res, next) => {
   const additional_cost_id = req.query.additional_cost_id;
@@ -123,6 +148,7 @@ const deleteAdditionalCostById = async (req, res, next) => {
 
 additionalCostController = {
   getAdditionalCost,
+  getAdditionalCostByQuoIdCompressData,
   deleteAdditionalCostById,
   createAdditionalCost,
   updateAdditionalCostById,

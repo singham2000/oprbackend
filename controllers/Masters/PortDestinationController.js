@@ -34,7 +34,7 @@ const getPortDestination = async (req, res, next) => {
 const getPortDestinationDropdown = async (req, res, next) => {
   try {
     const result = await port_destination_master.findAll({
-      attributes: ["port_destination_id", "port_destination_name"],
+      attributes: ["port_destination_id", "port_destination_name", "country_name"],
       where: {
         status: { [Op.eq]: 1 },
       },
@@ -45,6 +45,7 @@ const getPortDestinationDropdown = async (req, res, next) => {
     next(err);
   }
 };
+
 
 // Controller method to delete by id
 const deletePortDestinationById = async (req, res, next) => {

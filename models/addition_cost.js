@@ -20,6 +20,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(150),
         allowNull: true,
       },
+      reference_id: {
+        type: DataTypes.STRING(155),
+        allowNull: true,
+      },
+      reference_table_name: {
+        type: DataTypes.STRING(155),
+        allowNull: true,
+      },
       charge_amount: {
         type: DataTypes.STRING(50),
         allowNull: true,

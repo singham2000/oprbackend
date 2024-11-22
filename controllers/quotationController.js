@@ -61,6 +61,7 @@ const getQuotation = async (req, res, next) => {
           ],
         ],
         include: [
+          { model: db.additional_cost_freigth },
           {
             model: db.additional_cost,
             attributes: [
@@ -263,12 +264,25 @@ const getQuotation = async (req, res, next) => {
           ],
         ],
         include: [
-          {model: db.payment_milestone,   attributes: [
-            "quo_id",
-            "milestone",
-            "percentage",
-            "status",
-          ]},
+          {
+            model: db.rfq,
+            attributes: {
+              include: [
+                [
+                  sequelize.literal(
+                    "dbo.fn_GetPortDestinationName(port_of_destination)"
+                  ),
+                  "port_of_destination_name",
+                ],
+                [sequelize.literal("dbo.GetNamesFromIds(vendor_list)"), "vendors"],
+              ],
+            },
+          },
+          { model: db.additional_cost_freigth },
+          {
+            model: db.payment_milestone,
+            attributes: ["quo_id", "milestone", "percentage", "status"],
+          },
           {
             model: db.additional_cost,
             attributes: [
@@ -355,6 +369,7 @@ const getQuotation = async (req, res, next) => {
           ],
         ],
         include: [
+          { model: db.additional_cost_freigth },
           { model: db.quo_require_docs },
           {
             model: db.additional_cost,
@@ -531,6 +546,7 @@ const createQuotation = async (req, res, next) => {
       ItemData,
       payment_milestone,
       ReuireDocData,
+      FreightArray,
     } = quotation_details;
 
     // Generate quotation
@@ -593,6 +609,27 @@ const createQuotation = async (req, res, next) => {
     };
 
     await processCharges(); // Await the charge processing
+
+    const AddFreightCharges = async () => {
+      await Promise.all(
+        FreightArray.map(async (item) => {
+          await db.additional_cost_freigth.create({
+            quo_id: lastInsertedId,
+            quo_num: quotation_series,
+            number_container: item.no_of_container,
+            type_container: item.types_of_container,
+            rate: item.rate,
+            total_freigth: item.total_freight,
+            for_delivery_term: delivery_terms,
+            charges_by: "Supplier",
+            heading: "Freigth Charges",
+            status: 1,
+          });
+        })
+      );
+    };
+
+    await AddFreightCharges();
 
     const promises = payment_milestone.map(async (i) => {
       await db.payment_milestone.create(
@@ -706,8 +743,54 @@ const updateQuotationById = async (req, res, next) => {
 
 const updateAdditionalCost = async (req, res, next) => {
   try {
-    const { quo_id, additional_cost, quo_num, for_delivery_term } = req.body;
+    const {
+      quo_id,
+      additional_cost,
+      quo_num,
+      for_delivery_term,
+      FreightArray,
+    } = req.body;
     console.log(req.body);
+
+    const AddFreightCharges = async () => {
+      await Promise.all(
+        FreightArray.map(async (item) => {
+          if (item.isNew) {
+            await db.additional_cost_freigth.create({
+              quo_id: quo_id,
+              quo_num: quo_num,
+              number_container: item.no_of_container,
+              type_container: item.types_of_container,
+              rate: item.rate,
+              total_freigth: item.total_freight,
+              for_delivery_term: for_delivery_term,
+              charges_by: "Buyer",
+              heading: "Freigth Charges",
+              status: 1,
+            });
+          } else {
+            await db.additional_cost_freigth.update(
+              {
+                quo_id: quo_id,
+                quo_num: quo_num,
+                number_container: item.no_of_container,
+                type_container: item.types_of_container,
+                rate: item.rate,
+                total_freigth: item.total_freight,
+                for_delivery_term: for_delivery_term,
+              },
+              {
+                where: {
+                  additional_cost_freigth_id: item.additional_cost_freigth_id,
+                },
+              }
+            );
+          }
+        })
+      );
+    };
+
+    await AddFreightCharges();
 
     const results = await Promise.all(
       additional_cost.map(async (i) => {

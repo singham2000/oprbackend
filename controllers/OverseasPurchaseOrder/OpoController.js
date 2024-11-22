@@ -317,7 +317,7 @@ const createOpo = async (req, res, next) => {
 
     const result5 = await db.quotation_master.update(
       {
-        status: 20
+        status: 20,
       },
       {
         where: {
@@ -478,7 +478,6 @@ const getOpo = async (req, res, next) => {
                   exclude: ["item_img", "item_img_name"],
                 },
               }, // Include ItemMaster details
-              
             ],
           },
         ],
@@ -489,7 +488,6 @@ const getOpo = async (req, res, next) => {
         where: {
           status: {
             [Op.ne]: 0,
-
           },
         },
         attributes: [
@@ -508,12 +506,15 @@ const getOpo = async (req, res, next) => {
           "status",
         ],
         include: [
+          {model: db.Pfi_master,
+            include: [{model: db.form_m}, {model: db.letter_of_credit}]
+          },
           {
             model: db.quotation_master, // Include related quotation details
             include: [
+              {model: db.rfq, include: { model: db.port_destination_master },},
               {
                 model: db.additional_cost,
-                // attributes: ["charge_name", "charge_amount"],
               },
             ],
             attributes: [
@@ -533,7 +534,7 @@ const getOpo = async (req, res, next) => {
               "opr_lead_time",
               "port_of_loading",
               [
-                db.sequelize.literal("dbo.fn_GetDeliveryTerm(delivery_terms)"),
+                db.sequelize.literal("dbo.fn_GetDeliveryTerm(quotation_master.delivery_terms)"),
                 "delivery_terms_name", // Alias for delivery term
               ],
             ],
