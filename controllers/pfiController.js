@@ -84,23 +84,6 @@ const getPfi = async (req, res, next) => {
   }
 };
 
-// const getPfi = async (req, res, next) => {
-//     try {
-//         const result = await Pfi_master.findAll({
-//             include: [
-//                 { model: insurance },
-//                 { model: form_m },
-//                 { model: letter_of_credit },
-//                 { model: son_pfi }
-//             ]
-//         })
-//         res.status(200).json(result);
-//     } catch (error) {
-//         console.error('Error calling UDF:', error);
-//         throw error;
-//     }
-// };
-
 const getPfiData = async (req, res, next) => {
   try {
     const result = await Pfi_master.findAll({
@@ -117,8 +100,12 @@ const getPfiData = async (req, res, next) => {
         "updatedAt",
         "created_by",
         "updated_by",
+        "status",
+        "pfi_description",
       ],
       include: [
+        { model: db.commercial_invoice },
+        { model: db.VendorsBanksDetailsMaster },
         { model: insurance },
         { model: form_m },
         { model: letter_of_credit },
@@ -234,7 +221,7 @@ const getPfiData = async (req, res, next) => {
                 },
                 {
                   model: db.additional_cost,
-                  attributes: ["charge_name", "charge_amount", "heading"],
+                  // attributes: ["charge_name", "charge_amount", "heading"],
                 },
               ],
             },
@@ -243,6 +230,26 @@ const getPfiData = async (req, res, next) => {
       ],
     });
     res.status(200).json(result);
+  } catch (error) {
+    console.error("Error calling UDF:", error);
+    throw error;
+  }
+};
+
+const addBank = async (req, res, next) => {
+  let { pfi_id, v_banks_detail_id } = req.body;
+  try {
+    const result = await Pfi_master.update(
+      {
+        v_banks_detail_id: v_banks_detail_id,
+      },
+      {
+        where: {
+          pfi_id: pfi_id,
+        },
+      }
+    );
+    res.status(200).json("Bank Added SuccessFully");
   } catch (error) {
     console.error("Error calling UDF:", error);
     throw error;
@@ -304,6 +311,7 @@ const getPfibyid = async (req, res, next) => {
     next(err);
   }
 };
+
 // Controller method to Create po with status 1
 const genratePfi = async (req, res, next) => {
   let {
@@ -318,71 +326,190 @@ const genratePfi = async (req, res, next) => {
     shipment_mode,
     payment_mode,
     addAdditinalCostArr,
+    additinalCostDataArr,
+    additinalCostFreigthDataArr,
     quo_id,
     quo_num,
-    for_delivery_term
+    for_delivery_term,
+    totalFreigth,
   } = req.body;
+
   console.log(req.body);
+
+  const transaction = await db.sequelize.transaction(); // Start a new transaction
+
   try {
+    // Generate PFI number
     const doc_code = "PFI";
-    pfi_num = await generateSeries(doc_code);
+    const pfi_num = await generateSeries(doc_code);
 
-    //genrate po
-    const PFI_response = await Pfi_master.create({
-      pfi_num: pfi_num,
-      opo_selected_id: selectedOPOid,
-      opo_selected_num: selectedOPOnum,
-      remarks: remarks,
-      pfi_description: pfiDescription,
-      opo_nums,
-      opo_ids,
-      amount,
-      shipment_mode,
-      payment_mode,
-      status: 1,
+    // Generate PFI entry
+    const PFI_response = await Pfi_master.create(
+      {
+        pfi_num: pfi_num,
+        opo_selected_id: selectedOPOid,
+        opo_selected_num: selectedOPOnum,
+        remarks: remarks,
+        pfi_description: pfiDescription,
+        opo_nums,
+        opo_ids,
+        amount,
+        shipment_mode,
+        payment_mode,
+        status: 1,
+      },
+      { transaction }
+    ); // Pass the transaction object
+
+    const LastInsertedId = PFI_response.pfi_id;
+
+    // Handle freight data (update or create)
+    let freightData = await db.additional_cost.findAll({
+      where: {
+        quo_id: quo_id,
+        charges_by: "Buyer",
+        charge_name: "total_freight_charges",
+        heading: "Freight_Charges",
+      },
+      transaction, // Pass the transaction
     });
-    LastInsertedId = PFI_response.pfi_id;
 
-    if(addAdditinalCostArr.length > 0){
-      addAdditinalCostArr.map(async(i)=>(
-        await db.additional_cost.create({
-          reference_id: LastInsertedId,
-          quo_id,
-          quo_num,
-          charge_name: i.charge_name,
-          reference_table_name: 'pfi_master',
-          charge_amount: i.charge_amount,
-          charges_by: "Buyer",
-          heading: 'Add Charges in PFI',
-          for_delivery_term
+    await db.additional_cost.create(
+      {
+        reference_id: LastInsertedId,
+        quo_id,
+        quo_num,
+        charge_name: "total_freight_charges",
+        reference_table_name: "pfi_master",
+        charge_amount: totalFreigth,
+        charges_by: "Buyer",
+        heading: "Freight_Charges",
+        for_delivery_term,
+        status: 1,
+      },
+      { transaction }
+    ); // Pass the transaction
+
+    // Handle additional freight charges (create entries)
+    if (additinalCostFreigthDataArr.length > 0) {
+      await Promise.all(
+        additinalCostFreigthDataArr.map(async (item) => {
+          await db.additional_cost_freigth.create(
+            {
+              reference_id: LastInsertedId,
+              quo_id,
+              quo_num,
+              number_container: item.number_container,
+              type_container: item.type_container,
+              rate: item.rate,
+              total_freigth: item.line_total,
+              reference_table_name: "pfi_master",
+              charges_by: "Buyer",
+              heading: "Freigth Charges",
+              for_delivery_term,
+              status: 1,
+            },
+            { transaction }
+          ); // Pass the transaction
         })
-      ))
+      );
     }
 
+    // Handle additional cost data (create entries)
+    let filterAdditinalCostDataArr = additinalCostDataArr.filter(
+      (i) => i.add_amount > 0 && i.charge_name !== "Total"
+    );
+    if (filterAdditinalCostDataArr.length > 0) {
+      await Promise.all(
+        filterAdditinalCostDataArr.map(async (i) => {
+          await db.additional_cost.create(
+            {
+              reference_id: LastInsertedId,
+              quo_id,
+              quo_num,
+              charge_name: i.charge_name,
+              reference_table_name: "pfi_master",
+              charge_amount: i.add_amount,
+              charges_by: "Buyer",
+              heading: i.heading,
+              for_delivery_term,
+              status: 1,
+            },
+            { transaction }
+          ); // Pass the transaction
+        })
+      );
+    }
+
+    // Handle additional charges (create entries)
+    if (addAdditinalCostArr.length > 0) {
+      await Promise.all(
+        addAdditinalCostArr.map(async (i) => {
+          await db.additional_cost.create(
+            {
+              reference_id: LastInsertedId,
+              quo_id,
+              quo_num,
+              charge_name: i.charge_name,
+              reference_table_name: "pfi_master",
+              charge_amount: i.charge_amount,
+              charges_by: "Buyer",
+              heading: "Add Charges in PFI",
+              for_delivery_term,
+              status: 1,
+            },
+            { transaction }
+          ); // Pass the transaction
+        })
+      );
+    }
+
+    // Create PFI line items (bulk insert)
     const pfiItems = await Promise.all(
       items.map(async (item) => {
         console.log("item.line_total_margin", item.line_total_margin);
 
-        const result2 = await Pfi_line_items.create({
-          pfi_id: LastInsertedId, // Link the OPO item to the newly created OPO
-          margin_percent: item.margin_percent,
-          line_total: item.line_total_margin,
-          opo_qty: item.quote_qtd,
-          opo_item_id: item.opo_items_id,
-          ...item, // Spread the item properties
-          status: 1, // Active status
-        });
+        const result2 = await Pfi_line_items.create(
+          {
+            pfi_id: LastInsertedId, // Link the OPO item to the newly created OPO
+            margin_percent: item.margin_percent,
+            line_total: item.line_total_margin,
+            opo_qty: item.opr_qty,
+            rate: item.rate_with_margin,
+            opo_item_id: item.opo_items_id,
+            no_packs: item.no_packs, // Spread the item properties
+            pack_size: item.pack_size,
+            pack_type: item.pack_type,
+            item_id: item.item_id,
+            item_code: item.item_code,
+            item_name: item.item_name,
+            item_type: item.item_type,
+            remarks: item.remarks,
+            no_packs: item.no_packs,
+            status: 1, // Active status
+          },
+          { transaction }
+        ); // Pass the transaction
         return result2; // Return the created item
       })
     );
 
-    // const response = await Pfi_line_items.bulkCreate(pfi_items);
+    await db.opo_master.update(
+      { status: 5 },
+      { where: { opo_master_id: selectedOPOid } }
+    );
+
+    // Commit the transaction if everything is successful
+    await transaction.commit();
+
     res.status(201).json({ message: "Pfi Submit Successfully" });
   } catch (err) {
-    next(err);
+    // Rollback the transaction in case of an error
+    await transaction.rollback();
+    next(err); // Pass the error to the next error handler
   }
 };
-// get opr item company list by po no
+
 const getcompanylistPoNumber = async (req, res, next) => {
   try {
     let { po_id } = req.query;
@@ -414,4 +541,5 @@ module.exports = {
   getPfibyPoid,
   getPfibyid,
   getPfiData,
+  addBank,
 };

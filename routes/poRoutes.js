@@ -13,7 +13,7 @@ router
     .post('/create', POController.generatePo)
     .put('/update', POController.updatePOById)
     .delete('/delete', POController.deletePOById)
-    .post('/accept', POController.AcceptPO)
+    .post('/accept',  upload.any(), POController.AcceptPO)
     .post('/completecnfrm', upload.any(), setAuditFields, POController.completePo)
     .post('/paymentconfirm', POController.confimPoPaymentsbyVendor)
     .post('/finalpaymentconfirm', POController.confimPoFinalPaymentsbyVendor)

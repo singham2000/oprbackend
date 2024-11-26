@@ -9,6 +9,8 @@ const { generateSeries } = require("../../utilites/genrateSeries");
 
 // Create a new shippment_advise_master
 const createShippingAdviseTerm = async (req, res, next) => {
+  const transaction = await db.sequelize.transaction(); // Start a transaction
+
   try {
     console.log(req.body);
     console.log("file: ", req.files);
@@ -36,74 +38,185 @@ const createShippingAdviseTerm = async (req, res, next) => {
       free_days_time,
       freight,
       eta,
-      quo_id,
       additional_information,
       doc_list,
       cpackageDetail,
       grnData,
+
+      addAdditinalCostArr,
+      additinalCostDataArr,
+      additinalCostFreigthDataArr,
+      quo_id,
+      quo_num,
+      for_delivery_term,
+      totalFreigth,
     } = req.body;
 
-    const result = await shippment_advise_master.create({
-      po_id,
-      po_num,
-      shipment_status,
-      invoice_amount,
-      bl_awb_no,
-      bl_awb_date,
-      type_of_bl,
-      shipment_type,
-      cbm_information,
-      free_days,
-      shipping_vehicle,
-      vehicle_description,
-      port_of_loading,
-      port_of_discharge,
-      final_destination,
-      goods_description,
-      shipper_name,
-      consignee_name,
-      notify_name,
-      free_days_time,
-      freight,
-      eta,
-      status: 1,
-    });
+    // Step 1: Create the shipment advise
+    const result = await shippment_advise_master.create(
+      {
+        po_id,
+        po_num,
+        shipment_status,
+        invoice_amount,
+        bl_awb_no,
+        bl_awb_date,
+        type_of_bl,
+        shipment_type,
+        cbm_information,
+        free_days,
+        shipping_vehicle,
+        vehicle_description,
+        port_of_loading,
+        port_of_discharge,
+        final_destination,
+        goods_description,
+        shipper_name,
+        consignee_name,
+        notify_name,
+        free_days_time,
+        freight,
+        eta,
+        status: 1,
+      },
+      { transaction }
+    ); // Pass the transaction
 
     const lastInsertedId = result.shippment_advise_id;
 
-    if (additional_information && additional_information.length > 0) {
+    // Step 2: Add additional cost for freight
+    await db.additional_cost.create(
+      {
+        reference_id: lastInsertedId,
+        quo_id,
+        quo_num,
+        charge_name: "total_freight_charges",
+        reference_table_name: "shippment_advise_master",
+        charge_amount: totalFreigth,
+        charges_by: "Supplier",
+        heading: "Freight_Charges",
+        for_delivery_term,
+        status: 1,
+      },
+      { transaction }
+    ); // Pass the transaction
+
+    // Step 3: Handle additional freight charges
+    if (additinalCostFreigthDataArr?.length > 0) {
+      await Promise.all(
+        additinalCostFreigthDataArr.map(async (item) => {
+          await db.additional_cost_freigth.create(
+            {
+              reference_id: lastInsertedId,
+              quo_id,
+              quo_num,
+              number_container: item.number_container,
+              type_container: item.type_container,
+              rate: item.rate,
+              total_freigth: item.line_total,
+              reference_table_name: "shippment_advise_master",
+              charges_by: "Supplier",
+              heading: "Freigth Charges",
+              for_delivery_term,
+              status: 1,
+            },
+            { transaction }
+          ); // Pass the transaction
+        })
+      );
+    }
+
+    // Step 4: Handle additional costs
+    let filterAdditinalCostDataArr = additinalCostDataArr?.filter(
+      (i) => i.add_amount > 0 && i.charge_name !== "Total"
+    );
+    if (filterAdditinalCostDataArr?.length > 0) {
+      await Promise.all(
+        filterAdditinalCostDataArr.map(async (i) => {
+          await db.additional_cost.create(
+            {
+              reference_id: lastInsertedId,
+              quo_id,
+              quo_num,
+              charge_name: i.charge_name,
+              reference_table_name: "shippment_advise_master",
+              charge_amount: i.add_amount,
+              charges_by: "Supplier",
+              heading: i.heading,
+              for_delivery_term,
+              status: 1,
+            },
+            { transaction }
+          ); // Pass the transaction
+        })
+      );
+    }
+
+    // Step 5: Handle additional charges in shipping advise
+    if (addAdditinalCostArr?.length > 0) {
+      await Promise.all(
+        addAdditinalCostArr.map(async (i) => {
+          await db.additional_cost.create(
+            {
+              reference_id: lastInsertedId,
+              quo_id,
+              quo_num,
+              charge_name: i.charge_name,
+              reference_table_name: "shippment_advise_master",
+              charge_amount: i.charge_amount,
+              charges_by: "Supplier",
+              heading: "Add Charges in Shipping Advise",
+              for_delivery_term,
+              status: 1,
+            },
+            { transaction }
+          ); // Pass the transaction
+        })
+      );
+    }
+
+    // Step 6: Handle additional instructions (if any)
+    if (additional_information && additional_information?.length > 0) {
       await Promise.all(
         additional_information.map(async (item) => {
-          await shippment_advise_additional_instruction.create({
-            shippment_advise_id: lastInsertedId,
-            po_id: po_id,
-            po_num: po_num,
-            other: item.other,
-            status: 1,
-          });
+          await shippment_advise_additional_instruction.create(
+            {
+              shippment_advise_id: lastInsertedId,
+              po_id: po_id,
+              po_num: po_num,
+              other: item.other,
+              status: 1,
+            },
+            { transaction }
+          ); // Pass the transaction
         })
       );
     }
 
-    if (grnData?.po_item_id_lists && grnData?.po_item_id_lists.length > 0) {
+    // Step 7: Handle GRN data (if any)
+    if (grnData?.po_item_id_lists && grnData?.po_item_id_lists?.length > 0) {
       await Promise.all(
         grnData?.po_item_id_lists.map(async (item) => {
-          await db.shipment_advise_items.create({
-            shipment_advise_id: lastInsertedId,
-            po_id: po_id,
-            po_num: po_num,
-            item_id: item.item_id,
-            po_item_id: item.po_item_id,
-            no_of_packs: item.no_of_packs,
-            pack_size: item.pack_size,
-            pack_type: item.pack_type,
-            quantity: item.grn_qty,
-            status: 1,
-          });
+          await db.shipment_advise_items.create(
+            {
+              shipment_advise_id: lastInsertedId,
+              po_id: po_id,
+              po_num: po_num,
+              item_id: item.item_id,
+              po_item_id: item.po_item_id,
+              pack_size: item.pack_size,
+              pack_type: item.pack_type,
+              quantity: item.grn_qty,
+              no_of_packs: Number(item.pack_size) * Number(item.grn_qty),
+              status: 1,
+            },
+            { transaction }
+          ); // Pass the transaction
         })
       );
     }
 
+    // Step 8: Handle document uploads
     const updatedShippingAdviseDocs = doc_list.map((data, index) => ({
       quotation_id: quo_id,
       doc_id: lastInsertedId,
@@ -114,53 +227,62 @@ const createShippingAdviseTerm = async (req, res, next) => {
       q_doc_file: req.files[index]?.buffer.toString("base64"),
     }));
 
-    await db.QuoDoc.bulkCreate(updatedShippingAdviseDocs);
+    await db.QuoDoc.bulkCreate(updatedShippingAdviseDocs, { transaction }); // Pass the transaction
 
-    //Add
-    // Step 1: Create containers
+    // Step 9: Create containers
     const containerPromises = cpackageDetail.map(async (container) => {
-      const createdContainer = await db.add_shippment_container.create({
-        container_no: container.container_no,
-        container_type: container.container_type,
-        container_size: container.container_size,
-        packet_uom: container.p_uom,
-        gross_weight: container.total_gross_wt,
-        net_weight: container.total_net_wt,
-        po_id: po_id,
-        po_num: po_num,
-        status: 1,
-      });
-      console.log(createdContainer.add_shippment_container_id);
+      const createdContainer = await db.add_shippment_container.create(
+        {
+          container_no: container.container_no,
+          container_type: container.container_type,
+          container_size: container.container_size,
+          packet_uom: container.p_uom,
+          gross_weight: container.total_gross_wt,
+          net_weight: container.total_net_wt,
+          po_id: po_id,
+          po_num: po_num,
+          status: 1,
+        },
+        { transaction }
+      ); // Pass the transaction
       const lastInsertedId = createdContainer.add_shippment_container_id;
 
-      // Create details for each container
       const detailPromises = container.packing_info.map(async (detail) => {
-        await db.shippment_container_detail.create({
-          add_shippment_container_id: lastInsertedId,
-          packet_qty: detail.p_qty,
-          no_package: detail.no_package,
-          packet_weight: detail.p_net_wt,
-          status: 1,
-        });
+        await db.shippment_container_detail.create(
+          {
+            add_shippment_container_id: lastInsertedId,
+            packet_qty: detail.p_qty,
+            no_package: detail.no_package,
+            packet_weight: detail.p_net_wt,
+            status: 1,
+          },
+          { transaction }
+        ); // Pass the transaction
       });
       await Promise.all(detailPromises);
     });
 
-    // Wait for all containers and their details to be created
     await Promise.all(containerPromises);
 
+    // Step 10: Update PO status
     await db.po_master.update(
       {
         status: 11,
       },
       {
         where: { po_id },
+        transaction, // Pass the transaction
       }
     );
 
+    // Commit transaction if all operations are successful
+    await transaction.commit();
+
     return res.status(201).json({ message: "Submit Successfully" });
   } catch (err) {
-    console.error("Error creating shippment_advise_master term:", err);
+    // Rollback transaction if any error occurs
+    console.error("Error creating shipment advise:", err);
+    await transaction.rollback();
     next(err);
   }
 };
@@ -237,7 +359,39 @@ const createCommercialInvoice = async (req, res, next) => {
 
 const createGrn = async (req, res, next) => {
   try {
-    const { shippment_advise_id, pfi_id, po_id } = req.body;
+    const { shippment_advise_id, pfi_id, po_id, ItemDataArr } = req.body;
+    console.log("ABC", req.body);
+
+    // if (ItemDataArr?.length > 0) {
+    //   await Promise.all(
+    //     db.ItemDataArr?.map(async (item) => {
+    //       await db.shipment_advise_items.update(
+    //         {
+    //           grn_qty: item.grn_qty,
+    //         },
+    //         {
+    //           shipment_advise_item_id: item.shipment_advise_item_id,
+    //         }
+    //       );
+    //     })
+    //   );
+    // }
+
+    if (ItemDataArr?.length > 0) {
+      await Promise.all(
+        ItemDataArr.map(async (item) => {
+          await db.shipment_advise_items.update(
+            {
+              grn_qty: item.grn_qty,
+            },
+            {
+              where: {shipment_advise_item_id: item.shipment_advise_item_id},
+            }
+          );
+        })
+      );
+    }
+
     await shippment_advise_master.update(
       {
         status: 5,

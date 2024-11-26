@@ -51,7 +51,7 @@ const getAllBankDropDn = async (req, res) => {
   try {
     // Find all vendors
     const banksdropdn = await VendorsBanksDetailsMaster.findAll({
-      attributes: ["v_banks_detail_id", "bank_name"],
+      // attributes: ["v_banks_detail_id", "bank_name"],
     });
     res.json(banksdropdn);
   } catch (err) {

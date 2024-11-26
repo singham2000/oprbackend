@@ -14,6 +14,7 @@ router
     .get('/pfibypoid', pfiController.getPfibyPoid)
     .get('/pfibyid', pfiController.getPfibyid)
     .post('/create', setAuditFields, pfiController.genratePfi)
+    .post('/addbank', setAuditFields, pfiController.addBank)
     .get('/create2', setAuditFields, pfiController.genratePfi2)
 router
     .post('/create', setAuditFields, newpfiController.create)

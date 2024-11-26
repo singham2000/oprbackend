@@ -64,6 +64,10 @@ module.exports = (sequelize, DataTypes) => {
           type: DataTypes.INTEGER,
           allowNull: true, // Nullable
         },
+        grn_qty: {
+          type: DataTypes.DECIMAL(18, 2),
+          allowNull: true, // Nullable
+        },
         pack_type: {
           type: DataTypes.STRING(50),
           allowNull: true, // Nullable

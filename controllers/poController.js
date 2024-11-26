@@ -1,6 +1,6 @@
 // const { po_master } = ('../models');
 const db = require("../models");
-const { sequelize, document: Document } = db;
+const { sequelize, document: Document, QuoDoc } = db;
 const { po_master, opo_master, po_items } = db;
 const formattedDateTime = require("../middleware/time");
 const { Op } = require("sequelize");
@@ -80,6 +80,29 @@ const getPO = async (req, res, next) => {
         include: [
           {
             model: db.add_shippment_container,
+            attributes: [
+              "add_shippment_container_id",
+              "po_id",
+              "po_num",
+              "container_no",
+              "container_type",
+              "container_size",
+              "packet_uom",
+              "net_weight",
+              "gross_weight",
+              "package_detail",
+              "created_on",
+              "created_by",
+              "updated_on",
+              "updated_by",
+              "status",
+              [
+                db.sequelize.literal(
+                  "dbo.fn_GetShippingContainerType(container_type)"
+                ),
+                "container_type_name",
+              ],
+            ],
             include: [{ model: db.shippment_container_detail }],
           },
           { model: db.shippment_instructions },
@@ -98,7 +121,16 @@ const getPO = async (req, res, next) => {
               {
                 model: db.Pfi_master,
                 include: [
-                  { model: db.commercial_invoice, attributes: ["commercial_invoice_id", "ci_num", "pfi_id", "pfi_num"] },
+                  {
+                    model: db.commercial_invoice,
+                    // attributes: [
+                    //   "commercial_invoice_id",
+                    //   "ci_num",
+                    //   "pfi_id",
+                    //   "pfi_num",
+                    // ],
+                  },
+                  { model: db.VendorsBanksDetailsMaster },
                   { model: db.insurance },
                   { model: db.form_m },
                   { model: db.letter_of_credit },
@@ -404,7 +436,8 @@ const po_email_conformation = async (req, res, next) => {
 
 const AcceptPO = async (req, res, next) => {
   try {
-    const { status, po_id, remarks } = req.body;
+    const { status, po_id, remarks, fileArray, po_num } = req.body;
+    console.log("fileArray", fileArray);
     const result = await po_master.update(
       {
         acceptance_remarks: remarks,
@@ -417,6 +450,25 @@ const AcceptPO = async (req, res, next) => {
         },
       }
     );
+
+    if (fileArray.length > 0) {
+      const SubmitDoc = async () => {
+        const promises = fileArray.map(async (item, index) => {
+          await QuoDoc.create({
+            q_doc_name: item.name,
+            q_doc_remarks: item.remark,
+            q_doc_filename: req.files[index]?.originalname,
+            q_doc_file: req.files[index]?.buffer.toString("base64"),
+            doc_id: po_id,
+            doc_num: po_num,
+            module: "po_master",
+            quotation_id: 3111,
+          });
+        });
+        await Promise.all(promises);
+      };
+      await SubmitDoc();
+    }
 
     res.status(201).json({ message: "Updated Successfully" });
   } catch (err) {

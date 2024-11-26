@@ -1,9 +1,9 @@
 //This controller for Additional Cost
 // const { additional_cost } = ('../models');
 const db = require("../models");
-const { additional_cost } = db;
+const { additional_cost, additional_cost_freigth } = db;
 const formattedDateTime = require("../middleware/time");
-const { Op } = require("sequelize");
+const { Op, Sequelize } = require("sequelize");
 
 // Controller method to Create AdditionalCost
 const createAdditionalCost = async (req, res, next) => {
@@ -48,24 +48,94 @@ const createAdditionalCost = async (req, res, next) => {
 
 const getAdditionalCostByQuoIdCompressData = async (req, res, next) => {
   const quo_id = req.query.quo_id;
+  const pfi_id = req.query.pfi_id;
   try {
-    const result = await additional_cost.findAll({
-      attributes: [
-        'heading',
-        'charge_name',
-        [db.sequelize.fn('SUM', db.sequelize.literal("CASE WHEN charges_by = 'Supplier' THEN charge_amount ELSE 0 END")), 'supp_charges'],
-        [db.sequelize.fn('SUM', db.sequelize.literal("CASE WHEN charges_by = 'Buyer' THEN charge_amount ELSE 0 END")), 'buyer_charges'],
-      ],
-      where: {
-        quo_id: quo_id,
-      },
-      group: ['heading', 'charge_name'], // Group by heading and charge_name
-      order: [
-        ['heading', 'ASC'],  // Order by heading in ascending order
-        ['charge_name', 'ASC'] // Order by charge_name in ascending order
-      ]
-    });
+    if (quo_id) {
+      console.log("ABC");
+      const result = await additional_cost.findAll({
+        attributes: [
+          "heading",
+          "charge_name",
+          [
+            db.sequelize.fn(
+              "SUM",
+              db.sequelize.literal(
+                "CASE WHEN charges_by = 'Supplier' THEN charge_amount ELSE 0 END"
+              )
+            ),
+            "supp_charges",
+          ],
+          [
+            db.sequelize.fn(
+              "SUM",
+              db.sequelize.literal(
+                "CASE WHEN charges_by = 'Buyer' THEN charge_amount ELSE 0 END"
+              )
+            ),
+            "buyer_charges",
+          ],
+        ],
+        where: {
+          quo_id: quo_id,
+          reference_id: {
+            [Sequelize.Op.eq]: null, // Checks for non-null values
+          },
+        },
+        group: ["heading", "charge_name"], // Group by heading and charge_name
+        order: [
+          ["heading", "ASC"], // Order by heading in ascending order
+          ["charge_name", "ASC"], // Order by charge_name in ascending order
+        ],
+      });
       res.status(200).json(result);
+    } else if (pfi_id) {
+      console.log("ABC");
+      const result = await additional_cost.findAll({
+        where: {
+          reference_id: pfi_id,
+          reference_table_name: "pfi_master",
+        },
+        order: [
+          ["heading", "ASC"], // Order by heading in ascending order
+          ["charge_name", "ASC"], // Order by charge_name in ascending order
+        ],
+      });
+      res.status(200).json(result);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getFreightAdditionalCostByQuoId = async (req, res, next) => {
+  const quo_id = req.query.quo_id;
+  const pfi_id = req.query.pfi_id;
+  try {
+    if (quo_id) {
+      const result = await additional_cost_freigth.findAll({
+        where: {
+          quo_id: quo_id,
+          reference_id: {
+            [Sequelize.Op.eq]: null, // Checks for non-null values
+          },
+        },
+        order: [
+          ["heading", "ASC"], // Order by heading in ascending order
+        ],
+      });
+      res.status(200).json(result);
+    }else if(pfi_id){
+      const result = await additional_cost_freigth.findAll({
+        where: {
+          reference_table_name: "pfi_master",
+          reference_id: pfi_id
+        },
+        order: [
+          ["heading", "ASC"], // Order by heading in ascending order
+        ],
+      });
+      res.status(200).json(result);
+    }
   } catch (err) {
     next(err);
   }
@@ -152,5 +222,6 @@ additionalCostController = {
   deleteAdditionalCostById,
   createAdditionalCost,
   updateAdditionalCostById,
+  getFreightAdditionalCostByQuoId,
 };
 module.exports = additionalCostController;

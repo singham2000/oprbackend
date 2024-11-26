@@ -141,11 +141,6 @@ const getCommercialInvoiceTerms = async (req, res, next) => {
               { model: govt_charges}
             ]
           }
-          ,{
-            model: operations_son,            
-          }
-        
-        
         ],
         order: [["commercial_invoice_id", "DESC"]],
       });

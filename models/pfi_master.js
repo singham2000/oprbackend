@@ -21,6 +21,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: true
         },
+        v_banks_detail_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
         company_id: {
             type: DataTypes.INTEGER,
             allowNull: true
@@ -50,6 +54,10 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         },
         payment_mode: {
+            type: DataTypes.STRING(255),
+            allowNull: true
+        },
+        approve_remarks: {
             type: DataTypes.STRING(255),
             allowNull: true
         },
@@ -272,6 +280,9 @@ module.exports = (sequelize, DataTypes) => {
         });
         pfi_master.hasOne(models.commercial_invoice, {
             foreignKey: 'pfi_id',  // Ensure this matches the foreign key in insuranc
+        });
+        pfi_master.belongsTo(models.VendorsBanksDetailsMaster, {
+            foreignKey: 'v_banks_detail_id',  // Ensure this matches the foreign key in insuranc
         });
         pfi_master.hasMany(models.Pfi_line_items, { foreignKey: 'pfi_id' });
     };

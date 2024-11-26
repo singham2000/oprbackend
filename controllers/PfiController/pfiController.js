@@ -61,8 +61,8 @@ exports.cnfrmpfilist = async (req, res) => {
 // Retrieve all PFI Master records
 exports.approvePfi = async (req, res) => {
     try {
-        let { pfi_id } = req.body
-        const updatedpfiMasters = await PfiMaster.update({ status: 2 }, {
+        let { pfi_id, remarks } = req.body
+        const updatedpfiMasters = await PfiMaster.update({ status: 2, approve_remarks: remarks }, {
             where: { pfi_id }
         });
         res.status(200).json({ status: 'success', data: updatedpfiMasters, message: "Pfi Approved Sucessfully" });

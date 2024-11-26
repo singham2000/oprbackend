@@ -10,6 +10,7 @@ const setAuditFields = require('../middleware/setAuditFields.js');
 router
     .get('/', additionalCostController.getAdditionalCost)
     .get('/compressdata', additionalCostController.getAdditionalCostByQuoIdCompressData)
+    .get('/freight', additionalCostController.getFreightAdditionalCostByQuoId)
     .post('/', setAuditFields, additionalCostController.createAdditionalCost)
     .put('/', setAuditFields, additionalCostController.updateAdditionalCostById)
     .delete('/', setAuditFields, additionalCostController.deleteAdditionalCostById)
