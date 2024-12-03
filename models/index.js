@@ -195,7 +195,6 @@ db.PaymentTermsMilesStones = require("./Payments/PaymentsTermsMileStones.js")(se
 db.OpoMaster = require("./Opo/opo_master.js")(sequelize, DataTypes);
 db.OpoItems = require("./Opo/opo_items.js")(sequelize, DataTypes);
 
-
 //PFI
 db.commercial_invoice = require("./Pfi/CommercialInvoice")(
     sequelize,
@@ -206,7 +205,14 @@ db.letter_of_credit = require("./Pfi/LetterOfCredit")(sequelize, DataTypes);
 db.son_pfi = require("./Pfi/SonPfi")(sequelize, DataTypes);
 db.nafdac_pfi = require("./Pfi/NafdacPfi")(sequelize, DataTypes);
 db.paar = require("./Pfi/Paar")(sequelize, DataTypes);
-
+db.soncap_master = require("./Pfi/SoncapModel.js")(sequelize, DataTypes);
+db.other_govt_charges = require("./Pfi/OtherGovtChargesModel")(sequelize, DataTypes);
+db.nafdac_inspection_expense = require("./Pfi/NafdacInspectionExpenseModel")(sequelize, DataTypes);
+db.nafdac_clearance = require("./Pfi/NafdacClearingModel")(sequelize, DataTypes);
+db.nafdac_penalty = require("./Pfi/NafdacPenalty.js")(sequelize, DataTypes);
+db.nafdac_penalty_item = require("./Pfi/NafdacPenaltyItems")(sequelize, DataTypes);
+db.paar_amendment_request = require("./Pfi/PaarAmendmentRequest")(sequelize, DataTypes);
+db.custom_clearance = require("./Pfi/CustomClearanceModel.js")(sequelize, DataTypes);
 
 //Operations
 db.operations_nafdac = require("./Opreations/OperationsNafdac")(
@@ -279,7 +285,8 @@ db.opo_items = require('./OverseasPurchaseOrder/OpoItems.js')(sequelize, DataTyp
 db.PackageTypeMaster = require('./Packing/PackageType.js')(sequelize, DataTypes);
 
 //Shipping
-db.ShippingMaster = require('./Shipping/shiping_master.js')(sequelize, DataTypes);
+db.ci_doc_movement_master = require('./Shipping/DocMovementMaster')(sequelize, DataTypes);
+db.ci_shipping_doc_movement_dt = require('./Shipping/CiShippingDocMovementDt.js')(sequelize, DataTypes);
 db.Container = require('./Shipping/container.js')(sequelize, DataTypes);
 db.VesselDetails = require('./Shipping/vessel_details.js')(sequelize, DataTypes);
 db.ShippingExpenses = require('./Shipping/shipping_expensesModal.js')(sequelize, DataTypes);

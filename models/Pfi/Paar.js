@@ -16,6 +16,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(50),
         allowNull: true,
       },
+      ci_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      ci_num: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
       form_m_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
@@ -64,6 +72,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(255),
         allowNull: true,
       },
+      cfr_invoice_amount: {
+        type: DataTypes.DECIMAL(18, 2),
+        allowNull: true,
+      },
+      update_hsn_code: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
       created_on: {
         type: DataTypes.DATE,
         allowNull: true,
@@ -95,10 +111,10 @@ module.exports = (sequelize, DataTypes) => {
     paar.belongsTo(models.Pfi_master, {
       foreignKey: "pfi_id",
     });
-  }
-  
-
-
+    paar.hasMany(models.paar_amendment_request, {
+      foreignKey: "paar_id",
+    });
+  };
 
   return paar;
 };

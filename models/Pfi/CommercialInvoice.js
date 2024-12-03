@@ -181,6 +181,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(50),
         allowNull: true,
       },
+      ci_amount: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: true,
+      },
     },
     {
       tableName: "commercial_invoice",
@@ -191,6 +195,24 @@ module.exports = (sequelize, DataTypes) => {
   commercial_invoice.associate = (models) => {
     commercial_invoice.belongsTo(models.Pfi_master, {
       foreignKey: "pfi_id",
+    });
+    commercial_invoice.hasOne(models.soncap_master, {
+      foreignKey: "ci_id",
+    });
+    commercial_invoice.hasOne(models.ci_doc_movement_master, {
+      foreignKey: "ci_id",
+    });
+    commercial_invoice.hasOne(models.other_govt_charges, {
+      foreignKey: "ci_id",
+    });
+    commercial_invoice.hasOne(models.nafdac_clearance, {
+      foreignKey: "ci_id",
+    });
+    commercial_invoice.hasOne(models.nafdac_inspection_expense, {
+      foreignKey: "ci_id",
+    });
+    commercial_invoice.hasOne(models.nafdac_penalty, {
+      foreignKey: "ci_id",
     });
     commercial_invoice.hasMany(models.operations_son, {
       foreignKey: 'ci_id',

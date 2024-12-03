@@ -289,8 +289,15 @@ const createShippingAdviseTerm = async (req, res, next) => {
 
 const createCommercialInvoice = async (req, res, next) => {
   try {
-    const { shippment_advise_id, pfi_id, pfi_num, po_id, po_num, item_list } =
-      req.body;
+    const {
+      shippment_advise_id,
+      pfi_id,
+      pfi_num,
+      po_id,
+      po_num,
+      item_list,
+      ci_amount,
+    } = req.body;
     console.log("req.body", req.body);
     console.log("item_list", item_list);
     const ci_series = await generateSeries("INVOICE");
@@ -299,6 +306,7 @@ const createCommercialInvoice = async (req, res, next) => {
       pfi_id: pfi_id,
       pfi_num: pfi_num,
       ci_num: ci_series,
+      ci_amount,
       status: 1,
     });
     let lastInsertedId = result.commercial_invoice_id;
@@ -309,6 +317,7 @@ const createCommercialInvoice = async (req, res, next) => {
           {
             ci_id: lastInsertedId,
             ci_rate: item.ci_rate,
+            ci_line_total: item.line_total,
           },
           {
             where: {
@@ -385,7 +394,7 @@ const createGrn = async (req, res, next) => {
               grn_qty: item.grn_qty,
             },
             {
-              where: {shipment_advise_item_id: item.shipment_advise_item_id},
+              where: { shipment_advise_item_id: item.shipment_advise_item_id },
             }
           );
         })
@@ -457,6 +466,9 @@ const getShippingAdviseTypeByID = async (req, res, next) => {
         "po_item_id",
         "ci_id",
         "ci_rate",
+        "grn_qty",
+        "ci_line_total",
+        "hsn_code",
         [db.sequelize.col("shipment_advise_items.pack_type"), "pack_type"],
         [
           db.sequelize.literal(

@@ -13,6 +13,12 @@ router
     uploadMulti.any(),
     PaarController.createPaarTerm
   )
+  .post(
+    "/revise/request",
+    setAuditFields,
+    uploadMulti.any(),
+    PaarController.createPaarRequest
+  )
   .put("/", setAuditFields, PaarController.updatePaarTerm)
   .delete("/", PaarController.deletePaarTerm);
 

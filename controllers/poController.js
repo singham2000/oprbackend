@@ -96,6 +96,8 @@ const getPO = async (req, res, next) => {
               "updated_on",
               "updated_by",
               "status",
+              "soncap_amount",
+              "bl_num",
               [
                 db.sequelize.literal(
                   "dbo.fn_GetShippingContainerType(container_type)"
@@ -129,17 +131,37 @@ const getPO = async (req, res, next) => {
                     //   "pfi_id",
                     //   "pfi_num",
                     // ],
+                    include: [
+                      {
+                        model: db.ci_doc_movement_master,
+                        include: [{ model: db.ci_shipping_doc_movement_dt }],
+                      },
+                      { model: db.soncap_master },
+                      { model: db.other_govt_charges },
+                      { model: db.nafdac_inspection_expense },
+                      { model: db.nafdac_clearance },
+                      {
+                        model: db.nafdac_penalty,
+                        include: [{ model: db.nafdac_penalty_item }],
+                      },
+                    ],
                   },
+                  { model: db.Pfi_line_items },
                   { model: db.VendorsBanksDetailsMaster },
                   { model: db.insurance },
                   { model: db.form_m },
                   { model: db.letter_of_credit },
                   { model: db.son_pfi },
                   { model: db.assessment },
-                  { model: db.ShippingMaster },
                   { model: db.CompanyMaster },
                   { model: db.operations_nafdac },
-                  { model: db.paar },
+                  {
+                    model: db.paar,
+                    // where: {
+                    //   status: 1,
+                    // },
+                    include: [{ model: db.paar_amendment_request }],
+                  },
                   { model: db.operations_nafdac_master },
                   { model: db.govt_charges },
                   { model: db.nafdac_pfi },

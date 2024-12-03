@@ -44,6 +44,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(155),
         allowNull: true,
       },
+      bl_num: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
+      soncap_amount: {
+        type: DataTypes.DECIMAL(18, 2),
+        allowNull: true,
+      },
       created_on: {
         type: DataTypes.DATE,
         allowNull: true,

@@ -1,110 +1,200 @@
 const { where } = require("sequelize");
-const {
-   ShippingMaster, 
-   Pfi_master, 
-   commercial_invoice, 
-   insurance,
-   form_m,
-   letter_of_credit,
-   son_pfi
-  } = require("../../models"); // Adjust the path as necessary
-
-
-
-
+const db = require("../../models");
 
 //add shipping entry
-exports.addshippingEntry =  async (req,res)=>{
-  try{
-    const { pfi_id, ...fields } = req.body;
+exports.addshippingEntry = async (req, res) => {
+  try {
+    const { ci_id, pfi_id, pfi_no, ci_num, oblData, activity_authority } =
+      req.body;
 
-    //chek is pfi_exist or not
-      // Check if the pfi_id already exists
-      const existingRecord = await ShippingMaster.findOne({
-        where: { pfi_id }
+    let lastInsertedValue = 0;
+    const result = await db.ci_doc_movement_master.findOne({
+      where: {
+        ci_id: ci_id,
+        pfi_id,
+      },
+    });
+
+    if (result) {
+      lastInsertedValue = result.shipping_entry_id;
+    } else {
+      let response = await db.ci_doc_movement_master.create({
+        ci_id,
+        pfi_id,
+        pfi_num: pfi_no,
+        ci_num,
+        status: 1,
+      });
+      lastInsertedValue = response.shipping_entry_id;
+    }
+    for (let key in oblData) {
+      let exisitingDt = await db.ci_shipping_doc_movement_dt.findAll({
+        where: {
+          ci_id,
+          pfi_id,
+          activity_name: key,
+        },
       });
 
-      if (existingRecord) {
-        await ShippingMaster.update(req.body,{
-          where:{pfi_id}
+      if (exisitingDt.length > 0) {
+        await db.ci_shipping_doc_movement_dt.update(
+          {
+            status: 2,
+          },
+          {
+            where: { ci_id, pfi_id, activity_name: key },
+          }
+        );
+
+        await db.ci_shipping_doc_movement_dt.create({
+          shipping_entry_id: lastInsertedValue,
+          ci_id,
+          pfi_id,
+          activity_name: key,
+          activity_date: oblData[key],
+          activity_authority: activity_authority,
+          status_activity: exisitingDt.length,
+          status: 1,
         });
-      }else{
-        await ShippingMaster.create(req.body);
+      } else {
+        await db.ci_shipping_doc_movement_dt.create({
+          shipping_entry_id: lastInsertedValue,
+          ci_id,
+          pfi_id,
+          activity_name: key,
+          activity_date: oblData[key],
+          activity_authority: activity_authority,
+          status_activity: 1,
+          status: 1,
+        });
       }
-      res.status(201).json({status:'Sucess',message:"Shipping Entry added Successfully inShipping Master"});
-  }catch(err){
-    console.log("Erro in shipping Entry")
-    console.log("Error:", err )
+    }
+    res.status(201).json({
+      status: "Sucess",
+      message: "Successfully",
+    });
+  } catch (err) {
+    console.log("Erro in shipping Entry");
+    console.log("Error:", err);
   }
-}
+};
 
-
-exports.addOBLshippingEntry =  async (req,res)=>{
-  try{
-    const { pfi_id, ...fields } = req.body;
-    console.log("obl Entry*******")
+exports.addOBLshippingEntry = async (req, res) => {
+  try {
+    const {
+      ci_id,
+      pfi_id,
+      pfi_no,
+      ci_num,
+      nafdac,
+      son,
+      idec,
+      idec_name,
+      cria,
+      cria_doc_available,
+      fast_track_clearing,
+      agency_name,
+      agent,
+    } = req.body;
     console.log(req.body);
-    //chek is pfi_exist or not
 
-      // Check if the pfi_id already exists
-      const existingRecord = await ShippingMaster.findOne({
-        where: { pfi_id }
+    const result = await db.ci_doc_movement_master.findOne({
+      where: {
+        ci_id: ci_id,
+        pfi_id,
+      },
+    });
+
+    if (result) {
+      lastInsertedValue = result.shipping_entry_id;
+
+      await db.ci_doc_movement_master.update(
+        {
+          nafdac_clearance_req: nafdac,
+          son_clearance_req: son,
+          idec_applicable: idec,
+          idec_number: idec_name,
+          cria_clearance_req: cria,
+          cria_doc_available: cria_doc_available,
+          fast_track_clearance: fast_track_clearing,
+          agency: agency_name,
+          agent: agent,
+          status: 1,
+        },
+        {
+          where: { shipping_entry_id: result.shipping_entry_id },
+        }
+      );
+    } else {
+      await db.ci_doc_movement_master.create({
+        ci_id,
+        pfi_id,
+        pfi_num: pfi_no,
+        ci_num,
+        nafdac_clearance_req: nafdac,
+        son_clearance_req: son,
+        idec_applicable: idec,
+        idec_number: idec_name,
+        cria_clearance_req: cria,
+        cria_doc_available: cria_doc_available,
+        fast_track_clearance: fast_track_clearing,
+        agency: agency_name,
+        agent: agent,
+        status: 1,
       });
+    }
 
-      if (existingRecord) {
-        await ShippingMaster.update(req.body,{
-          where:{pfi_id}
-        });
-      }else{
-        await ShippingMaster.create(req.body);
-      }
-      res.status(201).json({status:'Sucess',message:"OBL added Successfully in Shipping Master"});
-  }catch(err){
-    console.log("Erro in shipping Entry")
-    console.log("Error:", err )
+    res.status(201).json({
+      status: "Sucess",
+      message: "Sucessfully",
+    });
+  } catch (err) {
+    console.log("Erro in shipping Entry");
+    console.log("Error:", err);
   }
-}
-
-
+};
 
 // Add Eta in shhipin recorad againg ci_ic
 exports.addETAinShippingMaster = async (req, res) => {
   {
-    try{
-       const { pfi_id, eta, updated_by } = req.body;  
-        const existingRecord = await ShippingMaster.findOne({
-          where: { pfi_id }
-        });
-  
-        if (existingRecord) {
-          await ShippingMaster.update({eta, updated_by},{
-            where:{pfi_id}
-          });
-        }else{
-          await ShippingMaster.create({pfi_id,eta, updated_by});
-        }
-        res.status(201).json({status:'Sucess',message:"Shipping Entry added Successfully inShipping Master"});
-    }catch(err){
-      console.log("Error in shipping Entry add eta")
-      console.log("Error:", err )
+    try {
+      const { pfi_id, eta, updated_by } = req.body;
+      const existingRecord = await db.ci_doc_movement_master.findOne({
+        where: { pfi_id },
+      });
+
+      if (existingRecord) {
+        await db.ci_doc_movement_master.update(
+          { eta, updated_by },
+          {
+            where: { pfi_id },
+          }
+        );
+      } else {
+        await db.ci_doc_movement_master.create({ pfi_id, eta, updated_by });
+      }
+      res.status(201).json({
+        status: "Sucess",
+        message: "Shipping Entry added Successfully inShipping Master",
+      });
+    } catch (err) {
+      console.log("Error in shipping Entry add eta");
+      console.log("Error:", err);
     }
   }
-
 };
 
 // Create a new shipping info record
 exports.createShippingMaster = async (req, res) => {
   try {
-    console.log("Gnerate Shipping Entry")
+    console.log("Gnerate Shipping Entry");
     console.log(req.body);
-    await ShippingMaster.create(req.body);
+    await db.ci_doc_movement_master.create(req.body);
     res.status(201).json({ msg: "OBL Receipt APAPA Updated Successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
-
-
 
 // Create a new shipping info record
 exports.addcomplianceinShippingMaster = async (req, res) => {
@@ -120,12 +210,10 @@ exports.addcomplianceinShippingMaster = async (req, res) => {
       updated_by,
     } = req.body;
 
-    console.log("Create Add compplaince-------------")
-    console.log(req.body)
+    console.log("Create Add compplaince-------------");
+    console.log(req.body);
 
-
-
-    await ShippingMaster.update(
+    await db.ci_doc_movement_master.update(
       {
         nafdac,
         son,
@@ -146,8 +234,6 @@ exports.addcomplianceinShippingMaster = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-
 
 // Update terminal view (discharge and transfer terminal) in the shipping record against ci_id
 exports.updateShippingDetailsByCiId = async (req, res) => {
@@ -195,12 +281,12 @@ exports.updateShippingDetailsByCiId = async (req, res) => {
     updateFields.updated_by = updated_by;
 
     // Perform the update
-    const [updated] = await ShippingMaster.update(updateFields, {
+    const [updated] = await db.ci_doc_movement_master.update(updateFields, {
       where: { ci_id },
     });
 
     if (updated) {
-      const updatedShippingRecord = await ShippingMaster.findOne({
+      const updatedShippingRecord = await db.ci_doc_movement_master.findOne({
         where: { ci_id },
       });
       res.status(200).json({
@@ -218,7 +304,7 @@ exports.updateShippingDetailsByCiId = async (req, res) => {
 // Retrieve all shipping info records
 exports.getAllShippingMasters = async (req, res) => {
   try {
-    const ShippingMasters = await ShippingMaster.findAll({
+    const ShippingMasters = await db.ci_doc_movement_master.findAll({
       include: [
         { model: commercial_invoice },
         {
@@ -227,9 +313,9 @@ exports.getAllShippingMasters = async (req, res) => {
             { model: insurance },
             { model: form_m },
             { model: letter_of_credit },
-            { model: son_pfi }
-          ]
-        }
+            { model: son_pfi },
+          ],
+        },
         // { model: form_m, letter_of_credit, as: "FormM" },
         // { model: letter_of_credit, as: "LC" },
       ],
@@ -250,34 +336,40 @@ exports.getShippingMasterByCiId = async (req, res) => {
         .json({ message: "ci_id query parameter is required" });
     }
 
-    const shippingMaster = await ShippingMaster.findOne({ where: { ci_id } });
+    const Shipping = await db.ci_doc_movement_master.findOne({
+      where: { ci_id },
+    });
 
-    if (!shippingMaster) {
-      return res.status(404).json({ message: "ShippingMaster not found" });
+    if (!db.ci_doc_movement_master) {
+      return res
+        .status(404)
+        .json({ message: "db.ci_doc_movement_master not found" });
     }
 
-    res.status(200).json(shippingMaster);
+    res.status(200).json(Shipping);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
 // Retrieve a single shipping info record by id
-exports.getShippingMasterById = async (req, res) => {
+exports.getShippingById = async (req, res) => {
   try {
     const { id } = req.params;
-    const ShippingMaster = await ShippingMaster.findByPk(id);
-    if (!ShippingMaster) {
-      return res.status(404).json({ message: "ShippingMaster not found" });
+    const result = await db.ci_doc_movement_master.findByPk(id);
+    if (!db.ci_doc_movement_master) {
+      return res
+        .status(404)
+        .json({ message: "db.ci_doc_movement_master not found" });
     }
-    res.status(200).json(ShippingMaster);
+    res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
 // Update a shipping info record by id
-exports.updateShippingMaster = async (req, res) => {
+exports.updateShippingDetailsByCiId = async (req, res) => {
   try {
     const { id } = req.params;
     const {
@@ -286,7 +378,7 @@ exports.updateShippingMaster = async (req, res) => {
       obl_sent_port_date,
       obl_received_date,
     } = req.body;
-    const [updated] = await ShippingMaster.update(
+    const [updated] = await db.ci_doc_movement_master.update(
       {
         shipping_doc_receipt_date_ho,
         received_from_bank_date_ho,
@@ -298,10 +390,10 @@ exports.updateShippingMaster = async (req, res) => {
       }
     );
     if (updated) {
-      const updatedShippingMaster = await ShippingMaster.findByPk(id);
-      res.status(200).json(updatedShippingMaster);
+      const result = await db.ci_doc_movement_master.findByPk(id);
+      res.status(200).json(result);
     } else {
-      res.status(404).json({ message: "ShippingMaster not found" });
+      res.status(404).json({ message: "db.ci_doc_movement_master not found" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -309,16 +401,16 @@ exports.updateShippingMaster = async (req, res) => {
 };
 
 // Delete a shipping info record by id
-exports.deleteShippingMaster = async (req, res) => {
+exports.deleteshipping = async (req, res) => {
   try {
     const { id } = req.params;
-    const deleted = await ShippingMaster.destroy({
+    const deleted = await shipping.destroy({
       where: { ci_id: id },
     });
     if (deleted) {
-      res.status(204).json({ message: "ShippingMaster deleted successfully" });
+      res.status(204).json({ message: "shipping deleted successfully" });
     } else {
-      res.status(404).json({ message: "ShippingMaster not found" });
+      res.status(404).json({ message: "shipping not found" });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });

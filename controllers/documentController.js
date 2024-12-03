@@ -24,6 +24,7 @@ exports.createDocument = async (req, res, next) => {
         doc_base64: file.buffer.toString('base64'),
         created_by: created_by,
         title: meta.title,
+        status: 1
       };
         documentData.push(data);
     }

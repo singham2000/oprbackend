@@ -52,12 +52,24 @@ module.exports = (sequelize, DataTypes) => {
           type: DataTypes.DECIMAL(18, 2),
           allowNull: true, // Nullable
         },
+        ci_line_total: {
+          type: DataTypes.DECIMAL(18, 2),
+          allowNull: true, // Nullable
+        },
         currency: {
           type: DataTypes.STRING(50),
           allowNull: true, // Nullable
         },
         remarks: {
           type: DataTypes.STRING(255),
+          allowNull: true, // Nullable
+        },
+        hsn_code: {
+          type: DataTypes.STRING(255),
+          allowNull: true, // Nullable
+        },
+        paar_id: {
+          type: DataTypes.INTEGER,
           allowNull: true, // Nullable
         },
         quantity: {
