@@ -349,7 +349,28 @@ async function createUDFIfNotExists() {
                   END;
               ');
           END;
+
+       
     `;
+
+    // IF OBJECT_ID('dbo.fn_GetContainerType', 'FN') IS NULL
+    // BEGIN
+    //     EXEC('
+    //         CREATE FUNCTION dbo.fn_GetContainerType(@containerTypeId INT)
+    //         RETURNS VARCHAR(150)
+    //         AS 
+    //         BEGIN
+    //             DECLARE @ret VARCHAR(150);
+                
+    //             -- Select container_type_master from container_type_name
+    //             SELECT @ret = ISNULL(s.container_type_name, ''Invalid Container Code'')
+    //             FROM container_type_master s
+    //             WHERE s.container_type_master_id = @containerTypeId;
+                
+    //             RETURN @ret;
+    //         END;
+    //     ');
+    // END;
 
     // Log the SQL query for debugging
     console.log("Executing SQL:", sql);

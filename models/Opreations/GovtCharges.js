@@ -12,6 +12,18 @@ module.exports = (sequelize, DataTypes) => {
           type: DataTypes.INTEGER,
           allowNull: true,
         },
+        pfi_num: {
+          type: DataTypes.STRING(55),
+          allowNull: true,
+        },
+        ci_id: {
+          type: DataTypes.INTEGER,
+          allowNull: true,
+        },
+        ci_num: {
+          type: DataTypes.STRING(55),
+          allowNull: true,
+        },
         payment_types: {
           type: DataTypes.STRING(55),
           allowNull: true,
@@ -52,7 +64,10 @@ module.exports = (sequelize, DataTypes) => {
           type: DataTypes.STRING(155),
           allowNull: true,
         },     
-        
+        other_head: {
+          type: DataTypes.STRING(155),
+          allowNull: true,
+        },
         other_narration: {
           type: DataTypes.STRING(255),
           allowNull: true,

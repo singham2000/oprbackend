@@ -13,23 +13,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       pfi_num: {
-        type: DataTypes.STRING(50),
+        type: DataTypes.STRING(150),
         allowNull: true,
       },
-      form_m_id: {
+      ci_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
-      form_m_num: {
-        type: DataTypes.STRING(55),
-        allowNull: true,
-      },
-      paar_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      paar_num: {
-        type: DataTypes.STRING(55),
+      ci_num: {
+        type: DataTypes.STRING(155),
         allowNull: true,
       },
       assessment_date: {

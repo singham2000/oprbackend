@@ -214,7 +214,16 @@ module.exports = (sequelize, DataTypes) => {
     commercial_invoice.hasOne(models.nafdac_penalty, {
       foreignKey: "ci_id",
     });
-    commercial_invoice.hasMany(models.operations_son, {
+    commercial_invoice.hasOne(models.custom_clearance, {
+      foreignKey: "ci_id",
+    });
+    commercial_invoice.hasOne(models.assessment, {
+      foreignKey: "ci_id",
+    });
+    commercial_invoice.hasOne(models.govt_charges, {
+      foreignKey: "ci_id",
+    });
+    commercial_invoice.hasOne(models.operations_son, {
       foreignKey: 'ci_id',
       targetKey: 'commercial_invoice_id'
     });

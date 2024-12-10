@@ -52,6 +52,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DECIMAL(18, 2),
         allowNull: true,
       },
+      do_validity_dt: {
+        type: DataTypes.DATEONLY,
+        allowNull: true, // Nullable
+      },
       created_on: {
         type: DataTypes.DATE,
         allowNull: true,

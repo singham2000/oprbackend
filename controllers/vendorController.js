@@ -81,6 +81,7 @@ const deleteVendorById = async (req, res) => {
 
 createVendor = async (req, res, next) => {
   const { vendorDetails, bankDetails, addressDetails } = req.body;
+  console.log(req.body);
   try {
     const doc_code = "VEN";
     const vendor_series = (await generateSeries(doc_code)) || "ven-000-ven";

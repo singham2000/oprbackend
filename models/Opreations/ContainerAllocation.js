@@ -8,19 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      pfi_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      pfi_num: {
-        type: DataTypes.STRING(50),
-        allowNull: true,
-      },
-      form_m_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      form_m_num: {
+      bl_num: {
         type: DataTypes.STRING(55),
         allowNull: true,
       },
@@ -36,16 +24,16 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(155),
         allowNull: true,
       },
-      container_count: {
+      no_of_container_allocated: {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
-      container_types: {
-        type: DataTypes.INTEGER,
+      type_of_container: {
+        type: DataTypes.STRING(155),
         allowNull: true,
       },
       rate: {
-        type: DataTypes.STRING(55),
+        type: DataTypes.DECIMAL(18,2),
         allowNull: true,
       },
       tdo_given_date: {
@@ -57,46 +45,50 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       payment_terms: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-
-      bill_payment_type: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      bill_invoice_num: {
-        type: DataTypes.STRING(55),
-        allowNull: true,
-      },
-      bill_invoice_date: {
-        type: DataTypes.DATE,
-        allowNull: true,
-      },
-      bill_amount: {
-        type: DataTypes.STRING(55),
-        allowNull: true,
-      },
-      bill_vat: {
-        type: DataTypes.STRING(55),
-        allowNull: true,
-      },
-      bill_deduction: {
-        type: DataTypes.STRING(55),
-        allowNull: true,
-      },
-      bill_narration: {
         type: DataTypes.STRING(255),
         allowNull: true,
       },
-      bll_party: {
-        type: DataTypes.STRING(155),
-        allowNull: true,
-      },
-      bill_status: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
+
+      // bill_payment_type: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: true,
+      // },
+      // bill_invoice_num: {
+      //   type: DataTypes.STRING(55),
+      //   allowNull: true,
+      // },
+      // bill_invoice_date: {
+      //   type: DataTypes.DATE,
+      //   allowNull: true,
+      // },
+      // bill_amount: {
+      //   type: DataTypes.STRING(55),
+      //   allowNull: true,
+      // },
+      // bill_vat: {
+      //   type: DataTypes.STRING(55),
+      //   allowNull: true,
+      // },
+      // bill_deduction: {
+      //   type: DataTypes.STRING(55),
+      //   allowNull: true,
+      // },
+      // bill_narration: {
+      //   type: DataTypes.STRING(255),
+      //   allowNull: true,
+      // },
+      // bll_party: {
+      //   type: DataTypes.STRING(155),
+      //   allowNull: true,
+      // },
+      // bill_status: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: true,
+      // },
+      // eir_received_date: {
+      //   type: DataTypes.DATE,
+      //   allowNull: true,
+      // },
       created_on: {
         type: DataTypes.DATE,
         allowNull: true,
@@ -117,10 +109,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
-      eir_received_date: {
-        type: DataTypes.DATE,
-        allowNull: true,
-      }
     },
     {
       tableName: "container_allocation",
