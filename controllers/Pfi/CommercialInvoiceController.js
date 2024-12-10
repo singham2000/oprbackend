@@ -18,6 +18,173 @@ const {
 const { Op } = require("sequelize");
 const { generateSeries } = require("../seriesGenerate");
 
+const getCustomClearance = async (req, res, next) => {
+  let ci_id = req.query.ci_id;
+  try {
+    let result = await db.custom_clearance.findOne({
+      where: { ci_id: ci_id, status: 1 },
+    });
+
+    return res.status(201).json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const GetShippingExpenseLapseByCiId = async (req, res, next) => {
+  let ci_id = req.query.ci_id;
+  try {
+    let result = await db.shipping_lapse.findOne({
+      where: { ci_id: ci_id, status: 1 },
+    });
+
+    return res.status(201).json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const GetShippingExpenseByCiId = async (req, res, next) => {
+  let ci_id = req.query.ci_id;
+  try {
+    let result = await db.operations_shipping_expenses.findOne({
+      where: { ci_id: ci_id, status: 1 },
+      include: [
+        { model: db.shipping_additinal_expenses },
+        { model: db.shipping_expenses_container_allocation },
+      ],
+    });
+
+    return res.status(201).json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const AddDOValidateDateContainer = async (req, res, next) => {
+  try {
+    const { containerItemArr } = req.body;
+    console.log("req.body", containerItemArr);
+
+    if (containerItemArr && containerItemArr.length > 0) {
+      await Promise.all(
+        containerItemArr.map(async (item) => {
+          await db.add_shippment_container.update(
+            { do_validity_dt: item.valid_till },
+            {
+              where: {
+                add_shippment_container_id: item.add_shippment_container_id,
+              },
+            }
+          );
+        })
+      );
+    }
+
+    return res.status(201).json({ mesage: "Submit Successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const createShippingExpense = async (req, res, next) => {
+  try {
+    const {
+      ci_id,
+      pfi_id,
+      pfi_num,
+      ci_num,
+      billNo,
+      shipmentLine,
+      provision,
+      billDate,
+      amount,
+      vat,
+      total,
+      narration,
+      expenses,
+      containers,
+      created_by,
+      user_id,
+    } = req.body;
+    console.log("req.body", req.body);
+
+    let result = await db.operations_shipping_expenses.create({
+      ci_id,
+      pfi_id,
+      pfi_num,
+      ci_num,
+      bill_no: billNo,
+      shipping_line: shipmentLine,
+      bill_date: billDate,
+      provision: provision,
+      amount,
+      vat,
+      total,
+      narration,
+      status: 1,
+      created_by,
+    });
+
+    let lastInsertedId = result.operations_shipping_expenses_id;
+
+    if (req.files && req.files.length > 0) {
+      await Promise.all(
+        req.files.map(async (file) => {
+          const base64 = file.buffer.toString("base64");
+          await db.document.create({
+            linked_id: lastInsertedId,
+            table_name: "operations_shipping_expenses",
+            type: "Operations Shipping Expense Doc / Sad Doc",
+            doc_name: file.originalname,
+            doc_base64: base64,
+            status: 1,
+          });
+        })
+      );
+    }
+
+    if (expenses && expenses.length > 0) {
+      await Promise.all(
+        expenses.map(async (item) => {
+          await db.shipping_additinal_expenses.create({
+            operations_shipping_expenses_id: lastInsertedId,
+            ci_id,
+            ci_num,
+            expense_head: item.expense_head,
+            amount: item.amount,
+            status: 1,
+          });
+        })
+      );
+    }
+
+    if (containers && containers.length > 0) {
+      await Promise.all(
+        containers.map(async (item) => {
+          await db.shipping_expenses_container_allocation.create({
+            operations_shipping_expenses_id: lastInsertedId,
+            add_shippment_container_id: item.add_shippment_container_id,
+            ci_id,
+            ci_num,
+            container_no: item.container_no,
+            container_deposit: item.container_deposit,
+            fixed_container_amount: item.fixed_container_amount,
+            demurrage_amount: item.demurrage_amount,
+            from_date: item.from_date,
+            to_date: item.to_date,
+            status: 1,
+          });
+        })
+      );
+    }
+
+    return res.status(201).json({ message: "Submit Successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const createCustomClearance = async (req, res, next) => {
   try {
     const {
@@ -792,6 +959,11 @@ CommercialInvoiceController = {
   createNafdacClearing,
   createNafdacPenalty,
   createCustomClearance,
+  getCustomClearance,
+  createShippingExpense,
+  GetShippingExpenseByCiId,
+  AddDOValidateDateContainer,
+  GetShippingExpenseLapseByCiId
 };
 
 module.exports = CommercialInvoiceController;

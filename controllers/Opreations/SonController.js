@@ -13,49 +13,95 @@ const createOperationsSon = async (req, res, next) => {
       ci_num,
       penalty_payment_date,
       penalty_approved_date,
-      payment_types,
+      payment_type,
       bill_no,
       bill_date,
       amount,
       remit_charges,
       vat,
-      penalty_approved,
+      penalty_approved_by,
       narration,
+      operations_son_id,
     } = req.body;
 
-    const result = await operations_son.create({
-      ci_id,
-      ci_num,
-      penalty_payment_date,
-      penalty_approved_date,
-      payment_type: payment_types,
-      bill_num: bill_no,
-      bill_date,
-      amount,
-      remit_charges,
-      vat,
-      total: Number(amount) + Number(remit_charges) + Number(vat),
-      penalty_approved_by: penalty_approved,
-      narration,
-      status: 1,
-    });
-
-    const lastInsertedId = result.operations_son_id;
-
-    if (req.files && req.files.length > 0) {
-      await Promise.all(
-        req.files.map(async (file) => {
-          const base64 = file.buffer.toString("base64");
-          await document.create({
-            linked_id: lastInsertedId,
-            table_name: "operations_son",
-            type: "Against Operations Add Son Doc",
-            doc_name: `${file.fieldname}-${file.originalname}`,
-            doc_base64: base64,
-            status: 1,
-          });
-        })
+    if (operations_son_id) {
+      const result = await operations_son.update(
+        {
+          penalty_payment_date,
+          penalty_approved_date,
+          payment_type,
+          bill_num: bill_no,
+          bill_date,
+          amount,
+          remit_charges,
+          vat,
+          total: Number(amount) + Number(remit_charges) + Number(vat),
+          penalty_approved_by,
+          narration,
+          status: 1,
+        },
+        {
+          where: { operations_son_id: operations_son_id },
+        }
       );
+
+      await document.update(
+        { status: 0 },
+        {
+          where: { table_name: "operations_son", linked_id: operations_son_id },
+        }
+      );
+
+      if (req.files && req.files.length > 0) {
+        await Promise.all(
+          req.files.map(async (file) => {
+            const base64 = file.buffer.toString("base64");
+            await document.create({
+              linked_id: operations_son_id,
+              table_name: "operations_son",
+              type: "Against Operations Add Son Doc",
+              doc_name: `${file.fieldname}-${file.originalname}`,
+              doc_base64: base64,
+              status: 1,
+            });
+          })
+        );
+      }
+    } else {
+      const result = await operations_son.create({
+        ci_id,
+        ci_num,
+        penalty_payment_date,
+        penalty_approved_date,
+        payment_type,
+        bill_num: bill_no,
+        bill_date,
+        amount,
+        remit_charges,
+        vat,
+        total: Number(amount) + Number(remit_charges) + Number(vat),
+        penalty_approved_by,
+        narration,
+        status: 1,
+      });
+
+      const lastInsertedId = result.operations_son_id;
+
+      if (req.files && req.files.length > 0) {
+        await Promise.all(
+          req.files.map(async (file) => {
+            const base64 = file.buffer.toString("base64");
+            await document.create({
+              linked_id: lastInsertedId,
+              table_name: "operations_son",
+              type: "Against Operations Add Son Doc",
+              doc_name: `${file.fieldname}-${file.originalname}`,
+              doc_base64: base64,
+              status: 1,
+            });
+          })
+        );
+      }
     }
 
     return res.status(201).json({ message: "Submit Successfully" });

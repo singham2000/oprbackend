@@ -12,10 +12,8 @@ const createAssessment = async (req, res, next) => {
       rotation_no,
       pfi_id,
       pfi_num,
-      form_m_id,
-      form_m_num,
-      paar_id,
-      paar_num,
+      ci_id,
+      ci_num,
       cNumber,
       assessmentDate,
       assessNo,
@@ -33,17 +31,13 @@ const createAssessment = async (req, res, next) => {
       totalDuty,
     } = req.body;
 
-    // assessmentDocument,
-    //   sadDocument
 
     const result = await assessment.create({
       pfi_id,
       rotation_no,
       pfi_num,
-      form_m_id,
-      form_m_num,
-      paar_id,
-      paar_num,
+      ci_id: ci_id,
+      ci_num: ci_num,
       assessment_date: assessmentDate,   // Mapping req.body field to model field
       c_number: cNumber,                 // Mapping req.body field to model field
       assess_num: assessNo,             // Mapping req.body field to model field
@@ -71,7 +65,7 @@ const createAssessment = async (req, res, next) => {
           await document.create({
             linked_id: lastInsertedId,
             table_name: "assessment",
-            type: "PFI Add Assessment",
+            type: "CI Assessment & SAD Docs",
             doc_name: `${file.fieldname}-${file.originalname}`,
             doc_base64: base64,
             status: 1,

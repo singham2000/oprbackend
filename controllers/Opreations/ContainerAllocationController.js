@@ -4,17 +4,15 @@ const { Op } = require("sequelize");
 
 // Create a new container_allocation
 const createContainerAllocation = async (req, res, next) => {
+  const { ci_id, ci_num, bl_num, containerArr } = req.body;
   try {
-    const containerAllocations = req.body.map((allocation) => ({
-      ci_id: allocation.ci_id,
-      ci_num: allocation.ci_num,
-      pfi_id: allocation.pfi_id,
-      pfi_num: allocation.pfi_num,
-      form_m_id: allocation.form_m_id,
-      form_m_num: allocation.form_m_num,
+    const containerAllocations = containerArr.map((allocation) => ({
+      ci_id: ci_id,
+      ci_num: ci_num,
+      bl_num: bl_num,
       transporter: allocation.transporter,
-      container_count: allocation.container_count,
-      container_types: allocation.container_types,
+      no_of_container_allocated: allocation.no_of_container_allocated,
+      type_of_container: allocation.type_of_container,
       rate: allocation.rate,
       tdo_given_date: allocation.tdo_given_date,
       delivery_location: allocation.delivery_location,

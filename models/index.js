@@ -219,7 +219,7 @@ db.operations_nafdac = require("./Opreations/OperationsNafdac")(
     sequelize,
     DataTypes
 );
-
+db.exchange_controll = require("./Opreations/ExchangeControllModel.js")(sequelize, DataTypes);
 db.operations_nafdac_master = require("./Opreations/OperationsNafdacMaster.js")(sequelize, DataTypes);
 db.operations_nafdac_lapse = require("./Opreations/OperationsNafdacLapse")(sequelize, DataTypes);
 db.operations_son = require("./Opreations/OperationsSon")(sequelize, DataTypes);
@@ -293,7 +293,9 @@ db.ShippingExpenses = require('./Shipping/shipping_expensesModal.js')(sequelize,
 db.shippment_instructions = require('./Shipping/ShippingInstructions')(sequelize, DataTypes);
 db.shippment_advise_additional_instruction = require('./Shipping/ShippingAdviseAditionalInformation.js')(sequelize, DataTypes);
 db.shippment_advise_master = require('./Shipping/ShippingAdvise.js')(sequelize, DataTypes);
-
+db.operations_shipping_expenses = require('./Shipping/OperationsShippingExpenseModel')(sequelize, DataTypes);
+db.shipping_expenses_container_allocation = require('./Shipping/ShippingExpenseContainerInformation.js')(sequelize, DataTypes);
+db.shipping_additinal_expenses = require('./Shipping/ShippingAdditinalExpense.js')(sequelize, DataTypes);
 
 //document Master
 db.ApprovalMatrix = require('./Approval/ApprovalMatrix.js')(sequelize, DataTypes);

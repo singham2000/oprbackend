@@ -98,11 +98,17 @@ const getPO = async (req, res, next) => {
               "status",
               "soncap_amount",
               "bl_num",
+              "do_validity_dt",
               [
                 db.sequelize.literal(
                   "dbo.fn_GetShippingContainerType(container_type)"
                 ),
                 "container_type_name",
+              ],[
+                db.sequelize.literal(
+                  "dbo.fn_containerType(container_size)"
+                ),
+                "container_size_name",
               ],
             ],
             include: [{ model: db.shippment_container_detail }],
@@ -136,10 +142,14 @@ const getPO = async (req, res, next) => {
                         model: db.ci_doc_movement_master,
                         include: [{ model: db.ci_shipping_doc_movement_dt }],
                       },
+                      { model: db.custom_clearance },
                       { model: db.soncap_master },
+                      // { model: db.govt_charges },
                       { model: db.other_govt_charges },
                       { model: db.nafdac_inspection_expense },
+                      { model: db.assessment },
                       { model: db.nafdac_clearance },
+                      { model: db.operations_son },
                       {
                         model: db.nafdac_penalty,
                         include: [{ model: db.nafdac_penalty_item }],
@@ -152,14 +162,10 @@ const getPO = async (req, res, next) => {
                   { model: db.form_m },
                   { model: db.letter_of_credit },
                   { model: db.son_pfi },
-                  { model: db.assessment },
                   { model: db.CompanyMaster },
                   { model: db.operations_nafdac },
                   {
                     model: db.paar,
-                    // where: {
-                    //   status: 1,
-                    // },
                     include: [{ model: db.paar_amendment_request }],
                   },
                   { model: db.operations_nafdac_master },
