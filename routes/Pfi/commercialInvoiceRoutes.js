@@ -15,6 +15,7 @@ router
 
   //Get Api's By CI ID
   router
+  .get("/container/details/bl", setAuditFields, CommercialInvoiceControllerGet.GetContainerByBL)
   .get("/shipping/expense/lapse", setAuditFields, CommercialInvoiceController.GetShippingExpenseLapseByCiId)
   .get("/shipping/expense", setAuditFields, CommercialInvoiceController.GetShippingExpenseByCiId)
   .get("/custom/clearance", CommercialInvoiceController.getCustomClearance)

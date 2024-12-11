@@ -314,6 +314,21 @@ const getPO = async (req, res, next) => {
     throw error;
   }
 };
+const getBankChargebypoid = async (req, res, next) => {
+  let po_id = req.query.po_id;
+  try {
+    let result = await db.PaymentRequestTransactionsMaster.findAll({
+      where: { doc_id: po_id },
+      attributes: {
+        exclude: ["receipt_image"], // Correctly exclude the receipt_image field
+      },
+    });
+
+    return res.status(201).json(result);
+  } catch (err) {
+    next(err);
+  }
+};
 
 //get po for grn
 const getPOforGrn = async (req, res, next) => {
@@ -767,6 +782,7 @@ module.exports = {
   confimPoPaymentsbyVendor,
   getVendorDeailsByPoId,
   getPOforGrn,
+  getBankChargebypoid,
   po_email_conformation,
   AcceptPO,
   getPO,

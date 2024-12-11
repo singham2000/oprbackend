@@ -237,6 +237,7 @@ db.transport_add_bill_container = require("./Opreations/TransportAddBillContaine
 db.transport_add_bill = require("./Opreations/TransportAddBillModel")(sequelize, DataTypes);
 db.govt_charges = require("./Opreations/GovtCharges")(sequelize, DataTypes);
 db.shipping_lapse = require("./Opreations/ShippingLapse")(sequelize, DataTypes);
+db.lapse_main = require("./Opreations/LapseMainModel.js")(sequelize, DataTypes);
 db.add_shippment_container = require("./Opreations/AddShippingContainer.js")(sequelize, DataTypes);
 db.shippment_container_detail = require("./Opreations/ShippingContainerDetails.js")(sequelize, DataTypes);
 

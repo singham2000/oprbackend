@@ -20,6 +20,7 @@ router
     .get('/vendor', POController.getVendorDeailsByPoId)
 router
     .get('/itemlist', POController.getPoItemsbypoid)
+    .get('/bank/charge', POController.getBankChargebypoid)
 
 // list for grny
 router

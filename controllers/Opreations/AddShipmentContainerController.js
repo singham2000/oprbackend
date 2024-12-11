@@ -6,7 +6,7 @@ const { Op } = require("sequelize");
 const createAddContainer = async (req, res, next) => {
   console.log(req.body);
   try {
-    const { po_id, po_num, cpackageDetail } = req.body;
+    const { po_id, po_num, ci_id,  cpackageDetail } = req.body;
     console.log(req.body.cpackageDetail[0].packing_info[0]);
     console.log(req.body);
 
@@ -20,6 +20,7 @@ const createAddContainer = async (req, res, next) => {
         gross_weight: container.total_gross_wt,
         net_weight: container.total_net_wt,
         po_id: po_id,
+        ci_id: ci_id,
         po_num: po_num,
         status: 1, 
       });

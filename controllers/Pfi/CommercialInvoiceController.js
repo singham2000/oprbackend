@@ -47,7 +47,7 @@ const GetShippingExpenseLapseByCiId = async (req, res, next) => {
 const GetShippingExpenseByCiId = async (req, res, next) => {
   let ci_id = req.query.ci_id;
   try {
-    let result = await db.operations_shipping_expenses.findOne({
+    let result = await db.operations_shipping_expenses.findAll({
       where: { ci_id: ci_id, status: 1 },
       include: [
         { model: db.shipping_additinal_expenses },
@@ -122,6 +122,7 @@ const createShippingExpense = async (req, res, next) => {
       vat,
       total,
       narration,
+      type: !provision || provision === "false" ? "Terminal" : "Shipping",
       status: 1,
       created_by,
     });
@@ -963,7 +964,7 @@ CommercialInvoiceController = {
   createShippingExpense,
   GetShippingExpenseByCiId,
   AddDOValidateDateContainer,
-  GetShippingExpenseLapseByCiId
+  GetShippingExpenseLapseByCiId,
 };
 
 module.exports = CommercialInvoiceController;

@@ -14,7 +14,21 @@ const GetContainerAllocationByCiId = async (req, res, next) => {
   }
 };
 
+const GetContainerByBL = async (req, res, next) => {
+  let bl_num = req.query.bl_num;
+  try {
+    let result = await db.add_shippment_container.findAll({
+      where: { bl_num: bl_num, status: 1 },
+    });
+
+    return res.status(201).json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
 CommercialInvoiceControllerGet = {
+  GetContainerByBL,
   GetContainerAllocationByCiId,
 };
 

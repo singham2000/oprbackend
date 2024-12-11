@@ -34,6 +34,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(155),
             allowNull: true
         },
+        type: {
+            type: DataTypes.STRING(250),
+            allowNull: true
+        },
         bill_date: {
             type: DataTypes.DATEONLY,
             allowNull: true

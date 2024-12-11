@@ -143,6 +143,7 @@ const getContainerAllocation = async (req, res, next) => {
     if (!container_allocation_id) {
       const result = await container_allocation.findAll({
         where: {
+          
           status: { [Op.ne]: 0 },
         },
         order: [["container_allocation_id", "DESC"]],
