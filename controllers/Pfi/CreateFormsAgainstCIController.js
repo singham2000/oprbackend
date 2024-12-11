@@ -3,15 +3,14 @@ const { Op } = require("sequelize");
 
 const CreateContainerAllocationByCiId = async (req, res, next) => {
   try {
-    const NafdacData = req.body; // Extract NafdacData from the request body
-    // console.log("NafdacData", NafdacData);
-    // Ensure NafdacData is an array
+    const { NafdacData } = req.body;
+
     if (!Array.isArray(NafdacData)) {
       return res
         .status(400)
         .json({ message: "Invalid data format. NafdacData must be an array." });
     }
-
+    console.log(NafdacData);
     // Iterate over each item in NafdacData
     for (let item of NafdacData) {
       // Validate the necessary fields for each item
@@ -39,14 +38,14 @@ const CreateContainerAllocationByCiId = async (req, res, next) => {
       // Handle file uploads for multi_upload_copy
       if (item.multi_upload_copy && item.multi_upload_copy.length > 0) {
         for (let file of item.multi_upload_copy) {
-          console.log("file.originalname")
-      //     await db.uploaded_files.create({
-      //       exchange_control_id: exchangeControl.id,
-      //       file_name: file.originalname,
-      //       file_path: file.path,  // Assuming files are stored in the uploads directory
-      //       file_type: file.mimetype,
-      //       created_at: new Date(),
-      //     });
+          console.log("file.originalname");
+          //     await db.uploaded_files.create({
+          //       exchange_control_id: exchangeControl.id,
+          //       file_name: file.originalname,
+          //       file_path: file.path,  // Assuming files are stored in the uploads directory
+          //       file_type: file.mimetype,
+          //       created_at: new Date(),
+          //     });
         }
       }
 
