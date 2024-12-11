@@ -90,5 +90,13 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: true,
     }
   );
+
+  transport_add_bill.associate = (models) => {
+    transport_add_bill.hasMany(models.transport_add_bill_container, {
+      foreignKey: "transport_add_bill_id",
+    });
+  }
+
+
   return transport_add_bill;
 };

@@ -30,6 +30,7 @@ const createContainerAllocation = async (req, res, next) => {
 };
 
 const createContainerAllocationAddBill = async (req, res, next) => {
+  console.log("fgvbhvhvh")
   const {
     bl_num,
     ci_id,
@@ -71,6 +72,7 @@ const createContainerAllocationAddBill = async (req, res, next) => {
       paid_from_bank,
       wht_deducted,
       bank_name,
+      status: 1,
     });
     const lastInsertedId = result.transport_add_bill_id;
 
@@ -119,28 +121,14 @@ const createContainerAllocationAddBill = async (req, res, next) => {
 };
 
 const getContainerAllocationAddBill = async (req, res, next) => {
+  const ci_id = req.query.ci_id;
   try {
-    const result = await container_allocation.findAll({
+    const result = await db.transport_add_bill.findAll({
+      include: [{model: db.transport_add_bill_container}],
       where: {
-        bill_status: { [Op.eq]: 1 },
+        ci_id,
+        status: { [Op.eq]: 1 },
       },
-      order: [["container_allocation_id", "DESC"]],
-      attributes: [
-        "delivery_location",
-        "bll_party",
-        "container_allocation_id",
-        "bill_payment_type",
-        "bill_invoice_num",
-        "bill_invoice_date",
-        "bill_amount",
-        "bill_vat",
-        "bill_deduction",
-        "bill_narration",
-        [
-          sequelize.literal("dbo.fn_transportPaymentType(bill_payment_type)"),
-          "payment_type",
-        ],
-      ],
     });
     return res.status(200).json(result);
   } catch (err) {
@@ -148,7 +136,7 @@ const getContainerAllocationAddBill = async (req, res, next) => {
   }
 };
 
-// Get Commercial Invoice
+// Get Commercial Invoice 
 const getContainerAllocation = async (req, res, next) => {
   const container_allocation_id = req.query.container_allocation_id;
   try {
