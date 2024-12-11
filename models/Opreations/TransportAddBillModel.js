@@ -1,8 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
-  const container_allocation = sequelize.define(
-    "container_allocation",
+  const transport_add_bill = sequelize.define(
+    "transport_add_bill",
     {
-      container_allocation_id: {
+      transport_add_bill_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
@@ -20,44 +20,60 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(55),
         allowNull: true,
       },
-      transporter: {
+      payment_type: {
         type: DataTypes.STRING(155),
         allowNull: true,
       },
-      no_of_container_allocated: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      type_of_container: {
+      invoice_no: {
         type: DataTypes.STRING(155),
         allowNull: true,
       },
-      rate: {
-        type: DataTypes.DECIMAL(18,2),
+      invoice_date: {
+        type: DataTypes.DATEONLY,
         allowNull: true,
       },
-      tdo_given_date: {
-        type: DataTypes.DATE,
+      amount: {
+        type: DataTypes.DECIMAL(18, 2),
         allowNull: true,
       },
-      delivery_location: {
-        type: DataTypes.STRING(155),
+      vat: {
+        type: DataTypes.DECIMAL(18, 2),
         allowNull: true,
       },
-      payment_terms: {
+      narration: {
         type: DataTypes.STRING(255),
         allowNull: true,
       },
-      created_on: {
-        type: DataTypes.DATE,
+      tdo_given_date: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,
+      },
+      payment_date: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,
+      },
+      ref_number: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
+      payment_amount: {
+        type: DataTypes.DECIMAL(18, 2),
+        allowNull: true,
+      },
+      paid_from_bank: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
+      wht_deducted: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
+      bank_name: {
+        type: DataTypes.STRING(255),
         allowNull: true,
       },
       created_by: {
         type: DataTypes.STRING(50),
-        allowNull: true,
-      },
-      updated_on: {
-        type: DataTypes.DATE,
         allowNull: true,
       },
       updated_by: {
@@ -70,9 +86,9 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
-      tableName: "container_allocation",
-      timestamps: false,
+      tableName: "transport_add_bill",
+      timestamps: true,
     }
   );
-  return container_allocation;
+  return transport_add_bill;
 };

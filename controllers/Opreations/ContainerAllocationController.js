@@ -31,44 +31,77 @@ const createContainerAllocation = async (req, res, next) => {
 
 const createContainerAllocationAddBill = async (req, res, next) => {
   const {
-    container_allocation_id,
-    party,
+    bl_num,
+    ci_id,
+    ci_num,
     payment_type,
     invoice_no,
     invoice_date,
     amount,
     vat,
-    deduction,
     narration,
+    tdo_given_date,
+    payment_date,
+    ref_number,
+    payment_amount,
+    paid_from_bank,
+    wht_deducted,
+    bank_name,
+    containers,
   } = req.body;
 
   console.log(req.body);
   console.log("file: ", req.files);
 
   try {
-    const ContainerAllocation = await container_allocation.findByPk(
-      container_allocation_id
-    );
-
-    await ContainerAllocation.update({
-      bll_party: party,
-      bill_payment_type: payment_type,
-      bill_invoice_num: invoice_no,
-      bill_invoice_date: invoice_date,
-      bill_amount: amount,
-      bill_vat: vat,
-      bill_deduction: deduction,
-      bill_narration: narration,
-      bill_status: 1,
+    let result = await db.transport_add_bill.create({
+      bl_num,
+      ci_id,
+      ci_num,
+      payment_type,
+      invoice_no,
+      invoice_date,
+      amount,
+      vat,
+      narration,
+      tdo_given_date,
+      payment_date,
+      ref_number,
+      payment_amount,
+      paid_from_bank,
+      wht_deducted,
+      bank_name,
     });
+    const lastInsertedId = result.transport_add_bill_id;
+
+    if (containers && containers.length > 0) {
+      await Promise.all(
+        containers.map(async (item) => {
+          await db.transport_add_bill_container.create({
+            transport_add_bill_id: lastInsertedId,
+            bl_num,
+            ci_id,
+            ci_num,
+            type_of_container: item.type_of_container,
+            no_of_container: item.no_of_container,
+            rate: item.rate,
+            payment_type: item.payment_type,
+            amount: item.amount,
+            paid_amt: item.paid_amt,
+            payment_date: item.payment_date,
+            status: 1,
+          });
+        })
+      );
+    }
 
     if (req.files && req.files.length > 0) {
       await Promise.all(
         req.files.map(async (file) => {
           const base64 = file.buffer.toString("base64");
           await document.create({
-            linked_id: container_allocation_id,
-            table_name: "container_allocation",
+            linked_id: lastInsertedId,
+            table_name: "transport_add_bill",
             type: "Transport Module Container Allocation Add Bill Doc",
             doc_name: `${file.fieldname}-${file.originalname}`,
             doc_base64: base64,

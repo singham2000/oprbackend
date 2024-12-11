@@ -31,6 +31,6 @@ router
     .post("/nafdac/penalty", setAuditFields, CommercialInvoiceController.createNafdacPenalty)
     .post("/other/govt/charges", setAuditFields, CommercialInvoiceController.createOtherGovtCharges)
     .post("/custom/clearance", setAuditFields, CommercialInvoiceController.createCustomClearance)
-    .post("/exchange/controll", setAuditFields, CommercialInvoiceControllerCreate.CreateContainerAllocationByCiId)
+    .post("/exchange/controll", setAuditFields, uploadMulti.any(), CommercialInvoiceControllerCreate.CreateContainerAllocationByCiId)
   
 module.exports = router;
