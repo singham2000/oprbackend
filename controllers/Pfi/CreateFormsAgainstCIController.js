@@ -10,63 +10,54 @@ const CreateContainerAllocationByCiId = async (req, res, next) => {
         .status(400)
         .json({ message: "Invalid data format. NafdacData must be an array." });
     }
-    console.log(NafdacData);
+    console.log(req.files);
+    console.log("req.body", req.body);
     // Iterate over each item in NafdacData
-    for (let item of NafdacData) {
-      // Validate the necessary fields for each item
-      // if (!item.ci_id || !item.ci_num || !item.bl_awb_no) {
-      //   return res
-      //     .status(400)
-      //     .json({ message: "Missing required fields in data." });
-      // }
+    // if (NafdacData && NafdacData.length > 0) {
+    //   await Promise.all(
+    //     NafdacData.map(async (item) => {
+    //       let result = await db.exchange_controll.create({
+    //         pfi_id: item?.pfi_id,
+    //         pfi_num: item?.pfi_num,
+    //         ci_amount: item?.ci_amount,
+    //         ci_id: item?.ci_id,
+    //         ci_num: item?.ci_num,
+    //         bl_awb_no: item?.bl_awb_no,
+    //         ba_num: item?.ba_num,
+    //         revised_eta: item?.revised_eta,
+    //         tdo_dt: item?.tdo_dt,
+    //         ecd_received: item?.ecd_received,
+    //         ecd_received_dt: item?.ecd_received_dt,
+    //         multi_upload_copy: item?.multi_upload_copy,
+    //         submitted_to_bank: item?.submitted_to_bank,
+    //         multi_upload_copy_bank: item?.multi_upload_copy_bank,
+    //         status: 1,
+    //       });
+    //       let multi_upload_copy = item.multi_upload_copy.split(","),
+    //       // let lastInsertedId = result.exchange_controll_id;
 
-      // Create the exchange control document entry
-      // const exchangeControl = await db.exchange_control.create({
-      //   ci_id: item.ci_id,
-      //   ci_num: item.ci_num,
-      //   bl_awb_no: item.bl_awb_no,
-      //   ba_num: item.ba_num,
-      //   ci_amount: item.ci_amount,
-      //   revised_eta: item.revised_eta,
-      //   tdo_dt: item.tdo_dt,
-      //   ecd_received: item.ecd_received,
-      //   ecd_received_dt: item.ecd_received_dt,
-      //   submitted_to_bank: item.submitted_to_bank,
-      //   created_at: new Date(),
-      // });
+    //       // if (req.files && req.files.length > 0) {
+    //       //   await Promise.all(
+    //       //     req.files.map(async (file) => {
+    //       //       file.originalname === 
+    //       //       // const base64 = file.buffer.toString("base64");
+    //       //       // await db.document.create({
+    //       //       //   linked_id: lastInsertedId,
+    //       //       //   table_name: "operations_shipping_expenses",
+    //       //       //   type: "Operations Shipping Expense Doc / Sad Doc",
+    //       //       //   doc_name: file.originalname,
+    //       //       //   doc_base64: base64,
+    //       //       //   status: 1,
+    //       //       // });
+    //       //     })
+    //       //   );
+    //       // }
+        
 
-      // Handle file uploads for multi_upload_copy
-      if (item.multi_upload_copy && item.multi_upload_copy.length > 0) {
-        for (let file of item.multi_upload_copy) {
-          console.log("file.originalname");
-          //     await db.uploaded_files.create({
-          //       exchange_control_id: exchangeControl.id,
-          //       file_name: file.originalname,
-          //       file_path: file.path,  // Assuming files are stored in the uploads directory
-          //       file_type: file.mimetype,
-          //       created_at: new Date(),
-          //     });
-        }
-      }
 
-      //   // Handle file uploads for multi_upload_copy_bank
-      //   if (item.submitted_to_bank === 'Yes' && item.multi_upload_copy_bank && item.multi_upload_copy_bank.length > 0) {
-      //     for (let file of item.multi_upload_copy_bank) {
-      //       await db.uploaded_files.create({
-      //         exchange_control_id: exchangeControl.id,
-      //         file_name: file.originalname,
-      //         file_path: file.path,
-      //         file_type: file.mimetype,
-      //         created_at: new Date(),
-      //       });
-      //     }
-      //   }
-      // }
-
-      return res
-        .status(201)
-        .json({ message: "Exchange Control Data submitted successfully." });
-    }
+    //     })
+    //   );
+    // }
   } catch (err) {
     next(err);
   }

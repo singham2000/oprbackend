@@ -571,7 +571,6 @@ const createQuotation = async (req, res, next) => {
         port_of_loading,
         status: 1,
       },
-      { transaction }
     );
 
     const lastInsertedId = newQuotationMaster.quo_id;
@@ -689,6 +688,7 @@ const createQuotation = async (req, res, next) => {
     next(err);
   }
 };
+
 
 const updateQuotationById = async (req, res, next) => {
   const quo_id = req.query.quo_id;
