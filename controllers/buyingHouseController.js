@@ -67,6 +67,7 @@ exports.getBhdropDown = async (req, res) => {
 
 // Get a single BuyingHouse by ID
 exports.getBuyingHouseById = async (req, res) => {
+  console.log("id", req.query.buying_house_id)
   try {
     const buyingHouse = await BuyingHouse.findByPk(req.query.buying_house_id);
     if (buyingHouse) {

@@ -238,7 +238,7 @@ const getPO = async (req, res, next) => {
                   },
                   {
                     model: db.payment_milestone,
-                    attributes: ["milestone", "percentage"],
+                    attributes: ["milestone", "percentage", "status"],
                   },
                 ],
               },

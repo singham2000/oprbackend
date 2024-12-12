@@ -11,7 +11,7 @@ router
     .post('/create', setAuditFields, BuyingHouseController.createBuyingHouse)
     .get('/dropdown', BuyingHouseController.getBhdropDown)
     .get('/list', BuyingHouseController.getAllBuyingHouses)
-    .get('/buyinghouses/:id', BuyingHouseController.getBuyingHouseById)
+    .get('/buyinghouses', BuyingHouseController.getBuyingHouseById)
     .put('/update', BuyingHouseController.updateBuyingHouse)
     .delete('/delete', BuyingHouseController.deleteBuyingHouse);
 
