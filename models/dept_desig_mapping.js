@@ -9,18 +9,12 @@ module.exports = (sequelize, DataTypes) => {
         dept_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            // references: {
-            //     model: 'department',
-            //     key: 'dept_id'
-            // }
+
         },
         designation_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            // references: {
-            //     model: 'designation', 
-            //     key: 'designation_id'
-            // }
+
         },
         created_by: {
             type: DataTypes.STRING(55),

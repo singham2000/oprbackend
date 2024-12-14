@@ -9,90 +9,100 @@
 
 const db = require('../models');
 const { PenaltyTermsMaster } = db;
+const { Op } = require('sequelize');
 
 // Create a new penalty term
 const createPenaltyTerm = async (req, res, next) => {
     try {
-        const { penalty_terms_name, created_by, updated_by, status } = req.body;
-
-        const newTerm = await PenaltyTermsMaster.create({
+        const {
+            penalty_terms_name, status
+        } = req.body;
+        const result = await PenaltyTermsMaster.create({
             penalty_terms_name,
-            created_by,
-            updated_by,
             status
         });
-
-        res.status(201).json(newTerm);
-    } catch (error) {
-        next(error);
+        return res.status(201).json({ message: "Submit Successfully" });
+    } catch (err) {
+        next(err)
     }
 };
 
 // Get all penalty terms
 const getAllPenaltyTerms = async (req, res, next) => {
     try {
-        const terms = await PenaltyTermsMaster.findAll();
-        res.status(200).json(terms);
-    } catch (error) {
-        next(error);
+            const result = await PenaltyTermsMaster.findAll({
+                where: {
+                    status: { [Op.eq]: 1 }
+                },
+                order: [['penalty_terms_name', 'ASC']],
+                attributes: [ 'penalty_terms_id', 'penalty_terms_name'],
+            });
+           return res.status(200).json(result);
+    } catch (err) {
+        next(err);
     }
 };
 
 // Get a single penalty term by ID
 const getPenaltyTermById = async (req, res, next) => {
-    const { id } = req.params;
-
+    const penalty_terms_id = req.query.penalty_terms_id;
     try {
-        const term = await PenaltyTermsMaster.findByPk(id);
-
-        if (!term) {
-            return res.status(404).json({ message: 'Penalty term not found' });
+        if (!penalty_terms_id) {
+            const result = await PenaltyTermsMaster.findAll({
+                where: {
+                    status: { [Op.ne]: 0 }
+                },
+                order: [['penalty_terms_id', 'DESC']]
+            });
+           return res.status(200).json(result);
+        } else {
+            const result = await PenaltyTermsMaster.findByPk((penalty_terms_id),{
+                where: {
+                    status: { [Op.ne]: 0 }
+                }
+            });
+            return res.status(200).json(result);
         }
 
-        res.status(200).json(term);
-    } catch (error) {
-        next(error);
+    } catch (err) {
+        next(err)
     }
 };
 
 // Update a penalty term by ID
 const updatePenaltyTerm = async (req, res, next) => {
-    const { id } = req.params;
-    const { penalty_terms_name, created_by, updated_by, status } = req.body;
+    const penalty_terms_id = req.query.penalty_terms_id;
 
     try {
-        const [updated] = await PenaltyTermsMaster.update(
-            { penalty_terms_name, created_by, updated_by, status },
-            { where: { penalty_terms_id: id } }
-        );
+        // Find the shipment mode by primary key
+        const PenaltyTerms = await PenaltyTermsMaster.findByPk(penalty_terms_id);
 
-        if (updated) {
-            const updatedTerm = await PenaltyTermsMaster.findByPk(id);
-            res.status(200).json(updatedTerm);
-        } else {
-            res.status(404).json({ message: 'Penalty term not found' });
-        }
-    } catch (error) {
-        next(error);
+
+        // Update the shipment mode
+        const { penalty_terms_name, status } = req.body;
+        await PenaltyTerms.update({
+            penalty_terms_name,
+            status
+        });
+
+        res.status(200).json({ message: "Updated Successfully" });
+    } catch (err) {
+        next(err);
     }
 };
 
 // Delete a penalty term by ID
 const deletePenaltyTerm = async (req, res, next) => {
-    const { id } = req.params;
-
+    const penalty_terms_id = req.query.penalty_terms_id;
     try {
-        const deleted = await PenaltyTermsMaster.destroy({
-            where: { penalty_terms_id: id }
+        const result = await PenaltyTermsMaster.update({ status: 0 }, {
+            where: {
+                penalty_terms_id: penalty_terms_id
+            }
         });
-
-        if (deleted) {
-            res.status(204).send();
-        } else {
-            res.status(404).json({ message: 'Penalty term not found' });
-        }
-    } catch (error) {
-        next(error);
+        return res.status(200).json({ message: 'Deleted successfully' });
+    } catch (err) {
+        next(err)
     }
 };
 

@@ -1,9 +1,8 @@
-// routes/api.js
 const express = require('express');
 const router = express.Router();
+const setAuditFields = require('../middleware/setAuditFields')
 
 
-// const itemController = require('../controllers/itemController');
 const { getAllRfqItem, getRfqItemById, deleteRfqItemById, getRfqItemByRfqid } = require('../controllers/rfqItemsController');
 
 // API routes

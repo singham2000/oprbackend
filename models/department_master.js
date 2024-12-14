@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Department.associate = (models) => {
-        Department.hasMany(models.opr_master, { foreignKey: 'department_id' });
+        Department.hasMany(models.OprMaster, { foreignKey: 'department_id' });
     };
 
     return Department;

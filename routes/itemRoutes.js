@@ -11,6 +11,6 @@ const upload = require('../utilites/handlefile.js');
 router
     .get('/items', itemController.getAllItems)
     .get('/item/:id', itemController.getItemById)
-    .post('/item', upload.single('item_image'), itemController.createItem)
+    .post('/item', upload.single('item_image'), setAuditFields, itemController.createItem)
     .delete('/item/:id', itemController.deleteItem)
 module.exports = router;

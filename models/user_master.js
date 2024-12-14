@@ -1,9 +1,6 @@
 const pwd = require('../utilites/passwordHashing');
 
 module.exports = (sequelize, DataTypes) => {
-
-
-
     const user = sequelize.define('User', {
         user_id: {
             type: DataTypes.INTEGER,

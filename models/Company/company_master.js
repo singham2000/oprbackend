@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(255),
             allowNull: true
         },
+        vertical_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
         company_name: {
             type: DataTypes.STRING(255),
             allowNull: true
@@ -46,6 +50,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: true
         },
+        remarks: {
+            type: DataTypes.STRING(255),
+            allowNull: true
+        },
         created_by: {
             type: DataTypes.STRING(55),
             allowNull: true
@@ -55,25 +63,19 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         }
     }, {
-        tableName: 'company_master2',
+        tableName: 'company_master',
         timestamps: true
     })
 
-
     // Define associations
-    // company.associate = (models) => {
-    //     company.hasMany(models.AddressMaster, { foreignKey: 'company_id' });
-    // };
-
-
-            // Define associations
-            company.associate = (models) => {
-                company.hasMany(models.AddressMaster, {
-                    foreignKey: 'entity_id',  // Correcting to match the AddressMaster foreign key
-                    constraints: false,  // Optional: If you don’t want foreign key constraints
-                });
-            };
-
-
+    company.associate = (models) => {
+        company.hasMany(models.AddressMaster, {
+            foreignKey: 'entity_id',
+            constraints: false
+        });
+        company.hasMany(models.OprMaster, { foreignKey: 'company_id' });
+        company.hasMany(models.OprItems, { foreignKey: 'company_id' });
+        company.hasMany(models.Pfi_master, { foreignKey: 'company_id' });
+    };
     return company
 }

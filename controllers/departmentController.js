@@ -5,7 +5,7 @@ const { department: Dept, DeptDesigMapping } = db;
 // Controller method to fetch all items
 const getAllDept = async (req, res) => {
     try {
-        const items = await Dept.findAll();
+        const items = await Dept.findAll();           
         res.status(200).json(items);
 
     } catch (err) {

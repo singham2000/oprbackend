@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         },
         status: {
-            type: DataTypes.STRING(55),
+            type: DataTypes.INTEGER,
             allowNull: true
         },
         created_by: {

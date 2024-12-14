@@ -4,10 +4,6 @@ const router = express.Router();
 const DeliveryTermsController = require('../controllers/deliveryTermsController');
 const setAuditFields = require('../middleware/setAuditFields.js');
 
-
-
-
-
 // API routes
 router
     .get('/', DeliveryTermsController.getDeliveryTerms)

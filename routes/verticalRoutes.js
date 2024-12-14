@@ -9,6 +9,7 @@ const upload = multer();
 // API routes
 router
     .get('/', verticalController.getVertical)
+    .get('/dropdown', verticalController.verticalDropDown)
     .post('/', upload.single('fieldName'), verticalController.createVertical)
     .put('/', verticalController.updateVerticalById)
     .delete('/', verticalController.deleteVerticalById)

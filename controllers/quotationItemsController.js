@@ -16,7 +16,11 @@ const getQuotationItem = async (req, res, next) => {
                 where: {
                     quo_item_id: quo_item_id,
                     status: { [Op.ne]: 0 }
-                }
+                },
+                include: [
+                    { model: db.ItemsMaster, attributes: ['item_name'] }
+                ],
+
             });
 
         } else if (quo_id) {
@@ -24,14 +28,20 @@ const getQuotationItem = async (req, res, next) => {
                 where: {
                     quo_id: quo_id,
                     status: { [Op.ne]: 0 }
-                }
+                },
+                include: [
+                    { model: db.ItemsMaster, attributes: ['item_name'] }
+                ],
             });
 
         } else {
             result = await quotation_items.findAll({
                 where: {
                     status: { [Op.ne]: 0 }
-                }
+                },
+                include: [
+                    { model: db.ItemsMaster, attributes: ['item_name'] }
+                ],
             });
 
         }
@@ -44,6 +54,7 @@ const getQuotationItem = async (req, res, next) => {
             // item.dataValues.vendor_email = 'vendor@gmail.com',
             // item.dataValues.vendor_mob = '+1234'
         ))
+
         return res.status(200).json(result);
 
     } catch (err) {
@@ -69,7 +80,6 @@ const deleteQuotationItemById = async (req, res, next) => {
 
 // Controller method to Create
 const createQuotationItem = async (req, res, next) => {
-    console.log(req.body);
     try {
         const {
             quo_id,
@@ -78,11 +88,17 @@ const createQuotationItem = async (req, res, next) => {
             item_description,
             opr_qty,
             opo_qtd,
-            quote_qtd,
+            quote_qty:quote_qtd,
             rate,
             remarks,
             created_by
         } = req.body;
+
+        console.log("create qote item");
+
+        console.log(req.body);
+
+
         const result = await quotation_items.create({
             quo_id,
             item_type,
@@ -145,7 +161,6 @@ const getQuotationItemByQuoId = async (quo_id) => {
     let res = await quotation_items.findAll({
         where: { quo_id: quo_id }
     })
-    console.log(res);
     return res;
 }
 

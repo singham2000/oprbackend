@@ -11,10 +11,10 @@ const getDeliveryTerms = async (req, res, next) => {
     try {
         if (!delivery_terms_id) {
             const result = await delivery_terms_quo.findAll({
-                attributes: ['delivery_terms_id', 'delivery_terms_name'],
                 where: {
                     status: { [Op.ne]: 0 }
-                }
+                },
+                order: [['delivery_terms_id', 'DESC']]
             });
             res.status(200).json(result);
         } else {
@@ -22,7 +22,8 @@ const getDeliveryTerms = async (req, res, next) => {
                 where: {
                     delivery_terms_id: delivery_terms_id,
                     status: { [Op.ne]: 0 }
-                }
+                },
+                order: [['branch_id', 'DESC']]
             });
             res.status(200).json(result);
         }
@@ -55,13 +56,11 @@ const createDeliveryTerms = async (req, res, next) => {
     try {
         const {
             delivery_terms_name,
-            created_by
+            status
         } = req.body;
         const result = await delivery_terms_quo.create({
             delivery_terms_name,
-            status: 1,
-            created_by,
-            created_on: formattedDateTime
+            status
         });
         res.status(201).json({ message: "Submit Successfully" });
     } catch (err) {
@@ -73,13 +72,10 @@ const updateDeliveryTermsById = async (req, res, next) => {
     const delivery_terms_id = req.query.delivery_terms_id;
     try {
         const {
-            delivery_terms_name,
-            updated_by
+            delivery_terms_name, status
         } = req.body;
         const result = await delivery_terms_quo.update({
-            delivery_terms_name,
-            updated_by,
-            updated_on: formattedDateTime
+            delivery_terms_name, status
         }, {
             where: {
                 delivery_terms_id: delivery_terms_id

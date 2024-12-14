@@ -1,20 +1,22 @@
-const { where } = require('sequelize');
 const { PaymentRequestTransactionsMaster, PaymentRequestMaster, po_master, Pfi_master, sequelize } = require('../models'); // Adjust the path to your models file
 
 //this funcation will insert data in transaction table and same time i will also insert data in pfi master without pfi number(series)
 exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {
     try {
-        const { payment_request_id, po_id } = req.body;
+        const { payment_request_id, po_id, doc_type } = req.body;
+
         //update request status 
         const paymentRequest = await PaymentRequestMaster.update(
             { status: 3 },
             { where: { payment_request_id: payment_request_id } }
         );
 
+
         //if id not found in master
         if (!paymentRequest) {
             return res.status(404).json({ message: 'Request id is not valid' });
         }
+
         //update po status
         const poMaterResponse = await po_master.update(
             { status: 6 },
@@ -26,7 +28,6 @@ exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {
             return res.status(404).json({ message: 'Po id is not valid' });
         }
 
-
         // handle image file
         const fileBuffer = req.file.buffer;
         const base64String = await fileBuffer.toString("base64");
@@ -36,7 +37,6 @@ exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {
         // genrate transactions
         const newTransaction = await PaymentRequestTransactionsMaster.create(req.body);
 
-
         //create data for pfi
         let query = `select  distinct  opr_items.company_id ,dbo.fn_companyname(opr_items.company_id)  as comp_name
             from opr_items            
@@ -45,9 +45,9 @@ exports.createPaymentRequestTransactionsMaster = async (req, res, next) => {
             where  po_items.po_id=${po_id}`
         let [result, metadata] = await sequelize.query(query);
 
-        
+        // genrate pfi master
         // insert po_id request_id in talbe
-        await result.forEach(item => { item.status = 1, item.po_id = po_id, item.payment_request_id = payment_request_id, item.created_by = req.body.created_by })
+        result.forEach(item => { item.status = 1, item.po_id = po_id, item.payment_request_id = payment_request_id, item.created_by = req.body.created_by })
         const PFI_response = await Pfi_master.bulkCreate(result);
         res.status(201).json(newTransaction);
 
@@ -98,7 +98,6 @@ exports.getPaymentRequestTransactionsMasterById = async (req, res) => {
 exports.getPaymentRequestTransactionsMasterRequestId = async (req, res) => {
     try {
         const { payment_request_id } = req.query;
-        console.log({ "payementid": payment_request_id })
         const transaction = await PaymentRequestTransactionsMaster.findOne(
             {
                 where: { payment_request_id: payment_request_id },
@@ -129,12 +128,10 @@ exports.getPaymentRequestTransactionsMasterRequestId = async (req, res) => {
     }
 };
 
-
 // Get a PaymentRequestTransactionsMaster by ID
 exports.getPaymentRequestTransactionsfileRequestId = async (req, res) => {
     try {
         const { payment_request_id } = req.query;
-        console.log({ "payementid": payment_request_id })
         const transaction = await PaymentRequestTransactionsMaster.findOne(
             {
                 where: { payment_request_id: payment_request_id },
@@ -160,8 +157,6 @@ exports.getPaymentRequestTransactionsfileRequestId = async (req, res) => {
         res.status(500).json({ error: 'An error occurred while fetching the PaymentRequestTransactionsMaster.' });
     }
 };
-
-
 
 // Update a PaymentRequestTransactionsMaster by ID
 exports.updatePaymentRequestTransactionsMaster = async (req, res) => {
@@ -201,7 +196,6 @@ exports.updatePaymentRequestTransactionsMaster = async (req, res) => {
     }
 };
 
-
 // Delete a PaymentRequestTransactionsMaster by ID
 exports.deletePaymentRequestTransactionsMaster = async (req, res) => {
     try {
@@ -218,4 +212,39 @@ exports.deletePaymentRequestTransactionsMaster = async (req, res) => {
     }
 };
 
+//get payment id by doc_id
+exports.getPaymentTransactionByCoID = async (req, res, next) => {
+    try {
+        const { doc_id } = req.query;
+        const transaction = await PaymentRequestTransactionsMaster.findAll({
+            where: { doc_id }
+        });
 
+        if (!transaction) {
+            return res.status(404).json({ message: 'PaymentRequestTransactionsMaster not found' });
+        }
+
+        res.status(200).json(transaction);
+    } catch (error) {
+        console.error('Error fetching PaymentRequestTransactionsMaster:', error);
+        next(error);
+    }
+}
+
+exports.sentPaymentForApproval = async (req, res, next) => {
+    const { doc_id, status } = req.body;
+    try {
+        const response = await PaymentRequestTransactionsMaster.findByPk(doc_id);
+        if (!response) {
+            return res.status(404).json({ message: "Document not found" });
+        } else {
+            response.status = status; // Change to the new status
+            await response.save(); // Save the updated document
+            // res.status(200).json({ message: "OPR sent for approval successfully", data: response });
+            next();
+        }
+    } catch (err) {
+        console.error(err); // Log the error for debugging
+        res.status(500).json({ message: "An error occurred", error: err.message });
+    }
+}

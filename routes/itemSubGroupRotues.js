@@ -8,6 +8,7 @@ const setAuditFields = require('../middleware/setAuditFields.js');
 router
     .post('/subgroup', setAuditFields, itemSubGroupController.createItemSubGroup)
     .get('/subgroups', itemSubGroupController.getAllItemGroupsByGropuid)
+    // .get('/category', itemSubGroupController.getItemCategoryBySuperCate)
 // .get('/subgroup/:id', itemSubGroupController.getItemGroupById)
 // .put('/subgroup/:id', itemSubGroupController.updateItemGroup)
 // .delete('/subgroup/:id', itemSubGroupController.deleteItemGroup);

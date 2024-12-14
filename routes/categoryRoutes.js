@@ -6,9 +6,6 @@ const categoryController = require('../controllers/categoryController');
 const setAuditFields = require('../middleware/setAuditFields.js');
 
 
-
-
-
 // API routes
 router
     .get('/categories', categoryController.getAllCategory)

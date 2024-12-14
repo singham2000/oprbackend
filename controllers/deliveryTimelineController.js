@@ -13,9 +13,9 @@ const getDeliveryTimeline = async (req, res, next) => {
                 where: {
                     status: { [Op.ne]: 0 }
                 },
-                attributes: ['delivery_timeline_id', 'delivery_timeline_name']
+                order: [['delivery_timeline_id', 'DESC']]
             });
-            res.status(200).json(result);
+           return res.status(200).json(result);
         } else {
             const result = await delivery_timeline_opr.findAll({
                 where: {
@@ -23,7 +23,7 @@ const getDeliveryTimeline = async (req, res, next) => {
                     status: { [Op.ne]: 0 }
                 }
             });
-            res.status(200).json(result);
+            return res.status(200).json(result);
         }
 
     } catch (err) {
@@ -40,7 +40,7 @@ const deleteDeliveryTimelineById = async (req, res, next) => {
                 delivery_timeline_id: delivery_timeline_id
             }
         });
-        res.status(200).json({ message: 'Deleted successfully' });
+        return res.status(200).json({ message: 'Deleted successfully' });
     } catch (err) {
         next(err)
     }
@@ -51,16 +51,13 @@ const deleteDeliveryTimelineById = async (req, res, next) => {
 const createDeliveryTimeline = async (req, res, next) => {
     try {
         const {
-            delivery_timeline_name,
-            created_by
+            delivery_timeline_name, status
         } = req.body;
         const result = await delivery_timeline_opr.create({
             delivery_timeline_name,
-            status: 1,
-            created_by,
-            created_on: formattedDateTime
+            status
         });
-        res.status(201).json({ message: "Submit Successfully" });
+        return res.status(201).json({ message: "Submit Successfully" });
     } catch (err) {
         next(err)
     }
@@ -71,12 +68,11 @@ const updateDeliveryTimelineById = async (req, res, next) => {
     try {
         const {
             delivery_timeline_name,
-            updated_by
+            status
         } = req.body;
         const result = await delivery_timeline_opr.update({
             delivery_timeline_name,
-            updated_by,
-            updated_on: formattedDateTime
+            status
         }, {
             where: {
                 delivery_timeline_id: delivery_timeline_id

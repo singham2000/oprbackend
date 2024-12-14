@@ -58,16 +58,14 @@ const setAuditFields = require('../middleware/setAuditFields.js');
 
 // API routes
 router
-    .get('/departments', getAllDepartments)
+    .get('/departments', getAllDepartments)       
     .post('/department', setAuditFields, createDepartment)
-    .get('/department/:id', getDepartmentById)
-    .put('/department/:id', updateDepartmentById)
-    .delete('/department/:id', deleteDepartmentById)
+    .put('/department', updateDepartmentById)
+    .delete('/department', deleteDepartmentById)
     .get('/designations', desigController.getAllDesignations)
     .post('/designation', desigController.createDesignation)
-    .get('/designation/:id', desigController.getDesignationById)
-    .put('/designation/:id', desigController.createDesignation)
-    .delete('/designation/:id', desigController.deleteDesignationById)
+    .put('/designation', desigController.updateDesignationById)
+    .delete('/designation', desigController.deleteDesignationById)
     .get('/desigbycompid', getDesignation)
 
 module.exports = router;

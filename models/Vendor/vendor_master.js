@@ -94,6 +94,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(555),
             allowNull: true
         },
+        currency: {
+            type: DataTypes.STRING(150),
+            allowNull: true
+        },
         status: {
             type: DataTypes.INTEGER,
             allowNull: true
@@ -110,6 +114,27 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'vendors_master',
         timestamps: true
     })
+
+    vendor.associate = (model) => {
+        vendor.hasMany(model.po_master, {
+            foreignKey: 'vendor_id'
+        });
+    };
+
+    vendor.associate = (models) => {
+        vendor.hasMany(models.po_master, {
+            foreignKey: 'vendor_id',
+        });
+        vendor.hasMany(models.VendorsAddressDetailsMaster, {
+            foreignKey: 'vendor_id',
+        });
+        vendor.hasMany(models.VendorsBanksDetailsMaster, {
+            foreignKey: 'vendor_id',
+        });
+        // vendor.hasMany(models.quotation_master, {
+        //     foreignKey: 'vendor_id',
+        // });
+    };
 
     return vendor
 }

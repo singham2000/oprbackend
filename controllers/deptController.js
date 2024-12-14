@@ -3,11 +3,10 @@ const { Op } = require('sequelize'); // Import Op from Sequelize
 // Create a new department
 exports.createDepartment = async (req, res, next) => {
     try {
-        const { dept_name, status, created_by } = req.body;
+        const { dept_name, status } = req.body;
         const newDepartment = await DepartmentMaster.create({
             dept_name,
-            status,
-            created_by
+            status
         });
         res.status(201).json(newDepartment);
     } catch (err) {
@@ -15,46 +14,51 @@ exports.createDepartment = async (req, res, next) => {
     }
 };
 
-// Get all departments
+
 exports.getAllDepartments = async (req, res, next) => {
+    const dept_id = req.query.dept_id;
     try {
-        const departments = await DepartmentMaster.findAll({
-            attributes: ['dept_id', 'dept_name']
-        });
-        res.json(departments);
-    } catch (err) {
-        next(err)
-    }
-};
-
-// Get a department by ID
-exports.getDepartmentById = async (req, res, next) => {
-    const { id } = req.params;
-    try {
-        const department = await DepartmentMaster.findByPk(id);
-        if (!department) {
-            res.status(404).json({ error: 'Department not found' });
+        if (!dept_id) {
+            const result = await DepartmentMaster.findAll({
+                where: {
+                    status: { [Op.ne]: 0 }
+                },
+                order: [['dept_id', 'DESC']]
+            });
+            res.status(200).json(result);
         } else {
-            res.json(department);
+            const result = await DepartmentMaster.findAll({
+                where: {
+                    dept_id: dept_id,
+                    status: { [Op.ne]: 0 }
+                },
+                order: [['dept_id', 'DESC']]
+            });
+            res.status(200).json(result);
         }
+
     } catch (err) {
         next(err)
     }
 };
 
-// Update a department by ID
+
 exports.updateDepartmentById = async (req, res, next) => {
-    const { id } = req.params;
+    const dept_id = req.query.dept_id;
     try {
-        const [updated] = await DepartmentMaster.update(req.body, {
-            where: { dept_id: id }
+        const {
+            dept_name,
+            status
+        } = req.body;
+        const result = await DepartmentMaster.update({
+            dept_name,
+            status
+        }, {
+            where: {
+                dept_id: dept_id
+            }
         });
-        if (updated) {
-            const updatedDepartment = await DepartmentMaster.findByPk(id);
-            res.json(updatedDepartment);
-        } else {
-            res.status(404).json({ error: 'Department not found' });
-        }
+        res.status(201).json({ message: "Updated Successfully" });
     } catch (err) {
         next(err)
     }
@@ -62,16 +66,14 @@ exports.updateDepartmentById = async (req, res, next) => {
 
 // Delete a department by ID
 exports.deleteDepartmentById = async (req, res, next) => {
-    const { id } = req.params;
+    const dept_id = req.query.dept_id;
     try {
-        const deleted = await DepartmentMaster.destroy({
-            where: { dept_id: id }
+        const result = await DepartmentMaster.update({ status: 0 }, {
+            where: {
+                dept_id: dept_id
+            }
         });
-        if (deleted) {
-            res.json({ message: 'Department deleted successfully' });
-        } else {
-            res.status(404).json({ error: 'Department not found' });
-        }
+        res.status(200).json({ message: 'Deleted successfully' });
     } catch (err) {
         next(err)
     }

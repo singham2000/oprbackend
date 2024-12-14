@@ -1,17 +1,15 @@
 const db = require('../../models')
 const { vendor: Vendor, VendorsMaster, sequelize, VendorsBanksDetailsMaster, AddressMaster } = db
-const generateSeries = require('../../utilites/genrateSeries');
+const {generateSeries} = require('../../utilites/genrateSeries');
 
 
 exports.createVendor2 = async (req, res, next) => {
     const transaction = await sequelize.transaction();
     try {
         const { vendorData, bankDetails, addressData } = req.body;
-
         vendorData.vendor_series = await generateSeries('VEN') || 'ven-000-ven';
         vendorData.last_audited_docs_name = req.files[0].originalname;
         vendorData.last_audited_docs = await req.files[0].buffer.toString("base64");
-
         const newVendor = await VendorsMaster.create(vendorData, { transaction });
         const vendor_id = newVendor.vendor_id
 

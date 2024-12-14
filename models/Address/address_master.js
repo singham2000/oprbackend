@@ -1,5 +1,3 @@
-
-
 module.exports = (sequelize, DataTypes) => {
     const AddressMaster = sequelize.define('AddressMaster', {
         address_id: {
@@ -70,6 +68,9 @@ module.exports = (sequelize, DataTypes) => {
             constraints: false,
         });
         AddressMaster.hasMany(models.OprItems, {
+            foreignKey: 'address_id'
+        });
+        AddressMaster.hasMany(models.rfqitem, {
             foreignKey: 'address_id'
         });
     };
