@@ -6,7 +6,7 @@ const { getAddressTypeDropDown } = require('../controllers/AddressController/add
 
 // API routes
 router
-    .get('/', getAddressByCompanyId)
+    .get('/bycompanyid', getAddressByCompanyId)
     .get('/type', getAddressTypeDropDown)
 
 module.exports = router;

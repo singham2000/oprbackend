@@ -1,6 +1,6 @@
 // const { vertical_opr } = ('../models');
 const db = require('../models');
-const { Vertical : vertical_opr  } = db;
+const { Vertical: vertical_opr } = db;
 const formattedDateTime = require("../middleware/time");
 const { Op } = require('sequelize');
 
@@ -32,6 +32,23 @@ const getVertical = async (req, res, next) => {
 };
 
 
+// Controller method to fetch all items
+const verticalDropDown = async (req, res, next) => {
+    try {
+        const result = await vertical_opr.findAll({
+            where: {
+                status: { [Op.ne]: 0 }
+            },
+            attributes:['vertical_id','vertical_name']
+        });
+        res.status(200).json(result);
+
+    } catch (err) {
+        next(err)
+    }
+};
+
+
 // Controller method to delete by id
 const deleteVerticalById = async (req, res, next) => {
     const vertical_id = req.query.vertical_id;
@@ -51,7 +68,6 @@ const deleteVerticalById = async (req, res, next) => {
 // Controller method to Create
 const createVertical = async (req, res, next) => {
     try {
-        console.log(req.body);
         const {
             vertical_name,
             created_by
@@ -92,6 +108,6 @@ const updateVerticalById = async (req, res, next) => {
     }
 };
 
-verticalController = { getVertical, deleteVerticalById, createVertical, updateVerticalById };
+verticalController = { getVertical, deleteVerticalById, createVertical, updateVerticalById, verticalDropDown };
 module.exports = verticalController;
 

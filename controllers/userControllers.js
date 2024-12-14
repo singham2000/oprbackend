@@ -5,10 +5,16 @@ const { user: User } = db
 const jwtSecretKey = process.env.JWT_SECRET;
 
 
+
+
+
+
 //Get all users
 const getAllUser = async (req, res, next) => {
     try {
-        const items = await User.findAll();
+        const items = await User.findAll({
+            attributes: ['user_id', 'first_name']
+        });
         res.status(200).json(items);
     } catch (err) {
         next(err);
@@ -18,7 +24,6 @@ const getAllUser = async (req, res, next) => {
 
 // Controller method to delte item by id
 const createUser = async (req, res, next) => {
-    console.log(req.body);
     try {
         const {
             first_name,
@@ -45,6 +50,8 @@ const createUser = async (req, res, next) => {
             date_of_birth,
             registration_date
         } = req.body;
+
+
 
         // console.log(first_name, last_name, email, username, phone_number, password);
         const newItem = await User.create({
@@ -78,7 +85,6 @@ const createUser = async (req, res, next) => {
 
 // Verifying a user's password
 const loginUser = async (req, res, next) => {
-    console.log(req.body);
     try {
         let { email, password } = req.body;
         const user = await User.findOne({ where: { email }, attributes: ['first_name', 'email', 'role', 'password_hash'] });

@@ -10,7 +10,16 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
+        doc_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
         payment_date: {
+            type: DataTypes.DATEONLY,
+            allowNull: false
+        },
+        
+        value_date: {
             type: DataTypes.DATEONLY,
             allowNull: false
         },
@@ -39,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         },
         remarks: {
-            type: DataTypes.STRING(250),
+            type: DataTypes.STRING(255),
             allowNull: true
         },
         receipt_image: {

@@ -32,8 +32,6 @@ const createEmailMessage = async (req, res, next) => {
             next(err);
         }
     }
-
-    console.log('Created new email message with ID:', newEmail.email_msg_id);
     next();
 }
 

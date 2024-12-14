@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
+        doc_type: {
+            type: DataTypes.STRING(100),
+            allowNull: true
+        },
         po_number: {
             type: DataTypes.STRING(100),
             allowNull: true
@@ -27,11 +31,31 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         },
         advice_amount: {
+            type: DataTypes.DECIMAL(18, 2),
+            allowNull: true
+        },
+        amount_payment_term: {
             type: DataTypes.DECIMAL(10, 2),
+            allowNull: true
+        },
+        vendor_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        bank_type_id: {
+            type: DataTypes.INTEGER,
             allowNull: true
         },
         advice_remarks: {
             type: DataTypes.STRING(255),
+            allowNull: true
+        },
+        payment_type_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        payment_milestone_id: {
+            type: DataTypes.INTEGER,
             allowNull: true
         },
         status: {
@@ -57,18 +81,17 @@ module.exports = (sequelize, DataTypes) => {
             field: 'updatedAt'
         }
     }, {
-        tableName: 'payment_request_master',
+        tableName: 'payment_request_master_new',
         timestamps: true
     });
 
     PaymentRequestMaster.associate = models => {
-        PaymentRequestMaster.belongsTo(models.PaymentTypeMaster, {
-            foreignKey: 'payment_type_id',
-            as: 'paymentType'
-        });
-        PaymentRequestMaster.hasMany(models.PaymentRequestTransactionsMaster, {
-            foreignKey: 'payment_request_id',
-            as: 'transactions'
+        // PaymentRequestMaster.belongsTo(models.PaymentTypeMaster, {
+        //     foreignKey: 'payment_type_id',
+        //     as: 'paymentType'
+        // });
+        PaymentRequestMaster.belongsTo(models.payment_milestone, {
+            foreignKey: 'payment_milestone_id',
         });
     };
 

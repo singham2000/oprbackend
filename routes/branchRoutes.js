@@ -1,8 +1,6 @@
-// routes/api.js
 const express = require('express');
 const router = express.Router();
-// const itemController = require('../controllers/itemController');
-const { createBranch, deleteBranchById, getAllBranch, getBranchById } = require('../controllers/branchController');
+const { createBranch, deleteBranchById, getAllBranch, updateBranch } = require('../controllers/branchController');
 const setAuditFields = require('../middleware/setAuditFields.js');
 
 
@@ -10,6 +8,6 @@ const setAuditFields = require('../middleware/setAuditFields.js');
 router
         .get('/branches', getAllBranch)
         .post('/branch', setAuditFields, createBranch)
-        .get('/branch/:id', getBranchById)
-        .delete('/branch/:id', deleteBranchById)
+        .delete('/branch', setAuditFields, deleteBranchById)
+        .put('/branch', setAuditFields, updateBranch)
 module.exports = router;

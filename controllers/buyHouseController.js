@@ -1,16 +1,17 @@
 // const { buy_house_opr } = ('../models');
 const db = require('../models');
-const { buy_house_opr } = db;
+const { BuyingHouse: buy_house_opr } = db;
 const formattedDateTime = require("../middleware/time");
 const { Op } = require('sequelize');
 
 // Controller method to fetch all items
 const getBuyHouse = async (req, res, next) => {
-    const buy_house_id = req.query.buy_house_id;
+    const buying_house_id = req.query.buying_house_id;
     try {
-        if (!buy_house_id) {
+        if (buying_house_id) {
             const result = await buy_house_opr.findAll({
                 where: {
+                    buying_house_id: buying_house_id,
                     status: { [Op.ne]: 0 }
                 }
             });
@@ -18,7 +19,6 @@ const getBuyHouse = async (req, res, next) => {
         } else {
             const result = await buy_house_opr.findAll({
                 where: {
-                    buy_house_id: buy_house_id,
                     status: { [Op.ne]: 0 }
                 }
             });
@@ -32,11 +32,11 @@ const getBuyHouse = async (req, res, next) => {
 
 // Controller method to delete by id
 const deleteBuyHouseById = async (req, res, next) => {
-    const buy_house_id = req.parmas.buy_house_id;
+    const buying_house_id = req.query.buying_house_id;
     try {
         const result = await buy_house_opr.update({ status: 0 }, {
             where: {
-                buy_house_id: buy_house_id
+                buying_house_id: buying_house_id
             }
         });
         res.status(200).json({ message: 'Deleted successfully' });
@@ -50,7 +50,7 @@ const deleteBuyHouseById = async (req, res, next) => {
 const createBuyHouse = async (req, res, next) => {
     try {
         const {
-            buy_house_name,
+            buy_house_name, 
         } = req.body;
         const result = await buy_house_opr.create({
             buy_house_name,
@@ -64,7 +64,7 @@ const createBuyHouse = async (req, res, next) => {
 };
 
 const updateBuyHouseById = async (req, res, next) => {
-    const buy_house_id = req.query.buy_house_id;
+    const buying_house_id = req.query.buying_house_id;
     try {
         const {
             buy_house_name,
@@ -76,7 +76,7 @@ const updateBuyHouseById = async (req, res, next) => {
             updated_on: formattedDateTime
         }, {
             where: {
-                buy_house_id: buy_house_id
+                buying_house_id: buying_house_id
             }
         });
         res.status(201).json({ message: "Updated Successfully" });

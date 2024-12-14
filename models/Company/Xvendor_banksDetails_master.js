@@ -9,18 +9,10 @@ module.exports = (sequelize, DataTypes) => {
         vendor_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            // references: {
-            //     model: 'VendorsMaster', 
-            //     key: 'vendor_id'
-            // }
         },
         bank_type_id: {
             type: DataTypes.INTEGER,
             allowNull: true,
-            // references: {
-            //     model: 'VendorBankTypeMaster',
-            //     key: 'v_bank_type_id'
-            // }
         },
         bank_name: {
             type: DataTypes.STRING(255),
