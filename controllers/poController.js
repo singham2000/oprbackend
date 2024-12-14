@@ -104,10 +104,9 @@ const getPO = async (req, res, next) => {
                   "dbo.fn_GetShippingContainerType(container_type)"
                 ),
                 "container_type_name",
-              ],[
-                db.sequelize.literal(
-                  "dbo.fn_containerType(container_size)"
-                ),
+              ],
+              [
+                db.sequelize.literal("dbo.fn_containerType(container_size)"),
                 "container_size_name",
               ],
             ],
@@ -369,8 +368,8 @@ const generatePo = async (req, res, next) => {
   try {
     console.log("Surya");
     console.log(req.body);
-    const opo_id = req.body.opo_ids.split(",");
-    console.log("opo_id", opo_id);
+    // const opo_id = opo_ids.length > 0 ? req.body.opo_ids.split(","): opo_ids;
+    // console.log("opo_id", opo_id);
     const {
       opo_ids,
       opo_nums,
@@ -402,7 +401,7 @@ const generatePo = async (req, res, next) => {
       {
         po_num: po_series,
         vendor_id,
-        selected_opo_id: opo_id[0],
+        selected_opo_id: opo_ids,
         opo_ids,
         opo_nums,
         total_cost: totalAmount,
@@ -417,7 +416,7 @@ const generatePo = async (req, res, next) => {
       { transaction } // Pass the transaction
     );
 
-    const arr = opo_ids.split(",").map(Number); // Convert to array of numbers
+    // const arr = opo_ids.split(",").map(Number);
 
     console.log("before updating opo_master");
     await opo_master.update(
@@ -426,9 +425,10 @@ const generatePo = async (req, res, next) => {
       },
       {
         where: {
-          opo_master_id: {
-            [Op.in]: arr, // Use the Op.in operator for the array of IDs
-          },
+          opo_master_id: opo_ids,
+          //  {
+          //   [Op.in]: arr, // Use the Op.in operator for the array of IDs
+          // },
         },
         transaction, // Pass the transaction
       }

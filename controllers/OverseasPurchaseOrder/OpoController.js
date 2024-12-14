@@ -276,55 +276,91 @@ const createOpo = async (req, res, next) => {
       vendor_id,
       item_list,
       unit_justification,
-      opo_description,
+      user_id,
+      // opo_description,
       procurement_justification,
     } = req.body;
-
-    // Create a new OPO record in the opo_master table
-    const result = await opo_master.create(
-      {
-        opo_num: opo_series, // Use the generated OPO series
-        quo_id,
-        quo_num,
-        opr_id,
-        opr_num,
-        vendor_id,
-        total_cost,
-        unit_justification,
-        opo_description,
-        procurement_justification,
-        status: 1, // Active status
-      },
-      { transaction } // Pass the transaction to ensure atomicity
-    );
-
-    const LastInsertedId = result.opo_master_id; // Get the ID of the newly created OPO
-
-    // Create related OPO items in a batch
-    const opoItems = await Promise.all(
-      item_list.map(async (items) => {
-        const result2 = await opo_items.create(
-          {
-            opo_id: LastInsertedId, // Link the OPO item to the newly created OPO
-            ...items, // Spread the item properties
-            status: 1, // Active status
-          },
-          { transaction } // Pass the transaction
-        );
-        return result2; // Return the created item
-      })
-    );
-
-    const result5 = await db.quotation_master.update(
-      {
-        status: 20,
-      },
-      {
-        where: {
-          quo_id: quo_id,
+    if (unit_justification) {
+      // Create a new OPO record in the opo_master table
+      const result = await opo_master.create(
+        {
+          opo_num: opo_series, // Use the generated OPO series
+          quo_id,
+          quo_num,
+          opr_id,
+          opr_num,
+          vendor_id,
+          total_cost,
+          unit_justification,
+          // opo_description,
+          procurement_justification,
+          status: 1, // Active status
         },
-      }
-    );
+        { transaction } // Pass the transaction to ensure atomicity
+      );
+
+      const LastInsertedId = result.opo_master_id; // Get the ID of the newly created OPO
+
+      // Create related OPO items in a batch
+      const opoItems = await Promise.all(
+        item_list.map(async (items) => {
+          const result2 = await opo_items.create(
+            {
+              opo_id: LastInsertedId, // Link the OPO item to the newly created OPO
+              ...items, // Spread the item properties
+              status: 1, // Active status
+            },
+            { transaction } // Pass the transaction
+          );
+          return result2; // Return the created item
+        })
+      );
+
+      const result5 = await db.quotation_master.update(
+        {
+          status: 20,
+        },
+        {
+          where: {
+            quo_id: quo_id,
+          },
+        }
+      );
+
+      // Update the 'OprMaster' table
+      await db.OprMaster.update(
+        {
+          status: 11, // Update the status to 10
+        },
+        {
+          where: { opr_id }, // Find the row where opr_id matches
+        },
+        { transaction }
+      );
+    } else {
+      // Update the 'quotation_master' table
+      await db.quotation_master.update(
+        {
+          procurement_justification: procurement_justification, // Set procurement justification
+          procurement_by: user_id, // Set user ID who performed the procurement
+        },
+        {
+          where: { quo_id }, // Find the row where quo_id matches
+        },
+        { transaction }
+      );
+
+      // Update the 'OprMaster' table
+      await db.OprMaster.update(
+        {
+          status: 10, // Update the status to 10
+        },
+        {
+          where: { opr_id }, // Find the row where opr_id matches
+        },
+        { transaction }
+      );
+    }
 
     await transaction.commit(); // Commit the transaction
     return res.status(201).json({ message: "Submit Successfully" }); // Respond with success
@@ -506,13 +542,14 @@ const getOpo = async (req, res, next) => {
           "status",
         ],
         include: [
-          {model: db.Pfi_master,
-            include: [{model: db.form_m}, {model: db.letter_of_credit}]
+          {
+            model: db.Pfi_master,
+            include: [{ model: db.form_m }, { model: db.letter_of_credit }],
           },
           {
             model: db.quotation_master, // Include related quotation details
             include: [
-              {model: db.rfq, include: { model: db.port_destination_master },},
+              { model: db.rfq, include: { model: db.port_destination_master } },
               {
                 model: db.additional_cost,
               },
@@ -534,7 +571,9 @@ const getOpo = async (req, res, next) => {
               "opr_lead_time",
               "port_of_loading",
               [
-                db.sequelize.literal("dbo.fn_GetDeliveryTerm(quotation_master.delivery_terms)"),
+                db.sequelize.literal(
+                  "dbo.fn_GetDeliveryTerm(quotation_master.delivery_terms)"
+                ),
                 "delivery_terms_name", // Alias for delivery term
               ],
             ],

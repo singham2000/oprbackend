@@ -55,6 +55,8 @@ const getQuotation = async (req, res, next) => {
           "quote_doc_name",
           "opr_lead_time",
           "port_of_loading",
+          "procurement_by",
+          "procurement_justification",
           [
             sequelize.literal("dbo.fn_GetDeliveryTerm(delivery_terms)"),
             "delivery_terms_name",
@@ -95,6 +97,8 @@ const getQuotation = async (req, res, next) => {
               "quo_num",
               "item_code",
               "rfq_item_id",
+              "item_name_vendor",
+              "item_name_label",
               [
                 sequelize.literal("dbo.fn_GetPackageType(pack_type)"),
                 "pack_type_name",
@@ -163,6 +167,8 @@ const getQuotation = async (req, res, next) => {
                   "opr_lead_time",
                   "port_of_loading",
                   "status",
+                  "procurement_by",
+                  "procurement_justification",
                   [
                     sequelize.literal("dbo.fn_GetDeliveryTerm(delivery_terms)"),
                     "delivery_terms_name",
@@ -202,6 +208,8 @@ const getQuotation = async (req, res, next) => {
                       "quo_num",
                       "item_code",
                       "rfq_item_id",
+                      "item_name_vendor",
+                      "item_name_label",
                       [
                         sequelize.literal("dbo.fn_GetPackageType(pack_type)"),
                         "pack_type_name",
@@ -258,6 +266,8 @@ const getQuotation = async (req, res, next) => {
           "quote_doc_name",
           "opr_lead_time",
           "port_of_loading",
+          "procurement_by",
+          "procurement_justification",
           [
             sequelize.literal("dbo.fn_GetDeliveryTerm(delivery_terms)"),
             "delivery_terms_name",
@@ -274,7 +284,10 @@ const getQuotation = async (req, res, next) => {
                   ),
                   "port_of_destination_name",
                 ],
-                [sequelize.literal("dbo.GetNamesFromIds(vendor_list)"), "vendors"],
+                [
+                  sequelize.literal("dbo.GetNamesFromIds(vendor_list)"),
+                  "vendors",
+                ],
               ],
             },
           },
@@ -315,6 +328,8 @@ const getQuotation = async (req, res, next) => {
               "quo_num",
               "item_code",
               "rfq_item_id",
+              "item_name_vendor",
+              "item_name_label",
               [
                 sequelize.literal("dbo.fn_GetPackageType(pack_type)"),
                 "pack_type_name",
@@ -363,6 +378,8 @@ const getQuotation = async (req, res, next) => {
           "quote_doc_name",
           "opr_lead_time",
           "port_of_loading",
+          "procurement_by",
+          "procurement_justification",
           [
             sequelize.literal("dbo.fn_GetDeliveryTerm(delivery_terms)"),
             "delivery_terms_name",
@@ -414,6 +431,8 @@ const getQuotation = async (req, res, next) => {
               "quo_num",
               "item_code",
               "rfq_item_id",
+              "item_name_vendor",
+              "item_name_label",
               [
                 sequelize.literal("dbo.fn_GetPackageType(pack_type)"),
                 "pack_type_name",
@@ -515,7 +534,7 @@ const deleteQuotationById = async (req, res, next) => {
 
 // Controller method to Create
 const createQuotation = async (req, res, next) => {
-  console.log(req.body.quotation_details.payment_milestone);
+  console.log(req.body.quotation_details.ItemData);
   // console.log(req.files);
   const { quotation_details, quotation_docslist } = req.body;
 
@@ -550,28 +569,26 @@ const createQuotation = async (req, res, next) => {
     } = quotation_details;
 
     // Generate quotation
-    const newQuotationMaster = await quotation_master.create(
-      {
-        quo_num: quotation_series,
-        rfq_id,
-        vendor_id,
-        reference_no,
-        reference_date,
-        quo_date,
-        currency,
-        delivery_terms,
-        country_origin,
-        country_supply,
-        port_loading,
-        lead_time: `${lead_time} Weeks`,
-        payment_terms,
-        remarks,
-        total_cost,
-        opr_lead_time,
-        port_of_loading,
-        status: 1,
-      },
-    );
+    const newQuotationMaster = await quotation_master.create({
+      quo_num: quotation_series,
+      rfq_id,
+      vendor_id,
+      reference_no,
+      reference_date,
+      quo_date,
+      currency,
+      delivery_terms,
+      country_origin,
+      country_supply,
+      port_loading,
+      lead_time: `${lead_time} Weeks`,
+      payment_terms,
+      remarks,
+      total_cost,
+      opr_lead_time,
+      port_of_loading,
+      status: 1,
+    });
 
     const lastInsertedId = newQuotationMaster.quo_id;
 
@@ -653,7 +670,23 @@ const createQuotation = async (req, res, next) => {
       quo_num: quotation_series,
       rfq_id: rfq_id,
       vendor_id: vendor_id,
-      ...item,
+
+      rfq_item_id: item.rfq_item_id,
+      item_type: item.item_type,
+      item_code: item.item_code,
+      item_id: item.item_id,
+      item_name: item.item_name,
+      opr_qty: item.opr_qty,
+      item_name_vendor: item.item_name_vendor,
+      item_name_label: item.item_name_label,
+      quote_qtd: item.quote_qtd,
+      rate: item.rate,
+      remarks: item.remarks,
+      line_total: item.line_total,
+      pack_type: item.pack_type,
+      pack_size: item.pack_size,
+      no_packs: item.no_packs,
+
       status: 1,
     }));
 
@@ -688,7 +721,6 @@ const createQuotation = async (req, res, next) => {
     next(err);
   }
 };
-
 
 const updateQuotationById = async (req, res, next) => {
   const quo_id = req.query.quo_id;

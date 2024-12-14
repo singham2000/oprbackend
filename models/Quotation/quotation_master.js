@@ -74,6 +74,14 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(55),
             allowNull: true
         },
+        procurement_justification: {
+            type: DataTypes.STRING(555),
+            allowNull: true
+        },
+        procurement_by: {
+            type: DataTypes.STRING(255),
+            allowNull: true
+        },
         created_on: {
             type: DataTypes.DATE,
             allowNull: true

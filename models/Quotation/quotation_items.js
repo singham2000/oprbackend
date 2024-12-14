@@ -76,6 +76,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(155),
       allowNull: true
     },
+    item_name_label: {
+      type: DataTypes.STRING(555),
+      allowNull: true
+    },
+    item_name_vendor: {
+      type: DataTypes.STRING(555),
+      allowNull: true
+    },
     created_by: {
       type: DataTypes.STRING(50),
       allowNull: true
