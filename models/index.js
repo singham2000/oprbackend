@@ -113,6 +113,11 @@ db.VendorTypeMaster = require("./Vendor/VendorTypeMaster.js")(
     sequelize,
     DataTypes
 );
+db.vendor_item_mapping = require("./Vendor/VendorItemMappingModel.js")(
+  sequelize,
+  DataTypes
+);
+
 
 //EMAIL
 db.EmailMessage = require("./email_message_master.js")(sequelize, DataTypes);
