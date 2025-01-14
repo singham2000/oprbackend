@@ -17,7 +17,7 @@ router
 
 // this for main group
 router
-    .post('/create', setAuditFields, itemGroupController.createItemGroup)
+    .post('/create', itemGroupController.createItemGroup)
     .get('/list', itemGroupController.getAllItemGroups)
     .get('/dropdown', itemGroupController.itemGropuDrpDn)
     .put('/update', setAuditFields, itemGroupController.updateItemGroup)
